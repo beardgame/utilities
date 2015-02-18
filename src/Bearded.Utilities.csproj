@@ -60,8 +60,19 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Algorithms\" />
+    <Folder Include="Collections\" />
     <Folder Include="Core\" />
+    <Folder Include="Data\" />
+    <Folder Include="Diagnostics\" />
+    <Folder Include="Input\" />
+    <Folder Include="IO\" />
+    <Folder Include="Linq\" />
+    <Folder Include="Math\" />
     <Folder Include="Properties\" />
+    <Folder Include="Serialization\JsonNet\" />
+    <Folder Include="SpaceTime\" />
+    <Folder Include="Threading\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
