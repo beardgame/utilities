@@ -65,7 +65,6 @@
     <Folder Include="Core\" />
     <Folder Include="Data\" />
     <Folder Include="Diagnostics\" />
-    <Folder Include="Input\" />
     <Folder Include="IO\" />
     <Folder Include="Linq\" />
     <Folder Include="Properties\" />
@@ -97,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Do.cs" />
+    <Compile Include="Input\InputManager.cs" />
     <Compile Include="Math\Extensions.cs" />
     <Compile Include="Math\GameMath.cs" />
     <Compile Include="Math\Interpolate.cs" />
