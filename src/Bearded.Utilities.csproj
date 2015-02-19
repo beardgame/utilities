@@ -62,7 +62,6 @@
   <ItemGroup>
     <Folder Include="Algorithms\" />
     <Folder Include="Collections\" />
-    <Folder Include="Core\" />
     <Folder Include="Data\" />
     <Folder Include="Diagnostics\" />
     <Folder Include="Input\" />
@@ -96,8 +95,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Do.cs" />
-    <Compile Include="EventHandlers.cs" />
+    <Compile Include="Core\Do.cs" />
+    <Compile Include="Core\EventHandlers.cs" />
     <Compile Include="Math\Extensions.cs" />
     <Compile Include="Math\GameMath.cs" />
     <Compile Include="Math\Interpolate.cs" />
