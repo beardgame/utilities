@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Do.cs" />
+    <Compile Include="Core\Environment.cs" />
     <Compile Include="Core\EventHandlers.cs" />
     <Compile Include="Math\Extensions.cs" />
     <Compile Include="Math\GameMath.cs" />
