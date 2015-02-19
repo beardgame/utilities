@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Do.cs" />
+    <Compile Include="EventHandlers.cs" />
     <Compile Include="Math\Extensions.cs" />
     <Compile Include="Math\GameMath.cs" />
     <Compile Include="Math\Interpolate.cs" />
