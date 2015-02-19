@@ -1,4 +1,7 @@
-﻿namespace Bearded.Utilities.Math
+﻿using System;
+using OpenTK;
+
+namespace Bearded.Utilities.Math
 {
     /// <summary>
     /// Math extension methods.
@@ -270,6 +273,86 @@
         public static int RoundedToInt(double d)
         {
             return (int)System.Math.Round(d);
+        }
+        #endregion
+
+        #region NaN sanity checks
+        /// <summary>
+        /// Throws an exception if the specified float is NaN.
+        /// </summary>
+        /// <param name="f">The float to check.</param>
+        /// <param name="exceptionString">The string message for the exception.</param>
+        public static void ThrowIfNaN(this float f,
+            string exceptionString = "Float is NaN while it is not allowed to.")
+        {
+            if (float.IsNaN(f))
+                throw new Exception(exceptionString);
+        }
+
+        /// <summary>
+        /// Throws an exception if any of the vector components is NaN.
+        /// </summary>
+        /// <param name="vector">The vector to check.</param>
+        /// <param name="exceptionString">The string message for the exception.</param>
+        public static void ThrowIfNaN(this Vector2 vector,
+            string exceptionString = "Vector is NaN while it is not allowed to.")
+        {
+            if (vector.IsNaN())
+                throw new Exception(exceptionString);
+        }
+
+        /// <summary>
+        /// Throws an exception if any of the vector components is NaN.
+        /// </summary>
+        /// <param name="vector">The vector to check.</param>
+        /// <param name="exceptionString">The string message for the exception.</param>
+        public static void ThrowIfNaN(this Vector3 vector,
+            string exceptionString = "Vector is NaN while it is not allowed to.")
+        {
+            if (vector.IsNaN())
+                throw new Exception(exceptionString);
+        }
+
+        /// <summary>
+        /// Throws an exception if any of the vector components is NaN.
+        /// </summary>
+        /// <param name="vector">The vector to check.</param>
+        /// <param name="exceptionString">The string message for the exception.</param>
+        public static void ThrowIfNaN(this Vector4 vector,
+            string exceptionString = "Vector is NaN while it is not allowed to.")
+        {
+            if (vector.IsNaN())
+                throw new Exception(exceptionString);
+        }
+
+        /// <summary>
+        /// Checks whether any of the vector components is NaN.
+        /// </summary>
+        /// <param name="vector">The vector to check.</param>
+        /// <returns>True if any of the components is NaN.</returns>
+        public static bool IsNaN(this Vector2 vector)
+        {
+            return float.IsNaN(vector.X) || float.IsNaN(vector.Y);
+        }
+
+        /// <summary>
+        /// Checks whether any of the vector components is NaN.
+        /// </summary>
+        /// <param name="vector">The vector to check.</param>
+        /// <returns>True if any of the components is NaN.</returns>
+        public static bool IsNaN(this Vector3 vector)
+        {
+            return float.IsNaN(vector.X) || float.IsNaN(vector.Y) || float.IsNaN(vector.Z);
+        }
+
+        /// <summary>
+        /// Checks whether any of the vector components is NaN.
+        /// </summary>
+        /// <param name="vector">The vector to check.</param>
+        /// <returns>True if any of the components is NaN.</returns>
+        public static bool IsNaN(this Vector4 vector)
+        {
+            return float.IsNaN(vector.X) || float.IsNaN(vector.Y) || float.IsNaN(vector.Z) || float.IsNaN(vector.W);
         }
         #endregion
     }
