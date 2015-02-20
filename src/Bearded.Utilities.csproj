@@ -108,6 +108,7 @@
     <Compile Include="Math\Geometry\arcs\Bezier2nd3.cs" />
     <Compile Include="Math\Geometry\arcs\Bezier3rd2.cs" />
     <Compile Include="Math\Geometry\arcs\Bezier3rd3.cs" />
+    <Compile Include="Math\Geometry\PolarPosition.cs" />
     <Compile Include="Math\Geometry\Rectangle.cs" />
     <Compile Include="Math\Interpolate.cs" />
     <Compile Include="Threading\IActionQueue.cs" />
