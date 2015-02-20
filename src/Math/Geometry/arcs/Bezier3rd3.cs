@@ -30,6 +30,11 @@ namespace Bearded.Utilities.Math.Geometry
             this.p3 = p3;
         }
 
+        /// <summary>
+        /// Calculates the point on the Bezier curve at parameter t.
+        /// </summary>
+        /// <param name="t">The arc parameter t.</param>
+        /// <returns>The Euclidean coordinates of the point on the curve at parameter t.</returns>
         protected override Vector3 getPointAt(float t)
         {
             return Interpolate.Bezier(p0, p1, p2, p3, t);

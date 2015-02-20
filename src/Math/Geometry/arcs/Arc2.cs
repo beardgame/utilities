@@ -14,6 +14,12 @@ namespace Bearded.Utilities.Math.Geometry
         protected Arc2(int segments = 100)
             : base(segments) { }
 
+        /// <summary>
+        /// Calculates the distance between two points using the Euclidean metric.
+        /// </summary>
+        /// <param name="p1">The first coordinate.</param>
+        /// <param name="p2">The second coordinate.</param>
+        /// <returns>The Euclidean distance between the specified points.</returns>
         protected override float getDistanceBetween(Vector2 p1, Vector2 p2)
         {
             return (p2 - p1).Length;
