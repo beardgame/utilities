@@ -69,7 +69,6 @@
     <Folder Include="Properties\" />
     <Folder Include="Serialization\JsonNet\" />
     <Folder Include="SpaceTime\" />
-    <Folder Include="Threading\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -101,6 +100,9 @@
     <Compile Include="Math\Extensions.cs" />
     <Compile Include="Math\GameMath.cs" />
     <Compile Include="Math\Interpolate.cs" />
+    <Compile Include="Threading\IActionQueue.cs" />
+    <Compile Include="Threading\ManualActionQueue.cs" />
+    <Compile Include="Threading\BackgroundActionQueue.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
