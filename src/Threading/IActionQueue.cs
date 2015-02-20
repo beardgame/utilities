@@ -11,13 +11,13 @@ namespace Bearded.Utilities.Threading
         /// Queues an action to run. Returns immediately.
         /// </summary>
         /// <param name="action">The action to run.</param>
-        void RunAndAwait(Action action);
+        void RunAndForget(Action action);
 
         /// <summary>
         /// Queues an action to run. Returns only after the action has been executed.
         /// </summary>
         /// <param name="action">The action to run.</param>
-        void RunAndForget(Action action);
+        void RunAndAwait(Action action);
 
         /// <summary>
         /// Queues a parameterless function to run. Returns the return value of the function only after the function has been executed.
