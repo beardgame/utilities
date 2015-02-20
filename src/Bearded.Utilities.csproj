@@ -99,6 +99,7 @@
     <Compile Include="Core\EventHandlers.cs" />
     <Compile Include="Math\Angle.cs" />
     <Compile Include="Math\Direction2.cs" />
+    <Compile Include="Math\Arc.cs" />
     <Compile Include="Math\Extensions.cs" />
     <Compile Include="Math\GameMath.cs" />
     <Compile Include="Math\Geometry\Rectangle.cs" />
