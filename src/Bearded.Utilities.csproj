@@ -60,7 +60,6 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Algorithms\" />
     <Folder Include="Data\" />
     <Folder Include="Diagnostics\" />
     <Folder Include="IO\" />
@@ -99,6 +98,7 @@
     <Compile Include="Collections\MutableLinkedListItem.cs" />
     <Compile Include="Collections\MutableLinkedListNode.cs" />
     <Compile Include="Collections\DeletableObjectList.cs" />
+    <Compile Include="Algorithms\HungarianAlgorithm.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Core\Do.cs" />
     <Compile Include="Core\Environment.cs" />
