@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using System;
+using OpenTK;
 
 namespace Bearded.Utilities.Math.Geometry
 {
@@ -94,6 +95,9 @@ namespace Bearded.Utilities.Math.Geometry
         /// <param name="height">Height of the rectangle.</param>
         public Rectangle(float x, float y, float width, float height)
         {
+            if (width < 0 || height < 0)
+                throw new ArgumentException("Width and height of the rectangle have to be non-negative.");
+
             this.x = x;
             this.y = y;
             this.width = width;
