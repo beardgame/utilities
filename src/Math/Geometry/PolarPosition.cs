@@ -81,5 +81,45 @@ namespace Bearded.Utilities.Math.Geometry
             return this.r == other.r && (this.r == 0 || this.angle == other.angle);
         }
         #endregion
+
+        #region Object overrides
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            if (r == 0)
+                return 0;
+
+            unchecked
+            {
+                return (this.r.GetHashCode() * 397) ^ this.angle.GetHashCode();
+            }
+        }
+        #endregion
+
+        #region Operator
+        #region Equality
+        /// <summary>
+        /// Checks two polar positions for equality.
+        /// </summary>
+        /// <returns>True if the polar positions are equal, false otherwise.</returns>
+        public static bool operator ==(PolarPosition p1, PolarPosition p2)
+        {
+            return p1.Equals(p2);
+        }
+
+        /// <summary>
+        /// Checks two polar positions for inequality.
+        /// </summary>
+        /// <returns>True if the polar positions are not equal, false otherwise.</returns>
+        public static bool operator !=(PolarPosition p1, PolarPosition p2)
+        {
+            return !(p1 == p2);
+        }
+        #endregion
+        #endregion
     }
 }
