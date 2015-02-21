@@ -60,7 +60,6 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Algorithms\" />
     <Folder Include="Collections\" />
     <Folder Include="Data\" />
     <Folder Include="Diagnostics\" />
@@ -93,6 +92,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms\HungarianAlgorithm.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Core\Do.cs" />
     <Compile Include="Core\Environment.cs" />
