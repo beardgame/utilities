@@ -74,7 +74,7 @@ namespace Bearded.Utilities.Math.Geometry
         {
             get { return new Vector2(this.Right, this.Bottom); }
         }
-        
+
         /// <summary>
         /// The coordinates of the center of mass of the rectangle.
         /// </summary>
@@ -84,6 +84,7 @@ namespace Bearded.Utilities.Math.Geometry
         }
         #endregion
 
+        #region Constructors
         /// <summary>
         /// Creates a new rectangle.
         /// </summary>
@@ -107,15 +108,9 @@ namespace Bearded.Utilities.Math.Geometry
         /// <param name="height">Height of the rectangle.</param>
         public Rectangle(Vector2 xy, float width, float height)
             : this(xy.X, xy.Y, width, height) { }
+        #endregion
 
-        /// <summary>
-        /// Creates a new rectangle.
-        /// </summary>
-        /// <param name="upperLeft">Coordinates of the upper left corner.</param>
-        /// <param name="bottomRight">Coordinates of the bottom right corner.</param>
-        public Rectangle(Vector2 upperLeft, Vector2 bottomRight)
-            : this(upperLeft.X, upperLeft.Y, bottomRight.X - upperLeft.X, bottomRight.Y - upperLeft.Y) { }
-
+        #region Collision checks
         /// <summary>
         /// Checks if the rectangle contains a point.
         /// </summary>
@@ -158,5 +153,26 @@ namespace Bearded.Utilities.Math.Geometry
             return !(other.Left > this.Right || other.Right < this.Left ||
                 other.Top > this.Bottom || other.Bottom < this.Top);
         }
+        #endregion
+
+        #region Static creators
+        /// <summary>
+        /// Creates a new rectangle with the specified points as corners.
+        /// </summary>
+        /// <returns>A rectangle with the specified points as corners.</returns>
+        public static Rectangle WithCorners(Vector2 upperLeft, Vector2 bottomRight)
+        {
+            return new Rectangle(upperLeft.X, upperLeft.Y, bottomRight.X - upperLeft.X, bottomRight.Y - upperLeft.Y);
+        }
+
+        /// <summary>
+        /// Creates a new rectangle with its boundaries at the specified coordinates.
+        /// </summary>
+        /// <returns>A rectangle with the specified coordinates as boundaries.</returns>
+        public static Rectangle WithSides(float top, float right, float bottom, float left)
+        {
+            return new Rectangle(top, left, bottom - top, right - left);
+        }
+        #endregion
     }
 }
