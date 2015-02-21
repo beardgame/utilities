@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Bearded.Utilities.Collections
 {
@@ -28,6 +28,12 @@ namespace Bearded.Utilities.Collections
         /// </summary>
         public float MaxEmptyFraction { get; set; }
 
+
+        /// <summary>
+        /// Gets an approximation of the number of items in the list.
+        /// The value is an inclusive upper bound to the actual number of items.
+        /// </summary>
+        public int ApproximateCount { get { return this.count; } }
 
         #endregion
 
@@ -79,6 +85,18 @@ namespace Bearded.Utilities.Collections
         {
             this.list[i] = null;
             this.count--;
+
+            if(this.count == 0)
+                this.list.Clear();
+        }
+
+        /// <summary>
+        /// Clears the list of all items.
+        /// </summary>
+        public void Clear()
+        {
+            this.list.Clear();
+            this.count = 0;
         }
 
         #region Enumeration
