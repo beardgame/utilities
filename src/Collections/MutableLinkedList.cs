@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Bearded.Utilities.Collections
 {
     /// <summary>
     /// A generic linked list that can be modified while it is being enumerated.
+    /// Unless otherwise specified, all operations on this list, including removal by node, run in constant time.
     /// This list is not threadsafe.
     /// </summary>
     public sealed class MutableLinkedList<T> : IEnumerable<T>
@@ -94,7 +95,7 @@ namespace Bearded.Utilities.Collections
         /// Tries to return the first occurrence of an item from the list.
         /// Returns true if it found and removed the item or false if the item is not in the list.
         /// </summary>
-        /// <remarks>This method takes O(n) time to complete and should not be used unless necessary.</remarks>
+        /// <remarks>This method takes O(Count) time and its use is discouraged.</remarks>
         /// <param name="item">The item to remove.</param>
         public bool Remove(T item)
         {
