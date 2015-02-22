@@ -39,6 +39,7 @@ namespace Bearded.Utilities.Collections
                     else
                     {
                         this.Current = item;
+                        this.i++;
                         return true;
                     }
                 this.i++;
