@@ -96,6 +96,7 @@
     <Compile Include="Core\Box.cs" />
     <Compile Include="Core\Id.cs" />
     <Compile Include="Core\ResetableLazy.cs" />
+    <Compile Include="Core\Singleton.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Core\Do.cs" />
     <Compile Include="Core\Environment.cs" />
