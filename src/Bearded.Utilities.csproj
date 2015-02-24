@@ -95,6 +95,11 @@
     <Compile Include="Core\Log.cs" />
     <Compile Include="Core\StaticRandom.cs" />
     <Compile Include="Core\RandomExtensions.cs" />
+    <Compile Include="Core\Box.cs" />
+    <Compile Include="Core\Id.cs" />
+    <Compile Include="Core\ResettableLazy.cs" />
+    <Compile Include="Core\Singleton.cs" />
+    <Compile Include="Core\Void.cs" />
     <Compile Include="Input\DigitalAction.cs" />
     <Compile Include="Input\DummyAction.cs" />
     <Compile Include="Input\GamePadAction.cs" />
