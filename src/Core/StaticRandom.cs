@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Bearded.Utilities
 {
@@ -7,6 +7,7 @@ namespace Bearded.Utilities
     /// The class is threadsafe and uses a different internal random object for each thread.
     /// Note that several of the methods are slightly biased for the sake of performance.
     /// </summary>
+    /// <remarks>The actual implementations of the custom random methods can be found in RandomExtensions.</remarks>
     public static class StaticRandom
     {
         #region Threadsafe random
