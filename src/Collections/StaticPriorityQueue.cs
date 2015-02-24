@@ -20,7 +20,7 @@ namespace Bearded.Utilities.Collections
         /// <summary>
         /// The amount of elements the tree contains.
         /// </summary>
-        public int Count { get; private set; }
+        public int Count { get; protected set; }
 
 // ReSharper disable once MemberCanBeProtected.Global
         /// <summary>
@@ -45,6 +45,7 @@ namespace Bearded.Utilities.Collections
         public StaticPriorityQueue(IEnumerable<KeyValuePair<TPriority, TValue>> data)
         {
             this.data = data.ToArray();
+            this.Count = this.data.Length;
             for (int i = this.data.Length / 2 - 1; i >= 0; i--)
                 this.cascadeDown(i);
         }
@@ -71,7 +72,7 @@ namespace Bearded.Utilities.Collections
         public KeyValuePair<TPriority, TValue> Peek()
         {
             if (this.Count == 0)
-                throw new ArgumentOutOfRangeException();
+                throw new InvalidOperationException();
 
             return this.data[0];
         }
@@ -83,7 +84,7 @@ namespace Bearded.Utilities.Collections
         public KeyValuePair<TPriority, TValue> Dequeue()
         {
             if (this.Count == 0)
-                throw new ArgumentOutOfRangeException();
+                throw new InvalidOperationException();
 
             var oldRoot = this.data[0];
             this.swap(0, this.Count - 1);

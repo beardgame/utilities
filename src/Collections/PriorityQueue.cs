@@ -32,6 +32,7 @@ namespace Bearded.Utilities.Collections
         public PriorityQueue(IEnumerable<KeyValuePair<TPriority, TValue>> data)
         {
             this.data = data.ToArray();
+            this.Count = this.data.Length;
             for (int i = 0; i < this.data.Length; i++)
                 this.valueDict.Add(this.data[i].Value, i);
             for (int i = this.data.Length / 2 - 1; i >= 0; i--)
@@ -46,6 +47,8 @@ namespace Bearded.Utilities.Collections
         public void DecreasePriority(TValue value, TPriority newPriority)
         {
             int i = this.valueDict[value];
+            if (this.data[i].Key.CompareTo(newPriority) == -1)
+                throw new InvalidOperationException("Can not increase the priority.");
             this.data[i] = new KeyValuePair<TPriority, TValue>(newPriority, value);
             this.cascadeUp(i);
         }

@@ -53,6 +53,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Collections\PriorityQueueTests.cs" />
+    <Compile Include="Collections\StaticPriorityQueueTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
