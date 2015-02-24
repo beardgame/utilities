@@ -60,7 +60,6 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Collections\" />
     <Folder Include="Data\" />
     <Folder Include="Diagnostics\" />
     <Folder Include="IO\" />
@@ -92,6 +91,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\DeletableObjectListEnumerator.cs" />
+    <Compile Include="Collections\IDeletable.cs" />
+    <Compile Include="Collections\MutableLinkedList.cs" />
+    <Compile Include="Collections\MutableLinkedListEnumerator.cs" />
+    <Compile Include="Collections\MutableLinkedListItem.cs" />
+    <Compile Include="Collections\MutableLinkedListNode.cs" />
+    <Compile Include="Collections\DeletableObjectList.cs" />
     <Compile Include="Algorithms\HungarianAlgorithm.cs" />
     <Compile Include="Core\StaticRandom.cs" />
     <Compile Include="Core\RandomExtensions.cs" />
