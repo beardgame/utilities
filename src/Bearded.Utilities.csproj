@@ -106,6 +106,7 @@
     <Compile Include="Core\ResetableLazy.cs" />
     <Compile Include="Core\Singleton.cs" />
     <Compile Include="Core\Void.cs" />
+    <Compile Include="Core\Log.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Core\Do.cs" />
     <Compile Include="Core\Environment.cs" />
