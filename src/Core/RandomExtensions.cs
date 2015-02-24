@@ -172,11 +172,11 @@ namespace Bearded.Utilities
         }
 
         /// <summary>
-        /// Returns a random boolean value.
+        /// Returns a random boolean value with specified probability.
         /// </summary>
         /// <param name="random">The Random instance to sample with.</param>
-        /// <param name="probability">The probability with which to return true.
-        /// Always returns true for values greater or equal to 1, and false for values less or equal to 0.</param>
+        /// <param name="probability">The probability with which to return true.</param>
+        /// <returns>Always returns true for probabilities greater or equal to 1 and false for probabilities less or equal to 0.</returns>
         public static bool NextBool(this Random random, double probability = 0.5)
         {
             return random.NextDouble() < probability;
@@ -184,6 +184,7 @@ namespace Bearded.Utilities
 
         /// <summary>
         /// Returns an integer, with a given expected value. Will always return either the floor or ceil of the given value.
+        /// Returns an integer with a given expected value. Will always return either the floor or ceil of the given value.
         /// </summary>
         /// <param name="random">The Random instance to sample with.</param>
         /// <param name="value">The expected value.</param>
