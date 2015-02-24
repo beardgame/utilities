@@ -7,7 +7,7 @@ namespace Bearded.Utilities
     public static class Box
     {
         /// <summary>
-        /// Gets a new box witha  given value.
+        /// Gets a new box with a given value.
         /// </summary>
         /// <param name="value">The value of the box.</param>
         public static Box<T> This<T>(T value)
