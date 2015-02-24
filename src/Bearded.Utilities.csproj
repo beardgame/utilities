@@ -99,6 +99,8 @@
     <Compile Include="Collections\MutableLinkedListNode.cs" />
     <Compile Include="Collections\DeletableObjectList.cs" />
     <Compile Include="Algorithms\HungarianAlgorithm.cs" />
+    <Compile Include="Core\StaticRandom.cs" />
+    <Compile Include="Core\RandomExtensions.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Core\Do.cs" />
     <Compile Include="Core\Environment.cs" />
