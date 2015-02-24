@@ -60,7 +60,6 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Collections\" />
     <Folder Include="Data\" />
     <Folder Include="Diagnostics\" />
     <Folder Include="IO\" />
@@ -106,6 +105,13 @@
     <Compile Include="Input\IAction.cs" />
     <Compile Include="Input\InputAction.cs" />
     <Compile Include="Input\InputManager.cs" />
+    <Compile Include="Collections\DeletableObjectListEnumerator.cs" />
+    <Compile Include="Collections\IDeletable.cs" />
+    <Compile Include="Collections\MutableLinkedList.cs" />
+    <Compile Include="Collections\MutableLinkedListEnumerator.cs" />
+    <Compile Include="Collections\MutableLinkedListItem.cs" />
+    <Compile Include="Collections\MutableLinkedListNode.cs" />
+    <Compile Include="Collections\DeletableObjectList.cs" />
     <Compile Include="Core\Do.cs" />
     <Compile Include="Core\Environment.cs" />
     <Compile Include="Core\EventHandlers.cs" />
