@@ -63,7 +63,6 @@
     <Folder Include="Data\" />
     <Folder Include="Diagnostics\" />
     <Folder Include="IO\" />
-    <Folder Include="Linq\" />
     <Folder Include="Properties\" />
     <Folder Include="Serialization\JsonNet\" />
     <Folder Include="SpaceTime\" />
@@ -113,6 +112,7 @@
     <Compile Include="Core\Do.cs" />
     <Compile Include="Core\Environment.cs" />
     <Compile Include="Core\EventHandlers.cs" />
+    <Compile Include="Linq\Extensions.cs" />
     <Compile Include="Math\Angle.cs" />
     <Compile Include="Math\Direction2.cs" />
     <Compile Include="Math\Arc.cs" />

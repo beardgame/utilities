@@ -12,13 +12,13 @@ namespace Bearded.Utilities
     {
         #region Threadsafe random
         [ThreadStatic]
-// ReSharper disable once InconsistentNaming
-        private static Random _random;
+        private static Random random;
 
         /// <summary>
         /// The thread safe instance of Random used by StaticRandom
         /// </summary>
-        private static Random random { get { return _random ?? (_random = new Random()); } }
+        // is internal for use as default random in Linq.Extensions
+        internal static Random Random { get { return random ?? (random = new Random()); } }
 
         /// <summary>
         /// Overrides the Random object for the calling thread by one with the given seed.
@@ -26,7 +26,7 @@ namespace Bearded.Utilities
         /// <param name="seed">The seed</param>
         public static void SeedWith(int seed)
         {
-            _random = new Random(seed);
+            random = new Random(seed);
         }
 
         #endregion
@@ -38,7 +38,7 @@ namespace Bearded.Utilities
         /// </summary>
         public static int Int()
         {
-            return random.Next();
+            return Random.Next();
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Bearded.Utilities
         /// <param name="max">The exclusive upper bound.</param>
         public static int Int(int max)
         {
-            return random.Next(max);
+            return Random.Next(max);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Bearded.Utilities
         /// <param name="max">The exclusive upper bound.</param>
         public static int Int(int min, int max)
         {
-            return random.Next(min, max);
+            return Random.Next(min, max);
         }
 
         #endregion
@@ -70,7 +70,7 @@ namespace Bearded.Utilities
         /// <returns></returns>
         public static long Long()
         {
-            return random.NextLong();
+            return Random.NextLong();
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Bearded.Utilities
         /// <param name="max">The exclusive upper bound.</param>
         public static long Long(long max)
         {
-            return random.NextLong(max);
+            return Random.NextLong(max);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Bearded.Utilities
         /// <param name="max">The exclusive upper bound.</param>
         public static long Long(long min, long max)
         {
-            return random.NextLong(min, max);
+            return Random.NextLong(min, max);
         }
 
         #endregion
@@ -102,7 +102,7 @@ namespace Bearded.Utilities
         /// <returns></returns>
         public static double Double()
         {
-            return random.NextDouble();
+            return Random.NextDouble();
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace Bearded.Utilities
         /// <param name="max">The exclusive upper bound.</param>
         public static double Double(double max)
         {
-            return random.NextDouble(max);
+            return Random.NextDouble(max);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace Bearded.Utilities
         /// <param name="max">The exclusive upper bound.</param>
         public static double Double(double min, double max)
         {
-            return random.NextDouble(min, max);
+            return Random.NextDouble(min, max);
         }
 
         #endregion
@@ -133,7 +133,7 @@ namespace Bearded.Utilities
         /// </summary>
         public static double NormalDouble()
         {
-            return random.NormalDouble();
+            return Random.NormalDouble();
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace Bearded.Utilities
         /// <param name="deviation">The standard deviation.</param>
         public static double NormalDouble(double mean, double deviation)
         {
-            return random.NormalDouble(mean, deviation);
+            return Random.NormalDouble(mean, deviation);
         }
 
         #endregion
@@ -154,7 +154,7 @@ namespace Bearded.Utilities
         /// </summary>
         public static float Float()
         {
-            return random.NextFloat();
+            return Random.NextFloat();
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace Bearded.Utilities
         /// <param name="max">The exclusive upper bound.</param>
         public static float Float(float max)
         {
-            return random.NextFloat(max);
+            return Random.NextFloat(max);
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace Bearded.Utilities
         /// <param name="max">The exclusive upper bound.</param>
         public static float Float(float min, float max)
         {
-            return random.NextFloat(min, max);
+            return Random.NextFloat(min, max);
         }
         #endregion
 
@@ -184,7 +184,7 @@ namespace Bearded.Utilities
         /// </summary>
         public static float NormalFloat()
         {
-            return random.NormalFloat();
+            return Random.NormalFloat();
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace Bearded.Utilities
         /// <param name="deviation">The standard deviation.</param>
         public static float NormalFloat(float mean, float deviation)
         {
-            return random.NormalFloat(mean, deviation);
+            return Random.NormalFloat(mean, deviation);
         }
 
         #endregion
@@ -206,7 +206,7 @@ namespace Bearded.Utilities
         /// </summary>
         public static int Sign()
         {
-            return random.NextSign();
+            return Random.NextSign();
         }
 
         /// <summary>
@@ -216,7 +216,7 @@ namespace Bearded.Utilities
         /// <returns>Always returns true for probabilities greater or equal to 1 and false for probabilities less or equal to 0.</returns>
         public static bool Bool(double probability = 0.5)
         {
-            return random.NextBool(probability);
+            return Random.NextBool(probability);
         }
 
 
@@ -226,7 +226,7 @@ namespace Bearded.Utilities
         /// <param name="value">The expected value.</param>
         public static int Discretise(float value)
         {
-            return random.Discretise(value);
+            return Random.Discretise(value);
         }
 
         #endregion
