@@ -5,15 +5,15 @@ namespace Bearded.Utilities
     /// <summary>
     /// Static class to help make resetable lazies.
     /// </summary>
-    public static class ResetableLazy
+    public static class ResettableLazy
     {
         /// <summary>
         /// Creates a new resetable lazy with a given initialisation function.
         /// </summary>
         /// <param name="maker">The function to initialise the value of the lazy.</param>
-        public static ResetableLazy<T> From<T>(Func<T> maker)
+        public static ResettableLazy<T> From<T>(Func<T> maker)
         {
-            return new ResetableLazy<T>(maker);
+            return new ResettableLazy<T>(maker);
         }
     }
 
@@ -21,7 +21,7 @@ namespace Bearded.Utilities
     /// This class represents a lazily initialised value. It can be reset to call the initialisation again afterwards.
     /// It is not thread safe.
     /// </summary>
-    public sealed class ResetableLazy<T>
+    public sealed class ResettableLazy<T>
     {
         private readonly Func<T> maker;
 
@@ -48,7 +48,7 @@ namespace Bearded.Utilities
         /// Creates a new resetable lazy instance.
         /// </summary>
         /// <param name="maker">The function that initialises the value for this instance.</param>
-        public ResetableLazy(Func<T> maker)
+        public ResettableLazy(Func<T> maker)
         {
             this.maker = maker;
         }
