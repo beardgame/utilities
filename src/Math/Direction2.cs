@@ -9,7 +9,7 @@ namespace Bearded.Utilities.Math
     public struct Direction2 : IEquatable<Direction2>
     {
         const float fromRadians = uint.MaxValue / GameMath.TwoPi;
-        const float toRadians = GameMath.TwoPi / ushort.MaxValue;
+        const float toRadians = GameMath.TwoPi / uint.MaxValue;
 
         const float fromDegrees = uint.MaxValue / 360f;
         const float toDegrees = 360f / uint.MaxValue;
