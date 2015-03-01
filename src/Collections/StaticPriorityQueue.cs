@@ -121,7 +121,7 @@ namespace Bearded.Utilities.Collections
             {
                 var parent = getParent(i);
 
-                if (data[i].Key.CompareTo(data[parent].Key) == -1)
+                if (data[i].Key.CompareTo(data[parent].Key) < 0)
                     this.swap(i, parent);
                 else return;
 
@@ -141,9 +141,9 @@ namespace Bearded.Utilities.Collections
                 var right = getRightChild(i);
                 var smallest = i;
 
-                if (left < this.Count && this.data[left].Key.CompareTo(this.data[smallest].Key) == -1)
+                if (left < this.Count && this.data[left].Key.CompareTo(this.data[smallest].Key) < 0)
                     smallest = left;
-                if (right < this.Count && this.data[right].Key.CompareTo(this.data[smallest].Key) == -1)
+                if (right < this.Count && this.data[right].Key.CompareTo(this.data[smallest].Key) < 0)
                     smallest = right;
 
                 if (smallest == i)

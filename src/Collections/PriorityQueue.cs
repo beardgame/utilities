@@ -47,7 +47,7 @@ namespace Bearded.Utilities.Collections
         public void DecreasePriority(TValue value, TPriority newPriority)
         {
             int i = this.valueDict[value];
-            if (this.data[i].Key.CompareTo(newPriority) == -1)
+            if (this.data[i].Key.CompareTo(newPriority) < 0)
                 throw new InvalidOperationException("Can not increase the priority.");
             this.data[i] = new KeyValuePair<TPriority, TValue>(newPriority, value);
             this.cascadeUp(i);

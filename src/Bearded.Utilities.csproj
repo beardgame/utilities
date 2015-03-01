@@ -90,7 +90,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <Compile Include="Algorithms\HungarianAlgorithm.cs" />
     <Compile Include="Core\Log.cs" />
     <Compile Include="Core\StaticRandom.cs" />
@@ -105,10 +104,6 @@
     <Compile Include="Input\GamePadAction.cs" />
     <Compile Include="Input\IAction.cs" />
     <Compile Include="Input\InputAction.cs" />
-=======
-    <Compile Include="Collections\PriorityQueue.cs" />
-    <Compile Include="Collections\StaticPriorityQueue.cs" />
->>>>>>> Implemented priority queues.
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Collections\DeletableObjectListEnumerator.cs" />
     <Compile Include="Collections\IDeletable.cs" />
@@ -116,6 +111,8 @@
     <Compile Include="Collections\MutableLinkedListEnumerator.cs" />
     <Compile Include="Collections\MutableLinkedListItem.cs" />
     <Compile Include="Collections\MutableLinkedListNode.cs" />
+    <Compile Include="Collections\PriorityQueue.cs" />
+    <Compile Include="Collections\StaticPriorityQueue.cs" />
     <Compile Include="Collections\DeletableObjectList.cs" />
     <Compile Include="Core\Do.cs" />
     <Compile Include="Core\Environment.cs" />
