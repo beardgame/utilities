@@ -8,7 +8,7 @@ Most of it is extracted from or written explicitly for the projects of [Paul Sch
 
 ## Collaborate & Share!
 
-We believe in reusing useful and generic code to accelerate development. With this project, we want to compile and share code that we fund useful and reusable.
+We believe in reusing useful and generic code to accelerate development. With this project, we want to compile and share code that we find useful and reusable.
 
 If you have similar code that you think would add something to the library, please feel free to make a pull request!
 
