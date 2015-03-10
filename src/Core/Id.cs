@@ -50,7 +50,7 @@ namespace Bearded.Utilities
         /// </summary>
         public bool Equals(Id<T> other)
         {
-            return other.value.Equals(other.value);
+            return this.value.Equals(other.value);
         }
 
         /// <summary>
