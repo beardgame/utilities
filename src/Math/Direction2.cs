@@ -185,7 +185,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Direction2 operator -(Direction2 direction)
         {
-            return new Direction2(direction.data + uint.MaxValue / 2);
+            return new Direction2(direction.data + (uint.MaxValue / 2 + 1));
         }
 
         #endregion
