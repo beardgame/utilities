@@ -252,6 +252,15 @@ namespace Bearded.Utilities
         /// <summary>
         /// Adds a regular message to the log.
         /// </summary>
+        /// <param name="obj">Value to log in the message.</param>
+        public static void Line<T>(T obj)
+        {
+            AddEntry(new Entry(obj.ToString()));
+        }
+
+        /// <summary>
+        /// Adds a regular message to the log.
+        /// </summary>
         /// <param name="text">Template string of the message.</param>
         /// <param name="parameters">Parameters inserted into template string.</param>
         public static void Line(string text, params object[] parameters)
@@ -269,6 +278,16 @@ namespace Bearded.Utilities
         {
             AddEntry(new Entry(text, Type.Warning));
         }
+
+        /// <summary>
+        /// Adds a warning to the log.
+        /// </summary>
+        /// <param name="obj">Value to log in the warning.</param>
+        public static void Warning<T>(T obj)
+        {
+            AddEntry(new Entry(obj.ToString(), Type.Warning));
+        }
+
         /// <summary>
         /// Adds a warning to the log.
         /// </summary>
@@ -289,6 +308,16 @@ namespace Bearded.Utilities
         {
             AddEntry(new Entry(text, Type.Error));
         }
+
+        /// <summary>
+        /// Adds an error to the log.
+        /// </summary>
+        /// <param name="obj">Value to log in the error.</param>
+        public static void Error<T>(T obj)
+        {
+            AddEntry(new Entry(obj.ToString(), Type.Error));
+        }
+
         /// <summary>
         /// Adds an error to the log.
         /// </summary>
@@ -313,6 +342,19 @@ namespace Bearded.Utilities
 #endif
             AddEntry(new Entry(text, Type.Debug));
         }
+
+        /// <summary>
+        /// Adds a debug message to the log.
+        /// </summary>
+        /// <param name="obj">Value to log in the debug message.</param>
+        public static void Debug<T>(T obj)
+        {
+#if !DEBUG
+            return;
+#endif
+            AddEntry(new Entry(obj.ToString(), Type.Debug));
+        }
+
         /// <summary>
         /// Adds a debug message to the log.
         /// If the application is not run in DEBUG mode, this has no effect.
@@ -337,6 +379,16 @@ namespace Bearded.Utilities
         {
             AddEntry(new Entry(text, Type.Special));
         }
+
+        /// <summary>
+        /// Adds a special message to the log.
+        /// </summary>
+        /// <param name="obj">Value to log in the special message.</param>
+        public static void Special<T>(T obj)
+        {
+            AddEntry(new Entry(obj.ToString(), Type.Special));
+        }
+
         /// <summary>
         /// Adds a special message to the log.
         /// </summary>
