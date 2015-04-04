@@ -1,4 +1,4 @@
-﻿using OpenTK;
+using OpenTK;
 
 namespace Bearded.Utilities.Math
 {
@@ -17,7 +17,12 @@ namespace Bearded.Utilities.Math
         /// <returns>The result of the Bezier curve interpolation.</returns>
         public static Vector2 Bezier(Vector2 p0, Vector2 p1, float t)
         {
-            return Interpolate.bezier(p0, p1, t.Clamped(0, 1));
+            if (t <= 0)
+                return p0;
+            if (t >= 1)
+                return p1;
+
+            return Interpolate.bezier(p0, p1, t);
         }
 
         private static Vector2 bezier(Vector2 p0, Vector2 p1, float t)
@@ -35,7 +40,12 @@ namespace Bearded.Utilities.Math
         /// <returns>The result of the Bezier curve interpolation.</returns>
         public static Vector2 Bezier(Vector2 p0, Vector2 p1, Vector2 p2, float t)
         {
-            return Interpolate.bezier(p0, p1, p2, t.Clamped(0, 1));
+            if (t <= 0)
+                return p0;
+            if (t >= 1)
+                return p2;
+
+            return Interpolate.bezier(p0, p1, p2, t);
         }
 
         private static Vector2 bezier(Vector2 p0, Vector2 p1, Vector2 p2, float t)
@@ -54,7 +64,12 @@ namespace Bearded.Utilities.Math
         /// <returns>The result of the Bezier curve interpolation.</returns>
         public static Vector2 Bezier(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, float t)
         {
-            return Interpolate.bezier(p0, p1, p2, p3, t.Clamped(0, 1));
+            if (t <= 0)
+                return p0;
+            if (t >= 1)
+                return p3;
+
+            return Interpolate.bezier(p0, p1, p2, p3, t);
         }
 
         private static Vector2 bezier(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, float t)
@@ -73,7 +88,12 @@ namespace Bearded.Utilities.Math
         /// <returns>The result of the Bezier curve interpolation.</returns>
         public static Vector3 Bezier(Vector3 p0, Vector3 p1, float t)
         {
-            return Interpolate.bezier(p0, p1, t.Clamped(0, 1));
+            if (t <= 0)
+                return p0;
+            if (t >= 1)
+                return p1;
+
+            return Interpolate.bezier(p0, p1, t);
         }
 
         private static Vector3 bezier(Vector3 p0, Vector3 p1, float t)
@@ -91,7 +111,12 @@ namespace Bearded.Utilities.Math
         /// <returns>The result of the Bezier curve interpolation.</returns>
         public static Vector3 Bezier(Vector3 p0, Vector3 p1, Vector3 p2, float t)
         {
-            return Interpolate.bezier(p0, p1, p2, t.Clamped(0, 1));
+            if (t <= 0)
+                return p0;
+            if (t >= 1)
+                return p2;
+
+            return Interpolate.bezier(p0, p1, p2, t);
         }
 
         private static Vector3 bezier(Vector3 p0, Vector3 p1, Vector3 p2, float t)
@@ -110,7 +135,12 @@ namespace Bearded.Utilities.Math
         /// <returns>The result of the Bezier curve interpolation.</returns>
         public static Vector3 Bezier(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
         {
-            return Interpolate.bezier(p0, p1, p2, p3, t.Clamped(0, 1));
+            if (t <= 0)
+                return p0;
+            if (t >= 1)
+                return p3;
+
+            return Interpolate.bezier(p0, p1, p2, p3, t);
         }
 
         private static Vector3 bezier(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
@@ -158,7 +188,12 @@ namespace Bearded.Utilities.Math
         /// <returns>The interpolated value.</returns>
         public static float SmoothStep(float from, float to, float t)
         {
-            return Interpolate.Hermite(from, 0, to, 0, t.Clamped(0, 1));
+            if (t <= 0)
+                return from;
+            if (t >= 1)
+                return to;
+
+            return Interpolate.Hermite(from, 0, to, 0, t);
         }
         #endregion
 
@@ -172,7 +207,12 @@ namespace Bearded.Utilities.Math
         /// <returns>The interpolated value.</returns>
         public static float Lerp(float from, float to, float t)
         {
-            return from + (to - from) * t.Clamped(0, 1);
+            if (t <= 0)
+                return from;
+            if (t >= 1)
+                return to;
+
+            return from + (to - from) * t;
         }
 
         /// <summary>
