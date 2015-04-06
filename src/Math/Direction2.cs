@@ -9,7 +9,7 @@ namespace Bearded.Utilities.Math
     public struct Direction2 : IEquatable<Direction2>
     {
         const float fromRadians = uint.MaxValue / GameMath.TwoPi;
-        const float toRadians = GameMath.TwoPi / ushort.MaxValue;
+        const float toRadians = GameMath.TwoPi / uint.MaxValue;
 
         const float fromDegrees = uint.MaxValue / 360f;
         const float toDegrees = 360f / uint.MaxValue;
@@ -185,7 +185,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Direction2 operator -(Direction2 direction)
         {
-            return new Direction2(direction.data + uint.MaxValue / 2);
+            return new Direction2(direction.data + (uint.MaxValue / 2 + 1));
         }
 
         #endregion
