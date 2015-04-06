@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -146,7 +146,7 @@ namespace Bearded.Utilities.Collections
                 throw new ArgumentNullException("values");
 
             var valueList = values.NotNull().Distinct()
-                .OrderBy(s => s, StringComparer.OrdinalIgnoreCase).ToList();
+                .OrderBy(s => s).ToList();
 
             this.count = valueList.Count;
 
@@ -190,6 +190,7 @@ namespace Bearded.Utilities.Collections
         /// <summary>
         /// Returns all contained strings with a given prefix.
         /// </summary>
+        /// <returns>Empty sequence if prefix is not contained in tree.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="prefix"/> is null.</exception>
         public IEnumerable<string> AllKeys(string prefix)
         {
@@ -203,6 +204,7 @@ namespace Bearded.Utilities.Collections
         /// <summary>
         /// Returns the maximum prefix that prefixes the same set of strings are the given one.
         /// </summary>
+        /// <returns>Null if prefix is not contained in tree.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="prefix"/> is null.</exception>
         public string ExtendPrefix(string prefix)
         {
