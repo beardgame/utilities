@@ -27,7 +27,7 @@ namespace Bearded.Utilities.Math
 
         private static Vector2 bezier(Vector2 p0, Vector2 p1, float t)
         {
-            return (1 - t) * p0 + t * p1;
+            return p0 + (p1 - p0) * t;
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Bearded.Utilities.Math
 
         private static Vector3 bezier(Vector3 p0, Vector3 p1, float t)
         {
-            return (1 - t) * p0 + t * p1;
+            return p0 + (p1 - p0) * t;
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace Bearded.Utilities.Math
         /// <returns>The result of the Hermite spline interpolation.</returns>
         public static float Hermite(float value1, float tangent1, float value2, float tangent2, float amount)
         {
-            // All transformed to double not to lose precission.
+            // All transformed to double not to lose precision.
             // Otherwise, we might get NaN or Infinity result.
             double v1 = value1, v2 = value2, t1 = tangent1, t2 = tangent2, s = amount, result;
             double sCubed = s * s * s;
@@ -216,38 +216,78 @@ namespace Bearded.Utilities.Math
         }
 
         /// <summary>
-        /// Performs a biliear interpolation between four values.
-        /// Note: The parameters are not clamped to the 0-1 range.
+        /// Performs a bilinear interpolation between four values.
         /// </summary>
         /// <param name="value00">The first value.</param>
         /// <param name="value10">The second value.</param>
         /// <param name="value01">The third value.</param>
         /// <param name="value11">The fourth value.</param>
-        /// <param name="u">Parameter in first dimension</param>
-        /// <param name="v">Parameter in second dimension.</param>
+        /// <param name="u">Parameter in first dimension (between 0 and 1).</param>
+        /// <param name="v">Parameter in second dimension (between 0 and 1).</param>
         /// <returns>The interpolated value.</returns>
         public static float BiLerp(float value00, float value10, float value01, float value11, float u, float v)
         {
-            var first = value00 + (value10 - value00) * u;
-            var second = value01 + (value11 - value01) * u;
+            float first, second;
+
+            if (u <= 0)
+            {
+                first = value00;
+                second = value01;
+            }
+            else if(u >= 1)
+            {
+                first = value10;
+                second = value11;
+            }
+            else
+            {
+                first = value00 + (value10 - value00) * u;
+                second = value01 + (value11 - value01) * u;
+            }
+
+            if (v <= 0)
+                return first;
+            if (v >= 1)
+                return second;
+
             return first + (second - first) * v;
         }
 
         /// <summary>
-        /// Performs a biliear interpolation between four vectors.
-        /// Note: The parameters are not clamped to the 0-1 range.
+        /// Performs a bilinear interpolation between four values.
         /// </summary>
         /// <param name="value00">The first value.</param>
         /// <param name="value10">The second value.</param>
         /// <param name="value01">The third value.</param>
         /// <param name="value11">The fourth value.</param>
-        /// <param name="u">Parameter in first dimension</param>
-        /// <param name="v">Parameter in second dimension.</param>
+        /// <param name="u">Parameter in first dimension (between 0 and 1).</param>
+        /// <param name="v">Parameter in second dimension (between 0 and 1).</param>
         /// <returns>The interpolated value.</returns>
         public static Vector2 BiLerp(Vector2 value00, Vector2 value10, Vector2 value01, Vector2 value11, float u, float v)
         {
-            var first = value00 + (value10 - value00) * u;
-            var second = value01 + (value11 - value01) * u;
+            Vector2 first, second;
+
+            if (u <= 0)
+            {
+                first = value00;
+                second = value01;
+            }
+            else if (u >= 1)
+            {
+                first = value10;
+                second = value11;
+            }
+            else
+            {
+                first = value00 + (value10 - value00) * u;
+                second = value01 + (value11 - value01) * u;
+            }
+
+            if (v <= 0)
+                return first;
+            if (v >= 1)
+                return second;
+
             return first + (second - first) * v;
         }
         #endregion
