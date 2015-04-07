@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithms\HungarianAlgorithm.cs" />
+    <Compile Include="Algorithms\BinPacking.cs" />
     <Compile Include="Collections\PrefixTrie.cs" />
     <Compile Include="Core\Log.cs" />
     <Compile Include="Core\StaticRandom.cs" />
