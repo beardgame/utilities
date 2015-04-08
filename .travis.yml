@@ -1,5 +1,10 @@
 language: csharp
 solution: Bearded.Utilities.sln
+before_install:
+  - sudo bash -c "echo deb http://badgerports.org precise main >> /etc/apt/sources.list"
+  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0E1FAD0C
+  - sudo apt-get update
+  - sudo apt-get install mono-devel
 install:
   - nuget restore Bearded.Utilities.sln
   - nuget install xunit.runner.console -Version 2.0.0 -OutputDirectory testrunner
