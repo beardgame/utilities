@@ -1,2 +1,8 @@
 language: csharp
 solution: Bearded.Utilities.sln
+install:
+  - nuget restore Bearded.Utilities.sln
+  - nuget install xunit.runners -Version 2.0.0 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Release Bearded.Utilities.sln
+  - mono ./testrunner/xunit.runners.2.0.0/tools/xunit.console.exe ./tests/bin/Release/Bearded.Utilities.dll
