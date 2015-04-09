@@ -1,111 +1,109 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Bearded.Utilities.Collections;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Bearded.Utilities.Tests.Collections
 {
-    [TestClass]
-    public sealed class PrefixTrieTests
+    public class PrefixTrieTests
     {
         #region construction
 
-        [TestMethod]
+        [Fact]
         public void TestCount()
         {
             var trie = new PrefixTrie(
                 new[] { "one", "two", "three" }
                 );
-            Assert.AreEqual(3, trie.Count);
+            Assert.Equal(3, trie.Count);
 
             trie = new PrefixTrie(
                 new string[0]
                 );
-            Assert.AreEqual(0, trie.Count);
+            Assert.Equal(0, trie.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestIgnoreNull()
         {
             var trie = new PrefixTrie(
                 new[] { "one", "two", "three", null }
                 );
-            Assert.AreEqual(3, trie.Count);
+            Assert.Equal(3, trie.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestIgnoreDouble()
         {
             var trie = new PrefixTrie(
                 new[] { "one", "two", "three", "two" }
                 );
-            Assert.AreEqual(3, trie.Count);
+            Assert.Equal(3, trie.Count);
         }
 
         #endregion
 
         #region Contains
 
-        [TestMethod]
+        [Fact]
         public void TestContains()
         {
             var trie = new PrefixTrie(
                 new[] { "one", "two", "three" }
                 );
 
-            Assert.IsTrue(trie.Contains("one"));
-            Assert.IsTrue(trie.Contains("two"));
-            Assert.IsTrue(trie.Contains("three"));
-            Assert.IsFalse(trie.Contains("four"));
-            Assert.IsFalse(trie.Contains("threeAndSome"));
+            Assert.True(trie.Contains("one"));
+            Assert.True(trie.Contains("two"));
+            Assert.True(trie.Contains("three"));
+            Assert.False(trie.Contains("four"));
+            Assert.False(trie.Contains("threeAndSome"));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestContains_DoesNotContainPrefixes()
         {
             var trie = new PrefixTrie(
                 new[] { "one", "two", "three" }
                 );
 
-            Assert.IsFalse(trie.Contains(""));
-            Assert.IsFalse(trie.Contains("t"));
-            Assert.IsFalse(trie.Contains("tw"));
+            Assert.False(trie.Contains(""));
+            Assert.False(trie.Contains("t"));
+            Assert.False(trie.Contains("tw"));
         }
 
         #endregion
 
         #region ExtendPrefix
 
-        [TestMethod]
+        [Fact]
         public void TestExtendPrefix()
         {
             var trie = new PrefixTrie(
                 new[] { "one", "two", "three", "threshing" }
                 );
-            Assert.AreEqual("one", trie.ExtendPrefix("o"));
-            Assert.AreEqual("one", trie.ExtendPrefix("one"));
+            Assert.Equal("one", trie.ExtendPrefix("o"));
+            Assert.Equal("one", trie.ExtendPrefix("one"));
 
-            Assert.AreEqual("t", trie.ExtendPrefix("t"));
-            Assert.AreEqual("thre", trie.ExtendPrefix("th"));
+            Assert.Equal("t", trie.ExtendPrefix("t"));
+            Assert.Equal("thre", trie.ExtendPrefix("th"));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestExtendPrefix_InvalidPrefix()
         {
             var trie = new PrefixTrie(
                 new[] { "one", "two", "three" }
                 );
 
-            Assert.IsNull(trie.ExtendPrefix("a"));
-            Assert.IsNull(trie.ExtendPrefix("twofold"));
+            Assert.Null(trie.ExtendPrefix("a"));
+            Assert.Null(trie.ExtendPrefix("twofold"));
         }
 
         #endregion
 
         #region AllKeys
 
-        [TestMethod]
+        [Fact]
         public void TestAllKeys()
         {
             var words = new[] { "one", "two", "three", "threshing" };
@@ -114,19 +112,19 @@ namespace Bearded.Utilities.Tests.Collections
 
             var withPrefixO = trie.AllKeys("o").ToList();
 
-            Assert.AreEqual(1, withPrefixO.Count);
-            Assert.AreEqual("one", withPrefixO[0]);
+            Assert.Equal(1, withPrefixO.Count);
+            Assert.Equal("one", withPrefixO[0]);
 
             var withPrefixTh = trie.AllKeys("th").ToList();
 
-            Assert.AreEqual(2, withPrefixTh.Count);
+            Assert.Equal(2, withPrefixTh.Count);
             foreach (var word in words.Where(w => w.StartsWith("th")))
             {
-                Assert.IsTrue(withPrefixTh.Contains(word));
+                Assert.True(withPrefixTh.Contains(word));
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void TestAllKeys_EmptyPrefix()
         {
             var words = new[] { "one", "two", "three", "threshing" };
@@ -135,14 +133,14 @@ namespace Bearded.Utilities.Tests.Collections
 
             var withPrefixEmptyString = trie.AllKeys("").ToList();
 
-            Assert.AreEqual(words.Length, withPrefixEmptyString.Count);
+            Assert.Equal(words.Length, withPrefixEmptyString.Count);
             foreach (var word in words)
             {
-                Assert.IsTrue(withPrefixEmptyString.Contains(word));
+                Assert.True(withPrefixEmptyString.Contains(word));
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void TestAllKeys_InvalidPrefix()
         {
             var words = new[] { "one", "two", "three", "threshing" };
@@ -151,14 +149,14 @@ namespace Bearded.Utilities.Tests.Collections
 
             var withPrefixEmptyString = trie.AllKeys("twofold").ToList();
 
-            Assert.AreEqual(0, withPrefixEmptyString.Count);
+            Assert.Equal(0, withPrefixEmptyString.Count);
         }
 
         #endregion
 
         #region enumeration
 
-        [TestMethod]
+        [Fact]
         public void TestGetEnumerator()
         {
             var words = new[] { "one", "two", "three", "threshing" };
@@ -171,16 +169,16 @@ namespace Bearded.Utilities.Tests.Collections
             {
                 for (int i = 0; i < words.Length; i++)
                 {
-                    Assert.IsTrue(enumerator.MoveNext());
+                    Assert.True(enumerator.MoveNext());
                     list.Add(enumerator.Current);
                 }
                 
-                Assert.IsFalse(enumerator.MoveNext());
+                Assert.False(enumerator.MoveNext());
             }
 
             foreach (var word in words)
             {
-                Assert.IsTrue(list.Contains(word));
+                Assert.True(list.Contains(word));
             }
         }
 
