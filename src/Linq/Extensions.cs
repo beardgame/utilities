@@ -130,15 +130,18 @@ namespace Bearded.Utilities.Linq
         /// <returns>A random element from the input.</returns>
         public static T RandomElement<T>(this IEnumerable<T> source, Random random = null)
         {
+            if (source == null)
+                throw new ArgumentNullException("source");
+
             if (random == null)
                 random = StaticRandom.Random;
             // optimisation for collections
-            var asList = source as ICollection<T>;
-            if (asList != null)
+            var asCollection = source as ICollection<T>;
+            if (asCollection != null)
             {
-                if (asList.Count == 0)
-                    throw new InvalidOperationException("Sequence was empty");
-                return asList.ElementAt(random.Next(asList.Count));
+                if (asCollection.Count == 0)
+                    throw new InvalidOperationException("Sequence was empty.");
+                return asCollection.ElementAt(random.Next(asCollection.Count));
             }
 
             T current = default(T);
@@ -153,7 +156,7 @@ namespace Bearded.Utilities.Linq
             }
             if (count == 0)
             {
-                throw new InvalidOperationException("Sequence was empty");
+                throw new InvalidOperationException("Sequence was empty.");
             }
             return current;
         }
@@ -167,33 +170,31 @@ namespace Bearded.Utilities.Linq
         /// <param name="count">The number of random elements to return. If this is smaller than the inputs size, the entire input is returned.</param>
         /// <param name="random">An optional random object to be used. If none is given, StaticRandom is used instead.</param>
         /// <returns>Random elements from the input.</returns>
-        public static IEnumerable<T> RandomSubset<T>(this IEnumerable<T> source, int count, Random random = null)
+        public static List<T> RandomSubset<T>(this IEnumerable<T> source, int count, Random random = null)
         {
             if (source == null)
                 throw new ArgumentNullException("source");
 
             if (count <= 0)
-                return Enumerable.Empty<T>();
+                return new List<T>();
 
             // optimisation for collections
             var asCollection = source as ICollection<T>;
             if (asCollection != null && count >= asCollection.Count)
                 // if we take as much or more than we have, return input
-                return source;
+                return source.ToList();
 
             if (random == null)
                 random = StaticRandom.Random;
 
-            // we could use a List<T> as well, but an array should
-            // be slightly faster, for as long as count <= input.Count()
-            var set = new T[count];
+            var set = new List<T>(count);
 
             int i = 0;
             foreach (var item in source)
             {
                 // copy first 'count' elements
                 if (i < count)
-                    set[i] = item;
+                    set.Add(item);
                 else
                 {
                     // add others with decreasing likelyhood
@@ -203,10 +204,6 @@ namespace Bearded.Utilities.Linq
                 }
                 i++;
             }
-
-            // if the input was smaller than 'count', resize output
-            if (i < count)
-                Array.Resize(ref set, i);
 
             return set;
         }
@@ -222,13 +219,16 @@ namespace Bearded.Utilities.Linq
         /// <param name="random">An optional random object to be used. If none is given, StaticRandom is used instead.</param>
         public static void Shuffle<T>(this IList<T> list, Random random = null)
         {
+            if (list == null)
+                throw new ArgumentNullException("list");
+
             if (random == null)
                 random = StaticRandom.Random;
 
             int c = list.Count;
             for (int i = 0; i < c; i++)
             {
-                int j = random.Next(c);
+                int j = random.Next(i, c);
 
                 T temp = list[i];
                 list[i] = list[j];
@@ -243,9 +243,45 @@ namespace Bearded.Utilities.Linq
         /// <param name="random">An optional random object to be used. If none is given, StaticRandom is used instead.</param>
         public static IList<T> Shuffled<T>(this IEnumerable<T> source, Random random = null)
         {
+            if (source == null)
+                throw new ArgumentNullException("source");
+
             var list = source.ToList();
             list.Shuffle(random);
             return list;
+        }
+
+        /// <summary>
+        /// Returns an enumerable that iterates the source in random order.
+        /// Contrary to Shuffled() this method deferres shuffling until iteration.
+        /// The first iteration step will take linear time, but all others are constant time.
+        /// </summary>
+        /// <remarks>
+        /// This method is useful to include a shuffle operation in a deferred query,
+        /// or when the number of randomly ordered elements needed is only made known when iterating them.
+        /// For most other cases, Shuffled() is a simpler alternative.
+        /// </remarks>
+        /// <param name="source">The sequence to shuffle.</param>
+        /// <param name="random">An optional random object to be used. If none is given, StaticRandom is used instead.</param>
+        public static IEnumerable<T> ShuffledDeferred<T>(this IEnumerable<T> source, Random random = null)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+
+            var list = source.ToList();
+
+            if (random == null)
+                random = StaticRandom.Random;
+
+            int c = list.Count;
+            for (int i = 0; i < c; i++)
+            {
+                int j = random.Next(i, c);
+
+                yield return list[j];
+
+                list[j] = list[i];
+            }
         }
 
         #endregion
