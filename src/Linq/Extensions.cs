@@ -130,6 +130,9 @@ namespace Bearded.Utilities.Linq
         /// <returns>A random element from the input.</returns>
         public static T RandomElement<T>(this IEnumerable<T> source, Random random = null)
         {
+            if (source == null)
+                throw new ArgumentNullException("source");
+
             if (random == null)
                 random = StaticRandom.Random;
             // optimisation for collections
@@ -137,7 +140,7 @@ namespace Bearded.Utilities.Linq
             if (asCollection != null)
             {
                 if (asCollection.Count == 0)
-                    throw new InvalidOperationException("Sequence was empty");
+                    throw new InvalidOperationException("Sequence was empty.");
                 return asCollection.ElementAt(random.Next(asCollection.Count));
             }
 
@@ -153,7 +156,7 @@ namespace Bearded.Utilities.Linq
             }
             if (count == 0)
             {
-                throw new InvalidOperationException("Sequence was empty");
+                throw new InvalidOperationException("Sequence was empty.");
             }
             return current;
         }
@@ -216,6 +219,9 @@ namespace Bearded.Utilities.Linq
         /// <param name="random">An optional random object to be used. If none is given, StaticRandom is used instead.</param>
         public static void Shuffle<T>(this IList<T> list, Random random = null)
         {
+            if (list == null)
+                throw new ArgumentNullException("list");
+
             if (random == null)
                 random = StaticRandom.Random;
 
@@ -237,18 +243,31 @@ namespace Bearded.Utilities.Linq
         /// <param name="random">An optional random object to be used. If none is given, StaticRandom is used instead.</param>
         public static IList<T> Shuffled<T>(this IEnumerable<T> source, Random random = null)
         {
+            if (source == null)
+                throw new ArgumentNullException("source");
+
             var list = source.ToList();
             list.Shuffle(random);
             return list;
         }
 
         /// <summary>
-        /// Returns a new shuffled list with the elements from the given sequence.
+        /// Returns an enumerable that iterates the source in random order.
+        /// Contrary to Shuffled() this method deferres shuffling until iteration.
+        /// The first iteration step will take linear time, but all others are constant time.
         /// </summary>
+        /// <remarks>
+        /// This method is useful to include a shuffle operation in a deferred query,
+        /// or when the number of randomly ordered elements needed is only made known when iterating them.
+        /// For most other cases, Shuffled() is a simpler alternative.
+        /// </remarks>
         /// <param name="source">The sequence to shuffle.</param>
         /// <param name="random">An optional random object to be used. If none is given, StaticRandom is used instead.</param>
         public static IEnumerable<T> ShuffledDeferred<T>(this IEnumerable<T> source, Random random = null)
         {
+            if (source == null)
+                throw new ArgumentNullException("source");
+
             var list = source.ToList();
 
             if (random == null)
