@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Bearded.Utilities.Algorithms;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Bearded.Utilities.Tests.Algorithms
 {
-    [TestClass]
-    public sealed class BinPackingTests
+    public class BinPackingTests
     {
-        [TestMethod]
+        [Fact]
         public void TestPackedRectangles_IncludesAll()
         {
             var random = new Random(0);
@@ -19,22 +18,22 @@ namespace Bearded.Utilities.Tests.Algorithms
 
             var result = BinPacking.Pack(input);
 
-            Assert.AreEqual(100, result.Rectangles.Count);
+            Assert.Equal(100, result.Rectangles.Count);
 
             var checkedIds = new HashSet<int>();
 
             foreach (var rectangle in result.Rectangles)
             {
-                Assert.IsTrue(checkedIds.Add(rectangle.Value));
+                Assert.True(checkedIds.Add(rectangle.Value));
 
-                Assert.AreEqual(rectangle.Width, input[rectangle.Value].Width);
-                Assert.AreEqual(rectangle.Height, input[rectangle.Value].Height);
+                Assert.Equal(rectangle.Width, input[rectangle.Value].Width);
+                Assert.Equal(rectangle.Height, input[rectangle.Value].Height);
             }
 
-            Assert.AreEqual(100, checkedIds.Count);
+            Assert.Equal(100, checkedIds.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestPackedRectangles_NoOverlap()
         {
             var random = new Random(0);
@@ -51,7 +50,7 @@ namespace Bearded.Utilities.Tests.Algorithms
                     if (r1 == r2)
                         continue;
 
-                    Assert.IsTrue(
+                    Assert.True(
                         r1.X + r1.Width <= r2.X ||
                         r2.X + r2.Width <= r1.X ||
                         r1.Y + r1.Height <= r2.Y ||
@@ -61,7 +60,7 @@ namespace Bearded.Utilities.Tests.Algorithms
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void TestPackedRectangles_CorrectResultStatistics()
         {
             var random = new Random(0);
@@ -73,7 +72,7 @@ namespace Bearded.Utilities.Tests.Algorithms
 
             var totalArea = result.Width * result.Height;
 
-            Assert.AreEqual(totalArea, result.Area);
+            Assert.Equal(totalArea, result.Area);
 
             var coveredPixels = 0;
 
@@ -89,15 +88,15 @@ namespace Bearded.Utilities.Tests.Algorithms
                 maxY = System.Math.Max(maxY, r.Y + r.Height);
             }
 
-            Assert.AreEqual(maxX, result.Width);
-            Assert.AreEqual(maxY, result.Height);
+            Assert.Equal(maxX, result.Width);
+            Assert.Equal(maxY, result.Height);
 
             var emptyPixels = totalArea - coveredPixels;
 
-            Assert.AreEqual(emptyPixels, result.EmptyPixels);
+            Assert.Equal(emptyPixels, result.EmptyPixels);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestPackedRectangles_MultipleHeuristicsEqualOrBetter()
         {
             var random = new Random(0);
@@ -108,15 +107,15 @@ namespace Bearded.Utilities.Tests.Algorithms
             var resultSingle = BinPacking.Pack(input, false);
             var resultMultiple = BinPacking.Pack(input, true);
 
-            Assert.IsTrue(resultSingle.Filled <= resultMultiple.Filled);
+            Assert.True(resultSingle.Filled <= resultMultiple.Filled);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestPackedRectangles_EmptyInputReturnsNull()
         {
             var result = BinPacking.Pack(new List<BinPacking.Rectangle<int>>());
             
-            Assert.IsNull(result);
+            Assert.Null(result);
         }
     }
 }

@@ -2,24 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using Bearded.Utilities.Collections;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Bearded.Utilities.Tests.Collections
 {
-    [TestClass]
-    public sealed class StaticPriorityQueueTests
+    public class StaticPriorityQueueTests
     {
-        [TestMethod]
+        [Fact]
         public void TestEnqueueing()
         {
             var q = new StaticPriorityQueue<double, string>();
             q.Enqueue(2, "first item");
             q.Enqueue(3, "second item");
             q.Enqueue(1, "third item");
-            Assert.AreEqual(3, q.Count, "The count of the priority queue should be equal to 3.");
+            Assert.Equal(3, q.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestDequeueing()
         {
             var q = new StaticPriorityQueue<double, string>();
@@ -28,58 +27,57 @@ namespace Bearded.Utilities.Tests.Collections
             q.Enqueue(1, "third item");
 
             var peek = q.Peek();
-            Assert.AreEqual("third item", peek.Value, "Peek should return the lowest priority item.");
-            Assert.AreEqual(3, q.Count, "The count of the priority queue should be equal to 3.");
+            Assert.Equal("third item", peek.Value);
+            Assert.Equal(3, q.Count);
 
             var deq = q.Dequeue();
-            Assert.AreEqual("third item", deq.Value, "Dequeue should return the lowest priority item.");
-            Assert.AreEqual(2, q.Count, "The count of the priority queue should be equal to 2.");
+            Assert.Equal("third item", deq.Value);
+            Assert.Equal(2, q.Count);
 
             deq = q.Dequeue();
-            Assert.AreEqual("first item", deq.Value, "Dequeue should return the lowest priority item.");
-            Assert.AreEqual(1, q.Count, "The count of the priority queue should be equal to 1.");
+            Assert.Equal("first item", deq.Value);
+            Assert.Equal(1, q.Count);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [Fact]
         public void TestDequeueOnEmptyQueue()
         {
-            new StaticPriorityQueue<double, string>().Dequeue();
+            Assert.Throws<InvalidOperationException>(() => new StaticPriorityQueue<double, string>().Dequeue());
+
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [Fact]
         public void TestPeekOnEmptyQueue()
         {
-            new StaticPriorityQueue<double, string>().Peek();
+            Assert.Throws<InvalidOperationException>(() => new StaticPriorityQueue<double, string>().Peek());
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGrowing()
         {
             var q = new StaticPriorityQueue<double, string>();
             for (int i = 0; i < 32; i++)
                 q.Enqueue(i, i.ToString());
-            Assert.AreEqual(32, q.Count, "The count of the priority queue should be equal to 32.");
+            Assert.Equal(32, q.Count);
             for (int i = 0; i < 32; i++)
             {
                 var deq = q.Dequeue();
-                Assert.AreEqual(i.ToString(), deq.Value, "Problem with dequeueing item {0}", i);
+                Assert.Equal(i.ToString(), deq.Value);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void TestInitialData()
         {
             var data = new[] { 5, 9, 2, 13, 1, 4, 7, 11, 2 };
             var q = new StaticPriorityQueue<int, int>(data.Select(i => new KeyValuePair<int, int>(i, i)));
-            Assert.AreEqual(data.Length, q.Count, "The count of the priority queue should be equal to the initial data size.");
+            Assert.Equal(data.Length, q.Count);
 
             Array.Sort(data);
             for (int i = 0; i < data.Length; i++)
             {
                 var deq = q.Dequeue();
-                Assert.AreEqual(data[i], deq.Value, "Dequeue should return the lowest priority item.");
+                Assert.Equal(data[i], deq.Value);
             }
         }
     }
