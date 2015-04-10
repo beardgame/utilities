@@ -1,5 +1,9 @@
 # utilities
 
+## Build Status (branch: develop)
+
+[![Travis CI Build Status](https://api.travis-ci.org/beardgame/utilities.svg?branch=develop)](https://travis-ci.org/beardgame/utilities "Travis CI Build Overview")
+
 ## What's this?
 
 Bearded.Utilities is a C# library full of useful utilities for games and other applications.
