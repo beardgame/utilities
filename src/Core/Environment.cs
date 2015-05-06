@@ -78,7 +78,14 @@ namespace Bearded.Utilities
                     return Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
                             "Library", "Application Support");
                 case Platform.Linux:
-                    throw new NotImplementedException();
+                    var osConfigDir = System.Environment.GetEnvironmentVariable("XDG_CONFIG_HOME");
+
+                    if (!string.IsNullOrEmpty(osConfigDir))
+                        return osConfigDir;
+                    
+                    var osHomeDir = System.Environment.GetEnvironmentVariable("HOME");
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    return string.IsNullOrEmpty(osConfigDir) ? "." : Path.Combine(osHomeDir, ".config");
                 default:
                     throw new IndexOutOfRangeException();
             }
@@ -88,7 +95,7 @@ namespace Bearded.Utilities
         /// Gets the default user settings directory for the current platform.
         /// For Windows: %appdata%
         /// For OSX: ~/Library/Application Support
-        /// For Linux: [not implemented]
+        /// For Linux: ~/.config
         /// </summary>
         public static string UserSettingsDirectory
         {
