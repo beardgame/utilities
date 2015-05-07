@@ -74,11 +74,24 @@ namespace Bearded.Utilities
             {
                 case Platform.Windows:
                     return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
+
                 case Platform.OSX:
-                    return Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
-                            "Library", "Application Support");
+                    var osxHomeDir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+
+                    if (string.IsNullOrEmpty(osxHomeDir))
+                        osxHomeDir = System.Environment.GetEnvironmentVariable("HOME");
+
+                    return string.IsNullOrEmpty(osxHomeDir) ? "." : Path.Combine(osxHomeDir, "Library", "Application Support");
+
                 case Platform.Linux:
-                    throw new NotImplementedException();
+                    var linuxConfigDir = System.Environment.GetEnvironmentVariable("XDG_CONFIG_HOME");
+
+                    if (!string.IsNullOrEmpty(linuxConfigDir))
+                        return linuxConfigDir;
+                    
+                    var linuxHomeDir = System.Environment.GetEnvironmentVariable("HOME");
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    return string.IsNullOrEmpty(linuxConfigDir) ? "." : Path.Combine(linuxHomeDir, ".config");
                 default:
                     throw new IndexOutOfRangeException();
             }
@@ -88,11 +101,24 @@ namespace Bearded.Utilities
         /// Gets the default user settings directory for the current platform.
         /// For Windows: %appdata%
         /// For OSX: ~/Library/Application Support
-        /// For Linux: [not implemented]
+        /// For Linux: ~/.config
         /// </summary>
         public static string UserSettingsDirectory
         {
             get { return userSettingsDirectory ?? (userSettingsDirectory = buildUserSettingsDirectory()); }
+        }
+
+        /// <summary>
+        /// Gets the default user setting directory for a given game name.
+        /// For Windows: %appdata%\[gamename]
+        /// For OSX: ~/Library/Application Support/[gamename]
+        /// For Linux: ~/.config/[gamename]
+        /// </summary>
+        /// <param name="gameName"></param>
+        /// <returns></returns>
+        public static string UserSettingsDirectoryFor(string gameName)
+        {
+            return Path.Combine(UserSettingsDirectory, gameName);
         }
         #endregion
     }
