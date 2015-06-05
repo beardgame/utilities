@@ -181,3 +181,8 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+
+# Xunit Nuget packages through Xamarin
+tests/xunit.*
+
+*.userprefs
