@@ -5,6 +5,7 @@
 *.suo
 *.user
 *.sln.docstates
+*.userprefs
 
 # Build results
 [Dd]ebug/
@@ -181,8 +182,3 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
-
-# Xunit Nuget packages through Xamarin
-tests/xunit.*
-
-*.userprefs
