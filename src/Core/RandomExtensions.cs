@@ -183,6 +183,7 @@ namespace Bearded.Utilities
         }
 
         /// <summary>
+        /// Returns an integer, with a given expected value. Will always return either the floor or ceil of the given value.
         /// Returns an integer with a given expected value. Will always return either the floor or ceil of the given value.
         /// </summary>
         /// <param name="random">The Random instance to sample with.</param>
