@@ -15,8 +15,8 @@
         /// <returns></returns>
         public static bool DoOverlap(double amin, double amax, double bmin, double bmax)
         {
-            // Negation of bmin >= amax || amin >= bmax
-            return bmin < amax && amin < bmax;
+            // Negation of bmin > amax || amin > bmax
+            return bmin <= amax && amin <= bmax;
         }
     }
 }
