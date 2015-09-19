@@ -125,7 +125,8 @@
     <Compile Include="Math\Direction2.cs" />
     <Compile Include="Math\Arc.cs" />
     <Compile Include="Math\Extensions.cs" />
-    <Compile Include="Math\GameMath.cs" />
+    <Compile Include="Math\Interval.cs" />
+    <Compile Include="Math\Mathf.cs" />
     <Compile Include="Math\Geometry\arcs\Arc2.cs" />
     <Compile Include="Math\Geometry\arcs\Arc3.cs" />
     <Compile Include="Math\Geometry\arcs\Bezier2nd2.cs" />
