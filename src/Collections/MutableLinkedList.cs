@@ -119,10 +119,10 @@ namespace Bearded.Utilities.Collections
         /// <param name="node">The node to remove.</param>
         public void Remove(MutableLinkedListNode<T> node)
         {
-            if (node.List == null)
+            if (node.List != this)
                 throw new Exception("Node must be in list to be removed.");
 
-            foreach (MutableLinkedListEnumerator<T> e in this.enumerators)
+            foreach (var e in this.enumerators)
                 e.OnObjectRemove(node);
 
             if (node == this.Last)
