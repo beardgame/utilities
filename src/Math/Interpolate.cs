@@ -151,32 +151,28 @@ namespace Bearded.Utilities.Math
 
         #region Smooth
         /// <summary>
-        /// Performs a Hermite spline interpolation.
+        /// Performs a clamped Hermite spline interpolation.
         /// </summary>
-        /// <param name="value1">From position.</param>
-        /// <param name="tangent1">From tangent.</param>
-        /// <param name="value2">To position.</param>
-        /// <param name="tangent2">To tangent.</param>
-        /// <param name="amount">The amount of interpolation.</param>
+        /// <param name="from">From position.</param>
+        /// <param name="fromTangent">From tangent.</param>
+        /// <param name="to">To position.</param>
+        /// <param name="toTangent">To tangent.</param>
+        /// <param name="t">The amount of interpolation (between 0 and 1).</param>
         /// <returns>The result of the Hermite spline interpolation.</returns>
-        public static float Hermite(float value1, float tangent1, float value2, float tangent2, float amount)
+        public static float Hermite(float from, float fromTangent, float to, float toTangent, float t)
         {
-            // All transformed to double not to lose precision.
-            // Otherwise, we might get NaN or Infinity result.
-            double v1 = value1, v2 = value2, t1 = tangent1, t2 = tangent2, s = amount, result;
-            double sCubed = s * s * s;
-            double sSquared = s * s;
+            if (t <= 0)
+                return from;
+            if (t >= 1)
+                return to;
 
-            if (amount == 0f)
-                result = value1;
-            else if (amount == 1f)
-                result = value2;
-            else
-                result = (2 * v1 - 2 * v2 + t2 + t1) * sCubed +
-                    (3 * v2 - 3 * v1 - 2 * t1 - t2) * sSquared +
-                    t1 * s +
-                    v1;
-            return (float)result;
+            var d = from - to;
+
+            return ((
+                (2 * d + fromTangent + toTangent) * t
+                - 3 * d - 2 * fromTangent - toTangent) * t +
+                fromTangent) * t +
+                from;
         }
 
         /// <summary>
@@ -193,7 +189,7 @@ namespace Bearded.Utilities.Math
             if (t >= 1)
                 return to;
 
-            return Interpolate.Hermite(from, 0, to, 0, t);
+            return (2 * t - 3) * t * t * (from - to) + from;
         }
         #endregion
 
