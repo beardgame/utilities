@@ -285,7 +285,7 @@ namespace Bearded.Utilities.Math
         public static void ThrowIfNaN(this float f,
             string exceptionString = "Float is NaN while it is not allowed to.")
         {
-            if (Single.IsNaN(f))
+            if (float.IsNaN(f))
                 throw new Exception(exceptionString);
         }
 
@@ -332,7 +332,7 @@ namespace Bearded.Utilities.Math
         /// <returns>True if any of the components is NaN.</returns>
         public static bool IsNaN(this Vector2 vector)
         {
-            return Single.IsNaN(vector.X) || Single.IsNaN(vector.Y);
+            return float.IsNaN(vector.X) || float.IsNaN(vector.Y);
         }
 
         /// <summary>
@@ -342,7 +342,7 @@ namespace Bearded.Utilities.Math
         /// <returns>True if any of the components is NaN.</returns>
         public static bool IsNaN(this Vector3 vector)
         {
-            return Single.IsNaN(vector.X) || Single.IsNaN(vector.Y) || Single.IsNaN(vector.Z);
+            return float.IsNaN(vector.X) || float.IsNaN(vector.Y) || float.IsNaN(vector.Z);
         }
 
         /// <summary>
@@ -352,7 +352,7 @@ namespace Bearded.Utilities.Math
         /// <returns>True if any of the components is NaN.</returns>
         public static bool IsNaN(this Vector4 vector)
         {
-            return Single.IsNaN(vector.X) || Single.IsNaN(vector.Y) || Single.IsNaN(vector.Z) || Single.IsNaN(vector.W);
+            return float.IsNaN(vector.X) || float.IsNaN(vector.Y) || float.IsNaN(vector.Z) || float.IsNaN(vector.W);
         }
         #endregion
 
