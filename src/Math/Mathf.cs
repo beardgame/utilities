@@ -1,11 +1,9 @@
-﻿using OpenTK;
-
-namespace Bearded.Utilities.Math
+﻿namespace Bearded.Utilities.Math
 {
     /// <summary>
     /// Collection of math-related functions.
     /// </summary>
-    public static class GameMath
+    public static class Mathf
     {
         #region Constants
         /// <summary>
@@ -26,22 +24,22 @@ namespace Bearded.Utilities.Math
         /// <summary>
         /// Represents the value of pi divided by two (1.57079637).
         /// </summary>
-        public const float PiOver2 = Pi / 2.0f;
+        public const float PiOver2 = Mathf.Pi / 2.0f;
 
         /// <summary>
         /// Represents the value of pi divided by four (0.7853982).
         /// </summary>
-        public const float PiOver4 = Pi / 4.0f;
+        public const float PiOver4 = Mathf.Pi / 4.0f;
 
         /// <summary>
         /// Represents the value of pi times two (6.28318548).
         /// </summary>
-        public const float TwoPi = 2 * Pi;
+        public const float TwoPi = 2 * Mathf.Pi;
 
         /// <summary>
         /// Represents the value of tau (6.28318548).
         /// </summary>
-        public const float Tau = 2 * Pi;
+        public const float Tau = 2 * Mathf.Pi;
         #endregion
 
         #region Float math
@@ -165,58 +163,6 @@ namespace Bearded.Utilities.Math
         public static int RoundToInt(double d)
         {
             return (int)System.Math.Round(d);
-        }
-        #endregion
-
-        #region Intervals
-        /// <summary>
-        /// Checks if two closed intervals overlap.
-        /// </summary>
-        /// <param name="amin">The (inclusive) lower bound of the first interval.</param>
-        /// <param name="amax">The (inclusive) upper bound of the first interval.</param>
-        /// <param name="bmin">The (inclusive) lower bound of the second interval.</param>
-        /// <param name="bmax">The (inclusive) upper bound of the second interval.</param>
-        /// <returns></returns>
-        public static bool IntervalOverlap(double amin, double amax, double bmin, double bmax)
-        {
-            // Negation of bmin >= amax || amin >= bmax
-            return bmin < amax && amin < bmax;
-        }
-        #endregion
-
-        #region Vector stuff
-        /// <summary>
-        /// Turns the vector into a three-dimensional vector.
-        /// </summary>
-        /// <param name="xy">Original vector.</param>
-        /// <param name="z">z-coordinate of the new vector.</param>
-        /// <returns>A three-dimensional vector.</returns>
-        public static Vector3 WithZ(this Vector2 xy, float z = 0)
-        {
-            return new Vector3(xy.X, xy.Y, z);
-        }
-
-        /// <summary>
-        /// Turns the vector into a homogenuous vector.
-        /// </summary>
-        /// <param name="xyz">Original vector.</param>
-        /// <param name="w">w-coordinate of the new vector.</param>
-        /// <returns>A homogenuous vector.</returns>
-        public static Vector4 WithW(this Vector3 xyz, float w)
-        {
-            return new Vector4(xyz, w);
-        }
-
-        /// <summary>
-        /// Turns the vector into a homogenuous vector.
-        /// </summary>
-        /// <param name="xy">Original vector.</param>
-        /// <param name="z">z-coordinate of the new vector.</param>
-        /// <param name="w">w-coordinate of the new vector.</param>
-        /// <returns>A homogenuous vector.</returns>
-        public static Vector4 WithZw(this Vector2 xy, float z, float w)
-        {
-            return new Vector4(xy.X, xy.Y, z, w);
         }
         #endregion
     }

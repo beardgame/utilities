@@ -356,8 +356,43 @@ namespace Bearded.Utilities.Math
         }
         #endregion
 
-        #region Geometric
+        #region Vector
+        /// <summary>
+        /// Turns the vector into a three-dimensional vector.
+        /// </summary>
+        /// <param name="xy">Original vector.</param>
+        /// <param name="z">z-coordinate of the new vector.</param>
+        /// <returns>A three-dimensional vector.</returns>
+        public static Vector3 WithZ(this Vector2 xy, float z = 0)
+        {
+            return new Vector3(xy.X, xy.Y, z);
+        }
 
+        /// <summary>
+        /// Turns the vector into a homogenuous vector.
+        /// </summary>
+        /// <param name="xyz">Original vector.</param>
+        /// <param name="w">w-coordinate of the new vector.</param>
+        /// <returns>A homogenuous vector.</returns>
+        public static Vector4 WithW(this Vector3 xyz, float w)
+        {
+            return new Vector4(xyz, w);
+        }
+
+        /// <summary>
+        /// Turns the vector into a homogenuous vector.
+        /// </summary>
+        /// <param name="xy">Original vector.</param>
+        /// <param name="z">z-coordinate of the new vector.</param>
+        /// <param name="w">w-coordinate of the new vector.</param>
+        /// <returns>A homogenuous vector.</returns>
+        public static Vector4 WithZw(this Vector2 xy, float z, float w)
+        {
+            return new Vector4(xy.X, xy.Y, z, w);
+        }
+        #endregion
+
+        #region Geometric
         /// <summary>
         /// Converts floating point value into a type safe angle representation in radians.
         /// </summary>
@@ -381,8 +416,6 @@ namespace Bearded.Utilities.Math
         {
             return Angle.FromDegrees(degrees);
         }
-
         #endregion
-
     }
 }

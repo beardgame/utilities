@@ -8,8 +8,8 @@ namespace Bearded.Utilities.Math
     /// </summary>
     public struct Angle : IEquatable<Angle>
     {
-        const float fromDegrees = GameMath.TwoPi / 360f;
-        const float toDegrees = 360f / GameMath.TwoPi;
+        const float fromDegrees = Mathf.TwoPi / 360f;
+        const float toDegrees = 360f / Mathf.TwoPi;
 
         private readonly float radians;
 
@@ -44,7 +44,7 @@ namespace Bearded.Utilities.Math
         {
             float perpDot = from.Y * to.X - from.X * to.Y;
 
-            return Angle.FromRadians(GameMath.Atan2(perpDot, Vector2.Dot(from, to)));
+            return Angle.FromRadians(Mathf.Atan2(perpDot, Vector2.Dot(from, to)));
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Bearded.Utilities.Math
         {
             var a = Angle.Between(from, to);
             if (a.radians < 0)
-                a += GameMath.TwoPi.Radians();
+                a += Mathf.TwoPi.Radians();
             return a;
         }
 
@@ -76,7 +76,7 @@ namespace Bearded.Utilities.Math
         {
             var a = Angle.Between(from, to);
             if (a.radians > 0)
-                a -= GameMath.TwoPi.Radians();
+                a -= Mathf.TwoPi.Radians();
             return a;
         }
 
@@ -133,21 +133,21 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public float Sin()
         {
-            return GameMath.Sin(this.radians);
+            return Mathf.Sin(this.radians);
         }
         /// <summary>
         /// Returns the Cosine of the angle.
         /// </summary>
         public float Cos()
         {
-            return GameMath.Cos(this.radians);
+            return Mathf.Cos(this.radians);
         }
         /// <summary>
         /// Returns the Tangent of the angle.
         /// </summary>
         public float Tan()
         {
-            return GameMath.Tan(this.radians);
+            return Mathf.Tan(this.radians);
         }
         /// <summary>
         /// Returns the Sign of the angle.

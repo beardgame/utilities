@@ -8,8 +8,8 @@ namespace Bearded.Utilities.Math
     /// </summary>
     public struct Direction2 : IEquatable<Direction2>
     {
-        const float fromRadians = uint.MaxValue / GameMath.TwoPi;
-        const float toRadians = GameMath.TwoPi / uint.MaxValue;
+        const float fromRadians = uint.MaxValue / Mathf.TwoPi;
+        const float toRadians = Mathf.TwoPi / uint.MaxValue;
 
         const float fromDegrees = uint.MaxValue / 360f;
         const float toDegrees = 360f / uint.MaxValue;
@@ -44,7 +44,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Direction2 Of(Vector2 vector)
         {
-            return Direction2.FromRadians(GameMath.Atan2(vector.Y, vector.X));
+            return Direction2.FromRadians(Mathf.Atan2(vector.Y, vector.X));
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Bearded.Utilities.Math
             get
             {
                 var radians = this.Radians;
-                return new Vector2(GameMath.Cos(radians), GameMath.Sin(radians));
+                return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
             }
         }
 
