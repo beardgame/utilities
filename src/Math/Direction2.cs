@@ -177,7 +177,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Angle operator -(Direction2 direction1, Direction2 direction2)
         {
-            return Angle.FromRadians((direction1.data - direction2.data) * toRadians);
+            return Angle.FromRadians(((int)direction1.data - (int)direction2.data) * toRadians);
         }
 
         /// <summary>
