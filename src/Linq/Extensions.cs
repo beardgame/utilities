@@ -79,6 +79,67 @@ namespace Bearded.Utilities.Linq
 
         #endregion
 
+        #region List
+
+        /// <summary>
+        /// Inserts an item into an already sorted list, maintaining the sort order and using the default comparer of the type.
+        /// If the list already contains elements of the same sort value, the method inserts the new item at an any of the valid indices, not necessarily the first or last.
+        /// If the given list is not sorted, the item will be inserted at an arbitrary index.
+        /// This method is an O(log n) operation, where n is the number of elements in the list.
+        /// </summary>
+        /// <param name="list">The list to insert the item into.</param>
+        /// <param name="item">The item to be inserted.</param>
+        /// <returns>The index at which the item was inserted.</returns>
+        /// <exception cref="ArgumentNullException">List is null.</exception>
+        public static int AddSorted<T>( this List<T> list, T item)
+            where T : IComparable<T>
+        {
+            return list.AddSorted(item, Comparer<T>.Default);
+        }
+
+
+        /// <summary>
+        /// Inserts an item into an already sorted list, maintaining the sort order.
+        /// If the list already contains elements of the same sort value, the method inserts the new item at an any of the valid indices, not necessarily the first or last.
+        /// If the given list is not sorted, the item will be inserted at an arbitrary index.
+        /// This method is an O(log n) operation, where n is the number of elements in the list.
+        /// </summary>
+        /// <param name="list">The list to insert the item into.</param>
+        /// <param name="item">The item to be inserted.</param>
+        /// <param name="comparer">Compared to use when determining item sort order.</param>
+        /// <returns>The index at which the item was inserted.</returns>
+        /// <exception cref="ArgumentNullException">List or comparer is null.</exception>
+        public static int AddSorted<T>(this List<T> list, T item, IComparer<T> comparer)
+        {
+            if (list == null)
+                throw new ArgumentNullException("list");
+            if (comparer == null)
+                throw new ArgumentNullException("comparer");
+
+            if (list.Count == 0 || comparer.Compare(list[0], item) >= 0)
+            {
+                list.Insert(0, item);
+                return 0;
+            }
+
+            var index = list.Count - 1;
+            if (comparer.Compare(list[index], item) <= 0)
+            {
+                list.Add(item);
+            }
+            else
+            {
+                index = list.BinarySearch(item, comparer);
+                if (index < 0)
+                    index = ~index;
+
+                list.Insert(index, item);
+            }
+            return index;
+        }
+
+        #endregion
+
         #region Dictionary
 
         /// <summary>
