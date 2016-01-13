@@ -47,7 +47,7 @@ namespace Bearded.Utilities.Collections
                 if (iMin >= iMax)
                     return null;
 
-                var dict = new Dictionary<char, Node>(iMax - iMin);
+                var dict = new Dictionary<char, Node>();
 
                 int index2 = index + 1;
 
