@@ -15,6 +15,8 @@ namespace Bearded.Utilities.SpaceTime
 
         public float NumericValue { get { return this.value; } }
 
+        public Squared<Unit> Squared { get { return Squared<Unit>.FromRoot(this.value); } }
+
         #region methods
 
         #region equality and hashcode

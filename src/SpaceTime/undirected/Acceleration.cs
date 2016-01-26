@@ -6,7 +6,7 @@ namespace Bearded.Utilities.SpaceTime
 {
     struct Acceleration : IBackedBy<float>, IEquatable<Acceleration>, IComparable<Acceleration>
     {
-        readonly float value;
+        private readonly float value;
         
         public Acceleration(float value)
         {
@@ -14,6 +14,8 @@ namespace Bearded.Utilities.SpaceTime
         }
 
         public float NumericValue { get { return this.value; } }
+
+        public Squared<Acceleration> Squared { get { return Squared<Acceleration>.FromRoot(this.value); } }
 
         #region methods
 

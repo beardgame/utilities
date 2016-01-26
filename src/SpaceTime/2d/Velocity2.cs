@@ -21,6 +21,8 @@ namespace Bearded.Utilities.SpaceTime
 
         public Speed Length { get { return new Speed(this.value.Length); } }
 
+        public Squared<Speed> LengthSquared { get { return new Squared<Speed>(this.value.LengthSquared); } }
+
         #endregion
 
         #region methods

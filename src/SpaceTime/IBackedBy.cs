@@ -6,4 +6,5 @@ namespace Bearded.Utilities.SpaceTime
     {
         T NumericValue { get; }
     }
+
 }

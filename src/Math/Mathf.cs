@@ -40,6 +40,14 @@
         /// Represents the value of tau (6.28318548).
         /// </summary>
         public const float Tau = 2 * Mathf.Pi;
+
+        #region private
+
+        private const float degreesToRadians = TwoPi / 360f;
+        private const float radiansToDegrees = 360f / TwoPi;
+
+        #endregion
+
         #endregion
 
         #region Float math
@@ -164,6 +172,27 @@
         {
             return (int)System.Math.Round(d);
         }
+
+        /// <summary>
+        /// Converts an angle in radians to degrees.
+        /// </summary>
+        /// <param name="radians">The angle in radians.</param>
+        /// <returns>The angle in degrees.</returns>
+        public static float RadiansToDegrees(float radians)
+        {
+            return radians * radiansToDegrees;
+        }
+
+        /// <summary>
+        /// Converts an angle in degrees to radians.
+        /// </summary>
+        /// <param name="degrees">The angle in degrees.</param>
+        /// <returns>The angle in radians.</returns>
+        public static float DegreesToRadians(float degrees)
+        {
+            return degrees * degreesToRadians;
+        }
+
         #endregion
     }
 }

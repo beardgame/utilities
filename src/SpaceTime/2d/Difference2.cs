@@ -21,6 +21,8 @@ namespace Bearded.Utilities.SpaceTime
 
         public Unit Length { get { return new Unit(this.value.Length); } }
 
+        public Squared<Unit> LengthSquared { get { return new Squared<Unit>(this.value.LengthSquared); } }
+
         #endregion
 
         #region methods

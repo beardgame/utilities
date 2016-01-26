@@ -8,9 +8,6 @@ namespace Bearded.Utilities.Math
     /// </summary>
     public struct Angle : IEquatable<Angle>
     {
-        const float fromDegrees = Mathf.TwoPi / 360f;
-        const float toDegrees = 360f / Mathf.TwoPi;
-
         private readonly float radians;
 
         #region Constructing
@@ -33,7 +30,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Angle FromDegrees(float degrees)
         {
-            return new Angle(degrees * Angle.fromDegrees);
+            return new Angle(Mathf.DegreesToRadians(degrees));
         }
 
         /// <summary>
@@ -44,7 +41,7 @@ namespace Bearded.Utilities.Math
         {
             float perpDot = from.Y * to.X - from.X * to.Y;
 
-            return Angle.FromRadians(Mathf.Atan2(perpDot, Vector2.Dot(from, to)));
+            return FromRadians(Mathf.Atan2(perpDot, Vector2.Dot(from, to)));
         }
 
         /// <summary>
@@ -62,7 +59,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Angle BetweenPositive(Direction2 from, Direction2 to)
         {
-            var a = Angle.Between(from, to);
+            var a = Between(from, to);
             if (a.radians < 0)
                 a += Mathf.TwoPi.Radians();
             return a;
@@ -74,7 +71,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Angle BetweenNegative(Direction2 from, Direction2 to)
         {
-            var a = Angle.Between(from, to);
+            var a = Between(from, to);
             if (a.radians > 0)
                 a -= Mathf.TwoPi.Radians();
             return a;
@@ -103,7 +100,7 @@ namespace Bearded.Utilities.Math
         /// <summary>
         /// Gets the value of the angle in degrees.
         /// </summary>
-        public float Degrees { get { return this.radians * Angle.toDegrees; } }
+        public float Degrees { get { return Mathf.RadiansToDegrees(this.radians); } }
 
         /// <summary>
         /// Gets a 2x2 rotation matrix that rotates vectors by this angle.
@@ -118,7 +115,7 @@ namespace Bearded.Utilities.Math
         /// <summary>
         /// Gets the magnitude (absolute value) of the angle in degrees.
         /// </summary>
-        public float MagnitudeInDegrees { get { return System.Math.Abs(this.radians * Angle.toDegrees); } }
+        public float MagnitudeInDegrees { get { return System.Math.Abs(this.Degrees); } }
 
 
         #endregion
@@ -157,7 +154,7 @@ namespace Bearded.Utilities.Math
             return System.Math.Sign(this.radians);
         }
         /// <summary>
-        /// Returns the absolute value of the angle in radians.
+        /// Returns the absolute value of the angle.
         /// </summary>
         public Angle Abs()
         {
@@ -165,6 +162,7 @@ namespace Bearded.Utilities.Math
         }
         /// <summary>
         /// Returns a new Angle with |value| == 1 radians and the same sign as this angle.
+        /// Returns 0 if the angle is zero.
         /// </summary>
         public Angle Normalized()
         {
@@ -175,7 +173,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public Angle Clamped(Angle min, Angle max)
         {
-            return Angle.Clamp(this, min, max);
+            return Clamp(this, min, max);
         }
 
         #region Statics
