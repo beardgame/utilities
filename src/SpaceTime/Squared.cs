@@ -38,35 +38,6 @@ namespace Bearded.Utilities.SpaceTime
 
         #region methods
 
-        public T Sqrt()
-        {
-            var root = this.value.Sqrted();
-            var t = default(T);
-
-            #pragma warning disable 184
-            // ReSharper disable HeuristicUnreachableCode
-
-            if (t is Unit)
-            {
-                return (T)(object)new Unit(root);
-            }
-            if (t is Speed)
-            {
-                return (T)(object)new Speed(root);
-            }
-            if (t is Acceleration)
-            {
-                return (T)(object)new Acceleration(root);
-            }
-
-            // ReSharper restore HeuristicUnreachableCode
-            #pragma warning restore 184
-
-            throw new Exception(string.Format(
-                "Can only take root of known squared types. {0} is not supported.",
-                typeof(T)));
-        }
-
         #region equality and hashcode
 
         public bool Equals(Squared<T> other)
