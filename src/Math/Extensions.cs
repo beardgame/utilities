@@ -390,6 +390,40 @@ namespace Bearded.Utilities.Math
         {
             return new Vector4(xy.X, xy.Y, z, w);
         }
+
+        /// <summary>
+        /// Normalizes a vector. If all components of the vector are zero, no exception is thrown. Instead the zero vector is returned.
+        /// </summary>
+        /// <param name="vector">The vector to normalize.</param>
+        /// <returns>The zero vector if the input is a zero vector. Otherwise a unit vector in the same direction as the input.</returns>
+        public static Vector2 NormalizedSafe(this Vector2 vector)
+        {
+            var lSqrd = vector.LengthSquared;
+
+            return lSqrd == 0 ? new Vector2() : vector / lSqrd.Sqrted();
+        }
+        /// <summary>
+        /// Normalizes a vector. If all components of the vector are zero, no exception is thrown. Instead the zero vector is returned.
+        /// </summary>
+        /// <param name="vector">The vector to normalize.</param>
+        /// <returns>The zero vector if the input is a zero vector. Otherwise a unit vector in the same direction as the input.</returns>
+        public static Vector3 NormalizedSafe(this Vector3 vector)
+        {
+            var lSqrd = vector.LengthSquared;
+
+            return lSqrd == 0 ? new Vector3() : vector / lSqrd.Sqrted();
+        }
+        /// <summary>
+        /// Normalizes a vector. If all components of the vector are zero, no exception is thrown. Instead the zero vector is returned.
+        /// </summary>
+        /// <param name="vector">The vector to normalize.</param>
+        /// <returns>The zero vector if the input is a zero vector. Otherwise a unit vector in the same direction as the input.</returns>
+        public static Vector4 NormalizedSafe(this Vector4 vector)
+        {
+            var lSqrd = vector.LengthSquared;
+
+            return lSqrd == 0 ? new Vector4() : vector / lSqrd.Sqrted();
+        }
         #endregion
 
         #region Geometric

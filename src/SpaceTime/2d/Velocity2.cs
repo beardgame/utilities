@@ -1,9 +1,10 @@
-﻿using Bearded.Utilities.Math;
+﻿using System;
+using Bearded.Utilities.Math;
 using OpenTK;
 
 namespace Bearded.Utilities.SpaceTime
 {
-    struct Velocity2 : IBackedBy<Vector2>
+    struct Velocity2 : IBackedBy<Vector2>, IEquatable<Velocity2>
     {
         private readonly Vector2 value;
 
@@ -19,6 +20,55 @@ namespace Bearded.Utilities.SpaceTime
         public Direction2 Direction { get { return Direction2.Of(this.value); } }
 
         public Speed Length { get { return new Speed(this.value.Length); } }
+
+        #endregion
+
+        #region methods
+
+        #region projection
+
+        public Speed ProjectedOn(Vector2 vector)
+        {
+            return this.projectedOn(vector.NormalizedSafe());
+        }
+
+        public Speed ProjectedOn(Difference2 vector)
+        {
+            return this.projectedOn(vector.NumericValue.NormalizedSafe());
+        }
+
+        public Speed ProjectedOn(Direction2 direction)
+        {
+            return this.projectedOn(direction.Vector);
+        }
+
+        private Speed projectedOn(Vector2 normalisedVector)
+        {
+            return new Speed(Vector2.Dot(this.value, normalisedVector));
+        }
+
+        #endregion
+
+
+        #region equality and hashcode
+
+        public bool Equals(Velocity2 other)
+        {
+            return this == other;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is Velocity2 && this.Equals((Velocity2)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.value.GetHashCode();
+        }
+
+        #endregion
 
         #endregion
 
@@ -89,6 +139,21 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
+        #region comparision
+
+        public static bool operator ==(Velocity2 v0, Velocity2 v1)
+        {
+            return v0.value == v1.value;
+        }
+
+        public static bool operator !=(Velocity2 v0, Velocity2 v1)
+        {
+            return v0.value != v1.value;
+        }
+
         #endregion
+
+        #endregion
+
     }
 }

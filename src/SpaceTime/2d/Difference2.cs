@@ -1,9 +1,10 @@
-﻿using Bearded.Utilities.Math;
+﻿using System;
+using Bearded.Utilities.Math;
 using OpenTK;
 
 namespace Bearded.Utilities.SpaceTime
 {
-    struct Difference2 : IBackedBy<Vector2>
+    struct Difference2 : IBackedBy<Vector2>, IEquatable<Difference2>
     {
         private readonly Vector2 value;
 
@@ -19,6 +20,52 @@ namespace Bearded.Utilities.SpaceTime
         public Direction2 Direction { get { return Direction2.Of(this.value); } }
 
         public Unit Length { get { return new Unit(this.value.Length); } }
+
+        #endregion
+
+        #region methods
+
+        #region projection
+
+        public Unit ProjectedOn(Vector2 vector)
+        {
+            return this.projectedOn(vector.NormalizedSafe());
+        }
+        public Unit ProjectedOn(Difference2 vector)
+        {
+            return this.projectedOn(vector.NumericValue.NormalizedSafe());
+        }
+        public Unit ProjectedOn(Direction2 direction)
+        {
+            return this.projectedOn(direction.Vector);
+        }
+
+        private Unit projectedOn(Vector2 normalisedVector)
+        {
+            return new Unit(Vector2.Dot(this.value, normalisedVector));
+        }
+
+        #endregion
+
+        #region equality and hashcode
+
+        public bool Equals(Difference2 other)
+        {
+            return this == other;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is Difference2 && this.Equals((Difference2)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.value.GetHashCode();
+        }
+
+        #endregion
 
         #endregion
 
@@ -76,6 +123,21 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
+        #region comparision
+
+        public static bool operator ==(Difference2 d0, Difference2 d1)
+        {
+            return d0.value == d1.value;
+        }
+
+        public static bool operator !=(Difference2 d0, Difference2 d1)
+        {
+            return d0.value != d1.value;
+        }
+
         #endregion
+
+        #endregion
+
     }
 }

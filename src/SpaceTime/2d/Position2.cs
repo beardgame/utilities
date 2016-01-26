@@ -1,8 +1,9 @@
-﻿using OpenTK;
+﻿using System;
+using OpenTK;
 
 namespace Bearded.Utilities.SpaceTime
 {
-    struct Position2 : IBackedBy<Vector2>
+    struct Position2 : IBackedBy<Vector2>, IEquatable<Position2>
     {
         private readonly Vector2 value;
 
@@ -12,6 +13,30 @@ namespace Bearded.Utilities.SpaceTime
         }
 
         public Vector2 NumericValue { get { return this.value; } }
+
+        #region methods
+
+        #region equality and hashcode
+
+        public bool Equals(Position2 other)
+        {
+            return this == other;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is Position2 && this.Equals((Position2)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.value.GetHashCode();
+        }
+
+        #endregion
+
+        #endregion
 
         #region operators
 
@@ -36,6 +61,21 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
+        #region comparision
+
+        public static bool operator ==(Position2 p0, Position2 p1)
+        {
+            return p0.value == p1.value;
+        }
+
+        public static bool operator !=(Position2 p0, Position2 p1)
+        {
+            return p0.value != p1.value;
+        }
+
         #endregion
+
+        #endregion
+
     }
 }

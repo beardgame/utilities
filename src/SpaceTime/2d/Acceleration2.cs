@@ -1,9 +1,10 @@
-﻿using Bearded.Utilities.Math;
+﻿using System;
+using Bearded.Utilities.Math;
 using OpenTK;
 
 namespace Bearded.Utilities.SpaceTime
 {
-    struct Acceleration2 : IBackedBy<Vector2>
+    struct Acceleration2 : IBackedBy<Vector2>, IEquatable<Acceleration2>
     {
         private readonly Vector2 value;
 
@@ -24,7 +25,49 @@ namespace Bearded.Utilities.SpaceTime
 
         #region methods
 
+        #region projection
 
+        public Acceleration ProjectedOn(Vector2 vector)
+        {
+            return this.projectedOn(vector.NormalizedSafe());
+        }
+
+        public Acceleration ProjectedOn(Difference2 vector)
+        {
+            return this.projectedOn(vector.NumericValue.NormalizedSafe());
+        }
+
+        public Acceleration ProjectedOn(Direction2 direction)
+        {
+            return this.projectedOn(direction.Vector);
+        }
+
+        private Acceleration projectedOn(Vector2 normalisedVector)
+        {
+            return new Acceleration(Vector2.Dot(this.value, normalisedVector));
+        }
+
+        #endregion
+
+        #region equality and hashcode
+
+        public bool Equals(Acceleration2 other)
+        {
+            return this == other;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is Acceleration2 && this.Equals((Acceleration2)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.value.GetHashCode();
+        }
+
+        #endregion
 
         #endregion
 
@@ -86,6 +129,21 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
+        #region comparision
+
+        public static bool operator ==(Acceleration2 a0, Acceleration2 a1)
+        {
+            return a0.value == a1.value;
+        }
+
+        public static bool operator !=(Acceleration2 a0, Acceleration2 a1)
+        {
+            return a0.value != a1.value;
+        }
+
         #endregion
+
+        #endregion
+
     }
 }

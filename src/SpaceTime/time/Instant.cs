@@ -1,6 +1,8 @@
-﻿namespace Bearded.Utilities.SpaceTime
+﻿using System;
+
+namespace Bearded.Utilities.SpaceTime
 {
-    struct Instant : IBackedBy<double>
+    struct Instant : IBackedBy<double>, IEquatable<Instant>, IComparable<Instant>
     {
         private readonly double value;
 
@@ -10,6 +12,39 @@
         }
 
         public double NumericValue { get { return this.value; } }
+
+        #region methods
+
+        #region equality and hashcode
+
+        public bool Equals(Instant other)
+        {
+            return this == other;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is Instant && this.Equals((Instant)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.value.GetHashCode();
+        }
+
+        #endregion
+
+        #region compare
+
+        public int CompareTo(Instant other)
+        {
+            return this.value.CompareTo(other.value);
+        }
+
+        #endregion
+
+        #endregion
 
         #region operators
 
@@ -34,6 +69,41 @@
 
         #endregion
 
+        #region comparision
+
+        public static bool operator ==(Instant i0, Instant i1)
+        {
+            return i0.value == i1.value;
+        }
+
+        public static bool operator !=(Instant i0, Instant i1)
+        {
+            return i0.value != i1.value;
+        }
+
+        public static bool operator <(Instant i0, Instant i1)
+        {
+            return i0.value < i1.value;
+        }
+
+        public static bool operator >(Instant i0, Instant i1)
+        {
+            return i0.value > i1.value;
+        }
+
+        public static bool operator <=(Instant i0, Instant i1)
+        {
+            return i0.value <= i1.value;
+        }
+
+        public static bool operator >=(Instant i0, Instant i1)
+        {
+            return i0.value >= i1.value;
+        }
+
         #endregion
+
+        #endregion
+
     }
 }

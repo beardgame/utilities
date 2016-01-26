@@ -1,9 +1,10 @@
 ﻿
+using System;
 using Bearded.Utilities.Math;
 
 namespace Bearded.Utilities.SpaceTime
 {
-    struct Acceleration
+    struct Acceleration : IBackedBy<float>, IEquatable<Acceleration>, IComparable<Acceleration>
     {
         readonly float value;
         
@@ -14,6 +15,38 @@ namespace Bearded.Utilities.SpaceTime
 
         public float NumericValue { get { return this.value; } }
 
+        #region methods
+
+        #region equality and hashcode
+
+        public bool Equals(Acceleration other)
+        {
+            return this == other;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is Acceleration && this.Equals((Acceleration)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.value.GetHashCode();
+        }
+
+        #endregion
+
+        #region compare
+
+        public int CompareTo(Acceleration other)
+        {
+            return this.value.CompareTo(other.value);
+        }
+
+        #endregion
+
+        #endregion
 
         #region operators
 
@@ -86,6 +119,41 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
+        #region comparision
+
+        public static bool operator ==(Acceleration a0, Acceleration a1)
+        {
+            return a0.value == a1.value;
+        }
+
+        public static bool operator !=(Acceleration a0, Acceleration a1)
+        {
+            return a0.value != a1.value;
+        }
+
+        public static bool operator <(Acceleration a0, Acceleration a1)
+        {
+            return a0.value < a1.value;
+        }
+
+        public static bool operator >(Acceleration a0, Acceleration a1)
+        {
+            return a0.value > a1.value;
+        }
+
+        public static bool operator <=(Acceleration a0, Acceleration a1)
+        {
+            return a0.value <= a1.value;
+        }
+
+        public static bool operator >=(Acceleration a0, Acceleration a1)
+        {
+            return a0.value >= a1.value;
+        }
+
         #endregion
+
+        #endregion
+
     }
 }

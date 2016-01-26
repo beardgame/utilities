@@ -1,6 +1,8 @@
-﻿namespace Bearded.Utilities.SpaceTime
+﻿using System;
+
+namespace Bearded.Utilities.SpaceTime
 {
-    struct TimeSpan : IBackedBy<double>
+    struct TimeSpan : IBackedBy<double>, IEquatable<TimeSpan>, IComparable<TimeSpan>
     {
         private readonly double value;
 
@@ -10,6 +12,39 @@
         }
 
         public double NumericValue { get { return this.value; } }
+
+        #region methods
+
+        #region equality and hashcode
+
+        public bool Equals(TimeSpan other)
+        {
+            return this == other;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is TimeSpan && this.Equals((TimeSpan)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.value.GetHashCode();
+        }
+
+        #endregion
+
+        #region compare
+
+        public int CompareTo(TimeSpan other)
+        {
+            return this.value.CompareTo(other.value);
+        }
+
+        #endregion
+
+        #endregion
 
         #region operators
 
@@ -49,13 +84,48 @@
 
         #region ratio
 
-        public static float operator /(TimeSpan dividend, TimeSpan divisor)
+        public static double operator /(TimeSpan dividend, TimeSpan divisor)
         {
             return dividend.value / divisor.value;
         }
 
         #endregion
 
+        #region comparision
+
+        public static bool operator ==(TimeSpan t0, TimeSpan t1)
+        {
+            return t0.value == t1.value;
+        }
+
+        public static bool operator !=(TimeSpan t0, TimeSpan t1)
+        {
+            return t0.value != t1.value;
+        }
+
+        public static bool operator <(TimeSpan t0, TimeSpan t1)
+        {
+            return t0.value < t1.value;
+        }
+
+        public static bool operator >(TimeSpan t0, TimeSpan t1)
+        {
+            return t0.value > t1.value;
+        }
+
+        public static bool operator <=(TimeSpan t0, TimeSpan t1)
+        {
+            return t0.value <= t1.value;
+        }
+
+        public static bool operator >=(TimeSpan t0, TimeSpan t1)
+        {
+            return t0.value >= t1.value;
+        }
+
         #endregion
+
+        #endregion
+
     }
 }

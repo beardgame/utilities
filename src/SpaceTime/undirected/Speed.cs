@@ -1,8 +1,9 @@
-﻿using Bearded.Utilities.Math;
+﻿using System;
+using Bearded.Utilities.Math;
 
 namespace Bearded.Utilities.SpaceTime
 {
-    struct Speed
+    struct Speed : IBackedBy<float>, IEquatable<Speed>, IComparable<Speed>
     {
         readonly float value;
 
@@ -12,6 +13,39 @@ namespace Bearded.Utilities.SpaceTime
         }
 
         public float NumericValue { get { return this.value; } }
+
+        #region methods
+
+        #region equality and hashcode
+
+        public bool Equals(Speed other)
+        {
+            return this == other;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is Speed && this.Equals((Speed)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.value.GetHashCode();
+        }
+
+        #endregion
+
+        #region compare
+
+        public int CompareTo(Speed other)
+        {
+            return this.value.CompareTo(other.value);
+        }
+
+        #endregion
+
+        #endregion
 
         #region operators
 
@@ -93,6 +127,41 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
+        #region comparision
+
+        public static bool operator ==(Speed s0, Speed s1)
+        {
+            return s0.value == s1.value;
+        }
+
+        public static bool operator !=(Speed s0, Speed s1)
+        {
+            return s0.value != s1.value;
+        }
+
+        public static bool operator <(Speed s0, Speed s1)
+        {
+            return s0.value < s1.value;
+        }
+
+        public static bool operator >(Speed s0, Speed s1)
+        {
+            return s0.value > s1.value;
+        }
+
+        public static bool operator <=(Speed s0, Speed s1)
+        {
+            return s0.value <= s1.value;
+        }
+
+        public static bool operator >=(Speed s0, Speed s1)
+        {
+            return s0.value >= s1.value;
+        }
+
         #endregion
+
+        #endregion
+
     }
 }
