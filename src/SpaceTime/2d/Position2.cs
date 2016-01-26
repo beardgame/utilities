@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace Bearded.Utilities.SpaceTime
 {
-    struct Position2 : IBackedBy<Vector2>, IEquatable<Position2>
+    public struct Position2 : IBackedBy<Vector2>, IEquatable<Position2>
     {
         private readonly Vector2 value;
 
@@ -11,10 +11,37 @@ namespace Bearded.Utilities.SpaceTime
         {
             this.value = value;
         }
+        
+        public Position2(float x, float y)
+            : this(new Vector2(x, y))
+        {
+        }
+
+        public Position2(Unit x, Unit y)
+            : this(new Vector2(x.NumericValue, y.NumericValue))
+        {
+        }
 
         public Vector2 NumericValue { get { return this.value; } }
 
+        public Unit X { get { return new Unit(this.value.X); } }
+        public Unit Y { get { return new Unit(this.value.Y); } }
+
         #region methods
+
+        #region lerp
+
+        public static Position2 Lerp(Position2 p0, Position2 p1, float t)
+        {
+            return p0 + (p1 - p0) * t;
+        }
+
+        public Position2 LerpTo(Position2 p, float t)
+        {
+            return Lerp(this, p, t);
+        }
+
+        #endregion
 
         #region equality and hashcode
 

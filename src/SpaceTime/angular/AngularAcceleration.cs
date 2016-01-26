@@ -3,7 +3,7 @@ using Bearded.Utilities.Math;
 
 namespace Bearded.Utilities.SpaceTime
 {
-    struct AngularAcceleration : IBackedBy<float>, IEquatable<AngularAcceleration>, IComparable<AngularAcceleration>
+    public struct AngularAcceleration : IBackedBy<float>, IEquatable<AngularAcceleration>, IComparable<AngularAcceleration>
     {
         private readonly float value;
 
@@ -28,6 +28,9 @@ namespace Bearded.Utilities.SpaceTime
         public Angle AngleValue { get { return Angle.FromRadians(this.value); } }
 
         public float NumericValue { get { return this.value; } }
+
+        public static AngularAcceleration Zero { get { return new AngularAcceleration(0); } }
+        public static AngularAcceleration One { get { return new AngularAcceleration(1); } }
 
         #region methods
 

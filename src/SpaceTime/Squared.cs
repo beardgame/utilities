@@ -1,10 +1,9 @@
 ﻿using System;
-using System.CodeDom;
 using Bearded.Utilities.Math;
 
 namespace Bearded.Utilities.SpaceTime
 {
-    struct Squared<T> : IBackedBy<float>, IEquatable<Squared<T>>, IComparable<Squared<T>>
+    public struct Squared<T> : IBackedBy<float>, IEquatable<Squared<T>>, IComparable<Squared<T>>
         where T : struct, IBackedBy<float>
     {
         private readonly float value;
@@ -33,6 +32,9 @@ namespace Bearded.Utilities.SpaceTime
         #region properties
 
         public float NumericValue { get { return this.value; } }
+
+        public static Squared<T> Zero { get { return new Squared<T>(0); } }
+        public static Squared<T> One { get { return new Squared<T>(1); } }
 
         #endregion
 

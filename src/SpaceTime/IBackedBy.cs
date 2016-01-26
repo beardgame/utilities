@@ -1,7 +1,7 @@
 ﻿
 namespace Bearded.Utilities.SpaceTime
 {
-    interface IBackedBy<T>
+    public interface IBackedBy<T>
         where T : struct
     {
         T NumericValue { get; }

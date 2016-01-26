@@ -1,10 +1,11 @@
 ﻿
 using System;
 using Bearded.Utilities.Math;
+using OpenTK;
 
 namespace Bearded.Utilities.SpaceTime
 {
-    struct Unit : IBackedBy<float>, IEquatable<Unit>, IComparable<Unit>
+    public struct Unit : IBackedBy<float>, IEquatable<Unit>, IComparable<Unit>
     {
         private readonly float value;
 
@@ -16,6 +17,9 @@ namespace Bearded.Utilities.SpaceTime
         public float NumericValue { get { return this.value; } }
 
         public Squared<Unit> Squared { get { return Squared<Unit>.FromRoot(this.value); } }
+
+        public static Unit Zero { get { return new Unit(0); } }
+        public static Unit One { get { return new Unit(1); } }
 
         #region methods
 
@@ -113,6 +117,15 @@ namespace Bearded.Utilities.SpaceTime
         public static Difference2 operator *(Direction2 d, Unit u)
         {
             return new Difference2(d.Vector * u.value);
+        }
+
+        public static Difference2 operator *(Unit u, Vector2 v)
+        {
+            return new Difference2(v * u.value);
+        }
+        public static Difference2 operator *(Vector2 v, Unit u)
+        {
+            return new Difference2(v * u.value);
         }
 
         #endregion

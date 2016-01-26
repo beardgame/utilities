@@ -4,7 +4,7 @@ using OpenTK;
 
 namespace Bearded.Utilities.SpaceTime
 {
-    struct Acceleration2 : IBackedBy<Vector2>, IEquatable<Acceleration2>
+    public struct Acceleration2 : IBackedBy<Vector2>, IEquatable<Acceleration2>
     {
         private readonly Vector2 value;
 
@@ -12,10 +12,28 @@ namespace Bearded.Utilities.SpaceTime
         {
             this.value = value;
         }
+        
+        public Acceleration2(float x, float y)
+            : this(new Vector2(x, y))
+        {
+        }
+
+        public Acceleration2(Acceleration x, Acceleration y)
+            : this(new Vector2(x.NumericValue, y.NumericValue))
+        {
+        }
+
+        public static Acceleration2 In(Direction2 direction, Acceleration u)
+        {
+            return direction * u;
+        }
 
         #region properties
 
         public Vector2 NumericValue { get { return this.value; } }
+
+        public Acceleration X { get { return new Acceleration(this.value.X); } }
+        public Acceleration Y { get { return new Acceleration(this.value.Y); } }
 
         public Direction2 Direction { get { return Direction2.Of(this.value); } }
 
@@ -26,6 +44,20 @@ namespace Bearded.Utilities.SpaceTime
         #endregion
 
         #region methods
+
+        #region lerp
+
+        public static Acceleration2 Lerp(Acceleration2 a0, Acceleration2 a1, float t)
+        {
+            return a0 + (a1 - a0) * t;
+        }
+
+        public Acceleration2 LerpTo(Acceleration2 a, float t)
+        {
+            return Lerp(this, a, t);
+        }
+
+        #endregion
 
         #region projection
 

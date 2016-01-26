@@ -2,7 +2,7 @@
 
 namespace Bearded.Utilities.SpaceTime
 {
-    struct Instant : IBackedBy<double>, IEquatable<Instant>, IComparable<Instant>
+    public struct Instant : IBackedBy<double>, IEquatable<Instant>, IComparable<Instant>
     {
         private readonly double value;
 
@@ -12,6 +12,8 @@ namespace Bearded.Utilities.SpaceTime
         }
 
         public double NumericValue { get { return this.value; } }
+
+        public static Instant Zero { get { return new Instant(0); } }
 
         #region methods
 

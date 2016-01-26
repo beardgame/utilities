@@ -3,7 +3,7 @@ using Bearded.Utilities.Math;
 
 namespace Bearded.Utilities.SpaceTime
 {
-    struct TimeSpan : IBackedBy<double>, IEquatable<TimeSpan>, IComparable<TimeSpan>
+    public struct TimeSpan : IBackedBy<double>, IEquatable<TimeSpan>, IComparable<TimeSpan>
     {
         private readonly double value;
 
@@ -13,6 +13,9 @@ namespace Bearded.Utilities.SpaceTime
         }
 
         public double NumericValue { get { return this.value; } }
+
+        public static TimeSpan Zero { get { return new TimeSpan(0); } }
+        public static TimeSpan One { get { return new TimeSpan(1); } }
 
         #region methods
 
