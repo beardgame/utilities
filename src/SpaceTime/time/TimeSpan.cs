@@ -1,4 +1,5 @@
 ﻿using System;
+using Bearded.Utilities.Math;
 
 namespace Bearded.Utilities.SpaceTime
 {
@@ -121,6 +122,15 @@ namespace Bearded.Utilities.SpaceTime
         public static bool operator >=(TimeSpan t0, TimeSpan t1)
         {
             return t0.value >= t1.value;
+        }
+
+        #endregion
+
+        #region angle differentiation
+
+        public static AngularVelocity operator /(Angle s, TimeSpan t)
+        {
+            return AngularVelocity.FromRadians(s.Radians / (float)t.value);
         }
 
         #endregion

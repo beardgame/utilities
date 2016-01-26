@@ -139,7 +139,6 @@
     <Compile Include="SpaceTime\angular\AngularVelocity.cs" />
     <Compile Include="SpaceTime\Extensions.cs" />
     <Compile Include="SpaceTime\Squared.cs" />
-    <Compile Include="SpaceTime\TimeInSeconds\Extensions.cs" />
     <Compile Include="SpaceTime\undirected\Acceleration.cs" />
     <Compile Include="SpaceTime\undirected\Speed.cs" />
     <Compile Include="SpaceTime\undirected\Unit.cs" />
