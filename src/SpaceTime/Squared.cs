@@ -3,6 +3,10 @@ using Bearded.Utilities.Math;
 
 namespace Bearded.Utilities.SpaceTime
 {
+    /// <summary>
+    /// Represents a type-safe squared value, backed by a float.
+    /// </summary>
+    /// <typeparam name="T">The squared type.</typeparam>
     public struct Squared<T> : IBackedBy<float>, IEquatable<Squared<T>>, IComparable<Squared<T>>
         where T : struct, IBackedBy<float>
     {
@@ -15,10 +19,17 @@ namespace Bearded.Utilities.SpaceTime
             this.value = value;
         }
 
+        /// <summary>
+        /// Creteas a new instance of the Squared type, from a given root value.
+        /// </summary>
         public static Squared<T> FromRoot(float root)
         {
             return new Squared<T>(root.Squared());
         }
+        /// <summary>
+        /// Creteas a new instance of the Squared type, from a given value.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">If value is negative.</exception>
         public static Squared<T> FromValue(float value)
         {
             if(value < 0)
@@ -31,9 +42,18 @@ namespace Bearded.Utilities.SpaceTime
 
         #region properties
 
+        /// <summary>
+        /// Returns the numeric value of the square.
+        /// </summary>
         public float NumericValue { get { return this.value; } }
 
+        /// <summary>
+        /// Returns a Square type of value 0.
+        /// </summary>
         public static Squared<T> Zero { get { return new Squared<T>(0); } }
+        /// <summary>
+        /// Returns a Square type of value 1.
+        /// </summary>
         public static Squared<T> One { get { return new Squared<T>(1); } }
 
         #endregion
@@ -75,6 +95,9 @@ namespace Bearded.Utilities.SpaceTime
 
         #region algebra
 
+        /// <summary>
+        /// Adds two squares.
+        /// </summary>
         public static Squared<T> operator +(Squared<T> s0, Squared<T> s1)
         {
             return new Squared<T>(s0.value + s1.value);
@@ -84,6 +107,9 @@ namespace Bearded.Utilities.SpaceTime
 
         #region ratio
 
+        /// <summary>
+        /// Divides a square by another, returning a type-less fraction.
+        /// </summary>
         public static float operator /(Squared<T> dividend, Squared<T> divisor)
         {
             return dividend.value / divisor.value;
@@ -93,31 +119,44 @@ namespace Bearded.Utilities.SpaceTime
 
         #region comparision
 
+        /// <summary>
+        /// Compares two squares for equality.
+        /// </summary>
         public static bool operator ==(Squared<T> s0, Squared<T> s1)
         {
             return s0.value == s1.value;
         }
-
+        /// <summary>
+        /// Compares two squares for inequality.
+        /// </summary>
         public static bool operator !=(Squared<T> s0, Squared<T> s1)
         {
             return s0.value != s1.value;
         }
-
+        /// <summary>
+        /// Checks if one square is smaller than another.
+        /// </summary>
         public static bool operator <(Squared<T> s0, Squared<T> s1)
         {
             return s0.value < s1.value;
         }
-
+        /// <summary>
+        /// Checks if one square is larger than another.
+        /// </summary>
         public static bool operator >(Squared<T> s0, Squared<T> s1)
         {
             return s0.value > s1.value;
         }
-
+        /// <summary>
+        /// Checks if one square is smaller or equal to another.
+        /// </summary>
         public static bool operator <=(Squared<T> s0, Squared<T> s1)
         {
             return s0.value <= s1.value;
         }
-
+        /// <summary>
+        /// Checks if one square is larger or equal to another.
+        /// </summary>
         public static bool operator >=(Squared<T> s0, Squared<T> s1)
         {
             return s0.value >= s1.value;
