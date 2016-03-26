@@ -8,11 +8,11 @@ namespace Bearded.Utilities.Math
     /// </summary>
     public struct Direction2 : IEquatable<Direction2>
     {
-        const float fromRadians = uint.MaxValue / Mathf.TwoPi;
-        const float toRadians = Mathf.TwoPi / uint.MaxValue;
+        private const float fromRadians = uint.MaxValue / Mathf.TwoPi;
+        private const float toRadians = Mathf.TwoPi / uint.MaxValue;
 
-        const float fromDegrees = uint.MaxValue / 360f;
-        const float toDegrees = 360f / uint.MaxValue;
+        private const float fromDegrees = uint.MaxValue / 360f;
+        private const float toDegrees = 360f / uint.MaxValue;
 
         private readonly uint data;
 
@@ -28,7 +28,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Direction2 FromRadians(float radians)
         {
-            return new Direction2((uint)(radians * Direction2.fromRadians));
+            return new Direction2((uint)(radians * fromRadians));
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Direction2 FromDegrees(float degrees)
         {
-            return new Direction2((uint)(degrees * Direction2.fromDegrees));
+            return new Direction2((uint)(degrees * fromDegrees));
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Direction2 Of(Vector2 vector)
         {
-            return Direction2.FromRadians(Mathf.Atan2(vector.Y, vector.X));
+            return FromRadians(Mathf.Atan2(vector.Y, vector.X));
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Bearded.Utilities.Math
         /// <param name="to">The point the directions "points" towards.</param>
         public static Direction2 Between(Vector2 from, Vector2 to)
         {
-            return Direction2.Of(to - from);
+            return Of(to - from);
         }
 
         #endregion
@@ -75,22 +75,22 @@ namespace Bearded.Utilities.Math
         /// <summary>
         /// Gets the absolute angle of the direction in radians between 0 and 2pi.
         /// </summary>
-        public float Radians { get { return this.data * Direction2.toRadians; } }
+        public float Radians { get { return this.data * toRadians; } }
 
         /// <summary>
         /// Gets the absolute angle of the direction in degrees between 0 and 360.
         /// </summary>
-        public float Degrees { get { return this.data * Direction2.toDegrees; } }
+        public float Degrees { get { return this.data * toDegrees; } }
 
         /// <summary>
         /// Gets the absolute angle of the direction in radians between -pi and pi.
         /// </summary>
-        public float RadiansSigned { get { return ((int)this.data) * Direction2.toRadians; } }
+        public float RadiansSigned { get { return (int)this.data * toRadians; } }
 
         /// <summary>
         /// Gets the absolute angle of the direction in degrees between -180 and 180.
         /// </summary>
-        public float DegreesSigned { get { return ((int)this.data) * Direction2.toDegrees; } }
+        public float DegreesSigned { get { return (int)this.data * toDegrees; } }
 
         /// <summary>
         /// Gets the unit vector pointing in this direction.
