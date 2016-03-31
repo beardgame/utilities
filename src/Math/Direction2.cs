@@ -28,7 +28,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Direction2 FromRadians(float radians)
         {
-            return new Direction2((uint)(radians * fromRadians));
+            return new Direction2((uint)(radians * Direction2.fromRadians));
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Direction2 FromDegrees(float degrees)
         {
-            return new Direction2((uint)(degrees * fromDegrees));
+            return new Direction2((uint)(degrees * Direction2.fromDegrees));
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Direction2 Of(Vector2 vector)
         {
-            return FromRadians(Mathf.Atan2(vector.Y, vector.X));
+            return Direction2.FromRadians(Mathf.Atan2(vector.Y, vector.X));
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Bearded.Utilities.Math
         /// <param name="to">The point the directions "points" towards.</param>
         public static Direction2 Between(Vector2 from, Vector2 to)
         {
-            return Of(to - from);
+            return Direction2.Of(to - from);
         }
 
         #endregion
@@ -69,28 +69,28 @@ namespace Bearded.Utilities.Math
 
         #endregion
 
-
+        
         #region Properties
 
         /// <summary>
         /// Gets the absolute angle of the direction in radians between 0 and 2pi.
         /// </summary>
-        public float Radians { get { return this.data * toRadians; } }
+        public float Radians { get { return this.data * Direction2.toRadians; } }
 
         /// <summary>
         /// Gets the absolute angle of the direction in degrees between 0 and 360.
         /// </summary>
-        public float Degrees { get { return this.data * toDegrees; } }
+        public float Degrees { get { return this.data * Direction2.toDegrees; } }
 
         /// <summary>
         /// Gets the absolute angle of the direction in radians between -pi and pi.
         /// </summary>
-        public float RadiansSigned { get { return (int)this.data * toRadians; } }
+        public float RadiansSigned { get { return (int)this.data * Direction2.toRadians; } }
 
         /// <summary>
         /// Gets the absolute angle of the direction in degrees between -180 and 180.
         /// </summary>
-        public float DegreesSigned { get { return (int)this.data * toDegrees; } }
+        public float DegreesSigned { get { return (int)this.data * Direction2.toDegrees; } }
 
         /// <summary>
         /// Gets the unit vector pointing in this direction.
@@ -160,7 +160,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Direction2 operator +(Direction2 direction, Angle angle)
         {
-            return new Direction2((uint)(direction.data + angle.Radians * fromRadians));
+            return new Direction2((uint)(direction.data + angle.Radians * Direction2.fromRadians));
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Direction2 operator -(Direction2 direction, Angle angle)
         {
-            return new Direction2((uint)(direction.data - angle.Radians * fromRadians));
+            return new Direction2((uint)(direction.data - angle.Radians * Direction2.fromRadians));
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Angle operator -(Direction2 direction1, Direction2 direction2)
         {
-            return Angle.FromRadians(((int)direction1.data - (int)direction2.data) * toRadians);
+            return Angle.FromRadians(((int)direction1.data - (int)direction2.data) * Direction2.toRadians);
         }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace Bearded.Utilities.Math
         /// </returns>
         public override bool Equals(object obj)
         {
-            return obj is Direction2 && this.data == ((Direction2)obj).data;
+            return obj is Direction2 && this.Equals((Direction2)obj);
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static bool operator ==(Direction2 x, Direction2 y)
         {
-            return x.data == y.data;
+            return x.Equals(y);
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static bool operator !=(Direction2 x, Direction2 y)
         {
-            return x.data != y.data;
+            return !(x == y);
         }
 
         #endregion

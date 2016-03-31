@@ -14,6 +14,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Unit((float)value);
         }
+
         /// <summary>
         /// Creates a new instance of the Unit type.
         /// </summary>
@@ -21,6 +22,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Unit(value);
         }
+
         /// <summary>
         /// Creates a new instance of the Unit type.
         /// </summary>
@@ -36,6 +38,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Unit(square.NumericValue.Sqrted());
         }
+
         /// <summary>
         /// Returns the typed square root of the squared speed.
         /// </summary>
@@ -43,6 +46,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Speed(square.NumericValue.Sqrted());
         }
+
         /// <summary>
         /// Returns the typed square root of the squared acceleration.
         /// </summary>

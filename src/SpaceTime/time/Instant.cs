@@ -5,7 +5,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of an absolute instant in time.
     /// </summary>
-    public struct Instant : IBackedBy<double>, IEquatable<Instant>, IComparable<Instant>
+    public struct Instant : IEquatable<Instant>, IComparable<Instant>
     {
         private readonly double value;
 
@@ -41,12 +41,11 @@ namespace Bearded.Utilities.SpaceTime
 
         public bool Equals(Instant other)
         {
-            return this == other;
+            return this.value == other.value;
         }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
             return obj is Instant && this.Equals((Instant)obj);
         }
 
@@ -79,6 +78,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Instant(i.value + t.NumericValue);
         }
+
         /// <summary>
         /// Adds a timespan to a time instant.
         /// </summary>
@@ -86,6 +86,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Instant(i.value + t.NumericValue);
         }
+
         /// <summary>
         /// Subtracts a timespan from a time instant.
         /// </summary>
@@ -93,6 +94,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Instant(i.value - t.NumericValue);
         }
+
         /// <summary>
         /// Subtracts two time instants, returning a timespan.
         /// </summary>
@@ -110,15 +112,17 @@ namespace Bearded.Utilities.SpaceTime
         /// </summary>
         public static bool operator ==(Instant i0, Instant i1)
         {
-            return i0.value == i1.value;
+            return i0.Equals(i1);
         }
+
         /// <summary>
         /// Compares two time instants for inequality.
         /// </summary>
         public static bool operator !=(Instant i0, Instant i1)
         {
-            return i0.value != i1.value;
+            return !(i0 == i1);
         }
+
         /// <summary>
         /// Checks if one time instant is smaller than another.
         /// </summary>
@@ -126,6 +130,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return i0.value < i1.value;
         }
+
         /// <summary>
         /// Checks if one time instant is larger than another.
         /// </summary>
@@ -133,6 +138,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return i0.value > i1.value;
         }
+
         /// <summary>
         /// Checks if one time instant is smaller or equal to another.
         /// </summary>
@@ -140,6 +146,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return i0.value <= i1.value;
         }
+
         /// <summary>
         /// Checks if one time instant is larger or equal to another.
         /// </summary>

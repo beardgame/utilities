@@ -7,7 +7,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of a 2d directed difference vector.
     /// </summary>
-    public struct Difference2 : IBackedBy<Vector2>, IEquatable<Difference2>
+    public struct Difference2 : IEquatable<Difference2>
     {
         private readonly Vector2 value;
 
@@ -20,6 +20,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             this.value = value;
         }
+
         /// <summary>
         /// Creates a new instance of the Difference2 type.
         /// </summary>
@@ -27,6 +28,7 @@ namespace Bearded.Utilities.SpaceTime
             : this(new Vector2(x, y))
         {
         }
+
         /// <summary>
         /// Creates a new instance of the Difference2 type.
         /// </summary>
@@ -34,6 +36,7 @@ namespace Bearded.Utilities.SpaceTime
             : this(new Vector2(x.NumericValue, y.NumericValue))
         {
         }
+
         /// <summary>
         /// Creates a new instance of the Difference2 type with a given direction and magnitude.
         /// </summary>
@@ -55,6 +58,7 @@ namespace Bearded.Utilities.SpaceTime
         /// Returns the X component of the difference vector.
         /// </summary>
         public Unit X { get { return new Unit(this.value.X); } }
+
         /// <summary>
         /// Returns the Y component of the difference vector.
         /// </summary>
@@ -118,6 +122,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return this.projectedOn(vector.NormalizedSafe());
         }
+
         /// <summary>
         /// Projects the difference vector onto a difference vector, returning the speed component in that vector's direction.
         /// </summary>
@@ -125,6 +130,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return this.projectedOn(vector.NumericValue.NormalizedSafe());
         }
+
         /// <summary>
         /// Projects the difference vector onto a direction, returning the speed component in that direction.
         /// </summary>
@@ -144,12 +150,11 @@ namespace Bearded.Utilities.SpaceTime
 
         public bool Equals(Difference2 other)
         {
-            return this == other;
+            return this.value == other.value;
         }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
             return obj is Difference2 && this.Equals((Difference2)obj);
         }
 
@@ -173,6 +178,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Difference2(d0.value + d1.value);
         }
+
         /// <summary>
         /// Subtracts a difference vector from another.
         /// </summary>
@@ -192,6 +198,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Difference2(-d.value);
         }
+
         /// <summary>
         /// Multiplies the difference vector with a scalar.
         /// </summary>
@@ -199,6 +206,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Difference2(d.value * scalar);
         }
+
         /// <summary>
         /// Multiplies the difference vector with a scalar.
         /// </summary>
@@ -206,6 +214,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Difference2(d.value * scalar);
         }
+
         /// <summary>
         /// Divides the difference vector by a divisor.
         /// </summary>
@@ -247,14 +256,15 @@ namespace Bearded.Utilities.SpaceTime
         /// </summary>
         public static bool operator ==(Difference2 d0, Difference2 d1)
         {
-            return d0.value == d1.value;
+            return d0.Equals(d1);
         }
+
         /// <summary>
         /// Compares two difference vectors for inequality.
         /// </summary>
         public static bool operator !=(Difference2 d0, Difference2 d1)
         {
-            return d0.value != d1.value;
+            return !(d0 == d1);
         }
 
         #endregion

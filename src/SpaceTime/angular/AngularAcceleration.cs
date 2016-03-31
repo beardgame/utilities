@@ -6,7 +6,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of a signed ancular acceleration.
     /// </summary>
-    public struct AngularAcceleration : IBackedBy<float>, IEquatable<AngularAcceleration>, IComparable<AngularAcceleration>
+    public struct AngularAcceleration : IEquatable<AngularAcceleration>, IComparable<AngularAcceleration>
     {
         private readonly float value;
 
@@ -32,6 +32,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new AngularAcceleration(radians);
         }
+
         /// <summary>
         /// Creates a new instance of the AngularAcceleration type from an angle in degrees.
         /// </summary>
@@ -67,12 +68,11 @@ namespace Bearded.Utilities.SpaceTime
 
         public bool Equals(AngularAcceleration other)
         {
-            return this == other;
+            return this.value == other.value;
         }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
             return obj is AngularAcceleration && this.Equals((AngularAcceleration)obj);
         }
 
@@ -105,6 +105,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new AngularAcceleration(v0.value + v1.value);
         }
+
         /// <summary>
         /// Adds two angular acceleration values.
         /// </summary>
@@ -124,6 +125,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new AngularAcceleration(-s.value);
         }
+
         /// <summary>
         /// Multiplies the angular acceleration with a scalar.
         /// </summary>
@@ -131,6 +133,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new AngularAcceleration(s.value * scalar);
         }
+
         /// <summary>
         /// Multiplies the angular acceleration with a scalar.
         /// </summary>
@@ -138,6 +141,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new AngularAcceleration(s.value * scalar);
         }
+
         /// <summary>
         /// Divides the angular acceleration by a divisor.
         /// </summary>
@@ -169,6 +173,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return AngularVelocity.FromRadians(s.value * (float)t.NumericValue);
         }
+
         /// <summary>
         /// Multiplies an angular acceleration by a timespan, returning an anglular velocity.
         /// </summary>
@@ -186,15 +191,17 @@ namespace Bearded.Utilities.SpaceTime
         /// </summary>
         public static bool operator ==(AngularAcceleration v0, AngularAcceleration v1)
         {
-            return v0.value == v1.value;
+            return v0.Equals(v1);
         }
+
         /// <summary>
         /// Compares two angular accelerations for inequality.
         /// </summary>
         public static bool operator !=(AngularAcceleration v0, AngularAcceleration v1)
         {
-            return v0.value != v1.value;
+            return !(v0 == v1);
         }
+
         /// <summary>
         /// Checks if one angular acceleration is smaller than another.
         /// </summary>
@@ -202,6 +209,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return v0.value < v1.value;
         }
+
         /// <summary>
         /// Checks if one angular acceleration is larger than another.
         /// </summary>
@@ -209,6 +217,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return v0.value > v1.value;
         }
+
         /// <summary>
         /// Checks if one angular acceleration is smaller or equal to another.
         /// </summary>
@@ -216,6 +225,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return v0.value <= v1.value;
         }
+
         /// <summary>
         /// Checks if one angular acceleration is larger or equal to another.
         /// </summary>

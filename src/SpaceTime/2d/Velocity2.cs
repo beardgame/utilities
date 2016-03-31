@@ -7,7 +7,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of a 2d directed velocity vector.
     /// </summary>
-    public struct Velocity2 : IBackedBy<Vector2>, IEquatable<Velocity2>
+    public struct Velocity2 : IEquatable<Velocity2>
     {
         private readonly Vector2 value;
 
@@ -20,6 +20,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             this.value = value;
         }
+
         /// <summary>
         /// Creates a new instance of the Velocity2 type.
         /// </summary>
@@ -27,6 +28,7 @@ namespace Bearded.Utilities.SpaceTime
             : this(new Vector2(x, y))
         {
         }
+
         /// <summary>
         /// Creates a new instance of the Velocity2 type.
         /// </summary>
@@ -56,6 +58,7 @@ namespace Bearded.Utilities.SpaceTime
         /// Returns the X component of the velocity vector.
         /// </summary>
         public Speed X { get { return new Speed(this.value.X); } }
+
         /// <summary>
         /// Returns the Y component of the velocity vector.
         /// </summary>
@@ -119,6 +122,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return this.projectedOn(vector.NormalizedSafe());
         }
+
         /// <summary>
         /// Projects the velocity vector onto a difference vector, returning the speed component in that vector's direction.
         /// </summary>
@@ -126,6 +130,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return this.projectedOn(vector.NumericValue.NormalizedSafe());
         }
+
         /// <summary>
         /// Projects the velocity vector onto a direction, returning the speed component in that direction.
         /// </summary>
@@ -145,12 +150,11 @@ namespace Bearded.Utilities.SpaceTime
 
         public bool Equals(Velocity2 other)
         {
-            return this == other;
+            return this.value == other.value;
         }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
             return obj is Velocity2 && this.Equals((Velocity2)obj);
         }
 
@@ -174,6 +178,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Velocity2(v0.value + v1.value);
         }
+
         /// <summary>
         /// Subtracts a velocity vector from another.
         /// </summary>
@@ -193,6 +198,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Velocity2(-v.value);
         }
+
         /// <summary>
         /// Multiplies the velocity vector with a scalar.
         /// </summary>
@@ -200,6 +206,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Velocity2(v.value * scalar);
         }
+
         /// <summary>
         /// Multiplies the velocity vector with a scalar.
         /// </summary>
@@ -207,6 +214,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Velocity2(v.value * scalar);
         }
+
         /// <summary>
         /// Divides the velocity vector by a divisor.
         /// </summary>
@@ -250,6 +258,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Difference2(v.value * (float)t.NumericValue);
         }
+
         /// <summary>
         /// Multiplies a velocity vector by a timespan, returning a difference vector.
         /// </summary>
@@ -267,14 +276,15 @@ namespace Bearded.Utilities.SpaceTime
         /// </summary>
         public static bool operator ==(Velocity2 v0, Velocity2 v1)
         {
-            return v0.value == v1.value;
+            return v0.Equals(v1);
         }
+
         /// <summary>
         /// Compares two velocity vectors for inequality.
         /// </summary>
         public static bool operator !=(Velocity2 v0, Velocity2 v1)
         {
-            return v0.value != v1.value;
+            return !(v0 == v1);
         }
 
         #endregion

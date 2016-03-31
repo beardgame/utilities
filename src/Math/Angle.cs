@@ -41,7 +41,7 @@ namespace Bearded.Utilities.Math
         {
             float perpDot = from.Y * to.X - from.X * to.Y;
 
-            return FromRadians(Mathf.Atan2(perpDot, Vector2.Dot(from, to)));
+            return Angle.FromRadians(Mathf.Atan2(perpDot, Vector2.Dot(from, to)));
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Angle BetweenPositive(Direction2 from, Direction2 to)
         {
-            var a = Between(from, to);
+            var a = Angle.Between(from, to);
             if (a.radians < 0)
                 a += Mathf.TwoPi.Radians();
             return a;
@@ -71,7 +71,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Angle BetweenNegative(Direction2 from, Direction2 to)
         {
-            var a = Between(from, to);
+            var a = Angle.Between(from, to);
             if (a.radians > 0)
                 a -= Mathf.TwoPi.Radians();
             return a;
@@ -162,7 +162,7 @@ namespace Bearded.Utilities.Math
         }
         /// <summary>
         /// Returns a new Angle with |value| == 1 radians and the same sign as this angle.
-        /// Returns 0 if the angle is zero.
+        /// Returns a new Angle with value 0 if the angle is zero.
         /// </summary>
         public Angle Normalized()
         {
@@ -173,7 +173,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public Angle Clamped(Angle min, Angle max)
         {
-            return Clamp(this, min, max);
+            return Angle.Clamp(this, min, max);
         }
 
         #region Statics
@@ -294,7 +294,7 @@ namespace Bearded.Utilities.Math
         /// </returns>
         public override bool Equals(object obj)
         {
-            return obj is Angle && this.radians == ((Angle)obj).radians;
+			return obj is Angle && this.Equals((Angle)obj);
         }
 
         /// <summary>
@@ -313,14 +313,14 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static bool operator ==(Angle x, Angle y)
         {
-            return x.radians == y.radians;
+            return x.Equals(y);
         }
         /// <summary>
         /// Checks two angles for inequality.
         /// </summary>
         public static bool operator !=(Angle x, Angle y)
         {
-            return x.radians != y.radians;
+            return !(x == y);
         }
 
         /// <summary>

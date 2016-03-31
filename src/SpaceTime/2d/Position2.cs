@@ -6,7 +6,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of an absolute 2d position vector.
     /// </summary>
-    public struct Position2 : IBackedBy<Vector2>, IEquatable<Position2>
+    public struct Position2 : IEquatable<Position2>
     {
         private readonly Vector2 value;
 
@@ -19,6 +19,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             this.value = value;
         }
+
         /// <summary>
         /// Creates a new instance of the Position2 type.
         /// </summary>
@@ -26,6 +27,7 @@ namespace Bearded.Utilities.SpaceTime
             : this(new Vector2(x, y))
         {
         }
+
         /// <summary>
         /// Creates a new instance of the Position2 type.
         /// </summary>
@@ -45,6 +47,7 @@ namespace Bearded.Utilities.SpaceTime
         /// Returns the X component of the position vector.
         /// </summary>
         public Unit X { get { return new Unit(this.value.X); } }
+
         /// <summary>
         /// Returns the Y component of the position vector.
         /// </summary>
@@ -86,12 +89,11 @@ namespace Bearded.Utilities.SpaceTime
 
         public bool Equals(Position2 other)
         {
-            return this == other;
+            return this.value == other.value;
         }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
             return obj is Position2 && this.Equals((Position2)obj);
         }
 
@@ -115,6 +117,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Position2(p.value + d.NumericValue);
         }
+
         /// <summary>
         /// Adds a difference vector to an absolute position.
         /// </summary>
@@ -122,6 +125,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Position2(p.value + d.NumericValue);
         }
+
         /// <summary>
         /// Subtracts a difference vector from an absolute position.
         /// </summary>
@@ -129,6 +133,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Position2(p.value - d.NumericValue);
         }
+
         /// <summary>
         /// Subtracts two absolute positions, returning a difference vector.
         /// </summary>
@@ -146,14 +151,15 @@ namespace Bearded.Utilities.SpaceTime
         /// </summary>
         public static bool operator ==(Position2 p0, Position2 p1)
         {
-            return p0.value == p1.value;
+            return p0.Equals(p1);
         }
+
         /// <summary>
         /// Compares two position vectors for inequality.
         /// </summary>
         public static bool operator !=(Position2 p0, Position2 p1)
         {
-            return p0.value != p1.value;
+            return !(p0 == p1);
         }
 
         #endregion

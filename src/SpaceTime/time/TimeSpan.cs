@@ -6,7 +6,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of a signed timespan.
     /// </summary>
-    public struct TimeSpan : IBackedBy<double>, IEquatable<TimeSpan>, IComparable<TimeSpan>
+    public struct TimeSpan : IEquatable<TimeSpan>, IComparable<TimeSpan>
     {
         private readonly double value;
 
@@ -33,6 +33,7 @@ namespace Bearded.Utilities.SpaceTime
         /// Returns the timespan with value 0.
         /// </summary>
         public static TimeSpan Zero { get { return new TimeSpan(0); } }
+
         /// <summary>
         /// Returns the timespan with value 1.
         /// </summary>
@@ -46,12 +47,11 @@ namespace Bearded.Utilities.SpaceTime
 
         public bool Equals(TimeSpan other)
         {
-            return this == other;
+            return this.value == other.value;
         }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
             return obj is TimeSpan && this.Equals((TimeSpan)obj);
         }
 
@@ -84,6 +84,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new TimeSpan(t0.value + t1.value);
         }
+
         /// <summary>
         /// Adds two timespans.
         /// </summary>
@@ -103,6 +104,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new TimeSpan(-t.value);
         }
+
         /// <summary>
         /// Multiples the timespan with a scalar.
         /// </summary>
@@ -110,6 +112,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new TimeSpan(t.value * scalar);
         }
+
         /// <summary>
         /// Multiples the timespan with a scalar.
         /// </summary>
@@ -117,6 +120,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new TimeSpan(t.value * scalar);
         }
+
         /// <summary>
         /// Divides the timespan by a divisor.
         /// </summary>
@@ -146,15 +150,17 @@ namespace Bearded.Utilities.SpaceTime
         /// </summary>
         public static bool operator ==(TimeSpan t0, TimeSpan t1)
         {
-            return t0.value == t1.value;
+            return t0.Equals(t1);
         }
+
         /// <summary>
         /// Compares two timespans for inequality.
         /// </summary>
         public static bool operator !=(TimeSpan t0, TimeSpan t1)
         {
-            return t0.value != t1.value;
+            return !(t0 == t1);
         }
+
         /// <summary>
         /// Checks if one timespan is smaller than another.
         /// </summary>
@@ -162,6 +168,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return t0.value < t1.value;
         }
+
         /// <summary>
         /// Checks if one timespan is larger than another.
         /// </summary>
@@ -169,6 +176,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return t0.value > t1.value;
         }
+
         /// <summary>
         /// Checks if one timespan is smaller or equal to another.
         /// </summary>
@@ -176,6 +184,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return t0.value <= t1.value;
         }
+
         /// <summary>
         /// Checks if one timespan is larger or equal to another.
         /// </summary>

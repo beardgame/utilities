@@ -7,7 +7,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of an undirected signed distance or length.
     /// </summary>
-    public struct Unit : IBackedBy<float>, IEquatable<Unit>, IComparable<Unit>
+    public struct Unit : IEquatable<Unit>, IComparable<Unit>
     {
         private readonly float value;
 
@@ -39,6 +39,7 @@ namespace Bearded.Utilities.SpaceTime
         /// Returns a Unit type with value 0.
         /// </summary>
         public static Unit Zero { get { return new Unit(0); } }
+
         /// <summary>
         /// Returns a Unit type with value 1.
         /// </summary>
@@ -52,12 +53,11 @@ namespace Bearded.Utilities.SpaceTime
 
         public bool Equals(Unit other)
         {
-            return this == other;
+            return this.value == other.value;
         }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
             return obj is Unit && this.Equals((Unit)obj);
         }
 
@@ -90,6 +90,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Unit(u0.value + u1.value);
         }
+
         /// <summary>
         /// Subtracts a unit value from another.
         /// </summary>
@@ -109,6 +110,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Unit(-u.value);
         }
+
         /// <summary>
         /// Multiples the unit value with a scalar.
         /// </summary>
@@ -116,6 +118,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Unit(u.value * scalar);
         }
+
         /// <summary>
         /// Multiples the unit value with a scalar.
         /// </summary>
@@ -123,6 +126,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Unit(u.value * scalar);
         }
+
         /// <summary>
         /// Divides the unit value by a divisor.
         /// </summary>
@@ -166,6 +170,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Difference2(d.Vector * u.value);
         }
+
         /// <summary>
         /// Multiplies a direction with a unit value, returning a typed vector of the given direction and length.
         /// </summary>
@@ -181,6 +186,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Difference2(v * u.value);
         }
+
         /// <summary>
         /// Multiplies a unit value with an untyped vector, returning a typed vector.
         /// </summary>
@@ -198,15 +204,17 @@ namespace Bearded.Utilities.SpaceTime
         /// </summary>
         public static bool operator ==(Unit u0, Unit u1)
         {
-            return u0.value == u1.value;
+            return u0.Equals(u1);
         }
+
         /// <summary>
         /// Compares two unit values for inequality.
         /// </summary>
         public static bool operator !=(Unit u0, Unit u1)
         {
-            return u0.value != u1.value;
+            return !(u0 == u1);
         }
+
         /// <summary>
         /// Checks if one unit value is smaller than another.
         /// </summary>
@@ -214,6 +222,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return u0.value < u1.value;
         }
+
         /// <summary>
         /// Checks if one unit value is larger than another.
         /// </summary>
@@ -221,6 +230,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return u0.value > u1.value;
         }
+
         /// <summary>
         /// Checks if one unit value is smaller or equal to another.
         /// </summary>
@@ -228,6 +238,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return u0.value <= u1.value;
         }
+
         /// <summary>
         /// Checks if one unit value is larger or equal to another.
         /// </summary>

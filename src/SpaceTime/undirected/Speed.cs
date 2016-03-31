@@ -7,7 +7,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of an undirected signed speed.
     /// </summary>
-    public struct Speed : IBackedBy<float>, IEquatable<Speed>, IComparable<Speed>
+    public struct Speed : IEquatable<Speed>, IComparable<Speed>
     {
         private readonly float value;
 
@@ -39,6 +39,7 @@ namespace Bearded.Utilities.SpaceTime
         /// Returns a Speed type with value 0.
         /// </summary>
         public static Speed Zero { get { return new Speed(0); } }
+
         /// <summary>
         /// Returns a Speed type with value 1.
         /// </summary>
@@ -52,12 +53,11 @@ namespace Bearded.Utilities.SpaceTime
 
         public bool Equals(Speed other)
         {
-            return this == other;
+            return this.value == other.value;
         }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
             return obj is Speed && this.Equals((Speed)obj);
         }
 
@@ -90,6 +90,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Speed(s0.value + s1.value);
         }
+
         /// <summary>
         /// Subtracts a speed value from another.
         /// </summary>
@@ -109,6 +110,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Speed(-s.value);
         }
+
         /// <summary>
         /// Multiplies the speed value with a scalar.
         /// </summary>
@@ -116,6 +118,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Speed(s.value * scalar);
         }
+
         /// <summary>
         /// Multiplies the speed value with a scalar.
         /// </summary>
@@ -123,6 +126,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Speed(s.value * scalar);
         }
+
         /// <summary>
         /// Divides the speed value by a divisor.
         /// </summary>
@@ -166,6 +170,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Unit(s.value * (float)t.NumericValue);
         }
+
         /// <summary>
         /// Multiplies a speed value by a timespan, returning a unit value.
         /// </summary>
@@ -185,6 +190,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Velocity2(d.Vector * s.value);
         }
+
         /// <summary>
         /// Multiplies a direction with a speed value, returning a typed speed vector of the given direction and length.
         /// </summary>
@@ -200,6 +206,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Velocity2(v * u.value);
         }
+
         /// <summary>
         /// Multiplies a speed value with an untyped vector, returning a typed speed vector.
         /// </summary>
@@ -217,15 +224,17 @@ namespace Bearded.Utilities.SpaceTime
         /// </summary>
         public static bool operator ==(Speed s0, Speed s1)
         {
-            return s0.value == s1.value;
+            return s0.Equals(s1);
         }
+
         /// <summary>
         /// Compares two speed values for inequality.
         /// </summary>
         public static bool operator !=(Speed s0, Speed s1)
         {
-            return s0.value != s1.value;
+            return !(s0 == s1);
         }
+
         /// <summary>
         /// Checks if one speed value is smaller than another.
         /// </summary>
@@ -233,6 +242,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return s0.value < s1.value;
         }
+
         /// <summary>
         /// Checks if one speed value is larger than another.
         /// </summary>
@@ -240,6 +250,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return s0.value > s1.value;
         }
+
         /// <summary>
         /// Checks if one speed value is smaller or equal to another.
         /// </summary>
@@ -247,6 +258,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return s0.value <= s1.value;
         }
+
         /// <summary>
         /// Checks if one speed value is larger or equal to another.
         /// </summary>

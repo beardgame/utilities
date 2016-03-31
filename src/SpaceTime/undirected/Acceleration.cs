@@ -7,7 +7,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of an undirected signed acceleration.
     /// </summary>
-    public struct Acceleration : IBackedBy<float>, IEquatable<Acceleration>, IComparable<Acceleration>
+    public struct Acceleration : IEquatable<Acceleration>, IComparable<Acceleration>
     {
         private readonly float value;
 
@@ -39,6 +39,7 @@ namespace Bearded.Utilities.SpaceTime
         /// Returns an Acceleration type with value 0.
         /// </summary>
         public static Acceleration Zero { get { return new Acceleration(0); } }
+
         /// <summary>
         /// Returns an Acceleration type with value 1.
         /// </summary>
@@ -52,12 +53,11 @@ namespace Bearded.Utilities.SpaceTime
 
         public bool Equals(Acceleration other)
         {
-            return this == other;
+            return this.value == other.value;
         }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
             return obj is Acceleration && this.Equals((Acceleration)obj);
         }
 
@@ -90,6 +90,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Acceleration(a0.value + a1.value);
         }
+
         /// <summary>
         /// Subtracts an acceleration value from another.
         /// </summary>
@@ -109,6 +110,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Acceleration(-a.value);
         }
+
         /// <summary>
         /// Multiples the acceleration value with a scalar.
         /// </summary>
@@ -116,6 +118,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Acceleration(a.value * scalar);
         }
+
         /// <summary>
         /// Multiples the acceleration value with a scalar.
         /// </summary>
@@ -123,6 +126,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Acceleration(a.value * scalar);
         }
+
         /// <summary>
         /// Divides the acceleration value by a divisor.
         /// </summary>
@@ -154,6 +158,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Speed(a.value * (float)t.NumericValue);
         }
+
         /// <summary>
         /// Multiplies an acceleration value by a timespan, returning a speed.
         /// </summary>
@@ -173,6 +178,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Acceleration2(d.Vector * a.value);
         }
+
         /// <summary>
         /// Multiplies a direction with an acceleration value, returning a typed acceleration vector of the given direction and length.
         /// </summary>
@@ -188,6 +194,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Acceleration2(v * u.value);
         }
+
         /// <summary>
         /// Multiplies an acceleration value with an untyped vector, returning a typed acceleration vector.
         /// </summary>
@@ -205,15 +212,17 @@ namespace Bearded.Utilities.SpaceTime
         /// </summary>
         public static bool operator ==(Acceleration a0, Acceleration a1)
         {
-            return a0.value == a1.value;
+            return a0.Equals(a1);
         }
+
         /// <summary>
         /// Compares two acceleration values for inequality.
         /// </summary>
         public static bool operator !=(Acceleration a0, Acceleration a1)
         {
-            return a0.value != a1.value;
+            return !(a0 == a1);
         }
+
         /// <summary>
         /// Checks if one acceleration value is smaller than another.
         /// </summary>
@@ -221,6 +230,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return a0.value < a1.value;
         }
+
         /// <summary>
         /// Checks if one acceleration value is larger than another.
         /// </summary>
@@ -228,6 +238,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return a0.value > a1.value;
         }
+
         /// <summary>
         /// Checks if one acceleration value is smaller or equal to another.
         /// </summary>
@@ -235,6 +246,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return a0.value <= a1.value;
         }
+
         /// <summary>
         /// Checks if one acceleration value is larger or equal to another.
         /// </summary>

@@ -7,8 +7,8 @@ namespace Bearded.Utilities.SpaceTime
     /// Represents a type-safe squared value, backed by a float.
     /// </summary>
     /// <typeparam name="T">The squared type.</typeparam>
-    public struct Squared<T> : IBackedBy<float>, IEquatable<Squared<T>>, IComparable<Squared<T>>
-        where T : struct, IBackedBy<float>
+    public struct Squared<T> : IEquatable<Squared<T>>, IComparable<Squared<T>>
+        where T : struct
     {
         private readonly float value;
 
@@ -26,6 +26,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Squared<T>(root.Squared());
         }
+
         /// <summary>
         /// Creteas a new instance of the Squared type, from a given value.
         /// </summary>
@@ -51,6 +52,7 @@ namespace Bearded.Utilities.SpaceTime
         /// Returns a Square type of value 0.
         /// </summary>
         public static Squared<T> Zero { get { return new Squared<T>(0); } }
+
         /// <summary>
         /// Returns a Square type of value 1.
         /// </summary>
@@ -64,7 +66,7 @@ namespace Bearded.Utilities.SpaceTime
 
         public bool Equals(Squared<T> other)
         {
-            return this == other;
+            return this.value == other.value;
         }
 
         public override bool Equals(object obj)
@@ -124,15 +126,17 @@ namespace Bearded.Utilities.SpaceTime
         /// </summary>
         public static bool operator ==(Squared<T> s0, Squared<T> s1)
         {
-            return s0.value == s1.value;
+            return s0.Equals(s1);
         }
+
         /// <summary>
         /// Compares two squares for inequality.
         /// </summary>
         public static bool operator !=(Squared<T> s0, Squared<T> s1)
         {
-            return s0.value != s1.value;
+            return !(s0 == s1);
         }
+
         /// <summary>
         /// Checks if one square is smaller than another.
         /// </summary>
@@ -140,6 +144,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return s0.value < s1.value;
         }
+
         /// <summary>
         /// Checks if one square is larger than another.
         /// </summary>
@@ -147,6 +152,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return s0.value > s1.value;
         }
+
         /// <summary>
         /// Checks if one square is smaller or equal to another.
         /// </summary>
@@ -154,6 +160,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return s0.value <= s1.value;
         }
+
         /// <summary>
         /// Checks if one square is larger or equal to another.
         /// </summary>

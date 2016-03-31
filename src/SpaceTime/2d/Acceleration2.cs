@@ -7,7 +7,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of a 2d directed acceleration vector.
     /// </summary>
-    public struct Acceleration2 : IBackedBy<Vector2>, IEquatable<Acceleration2>
+    public struct Acceleration2 : IEquatable<Acceleration2>
     {
         private readonly Vector2 value;
 
@@ -20,6 +20,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             this.value = value;
         }
+
         /// <summary>
         /// Creates a new instance of the Acceleration2 type.
         /// </summary>
@@ -27,6 +28,7 @@ namespace Bearded.Utilities.SpaceTime
             : this(new Vector2(x, y))
         {
         }
+
         /// <summary>
         /// Creates a new instance of the Acceleration2 type.
         /// </summary>
@@ -34,6 +36,7 @@ namespace Bearded.Utilities.SpaceTime
             : this(new Vector2(x.NumericValue, y.NumericValue))
         {
         }
+
         /// <summary>
         /// Creates a new instance of the Acceleration2 type with a given direction and magnitude.
         /// </summary>
@@ -55,6 +58,7 @@ namespace Bearded.Utilities.SpaceTime
         /// Returns the X component of the acceleration vector.
         /// </summary>
         public Acceleration X { get { return new Acceleration(this.value.X); } }
+
         /// <summary>
         /// Returns the Y component of the acceleration vector.
         /// </summary>
@@ -118,6 +122,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return this.projectedOn(vector.NormalizedSafe());
         }
+
         /// <summary>
         /// Projects the acceleration vector onto a difference vector, returning the acceleration component in that vector's direction.
         /// </summary>
@@ -125,6 +130,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return this.projectedOn(vector.NumericValue.NormalizedSafe());
         }
+
         /// <summary>
         /// Projects the acceleration vector onto a direction, returning the acceleration component in that direction.
         /// </summary>
@@ -144,7 +150,7 @@ namespace Bearded.Utilities.SpaceTime
 
         public bool Equals(Acceleration2 other)
         {
-            return this == other;
+            return this.value == other.value;
         }
 
         public override bool Equals(object obj)
@@ -173,6 +179,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Acceleration2(a0.value + a1.value);
         }
+
         /// <summary>
         /// Subtracts a acceleration vector from another.
         /// </summary>
@@ -192,6 +199,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Acceleration2(-a.value);
         }
+
         /// <summary>
         /// Multiplies the acceleration vector with a scalar.
         /// </summary>
@@ -199,6 +207,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Acceleration2(a.value * scalar);
         }
+
         /// <summary>
         /// Multiplies the acceleration vector with a scalar.
         /// </summary>
@@ -206,6 +215,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Acceleration2(a.value * scalar);
         }
+
         /// <summary>
         /// Divides the acceleration vector by a divisor.
         /// </summary>
@@ -237,6 +247,7 @@ namespace Bearded.Utilities.SpaceTime
         {
             return new Velocity2(a.value * (float)t.NumericValue);
         }
+
         /// <summary>
         /// Multiplies a acceleration vector by a timespan, returning a velocity vector.
         /// </summary>
@@ -254,14 +265,15 @@ namespace Bearded.Utilities.SpaceTime
         /// </summary>
         public static bool operator ==(Acceleration2 a0, Acceleration2 a1)
         {
-            return a0.value == a1.value;
+            return a0.Equals(a1);
         }
+
         /// <summary>
         /// Compares two acceleration vectors for inequality.
         /// </summary>
         public static bool operator !=(Acceleration2 a0, Acceleration2 a1)
         {
-            return a0.value != a1.value;
+            return !(a0 == a1);
         }
 
         #endregion

@@ -146,7 +146,6 @@
     <Compile Include="SpaceTime\2d\Difference2.cs" />
     <Compile Include="SpaceTime\2d\Position2.cs" />
     <Compile Include="SpaceTime\2d\Velocity2.cs" />
-    <Compile Include="SpaceTime\IBackedBy.cs" />
     <Compile Include="SpaceTime\time\Instant.cs" />
     <Compile Include="SpaceTime\time\TimeSpan.cs" />
     <Compile Include="Threading\IActionQueue.cs" />
