@@ -8,9 +8,6 @@ namespace Bearded.Utilities.Math
     /// </summary>
     public struct Angle : IEquatable<Angle>
     {
-        const float fromDegrees = Mathf.TwoPi / 360f;
-        const float toDegrees = 360f / Mathf.TwoPi;
-
         private readonly float radians;
 
         #region Constructing
@@ -33,7 +30,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Angle FromDegrees(float degrees)
         {
-            return new Angle(degrees * Angle.fromDegrees);
+            return new Angle(Mathf.DegreesToRadians(degrees));
         }
 
         /// <summary>
@@ -103,7 +100,7 @@ namespace Bearded.Utilities.Math
         /// <summary>
         /// Gets the value of the angle in degrees.
         /// </summary>
-        public float Degrees { get { return this.radians * Angle.toDegrees; } }
+        public float Degrees { get { return Mathf.RadiansToDegrees(this.radians); } }
 
         /// <summary>
         /// Gets a 2x2 rotation matrix that rotates vectors by this angle.
@@ -118,7 +115,7 @@ namespace Bearded.Utilities.Math
         /// <summary>
         /// Gets the magnitude (absolute value) of the angle in degrees.
         /// </summary>
-        public float MagnitudeInDegrees { get { return System.Math.Abs(this.radians * Angle.toDegrees); } }
+        public float MagnitudeInDegrees { get { return System.Math.Abs(this.Degrees); } }
 
 
         #endregion
@@ -157,7 +154,7 @@ namespace Bearded.Utilities.Math
             return System.Math.Sign(this.radians);
         }
         /// <summary>
-        /// Returns the absolute value of the angle in radians.
+        /// Returns the absolute value of the angle.
         /// </summary>
         public Angle Abs()
         {
@@ -165,6 +162,7 @@ namespace Bearded.Utilities.Math
         }
         /// <summary>
         /// Returns a new Angle with |value| == 1 radians and the same sign as this angle.
+        /// Returns a new Angle with value 0 if the angle is zero.
         /// </summary>
         public Angle Normalized()
         {
@@ -296,7 +294,7 @@ namespace Bearded.Utilities.Math
         /// </returns>
         public override bool Equals(object obj)
         {
-            return obj is Angle && this.radians == ((Angle)obj).radians;
+			return obj is Angle && this.Equals((Angle)obj);
         }
 
         /// <summary>
@@ -315,14 +313,14 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static bool operator ==(Angle x, Angle y)
         {
-            return x.radians == y.radians;
+            return x.Equals(y);
         }
         /// <summary>
         /// Checks two angles for inequality.
         /// </summary>
         public static bool operator !=(Angle x, Angle y)
         {
-            return x.radians != y.radians;
+            return !(x == y);
         }
 
         /// <summary>

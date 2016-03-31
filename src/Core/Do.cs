@@ -3,7 +3,7 @@
     /// <summary>
     /// Collection of methods performing simple operations.
     /// </summary>
-    static class Do
+    public static class Do
     {
         /// <summary>
         /// Swaps the values of the two variables.

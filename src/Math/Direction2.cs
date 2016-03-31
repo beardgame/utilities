@@ -8,11 +8,11 @@ namespace Bearded.Utilities.Math
     /// </summary>
     public struct Direction2 : IEquatable<Direction2>
     {
-        const float fromRadians = uint.MaxValue / Mathf.TwoPi;
-        const float toRadians = Mathf.TwoPi / uint.MaxValue;
+        private const float fromRadians = uint.MaxValue / Mathf.TwoPi;
+        private const float toRadians = Mathf.TwoPi / uint.MaxValue;
 
-        const float fromDegrees = uint.MaxValue / 360f;
-        const float toDegrees = 360f / uint.MaxValue;
+        private const float fromDegrees = uint.MaxValue / 360f;
+        private const float toDegrees = 360f / uint.MaxValue;
 
         private readonly uint data;
 
@@ -69,7 +69,7 @@ namespace Bearded.Utilities.Math
 
         #endregion
 
-
+        
         #region Properties
 
         /// <summary>
@@ -85,12 +85,12 @@ namespace Bearded.Utilities.Math
         /// <summary>
         /// Gets the absolute angle of the direction in radians between -pi and pi.
         /// </summary>
-        public float RadiansSigned { get { return ((int)this.data) * Direction2.toRadians; } }
+        public float RadiansSigned { get { return (int)this.data * Direction2.toRadians; } }
 
         /// <summary>
         /// Gets the absolute angle of the direction in degrees between -180 and 180.
         /// </summary>
-        public float DegreesSigned { get { return ((int)this.data) * Direction2.toDegrees; } }
+        public float DegreesSigned { get { return (int)this.data * Direction2.toDegrees; } }
 
         /// <summary>
         /// Gets the unit vector pointing in this direction.
@@ -160,7 +160,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Direction2 operator +(Direction2 direction, Angle angle)
         {
-            return new Direction2((uint)(direction.data + angle.Radians * fromRadians));
+            return new Direction2((uint)(direction.data + angle.Radians * Direction2.fromRadians));
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Direction2 operator -(Direction2 direction, Angle angle)
         {
-            return new Direction2((uint)(direction.data - angle.Radians * fromRadians));
+            return new Direction2((uint)(direction.data - angle.Radians * Direction2.fromRadians));
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static Angle operator -(Direction2 direction1, Direction2 direction2)
         {
-            return Angle.FromRadians(((int)direction1.data - (int)direction2.data) * toRadians);
+            return Angle.FromRadians(((int)direction1.data - (int)direction2.data) * Direction2.toRadians);
         }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace Bearded.Utilities.Math
         /// </returns>
         public override bool Equals(object obj)
         {
-            return obj is Direction2 && this.data == ((Direction2)obj).data;
+            return obj is Direction2 && this.Equals((Direction2)obj);
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static bool operator ==(Direction2 x, Direction2 y)
         {
-            return x.data == y.data;
+            return x.Equals(y);
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static bool operator !=(Direction2 x, Direction2 y)
         {
-            return x.data != y.data;
+            return !(x == y);
         }
 
         #endregion

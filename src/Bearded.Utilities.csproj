@@ -63,7 +63,6 @@
     <Folder Include="Diagnostics\" />
     <Folder Include="Properties\" />
     <Folder Include="Serialization\JsonNet\" />
-    <Folder Include="SpaceTime\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -136,6 +135,19 @@
     <Compile Include="Math\Geometry\PolarPosition.cs" />
     <Compile Include="Math\Geometry\Rectangle.cs" />
     <Compile Include="Math\Interpolate.cs" />
+    <Compile Include="SpaceTime\angular\AngularAcceleration.cs" />
+    <Compile Include="SpaceTime\angular\AngularVelocity.cs" />
+    <Compile Include="SpaceTime\Extensions.cs" />
+    <Compile Include="SpaceTime\Squared.cs" />
+    <Compile Include="SpaceTime\undirected\Acceleration.cs" />
+    <Compile Include="SpaceTime\undirected\Speed.cs" />
+    <Compile Include="SpaceTime\undirected\Unit.cs" />
+    <Compile Include="SpaceTime\2d\Acceleration2.cs" />
+    <Compile Include="SpaceTime\2d\Difference2.cs" />
+    <Compile Include="SpaceTime\2d\Position2.cs" />
+    <Compile Include="SpaceTime\2d\Velocity2.cs" />
+    <Compile Include="SpaceTime\time\Instant.cs" />
+    <Compile Include="SpaceTime\time\TimeSpan.cs" />
     <Compile Include="Threading\IActionQueue.cs" />
     <Compile Include="Threading\ManualActionQueue.cs" />
     <Compile Include="Threading\BackgroundActionQueue.cs" />
