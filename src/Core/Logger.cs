@@ -36,7 +36,7 @@ namespace Bearded.Utilities
             /// </summary>
             /// <param name="text">Text to log.</param>
             public void Log(string text) {
-                logger.AddEntry(new Entry(text, this.severity));
+                logger.AddEntry(new Entry(text, severity));
             }
 
             /// <summary>
@@ -44,7 +44,7 @@ namespace Bearded.Utilities
             /// </summary>
             /// <param name="obj">Value to log.</param>
             public void Log<T>(T obj) {
-                logger.AddEntry(new Entry(obj.ToString(), this.severity));
+                logger.AddEntry(new Entry(obj.ToString(), severity));
             }
 
             /// <summary>
@@ -53,7 +53,7 @@ namespace Bearded.Utilities
             /// <param name="text">Template string of the error.</param>
             /// <param name="parameters">Parameters inserted into template string.</param>
             public void Log(string text, params object[] parameters) {
-                this.Log(string.Format(text, parameters));
+                Log(string.Format(text, parameters));
             }
         }
 
@@ -121,9 +121,20 @@ namespace Bearded.Utilities
         /// </summary>
         public struct Entry
         {
-            private readonly string text;
-            private readonly Severity severity;
-            private readonly DateTime time;
+            /// <summary>
+            /// Gets the text of the log entry.
+            /// </summary>
+            public string Text { get; }
+
+            /// <summary>
+            /// Gets the severity of the log entry.
+            /// </summary>
+            public Severity Severity { get; }
+
+            /// <summary>
+            /// Gets the time of the log entry.
+            /// </summary>
+            public DateTime Time { get; }
 
             /// <summary>
             /// Creates a log entry.
@@ -143,31 +154,16 @@ namespace Bearded.Utilities
             /// <param name="time">The time for the log entry.</param>
             public Entry(string text, Severity severity, DateTime time)
             {
-                this.text = text;
-                this.severity = severity;
-                this.time = time;
+                Text = text;
+                Severity = severity;
+                Time = time;
             }
-
-            /// <summary>
-            /// Gets the text of the log entry.
-            /// </summary>
-            public string Text { get { return this.text; } }
-
-            /// <summary>
-            /// Gets the severity of the log entry.
-            /// </summary>
-            public Severity Severity { get { return this.severity; } }
-
-            /// <summary>
-            /// Gets the time of the log entry.
-            /// </summary>
-            public DateTime Time { get { return this.time; } }
 
             internal void WriteToConsole()
             {
                 var rgb = ConsoleColor.White;
 
-                switch (this.Severity)
+                switch (Severity)
                 {
                     case Severity.Fatal:
                     case Severity.Error:
@@ -190,7 +186,7 @@ namespace Bearded.Utilities
                 }
 
                 System.Console.ForegroundColor = rgb;
-                System.Console.WriteLine(this.Text);
+                System.Console.WriteLine(Text);
                 System.Console.ResetColor();
             }
         }
