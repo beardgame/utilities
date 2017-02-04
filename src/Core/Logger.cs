@@ -20,7 +20,7 @@ namespace Bearded.Utilities
         /// <summary>
         /// Provides an interface to log messages at a specific severity.
         /// </summary>
-        public class Writer
+        public sealed class Writer
         {
             private readonly Logger logger;
             private readonly Severity severity;
