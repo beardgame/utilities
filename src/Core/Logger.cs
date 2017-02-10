@@ -252,7 +252,7 @@ namespace Bearded.Utilities
         /// </summary>
         public int PrunedLength { get; set; }
 
-        internal Logger()
+        public Logger()
         {
             Fatal = new Writer(this, Severity.Fatal);
             Error = new Writer(this, Severity.Error);
