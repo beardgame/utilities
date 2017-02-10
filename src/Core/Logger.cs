@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using static System.Math;
 
 namespace Bearded.Utilities
 {
@@ -161,7 +162,7 @@ namespace Bearded.Utilities
 
             internal void WriteToConsole()
             {
-                var rgb = ConsoleColor.White;
+                ConsoleColor rgb;
 
                 switch (Severity)
                 {
@@ -185,9 +186,9 @@ namespace Bearded.Utilities
                         throw new ArgumentOutOfRangeException();
                 }
 
-                System.Console.ForegroundColor = rgb;
-                System.Console.WriteLine(Text);
-                System.Console.ResetColor();
+                Console.ForegroundColor = rgb;
+                Console.WriteLine(Text);
+                Console.ResetColor();
             }
         }
         #endregion
@@ -195,13 +196,13 @@ namespace Bearded.Utilities
         #region fields and constructor
 
         private readonly List<Entry> lines = new List<Entry>();
-        private readonly ReadOnlyCollection<Entry> linesAsReadonly;
+
         /// <summary>
         /// Gets the stored history of events.
         /// Iterating this collection might throw exceptions if new entries are locked in the mean time, wether by the calling or by other threads.
         /// For thread-safe iteration, use GetSafeRecentEntries.
         /// </summary>
-        public ReadOnlyCollection<Entry> RecentEntries { get { return linesAsReadonly; } }
+        public ReadOnlyCollection<Entry> RecentEntries { get; }
 
         /// <summary>
         /// Gets a copy of the recent entry history.
@@ -251,7 +252,7 @@ namespace Bearded.Utilities
         /// </summary>
         public int PrunedLength { get; set; }
 
-        internal Logger()
+        public Logger()
         {
             Fatal = new Writer(this, Severity.Fatal);
             Error = new Writer(this, Severity.Error);
@@ -260,7 +261,7 @@ namespace Bearded.Utilities
             Debug = new Writer(this, Severity.Debug);
             Trace = new Writer(this, Severity.Trace);
 
-            linesAsReadonly = lines.AsReadOnly();
+            RecentEntries = lines.AsReadOnly();
 
             MirrorToConsole = true;
             RaiseEvents = true;
@@ -284,21 +285,20 @@ namespace Bearded.Utilities
                 if (MirrorToConsole)
                     entry.WriteToConsole();
 
-                if (AllowPruning)
-                {
-                    if (lines.Count > MaxHistoryLength)
-                    {
-                        var toRemove = System.Math.Min(System.Math.Max(lines.Count - PrunedLength, 0), lines.Count);
-                        lines.RemoveRange(0, toRemove);
-                    }
-                }
+                pruneIfNecessary();
             }
         }
 
-        private void invokeEvent(LogEvent e, Entry entry)
+        private void pruneIfNecessary()
         {
-            if (e != null)
-                e(entry);
+            if (!AllowPruning)
+                return;
+
+            if (lines.Count <= MaxHistoryLength)
+                return;
+
+            var toRemove = Min(Max(lines.Count - PrunedLength, 0), lines.Count);
+            lines.RemoveRange(0, toRemove);
         }
 
         /// <summary>
@@ -310,7 +310,7 @@ namespace Bearded.Utilities
 
             // event is raised here, since if it was called inside lock, it could result in deadlock
             if (RaiseEvents)
-                invokeEvent(Logged, entry);
+                Logged?.Invoke(entry);
         }
 
         #endregion
