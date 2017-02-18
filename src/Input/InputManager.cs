@@ -52,7 +52,7 @@ namespace Bearded.Utilities.Input
             InputManager.currentKbState = Keyboard.GetState();
             // Move the mouse state forward
             InputManager.prevMouseState = InputManager.currentMouseState;
-            InputManager.currentMouseState = Mouse.GetState();
+            InputManager.currentMouseState = mouse.GetCursorState();
             // Move the gamepad states forward
             foreach (var gamepad in InputManager.gamepads)
             {
