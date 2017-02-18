@@ -97,129 +97,93 @@ namespace Bearded.Utilities.Input
         /// <summary>
         /// Current mouse position.
         /// </summary>
-        public static Vector2 MousePosition
-        {
-            get { return new Vector2(InputManager.mouse.X, InputManager.mouse.Y); }
-        }
+        public static Vector2 MousePosition => new Vector2(mouse.X, mouse.Y);
 
         /// <summary>
         /// Whether the mouse was moved in the last frame.
         /// </summary>
-        public static bool MouseMoved
-        {
-            get
-            {
-                return InputManager.currentMouseState.X != InputManager.prevMouseState.X
-                    || InputManager.currentMouseState.Y != InputManager.prevMouseState.Y;
-            }
-        }
+        public static bool MouseMoved => currentMouseState.X != prevMouseState.X
+                                         || currentMouseState.Y != prevMouseState.Y;
 
         /// <summary>
         /// The difference in scroll wheel values in the last frame.
         /// </summary>
-        public static int DeltaScroll
+        public static int DeltaScroll => currentMouseState.ScrollWheelValue - prevMouseState.ScrollWheelValue;
+
+        /// <summary>
+        /// Determines whether the specified mouse button is held down.
+        /// </summary>
+        /// <param name="button"></param>
+        /// <returns></returns>
+        public static bool IsMouseButtonPressed(MouseButton button)
         {
-            get
-            {
-                return InputManager.currentMouseState.ScrollWheelValue - InputManager.prevMouseState.ScrollWheelValue;
-            }
+            return currentMouseState[button];
+        }
+
+        /// <summary>
+        /// Determines whether the specified mouse button was hit in the last frame.
+        /// </summary>
+        /// <param name="button"></param>
+        /// <returns></returns>
+        public static bool IsMouseButtonHit(MouseButton button)
+        {
+            return currentMouseState[button] && !prevMouseState[button];
+        }
+
+        /// <summary>
+        /// Determines whether the specified mouse button was released in the last frame.
+        /// </summary>
+        /// <param name="button"></param>
+        /// <returns></returns>
+        public static bool IsMouseButtonReleased(MouseButton button)
+        {
+            return !currentMouseState[button] && prevMouseState[button];
         }
 
         /// <summary>
         /// Whether the left mouse button is held down.
         /// </summary>
-        public static bool LeftMousePressed
-        {
-            get { return InputManager.currentMouseState.LeftButton == ButtonState.Pressed; }
-        }
+        public static bool LeftMousePressed => IsMouseButtonPressed(MouseButton.Left);
 
         /// <summary>
         /// Whether the left mouse button was hit in the last frame.
         /// </summary>
-        public static bool LeftMouseHit
-        {
-            get
-            {
-                return InputManager.currentMouseState.LeftButton == ButtonState.Pressed
-                    && InputManager.prevMouseState.LeftButton == ButtonState.Released;
-            }
-        }
+        public static bool LeftMouseHit => IsMouseButtonHit(MouseButton.Left);
 
         /// <summary>
         /// Whether the left mouse button was released in the last frame.
         /// </summary>
-        public static bool LeftMouseReleased
-        {
-            get
-            {
-                return InputManager.currentMouseState.LeftButton == ButtonState.Released
-                    && InputManager.prevMouseState.LeftButton == ButtonState.Pressed;
-            }
-        }
+        public static bool LeftMouseReleased => IsMouseButtonReleased(MouseButton.Left);
 
         /// <summary>
         /// Whether the right mouse button is held down.
         /// </summary>
-        public static bool RightMousePressed
-        {
-            get { return InputManager.currentMouseState.RightButton == ButtonState.Pressed; }
-        }
+        public static bool RightMousePressed => IsMouseButtonPressed(MouseButton.Right);
 
         /// <summary>
         /// Whether the right mouse button was hit in the last frame.
         /// </summary>
-        public static bool RightMouseHit
-        {
-            get
-            {
-                return InputManager.currentMouseState.RightButton == ButtonState.Pressed
-                    && InputManager.prevMouseState.RightButton == ButtonState.Released;
-            }
-        }
+        public static bool RightMouseHit => IsMouseButtonHit(MouseButton.Right);
 
         /// <summary>
         /// Whether the right mouse button was released in the last frame.
         /// </summary>
-        public static bool RightMouseReleased
-        {
-            get
-            {
-                return InputManager.currentMouseState.RightButton == ButtonState.Released
-                    && InputManager.prevMouseState.RightButton == ButtonState.Pressed;
-            }
-        }
+        public static bool RightMouseReleased => IsMouseButtonReleased(MouseButton.Right);
 
         /// <summary>
         /// Whether the middle mouse button is held down.
         /// </summary>
-        public static bool MiddleMousePressed
-        {
-            get { return InputManager.currentMouseState.MiddleButton == ButtonState.Pressed; }
-        }
+        public static bool MiddleMousePressed => IsMouseButtonPressed(MouseButton.Middle);
 
         /// <summary>
         /// Whether the middle mouse button was hit in the last frame.
         /// </summary>
-        public static bool MiddleMouseHit
-        {
-            get
-            {
-                return InputManager.currentMouseState.MiddleButton == ButtonState.Pressed
-                    && InputManager.prevMouseState.MiddleButton == ButtonState.Released;
-            }
-        }
+        public static bool MiddleMouseHit => IsMouseButtonHit(MouseButton.Middle);
 
         /// <summary>
         /// Whether the middle mouse button was released in the last frame.
         /// </summary>
-        public static bool MiddleMouseReleased
-        {
-            get
-            {
-                return InputManager.currentMouseState.MiddleButton == ButtonState.Released
-                    && InputManager.prevMouseState.MiddleButton == ButtonState.Pressed;
-            }
-        }
+        public static bool MiddleMouseReleased => IsMouseButtonReleased(MouseButton.Middle);
 
         /// <summary>
         /// Checks if the cursor is currently contained in a specified rectangle in screen coordinates.
@@ -228,7 +192,7 @@ namespace Bearded.Utilities.Input
         /// <returns>True if the cursor is contained in the specified rectangle.</returns>
         public static bool IsMouseInRectangle(System.Drawing.Rectangle rect)
         {
-            return rect.Contains(InputManager.mouse.X, InputManager.mouse.Y);
+            return rect.Contains(mouse.X, mouse.Y);
         }
         #endregion
 
