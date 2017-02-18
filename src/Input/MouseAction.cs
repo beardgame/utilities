@@ -52,8 +52,8 @@ namespace Bearded.Utilities.Input
             }
 
             public override bool Hit => InputManager.IsMouseButtonHit(button);
-            public override bool Active => InputManager.IsMouseButtonHit(button);
-            public override bool Released => InputManager.IsMouseButtonHit(button);
+            public override bool Active => InputManager.IsMouseButtonPressed(button);
+            public override bool Released => InputManager.IsMouseButtonReleased(button);
 
             public override string ToString()
             {
