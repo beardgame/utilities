@@ -229,7 +229,7 @@ namespace Bearded.Utilities
             List<Entry> copy;
             lock (lines)
             {
-                copy = lines.Where(entry => entry.Severity >= severity).ToList();
+                copy = lines.Where(entry => entry.Severity <= severity).ToList();
             }
             return copy.AsReadOnly();
         }
