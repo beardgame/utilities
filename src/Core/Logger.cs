@@ -220,6 +220,21 @@ namespace Bearded.Utilities
         }
 
         /// <summary>
+        /// Gets a copy of the recent entry history with a minimum severity.
+        /// This is the only thread-safe way of accessing the history.
+        /// This method allocates significant memory and should not be used unless necessary.
+        /// </summary>
+        public ReadOnlyCollection<Entry> GetSafeRecentEntriesWithSeverity(Severity severity)
+        {
+            List<Entry> copy;
+            lock (lines)
+            {
+                copy = lines.Where(entry => entry.Severity <= severity).ToList();
+            }
+            return copy.AsReadOnly();
+        }
+
+        /// <summary>
         /// If RaiseEvents is true, this event is raised every time an event is added to the log.
         /// </summary>
         public event LogEvent Logged;
