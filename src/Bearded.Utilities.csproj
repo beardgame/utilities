@@ -56,7 +56,7 @@
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="OpenTK">
-      <HintPath>..\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -91,7 +91,7 @@
     <Compile Include="Algorithms\HungarianAlgorithm.cs" />
     <Compile Include="Algorithms\BinPacking.cs" />
     <Compile Include="Collections\PrefixTrie.cs" />
-    <Compile Include="Core\Log.cs" />
+    <Compile Include="Core\Logger.cs" />
     <Compile Include="Core\StaticRandom.cs" />
     <Compile Include="Core\RandomExtensions.cs" />
     <Compile Include="Core\Box.cs" />
@@ -117,6 +117,7 @@
     <Compile Include="Core\Do.cs" />
     <Compile Include="Core\Environment.cs" />
     <Compile Include="Core\EventHandlers.cs" />
+    <Compile Include="Input\MouseAction.cs" />
     <Compile Include="IO\FileModifiedWatcher.cs" />
     <Compile Include="Linq\Extensions.cs" />
     <Compile Include="Input\KeyboardAction.cs" />
@@ -167,7 +168,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
