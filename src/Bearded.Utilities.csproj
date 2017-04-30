@@ -1,26 +1,185 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <!-- Package metadata -->
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
-    <!-- Package metadata -->
     <Authors>amulware, tomrijnbeek</Authors>
     <PackageDescription>Collection of gamedev utilities.</PackageDescription>
     <PackageProjectUrl>https://github.com/beardgame/utilities</PackageProjectUrl>
     <PackageTags>gamedev</PackageTags>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\bin\Debug</OutputPath>
-    <BaseIntermediateOutputPath>..\obj\Debug</BaseIntermediateOutputPath>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2F580B9D-6255-4427-8395-5EF236C9401C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Bearded.Utilities</RootNamespace>
+    <AssemblyName>Bearded.Utilities</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+    <ReleaseVersion>0.1.0</ReleaseVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\bin\Release</OutputPath>
-    <BaseIntermediateOutputPath>..\obj\Release</BaseIntermediateOutputPath>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\Debug\Bearded.Utilities.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\Debug\Bearded.Utilities.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="OpenTK" Version="2.0.0" />
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="OpenTK">
+      <HintPath>$(SolutionDir)\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Update="OpenTK.dll.config">
+    <Folder Include="Data\" />
+    <Folder Include="Diagnostics\" />
+    <Folder Include="Properties\" />
+    <Folder Include="Serialization\JsonNet\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 4.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Algorithms\HungarianAlgorithm.cs" />
+    <Compile Include="Algorithms\BinPacking.cs" />
+    <Compile Include="Collections\PrefixTrie.cs" />
+    <Compile Include="Core\Logger.cs" />
+    <Compile Include="Core\StaticRandom.cs" />
+    <Compile Include="Core\RandomExtensions.cs" />
+    <Compile Include="Core\Box.cs" />
+    <Compile Include="Core\Id.cs" />
+    <Compile Include="Core\ResettableLazy.cs" />
+    <Compile Include="Core\Singleton.cs" />
+    <Compile Include="Core\Void.cs" />
+    <Compile Include="Input\DigitalAction.cs" />
+    <Compile Include="Input\DummyAction.cs" />
+    <Compile Include="Input\GamePadAction.cs" />
+    <Compile Include="Input\IAction.cs" />
+    <Compile Include="Input\InputAction.cs" />
+    <Compile Include="Input\InputManager.cs" />
+    <Compile Include="Collections\DeletableObjectListEnumerator.cs" />
+    <Compile Include="Collections\IDeletable.cs" />
+    <Compile Include="Collections\MutableLinkedList.cs" />
+    <Compile Include="Collections\MutableLinkedListEnumerator.cs" />
+    <Compile Include="Collections\MutableLinkedListItem.cs" />
+    <Compile Include="Collections\MutableLinkedListNode.cs" />
+    <Compile Include="Collections\PriorityQueue.cs" />
+    <Compile Include="Collections\StaticPriorityQueue.cs" />
+    <Compile Include="Collections\DeletableObjectList.cs" />
+    <Compile Include="Core\Do.cs" />
+    <Compile Include="Core\Environment.cs" />
+    <Compile Include="Core\EventHandlers.cs" />
+    <Compile Include="Input\MouseAction.cs" />
+    <Compile Include="IO\FileModifiedWatcher.cs" />
+    <Compile Include="Linq\Extensions.cs" />
+    <Compile Include="Input\KeyboardAction.cs" />
+    <Compile Include="Input\LambdaAction.cs" />
+    <Compile Include="Math\Angle.cs" />
+    <Compile Include="Math\Direction2.cs" />
+    <Compile Include="Math\Arc.cs" />
+    <Compile Include="Math\Extensions.cs" />
+    <Compile Include="Math\Interval.cs" />
+    <Compile Include="Math\Mathf.cs" />
+    <Compile Include="Math\Geometry\arcs\Arc2.cs" />
+    <Compile Include="Math\Geometry\arcs\Arc3.cs" />
+    <Compile Include="Math\Geometry\arcs\Bezier2nd2.cs" />
+    <Compile Include="Math\Geometry\arcs\Bezier2nd3.cs" />
+    <Compile Include="Math\Geometry\arcs\Bezier3rd2.cs" />
+    <Compile Include="Math\Geometry\arcs\Bezier3rd3.cs" />
+    <Compile Include="Math\Geometry\PolarPosition.cs" />
+    <Compile Include="Math\Geometry\Rectangle.cs" />
+    <Compile Include="Math\Interpolate.cs" />
+    <Compile Include="SpaceTime\angular\AngularAcceleration.cs" />
+    <Compile Include="SpaceTime\angular\AngularVelocity.cs" />
+    <Compile Include="SpaceTime\Extensions.cs" />
+    <Compile Include="SpaceTime\Squared.cs" />
+    <Compile Include="SpaceTime\undirected\Acceleration.cs" />
+    <Compile Include="SpaceTime\undirected\Speed.cs" />
+    <Compile Include="SpaceTime\undirected\Unit.cs" />
+    <Compile Include="SpaceTime\2d\Acceleration2.cs" />
+    <Compile Include="SpaceTime\2d\Difference2.cs" />
+    <Compile Include="SpaceTime\2d\Position2.cs" />
+    <Compile Include="SpaceTime\2d\Velocity2.cs" />
+    <Compile Include="SpaceTime\time\Instant.cs" />
+    <Compile Include="SpaceTime\time\TimeSpan.cs" />
+    <Compile Include="Threading\IActionQueue.cs" />
+    <Compile Include="Threading\ManualActionQueue.cs" />
+    <Compile Include="Threading\BackgroundActionQueue.cs" />
+    <Compile Include="Tilemaps\Rectangular\Direction.cs" />
+    <Compile Include="Tilemaps\Rectangular\Directions.cs" />
+    <Compile Include="Tilemaps\Rectangular\Extensions.cs" />
+    <Compile Include="Tilemaps\Step.cs" />
+    <Compile Include="Tilemaps\Rectangular\Tile.cs" />
+    <Compile Include="Tilemaps\Rectangular\Tilemap.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OpenTK.dll.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

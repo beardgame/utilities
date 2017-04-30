@@ -4,6 +4,10 @@ solution: Bearded.Utilities.sln
 mono:
  - latest
 
+install:
+  - nuget restore Bearded.Utilities.sln
+  - nuget install xunit.runner.console -Version 2.1.0 -OutputDirectory testrunner
+
 script:
   - xbuild /p:Configuration=Release Bearded.Utilities.sln
-  - mono ./packages/xunit.runner.console.*/tools/xunit.console.exe ./tests/bin/Release/Bearded.Utilities.Tests.dll
+  - mono ./testrunner/xunit.runner.console.2.1.0/tools/xunit.console.exe ./tests/bin/Release/Bearded.Utilities.Tests.dll
