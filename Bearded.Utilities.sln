@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Utilities", "src\Bearded.Utilities.csproj", "{2F580B9D-6255-4427-8395-5EF236C9401C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Utilities.Tests", "tests\Bearded.Utilities.Tests.csproj", "{7EDB76CB-E9DC-4BCC-A610-12BE4976A701}"
@@ -15,6 +17,7 @@ Global
 		{2F580B9D-6255-4427-8395-5EF236C9401C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F580B9D-6255-4427-8395-5EF236C9401C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F580B9D-6255-4427-8395-5EF236C9401C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F580B9D-6255-4427-8395-5EF236C9401C}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{7EDB76CB-E9DC-4BCC-A610-12BE4976A701}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7EDB76CB-E9DC-4BCC-A610-12BE4976A701}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EDB76CB-E9DC-4BCC-A610-12BE4976A701}.Release|Any CPU.ActiveCfg = Release|Any CPU
