@@ -8,7 +8,7 @@
 
 Bearded.Utilities is a C# library full of useful utilities for games and other applications.
 
-Most of it is extracted from or written explicitly for the projects of [Paul Scharf](http://github.com/amulware) and [Tom Rijnbeek](http://github.com/tomrijnbeek), including [Roche Fusion](http://rochefusion.com).
+Most of it is extracted from or written explicitly for the projects of [Paul Scharf](http://github.com/amulware) and [Tom Rijnbeek](http://github.com/tomrijnbeek), including [Roche Fusion](http://rochefusion.com) and [TD](https://github.com/beardgame/td).
 
 ## Collaborate & Share!
 
