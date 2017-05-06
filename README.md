@@ -1,8 +1,14 @@
-# utilities
+# Bearded.Utilities
 
 ## Build Status (branch: develop)
 
 [![Travis CI Build Status](https://api.travis-ci.org/beardgame/utilities.svg?branch=develop)](https://travis-ci.org/beardgame/utilities "Travis CI Build Overview")
+
+## How to use?
+
+This library is still under development, but should be mostly in a stable state. If you intend to use this library in your project, please feel free to get in touch so that we can reach out if we want to make big changes.
+
+The easiest way to use this library is to add the NuGet package to your project. Search for "Bearded.Utilities" in the NuGet package browser, or check the install instructions on the [NuGet package page](https://www.nuget.org/packages/Bearded.Utilities).
 
 ## What's this?
 
