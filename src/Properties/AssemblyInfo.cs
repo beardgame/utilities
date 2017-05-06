@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Bearded.Utilities")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Set of basic utilities on top of OpenTK, mostly aimed at games.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("amulware, Tom Rijnbeek")]
 [assembly: AssemblyProduct("Bearded.Utilities")]
 [assembly: AssemblyCopyright("Copyright © 2017")]
 [assembly: AssemblyTrademark("")]
