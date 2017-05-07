@@ -3,6 +3,7 @@
 ## Build Status (branch: develop)
 
 [![Travis CI Build Status](https://api.travis-ci.org/beardgame/utilities.svg?branch=develop)](https://travis-ci.org/beardgame/utilities "Travis CI Build Overview")
+[![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/36rqmw34wqhcf0h0/branch/develop?svg=true)](https://ci.appveyor.com/project/tomrijnbeek/utilities/branch/develop)
 
 ## What's this?
 
