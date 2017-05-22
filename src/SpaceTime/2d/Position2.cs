@@ -56,7 +56,7 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Returns a Position2 type with value 0.
         /// </summary>
-        public Position2 Zero { get { return new Position2(0, 0); } }
+        public static Position2 Zero { get { return new Position2(0, 0); } }
 
         #region methods
 
