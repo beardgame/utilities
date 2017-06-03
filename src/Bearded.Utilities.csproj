@@ -44,11 +44,11 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\Debug\</OutputPath>
+    <OutputPath>..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Debug\Bearded.Utilities.xml</DocumentationFile>
+    <DocumentationFile>..\bin\Release\Bearded.Utilities.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
@@ -61,7 +61,6 @@
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Diagnostics\" />
-    <Folder Include="Properties\" />
     <Folder Include="Serialization\JsonNet\" />
   </ItemGroup>
   <ItemGroup>
@@ -158,8 +157,10 @@
     <Compile Include="Tilemaps\Step.cs" />
     <Compile Include="Tilemaps\Rectangular\Tile.cs" />
     <Compile Include="Tilemaps\Rectangular\Tilemap.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Bearded.Utilities.nuspec" />
     <None Include="OpenTK.dll.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
