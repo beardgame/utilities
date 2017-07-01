@@ -4,21 +4,6 @@ using System.Runtime.InteropServices;
 namespace Bearded.Utilities
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct Id
-    {
-        private readonly int value;
-
-        public int Value => value;
-
-        public Id(int value)
-        {
-            this.value = value;
-        }
-
-        public Id<T> Generic<T>() => new Id<T>(value);
-    }
-
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Id<T> : IEquatable<Id<T>>
     {
         private readonly int value;
@@ -29,8 +14,6 @@ namespace Bearded.Utilities
         {
             this.value = value;
         }
-
-        public Id Simple => new Id(value);
 
         public bool IsValid => value != 0;
         public static Id<T> Invalid => new Id<T>(0);
