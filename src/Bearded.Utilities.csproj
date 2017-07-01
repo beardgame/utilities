@@ -91,6 +91,7 @@
     <Compile Include="Algorithms\HungarianAlgorithm.cs" />
     <Compile Include="Algorithms\BinPacking.cs" />
     <Compile Include="Collections\PrefixTrie.cs" />
+    <Compile Include="Core\IdManager.cs" />
     <Compile Include="Core\Logger.cs" />
     <Compile Include="Core\StaticRandom.cs" />
     <Compile Include="Core\RandomExtensions.cs" />
