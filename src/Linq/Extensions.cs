@@ -180,7 +180,8 @@ namespace Bearded.Utilities.Linq
 
         public static TValue ValueOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key)
         {
-            dict.TryGetValue(key, out var value);
+            TValue value;
+            dict.TryGetValue(key, out value);
             return value;
         }
 
