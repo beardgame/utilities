@@ -2,18 +2,11 @@
 
 namespace Bearded.Utilities
 {
-    /// <summary>
-    /// Static class to help make resetable lazies.
-    /// </summary>
     public static class ResettableLazy
     {
-        /// <summary>
-        /// Creates a new resetable lazy with a given initialisation function.
-        /// </summary>
-        /// <param name="maker">The function to initialise the value of the lazy.</param>
-        public static ResettableLazy<T> From<T>(Func<T> maker)
+        public static ResettableLazy<T> From<T>(Func<T> factory)
         {
-            return new ResettableLazy<T>(maker);
+            return new ResettableLazy<T>(factory);
         }
     }
 
@@ -23,42 +16,31 @@ namespace Bearded.Utilities
     /// </summary>
     public sealed class ResettableLazy<T>
     {
-        private readonly Func<T> maker;
+        private readonly Func<T> factory;
 
         private bool hasValue;
         private T value;
-
-        /// <summary>
-        /// Gets the value of this instance.
-        /// </summary>
-        public T Value
+        
+        public T Value => ensureValue();
+        
+        public ResettableLazy(Func<T> factory)
         {
-            get
-            {
-                if (!this.hasValue)
-                {
-                    this.value = maker();
-                    this.hasValue = true;
-                }
-                return this.value;
-            }
+            this.factory = factory;
         }
 
-        /// <summary>
-        /// Creates a new resetable lazy instance.
-        /// </summary>
-        /// <param name="maker">The function that initialises the value for this instance.</param>
-        public ResettableLazy(Func<T> maker)
-        {
-            this.maker = maker;
-        }
-
-        /// <summary>
-        /// Resets the lazy to get a new value when accessed next.
-        /// </summary>
         public void Reset()
         {
-            this.hasValue = false;
+            hasValue = false;
+        }
+
+        private T ensureValue()
+        {
+            if (!hasValue)
+            {
+                value = factory();
+                hasValue = true;
+            }
+            return value;
         }
     }
 }

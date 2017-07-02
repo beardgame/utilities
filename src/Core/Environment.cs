@@ -3,28 +3,13 @@ using System.IO;
 
 namespace Bearded.Utilities
 {
-    /// <summary>
-    /// Enumerator for platforms.
-    /// </summary>
     public enum Platform
     {
-        /// <summary>
-        /// Windows platforms.
-        /// </summary>
         Windows,
-        /// <summary>
-        /// Linux platforms.
-        /// </summary>
         Linux,
-        /// <summary>
-        /// Mac platforms (OSX).
-        /// </summary>
         OSX
     }
-
-    /// <summary>
-    /// Collection of platform-specific functions.
-    /// </summary>
+    
     public static class Environment
     {
         #region Current platform
@@ -52,17 +37,9 @@ namespace Bearded.Utilities
                     return Platform.Windows;
             }
         }
+        
+        public static Platform CurrentPlatform => currentPlatform ?? (currentPlatform = detectPlatform()).Value;
 
-        /// <summary>
-        /// The platform the application is currently running on.
-        /// </summary>
-        public static Platform CurrentPlatform
-        {
-            get
-            {
-                return currentPlatform.HasValue ? currentPlatform.Value : (currentPlatform = detectPlatform()).Value;
-            }
-        }
         #endregion
 
         #region User settings directory
@@ -70,7 +47,7 @@ namespace Bearded.Utilities
 
         private static string buildUserSettingsDirectory()
         {
-            switch (Environment.CurrentPlatform)
+            switch (CurrentPlatform)
             {
                 case Platform.Windows:
                     return System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
@@ -103,10 +80,7 @@ namespace Bearded.Utilities
         /// For OSX: ~/Library/Application Support
         /// For Linux: ~/.config
         /// </summary>
-        public static string UserSettingsDirectory
-        {
-            get { return userSettingsDirectory ?? (userSettingsDirectory = buildUserSettingsDirectory()); }
-        }
+        public static string UserSettingsDirectory => userSettingsDirectory ?? (userSettingsDirectory = buildUserSettingsDirectory());
 
         /// <summary>
         /// Gets the default user setting directory for a given game name.
@@ -114,8 +88,6 @@ namespace Bearded.Utilities
         /// For OSX: ~/Library/Application Support/[gamename]
         /// For Linux: ~/.config/[gamename]
         /// </summary>
-        /// <param name="gameName"></param>
-        /// <returns></returns>
         public static string UserSettingsDirectoryFor(string gameName)
         {
             return Path.Combine(UserSettingsDirectory, gameName);

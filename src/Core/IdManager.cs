@@ -11,9 +11,9 @@ namespace Bearded.Utilities
         public Id<T> GetNext<T>()
         {
             var type = typeof(T);
-            var i = lastIds.ValueOrDefault(type) + 1;
-            lastIds[type] = i;
-            return new Id<T>(i);
+            var id = lastIds.ValueOrDefault(type) + 1;
+            lastIds[type] = id;
+            return new Id<T>(id);
         }
     }
 }
