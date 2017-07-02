@@ -90,6 +90,8 @@
   <ItemGroup>
     <Compile Include="Algorithms\HungarianAlgorithm.cs" />
     <Compile Include="Algorithms\BinPacking.cs" />
+    <Compile Include="Collections\IdDictionary.cs" />
+    <Compile Include="Collections\IIdable.cs" />
     <Compile Include="Collections\PrefixTrie.cs" />
     <Compile Include="Core\IdManager.cs" />
     <Compile Include="Core\Logger.cs" />
