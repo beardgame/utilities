@@ -4,9 +4,7 @@
     {
         public static void Swap<T>(ref T a, ref T b)
         {
-            var t = a;
-            a = b;
-            b = t;
+            (a, b) = (b, a);
         }
 
         public static Box<T> Box<T>(T value)
