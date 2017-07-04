@@ -240,7 +240,7 @@ namespace Bearded.Utilities
             lock (lines)
             {
                 if (collection is List<Entry> list)
-                    list.Capacity = list.Count + lines.Count;
+                    ensureListCapacity(list, list.Count + lines.Count);
 
                 foreach (var entry in lines)
                     collection.Add(entry);
@@ -254,12 +254,18 @@ namespace Bearded.Utilities
         {
             lock (lines)
             {
-                if (collection is List<Entry> list)
-                    list.Capacity = list.Count + lines.Count;
+                if (severity == Severity.Trace && collection is List<Entry> list)
+                    ensureListCapacity(list, list.Count + lines.Count);
 
                 foreach (var entry in lines.Where(entry => entry.Severity <= severity))
                     collection.Add(entry);
             }
+        }
+
+        private static void ensureListCapacity(List<Entry> list, int neededCapacity)
+        {
+            if (list.Capacity < neededCapacity)
+                list.Capacity = Max(list.Capacity * 2, neededCapacity);
         }
 
         /// <summary>
