@@ -82,7 +82,7 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Returns a Difference2 type with value 0.
         /// </summary>
-        public Difference2 Zero { get { return new Difference2(0, 0); } }
+        public static Difference2 Zero { get { return new Difference2(0, 0); } }
 
         #endregion
 

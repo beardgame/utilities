@@ -82,7 +82,7 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Returns a Acceleration2 type with value 0.
         /// </summary>
-        public Acceleration2 Zero { get { return new Acceleration2(0, 0); } }
+        public static Acceleration2 Zero { get { return new Acceleration2(0, 0); } }
 
         #endregion
 
