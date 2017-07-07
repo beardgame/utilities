@@ -189,13 +189,9 @@ namespace Bearded.Utilities.Algorithms
                 public Node Find(int w, int h)
                 {
                     if (right != null)
-                    {
                         return right.Find(w, h) ?? down.Find(w, h);
-                    }
                     if (w <= W && h <= H)
-                    {
                         return this;
-                    }
                     return null;
                 }
 
@@ -235,7 +231,7 @@ namespace Bearded.Utilities.Algorithms
                         node = growNode(block.Width, block.Height);
                     }
                     if (node == null)
-                        throw new Exception("Oops.");
+                        throw new InvalidOperationException("Encountered unexpected null node.");
                     results.Add(new PositionedRectangle<T>(block, node.X, node.Y));
                 }
 
@@ -249,8 +245,8 @@ namespace Bearded.Utilities.Algorithms
                 var canGrowDown = w <= root.W;
                 var canGrowRight = h <= root.H;
 
-                var shouldGrowRight = canGrowRight && (root.H >= (root.W + w));
-                var shouldGrowDown = canGrowDown && (root.W >= (root.H + h));
+                var shouldGrowRight = canGrowRight && root.H >= root.W + w;
+                var shouldGrowDown = canGrowDown && root.W >= root.H + h;
 
                 if (shouldGrowRight)
                     return growRight(w, h);
@@ -266,8 +262,7 @@ namespace Bearded.Utilities.Algorithms
             private Node growRight(int w, int h)
             {
                 var r = root;
-                root = new Node(0, 0, r.W + w, r.H,
-                    r, new Node(r.W, 0, w, r.H));
+                root = new Node(0, 0, r.W + w, r.H, r, new Node(r.W, 0, w, r.H));
                 var node = root.Find(w, h);
                 node?.Split(w, h);
                 return node;
@@ -276,11 +271,9 @@ namespace Bearded.Utilities.Algorithms
             private Node growDown(int w, int h)
             {
                 var r = root;
-                root = new Node(0, 0, r.W, r.H + h,
-                    new Node(0, r.H, r.W, h), r);
+                root = new Node(0, 0, r.W, r.H + h, new Node(0, r.H, r.W, h), r);
                 var node = root.Find(w, h);
-                if (node != null)
-                    node.Split(w, h);
+                node?.Split(w, h);
                 return node;
             }
         }
