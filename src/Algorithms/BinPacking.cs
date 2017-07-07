@@ -21,34 +21,15 @@ namespace Bearded.Utilities.Algorithms
         /// <typeparam name="T">Type of custom user data associated with the rectangle.</typeparam>
         public class Rectangle<T>
         {
-            private readonly T value;
-            private readonly int width;
-            private readonly int height;
+            public T Value { get; }
+            public int Width { get; }
+            public int Height { get; }
 
-            /// <summary>
-            /// Custom user data associated with the rectangle.
-            /// </summary>
-            public T Value { get { return this.value; } }
-            /// <summary>
-            /// The width of the rectangle.
-            /// </summary>
-            public int Width { get { return this.width; } }
-            /// <summary>
-            /// The height of the rectangle.
-            /// </summary>
-            public int Height { get { return this.height; } }
-
-            /// <summary>
-            /// Creates a new instance of the rectangle class.
-            /// </summary>
-            /// <param name="value">Custom user data associated with the rectangle.</param>
-            /// <param name="width">The width of the rectangle.</param>
-            /// <param name="height">The height of the rectangle.</param>
             public Rectangle(T value, int width, int height)
             {
-                this.value = value;
-                this.width = width;
-                this.height = height;
+                Value = value;
+                Width = width;
+                Height = height;
             }
         }
 
@@ -59,35 +40,18 @@ namespace Bearded.Utilities.Algorithms
         public class PositionedRectangle<T>
         {
             private readonly Rectangle<T> rectangle;
-            private readonly int x;
-            private readonly int y;
 
-            /// <summary>
-            /// Lower X Coordinate of the rectangle.
-            /// </summary>
-            public int X { get { return this.x; } }
-            /// <summary>
-            /// Lower Y Coordinate of the rectangle.
-            /// </summary>
-            public int Y { get { return this.y; } }
-            /// <summary>
-            /// Custom user data associated with the rectangle.
-            /// </summary>
-            public T Value { get { return this.rectangle.Value; } }
-            /// <summary>
-            /// The width of the rectangle.
-            /// </summary>
-            public int Width { get { return this.rectangle.Width; } }
-            /// <summary>
-            /// The height of the rectangle.
-            /// </summary>
-            public int Height { get { return this.rectangle.Height; } }
+            public int X { get; }
+            public int Y { get; }
+            public T Value => rectangle.Value;
+            public int Width => rectangle.Width;
+            public int Height => rectangle.Height;
 
             internal PositionedRectangle(Rectangle<T> rectangle, int x, int y)
             {
                 this.rectangle = rectangle;
-                this.x = x;
-                this.y = y;
+                X = x;
+                Y = y;
             }
         }
 
@@ -97,44 +61,43 @@ namespace Bearded.Utilities.Algorithms
         /// <typeparam name="T">Type of custom user data associated with the rectangle.</typeparam>
         public class Result<T>
         {
-            private readonly ReadOnlyCollection<PositionedRectangle<T>> rectangles;
-            private readonly int width;
-            private readonly int height;
-            private readonly int emptyPixels;
-
             /// <summary>
             /// The list of packed rectangles.
             /// </summary>
-            public ReadOnlyCollection<PositionedRectangle<T>> Rectangles { get { return this.rectangles; } }
+            public ReadOnlyCollection<PositionedRectangle<T>> Rectangles { get; }
+
             /// <summary>
             /// The width of the containing rectangle.
             /// </summary>
-            public int Width { get { return this.width; } }
+            public int Width { get; }
+
             /// <summary>
             /// The height of the containing rectangle.
             /// </summary>
-            public int Height { get { return this.height; } }
+            public int Height { get; }
+
             /// <summary>
             /// Number of pixels or grid cells of the containing rectangle wasted with this packing.
             /// </summary>
-            public int EmptyPixels { get { return this.emptyPixels; } }
+            public int EmptyPixels { get; }
 
             /// <summary>
             /// The total area of the containing rectangle (Width * Height).
             /// </summary>
-            public int Area { get { return this.Width * this.Height; } }
+            public int Area => Width * Height;
+
             /// <summary>
             /// The fraction of pixels or grid cells of the containing rectangle filled by the packed rectangles.
             /// Maximum is 1 for a perfect filling.
             /// </summary>
-            public double Filled { get { return 1 - this.EmptyPixels / (double)this.Area; } }
+            public double Filled => 1 - EmptyPixels / (double)Area;
 
             internal Result(ReadOnlyCollection<PositionedRectangle<T>> rectangles, int width, int height, int emptyPixels)
             {
-                this.rectangles = rectangles;
-                this.width = width;
-                this.height = height;
-                this.emptyPixels = emptyPixels;
+                Rectangles = rectangles;
+                Width = width;
+                Height = height;
+                EmptyPixels = emptyPixels;
             }
         }
 
@@ -151,26 +114,22 @@ namespace Bearded.Utilities.Algorithms
         /// Otherwise, an object containing the packed rectangles and some additional information.
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="rectangles"/> is null.</exception>
-        static public Result<T> Pack<T>(IEnumerable<Rectangle<T>> rectangles, bool tryMultipleHeuristics = true)
+        public static Result<T> Pack<T>(IEnumerable<Rectangle<T>> rectangles, bool tryMultipleHeuristics = true)
         {
             if(rectangles == null)
-                throw new ArgumentNullException("rectangles");
+                throw new ArgumentNullException(nameof(rectangles));
 
             var asList = rectangles.ToList();
 
             if (asList.Count == 0)
-            {
                 return null;
-            }
 
             asList.Sort((r1, r2) => (r2.Width * r2.Height).CompareTo(r1.Width * r1.Height));
 
             var result = fit(asList);
 
             if (!tryMultipleHeuristics)
-            {
                 return result;
-            }
 
             var heuristics = new List<Comparison<Rectangle<T>>>
             {
@@ -194,11 +153,8 @@ namespace Bearded.Utilities.Algorithms
         {
             return new Tree<T>().Fit(blocks);
         }
-
-        /// <summary>
-        /// Implementation of the algorithm.
-        /// For details see http://codeincomplete.com/posts/2011/5/7/bin_packing/
-        /// </summary>
+        
+        // See http://codeincomplete.com/posts/2011/5/7/bin_packing/
         private class Tree<T>
         {
 
@@ -207,36 +163,36 @@ namespace Bearded.Utilities.Algorithms
                 private Node down;
                 private Node right;
 
-                public int X { get; private set; }
-                public int Y { get; private set; }
-                public int W { get; private set; }
-                public int H { get; private set; }
+                public int X { get; }
+                public int Y { get; }
+                public int W { get; }
+                public int H { get; }
 
                 public Node(int x, int y, int w, int h, Node down, Node right)
                 {
                     this.down = down;
                     this.right = right;
-                    this.X = x;
-                    this.Y = y;
-                    this.W = w;
-                    this.H = h;
+                    X = x;
+                    Y = y;
+                    W = w;
+                    H = h;
                 }
 
                 public Node(int x, int y, int w, int h)
                 {
-                    this.X = x;
-                    this.Y = y;
-                    this.W = w;
-                    this.H = h;
+                    X = x;
+                    Y = y;
+                    W = w;
+                    H = h;
                 }
 
                 public Node Find(int w, int h)
                 {
-                    if (this.right != null)
+                    if (right != null)
                     {
-                        return this.right.Find(w, h) ?? this.down.Find(w, h);
+                        return right.Find(w, h) ?? down.Find(w, h);
                     }
-                    if (w <= this.W && h <= this.H)
+                    if (w <= W && h <= H)
                     {
                         return this;
                     }
@@ -245,15 +201,15 @@ namespace Bearded.Utilities.Algorithms
 
                 public void Split(int w, int h)
                 {
-                    this.down = new Node(this.X, this.Y + h, this.W, this.H - h);
-                    this.right = new Node(this.X + w, this.Y, this.W - w, h);
+                    down = new Node(X, Y + h, W, H - h);
+                    right = new Node(X + w, Y, W - w, h);
                 }
 
                 public int GetEmptyPixels()
                 {
-                    if (this.right == null)
-                        return this.W * this.H;
-                    return this.down.GetEmptyPixels() + this.right.GetEmptyPixels();
+                    if (right == null)
+                        return W * H;
+                    return down.GetEmptyPixels() + right.GetEmptyPixels();
                 }
             }
 
@@ -263,7 +219,7 @@ namespace Bearded.Utilities.Algorithms
             {
                 var first = blocks[0];
 
-                this.root = new Node(0, 0, first.Width, first.Height);
+                root = new Node(0, 0, first.Width, first.Height);
 
                 var results = new List<PositionedRectangle<T>>(blocks.Count);
 
@@ -276,54 +232,53 @@ namespace Bearded.Utilities.Algorithms
                     }
                     else
                     {
-                        node = this.growNode(block.Width, block.Height);
+                        node = growNode(block.Width, block.Height);
                     }
                     if (node == null)
                         throw new Exception("Oops.");
                     results.Add(new PositionedRectangle<T>(block, node.X, node.Y));
                 }
 
-                var emptyPixels = this.root.GetEmptyPixels();
+                var emptyPixels = root.GetEmptyPixels();
 
-                return new Result<T>(results.AsReadOnly(), this.root.W, this.root.H, emptyPixels);
+                return new Result<T>(results.AsReadOnly(), root.W, root.H, emptyPixels);
             }
 
             private Node growNode(int w, int h)
             {
-                var canGrowDown = w <= this.root.W;
-                var canGrowRight = h <= this.root.H;
+                var canGrowDown = w <= root.W;
+                var canGrowRight = h <= root.H;
 
-                var shouldGrowRight = canGrowRight && (this.root.H >= (this.root.W + w));
-                var shouldGrowDown = canGrowDown && (this.root.W >= (this.root.H + h));
+                var shouldGrowRight = canGrowRight && (root.H >= (root.W + w));
+                var shouldGrowDown = canGrowDown && (root.W >= (root.H + h));
 
                 if (shouldGrowRight)
-                    return this.growRight(w, h);
+                    return growRight(w, h);
                 if (shouldGrowDown)
-                    return this.growDown(w, h);
+                    return growDown(w, h);
                 if (canGrowRight)
-                    return this.growRight(w, h);
+                    return growRight(w, h);
                 if (canGrowDown)
-                    return this.growDown(w, h);
+                    return growDown(w, h);
                 return null;
             }
 
             private Node growRight(int w, int h)
             {
-                var r = this.root;
-                this.root = new Node(0, 0, r.W + w, r.H,
+                var r = root;
+                root = new Node(0, 0, r.W + w, r.H,
                     r, new Node(r.W, 0, w, r.H));
-                var node = this.root.Find(w, h);
-                if (node != null)
-                    node.Split(w, h);
+                var node = root.Find(w, h);
+                node?.Split(w, h);
                 return node;
             }
 
             private Node growDown(int w, int h)
             {
-                var r = this.root;
-                this.root = new Node(0, 0, r.W, r.H + h,
+                var r = root;
+                root = new Node(0, 0, r.W, r.H + h,
                     new Node(0, r.H, r.W, h), r);
-                var node = this.root.Find(w, h);
+                var node = root.Find(w, h);
                 if (node != null)
                     node.Split(w, h);
                 return node;
