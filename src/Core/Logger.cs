@@ -138,7 +138,7 @@ namespace Bearded.Utilities
             {
                 unchecked
                 {
-                    var hashCode = Text != null ? Text.GetHashCode() : 0;
+                    var hashCode = Text?.GetHashCode() ?? 0;
                     hashCode = (hashCode * 397) ^ (int)Severity;
                     hashCode = (hashCode * 397) ^ Time.GetHashCode();
                     return hashCode;
