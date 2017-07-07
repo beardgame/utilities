@@ -191,7 +191,8 @@ namespace Bearded.Utilities.Algorithms
         }
 
         /// <summary>
-        /// Compute an initial feasible solution by assigning zero labels to the workers and by assigning to each job a label equal to the minimum cost among its incident edges.
+        /// Compute an initial feasible solution by assigning zero labels to the workers and by assigning to each job a
+        /// label equal to the minimum cost among its incident edges.
         /// </summary>
         private void computeInitialFeasibleSolution()
         {
@@ -214,7 +215,8 @@ namespace Bearded.Utilities.Algorithms
                 for (var t = 0; t < dim; t++)
                 {
                     if (sourceMatches[s] == -1 && destMatches[t] == -1
-                        && costMatrix[s, t] - labelSources[s] - labelDests[t] < float.Epsilon)
+                        // ReSharper disable once CompareOfFloatsByEqualityOperator
+                        && costMatrix[s, t] - labelSources[s] - labelDests[t] == 0)
                     {
                         match(s, t);
                     }
