@@ -6,177 +6,80 @@ namespace Bearded.Utilities.Math.Geometry
     /// <summary>
     /// Represents an axis-aligned rectangle.
     /// All properties assume the x axis pointing right and the y axis pointing down.
+    /// Negative width or height rectangles are not allowed, and the constructor will throw with those values.
     /// </summary>
-    public struct Rectangle
+    public struct Rectangle : IEquatable<Rectangle>
     {
-        private readonly float x, y, width, height;
+        public float Left { get; }
+        public float Top { get; }
+        public float Width { get; }
+        public float Height { get; }
+        
+        public float Right => Left + Width;
+        public float Bottom => Top + Height;
 
-        #region Properties
-        /// <summary>
-        /// The x-coodinate of the left boundary of the rectangle.
-        /// </summary>
-        public float Left
-        {
-            get { return this.x; }
-        }
+        public Vector2 TopLeft => new Vector2(Left, Top);
+        public Vector2 TopRight => new Vector2(Right, Top);
+        public Vector2 BottomLeft => new Vector2(Left, Bottom);
+        public Vector2 BottomRight => new Vector2(Right, Bottom);
 
-        /// <summary>
-        /// The x-coordinate of the right boundary of the rectangle.
-        /// </summary>
-        public float Right
-        {
-            get { return this.x + this.width; }
-        }
+        public Vector2 Center => new Vector2(Left + Width * 0.5f, Top + Height * 0.5f);
 
-        /// <summary>
-        /// The y-coordinate of the top boundary of the rectangle.
-        /// </summary>
-        public float Top
-        {
-            get { return this.y; }
-        }
+        public float Area => Width * Height;
 
-        /// <summary>
-        /// The y-coordinate of the bottom boundary of the rectangle.
-        /// </summary>
-        public float Bottom
-        {
-            get { return this.y + this.height; }
-        }
-
-        /// <summary>
-        /// The coordinates of the top left corner of the rectangle.
-        /// </summary>
-        public Vector2 TopLeft
-        {
-            get { return new Vector2(this.Left, this.Top); }
-        }
-
-        /// <summary>
-        /// The coordinates of the top right corner of the rectangle.
-        /// </summary>
-        public Vector2 TopRight
-        {
-            get { return new Vector2(this.Right, this.Top); }
-        }
-
-        /// <summary>
-        /// The coordinates of the bottom left corner of the rectangle.
-        /// </summary>
-        public Vector2 BottomLeft
-        {
-            get { return new Vector2(this.Left, this.Bottom); }
-        }
-
-        /// <summary>
-        /// The coordinates of the bottom right corner of the rectangle.
-        /// </summary>
-        public Vector2 BottomRight
-        {
-            get { return new Vector2(this.Right, this.Bottom); }
-        }
-
-        /// <summary>
-        /// The coordinates of the center of mass of the rectangle.
-        /// </summary>
-        public Vector2 Center
-        {
-            get { return new Vector2(this.x + this.width * 0.5f, this.y + this.height * 0.5f); }
-        }
-        #endregion
-
-        #region Constructors
-        /// <summary>
-        /// Creates a new rectangle.
-        /// </summary>
-        /// <param name="x">X-coordinate of the upper left corner.</param>
-        /// <param name="y">Y-coordinate of the upper left corner.</param>
-        /// <param name="width">Width of the rectangle.</param>
-        /// <param name="height">Height of the rectangle.</param>
         public Rectangle(float x, float y, float width, float height)
         {
             if (width < 0 || height < 0)
                 throw new ArgumentException("Width and height of the rectangle have to be non-negative.");
 
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
+            Left = x;
+            Top = y;
+            Width = width;
+            Height = height;
         }
 
-        /// <summary>
-        /// Creates a new rectangle.
-        /// </summary>
-        /// <param name="xy">Coordinates of the upper left corner.</param>
-        /// <param name="width">Width of the rectangle.</param>
-        /// <param name="height">Height of the rectangle.</param>
         public Rectangle(Vector2 xy, float width, float height)
             : this(xy.X, xy.Y, width, height) { }
-        #endregion
-
-        #region Collision checks
-        /// <summary>
-        /// Checks if the rectangle contains a point.
-        /// </summary>
-        /// <param name="x">The x-coordinate of the point to check.</param>
-        /// <param name="y">The y-coordinate of the point to check.</param>
-        /// <returns>True if the point is contained in the rectangle; false otherwise.</returns>
+        
         public bool Contains(float x, float y)
-        {
-            return this.Left <= x && x <= this.Right && this.Top <= y && y <= this.Bottom;
-        }
+            => Left <= x && x <= Right && Top <= y && y <= Bottom;
 
-        /// <summary>
-        /// Checks if the rectangle contains a point.
-        /// </summary>
-        /// <param name="xy">The point to check.</param>
-        /// <returns>True if the point is contained in the rectangle; false otherwise.</returns>
-        public bool Contains(Vector2 xy)
-        {
-            return this.Contains(xy.X, xy.Y);
-        }
+        public bool Contains(Vector2 xy) => Contains(xy.X, xy.Y);
 
-        /// <summary>
-        /// Checks if the rectangle contains the specified rectangle.
-        /// </summary>
-        /// <param name="other">The rectangle to check.</param>
-        /// <returns>True if the other rectangle is contained in this rectangle; false otherwise.</returns>
         public bool Contains(Rectangle other)
-        {
-            return this.Left <= other.Left && other.Right <= this.Right
-                && this.Top <= other.Top && other.Bottom <= this.Bottom;
-        }
+            => Left <= other.Left && other.Right <= Right
+                && Top <= other.Top && other.Bottom <= Bottom;
 
-        /// <summary>
-        /// Checks if the rectangle intersects with the specified rectangle.
-        /// </summary>
-        /// <param name="other">The other rectangle.</param>
-        /// <returns>True if the rectangles intersect; false otherwise.</returns>
         public bool Intersects(Rectangle other)
-        {
-            return !(other.Left > this.Right || other.Right < this.Left ||
-                other.Top > this.Bottom || other.Bottom < this.Top);
-        }
-        #endregion
-
-        #region Static creators
-        /// <summary>
-        /// Creates a new rectangle with the specified points as corners.
-        /// </summary>
-        /// <returns>A rectangle with the specified points as corners.</returns>
+            => !(other.Left > Right || other.Right < Left
+                || other.Top > Bottom || other.Bottom < Top);
+        
         public static Rectangle WithCorners(Vector2 upperLeft, Vector2 bottomRight)
+            => new Rectangle(upperLeft.X, upperLeft.Y, bottomRight.X - upperLeft.X, bottomRight.Y - upperLeft.Y);
+
+        public static Rectangle WithSides(float top, float right, float bottom, float left)
+            => new Rectangle(top, left, bottom - top, right - left);
+
+        public bool Equals(Rectangle other)
+            // ReSharper disable CompareOfFloatsByEqualityOperator
+            => Left == other.Left && Right == other.Right && Width == other.Width && Height == other.Height;
+            // ReSharper restore CompareOfFloatsByEqualityOperator
+
+        public override bool Equals(object obj) => obj is Rectangle && Equals((Rectangle) obj);
+
+        public override int GetHashCode()
         {
-            return new Rectangle(upperLeft.X, upperLeft.Y, bottomRight.X - upperLeft.X, bottomRight.Y - upperLeft.Y);
+            unchecked
+            {
+                var hashCode = Left.GetHashCode();
+                hashCode = (hashCode * 397) ^ Top.GetHashCode();
+                hashCode = (hashCode * 397) ^ Width.GetHashCode();
+                hashCode = (hashCode * 397) ^ Height.GetHashCode();
+                return hashCode;
+            }
         }
 
-        /// <summary>
-        /// Creates a new rectangle with its boundaries at the specified coordinates.
-        /// </summary>
-        /// <returns>A rectangle with the specified coordinates as boundaries.</returns>
-        public static Rectangle WithSides(float top, float right, float bottom, float left)
-        {
-            return new Rectangle(top, left, bottom - top, right - left);
-        }
-        #endregion
+        public static bool operator ==(Rectangle left, Rectangle right) => left.Equals(right);
+        public static bool operator !=(Rectangle left, Rectangle right) => !left.Equals(right);
     }
 }
