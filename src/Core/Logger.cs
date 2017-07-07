@@ -78,7 +78,7 @@ namespace Bearded.Utilities
             Trace = 5,
         }
         
-        public struct Entry
+        public struct Entry : IEquatable<Entry>
         {
             public string Text { get; }
             
@@ -90,7 +90,7 @@ namespace Bearded.Utilities
                 : this(text, severity, DateTime.Now)
             {
             }
-            
+
             public Entry(string text, Severity severity, DateTime time)
             {
                 Text = text;
@@ -128,6 +128,28 @@ namespace Bearded.Utilities
                 Console.WriteLine(Text);
                 Console.ResetColor();
             }
+            
+            public bool Equals(Entry other)
+                => string.Equals(Text, other.Text) && Severity == other.Severity && Time.Equals(other.Time);
+
+            public override bool Equals(object obj) => obj is Entry && Equals((Entry)obj);
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    var hashCode = Text != null ? Text.GetHashCode() : 0;
+                    hashCode = (hashCode * 397) ^ (int)Severity;
+                    hashCode = (hashCode * 397) ^ Time.GetHashCode();
+                    return hashCode;
+                }
+            }
+
+            public static bool operator ==(Entry left, Entry right)
+                => left.Equals(right);
+
+            public static bool operator !=(Entry left, Entry right)
+                => !left.Equals(right);
         }
         #endregion
 
