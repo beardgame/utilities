@@ -1,7 +1,9 @@
 ﻿using System;
 using Bearded.Utilities.Algorithms;
 using FsCheck.Xunit;
+using OpenTK;
 using Xunit;
+using static System.Math;
 
 namespace Bearded.Utilities.Tests.Algorithms
 {
@@ -51,6 +53,27 @@ namespace Bearded.Utilities.Tests.Algorithms
                     {3, 9, 1}
                 }
             ));
+        }
+
+        [Fact]
+        public void Run_Metric_MatchClosest()
+        {
+            Assert.Equal(new[] { 1, 2, 0 },
+                HungarianAlgorithm.Run(new[] { -100, 0, 100 }, new[] { 111, -111, 42 }, (i1, i2) => Abs(i2 - i1)));
+        }
+
+        [Fact]
+        public void Run_Vector2s_MatchClosest()
+        {
+            Assert.Equal(new[] {1, 0},
+                HungarianAlgorithm.Run(new[] {Vector2.Zero, Vector2.UnitY}, new[] {Vector2.One, Vector2.UnitX}));
+        }
+
+        [Fact]
+        public void Run_Vector3s_MathClosest()
+        {
+            Assert.Equal(new[] { 1, 0 },
+                HungarianAlgorithm.Run(new[] { Vector3.Zero, Vector3.UnitY }, new[] { Vector3.One, Vector3.Zero }));
         }
     }
 }
