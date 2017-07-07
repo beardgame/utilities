@@ -17,7 +17,7 @@ namespace Bearded.Utilities.Algorithms
         /// </summary>
         /// <param name="costMatrix">The cost matrix, where matrix[i, j] holds the cost of assigning worker i to job j,
         ///     for all i, j. Needs to be square.</param>
-        /// <returns>The minimal cost matching based on the specified cost matrix. A value of -1 means the worker is not assigned.</returns>
+        /// <returns>The minimal cost matching based on the specified cost matrix.</returns>
         public static int[] Run(float[,] costMatrix)
         {
             var instance = new HungarianAlgorithm(costMatrix);
@@ -32,7 +32,7 @@ namespace Bearded.Utilities.Algorithms
         /// <param name="workers">The elements representing the workers.</param>
         /// <param name="jobs">The elements representing the jobs.</param>
         /// <param name="getCost">A function that calculates the cost of assigning a job to a worker.</param>
-        /// <returns>The minimal cost matching based on the specified metric. A value of -1 means the worker is not assigned.</returns>
+        /// <returns>The minimal cost matching based on the specified metric.</returns>
         public static int[] Run<TWorker, TJob>(TWorker[] workers, TJob[] jobs, Func<TWorker, TJob, float> getCost)
         {
             var costMatrix = new float[workers.Length, jobs.Length];
@@ -48,7 +48,7 @@ namespace Bearded.Utilities.Algorithms
         /// </summary>
         /// <param name="from">The source vectors.</param>
         /// <param name="to">The destination vectors.</param>
-        /// <returns>The minimal cost matching based on the least-squares metric. A value of -1 means the source vector is not assigned.</returns>
+        /// <returns>The minimal cost matching based on the least-squares metric.</returns>
         public static int[] Run(Vector2[] from, Vector2[] to)
         {
             return Run(from, to, (u, v) => (v - u).LengthSquared);
@@ -59,7 +59,7 @@ namespace Bearded.Utilities.Algorithms
         /// </summary>
         /// <param name="from">The source vectors.</param>
         /// <param name="to">The destination vectors.</param>
-        /// <returns>The minimal cost matching based on the least-squares metric. A value of -1 means the source vector is not assigned.</returns>
+        /// <returns>The minimal cost matching based on the least-squares metric.</returns>
         public static int[] Run(Vector3[] from, Vector3[] to)
         {
             return Run(from, to, (u, v) => (v - u).LengthSquared);
