@@ -39,6 +39,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\bin\Debug\Bearded.Utilities.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -50,6 +51,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\bin\Release\Bearded.Utilities.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -88,7 +90,10 @@
   <ItemGroup>
     <Compile Include="Algorithms\HungarianAlgorithm.cs" />
     <Compile Include="Algorithms\BinPacking.cs" />
+    <Compile Include="Collections\IdDictionary.cs" />
+    <Compile Include="Collections\IIdable.cs" />
     <Compile Include="Collections\PrefixTrie.cs" />
+    <Compile Include="Core\IdManager.cs" />
     <Compile Include="Core\Logger.cs" />
     <Compile Include="Core\StaticRandom.cs" />
     <Compile Include="Core\RandomExtensions.cs" />

@@ -206,7 +206,6 @@ namespace Bearded.Utilities
 
         /// <summary>
         /// Gets a copy of the recent entry history.
-        /// This is the only thread-safe way of accessing the history.
         /// This method allocates significant memory and should not be used unless necessary.
         /// </summary>
         public ReadOnlyCollection<Entry> GetSafeRecentEntries()
@@ -221,7 +220,6 @@ namespace Bearded.Utilities
 
         /// <summary>
         /// Gets a copy of the recent entry history with a minimum severity.
-        /// This is the only thread-safe way of accessing the history.
         /// This method allocates significant memory and should not be used unless necessary.
         /// </summary>
         public ReadOnlyCollection<Entry> GetSafeRecentEntriesWithSeverity(Severity severity)
@@ -232,6 +230,42 @@ namespace Bearded.Utilities
                 copy = lines.Where(entry => entry.Severity <= severity).ToList();
             }
             return copy.AsReadOnly();
+        }
+
+        /// <summary>
+        /// Adds all recent entries to a provided collection.
+        /// </summary>
+        public void CopyRecentEntries(ICollection<Entry> collection)
+        {
+            lock (lines)
+            {
+                if (collection is List<Entry> list)
+                    ensureListCapacity(list, list.Count + lines.Count);
+
+                foreach (var entry in lines)
+                    collection.Add(entry);
+            }
+        }
+
+        /// <summary>
+        /// Adds all recent entries that are at least of the given severity to a provided collection.
+        /// </summary>
+        public void CopyRecentEntriesWithSeverity(Severity severity, ICollection<Entry> collection)
+        {
+            lock (lines)
+            {
+                if (severity == Severity.Trace && collection is List<Entry> list)
+                    ensureListCapacity(list, list.Count + lines.Count);
+
+                foreach (var entry in lines.Where(entry => entry.Severity <= severity))
+                    collection.Add(entry);
+            }
+        }
+
+        private static void ensureListCapacity(List<Entry> list, int neededCapacity)
+        {
+            if (list.Capacity < neededCapacity)
+                list.Capacity = Max(list.Capacity * 2, neededCapacity);
         }
 
         /// <summary>
