@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using OpenTK;
 
 namespace Bearded.Utilities.Algorithms
@@ -14,7 +15,8 @@ namespace Bearded.Utilities.Algorithms
         /// <summary>
         /// Evaluates a minimal cost matching using the given cost matrix.
         /// </summary>
-        /// <param name="costMatrix">A matrix of costs of assigning jobs to workers.</param>
+        /// <param name="costMatrix">The cost matrix, where matrix[i, j] holds the cost of assigning worker i to job j,
+        ///     for all i, j. Needs to be square.</param>
         /// <returns>The minimal cost matching based on the specified cost matrix. A value of -1 means the worker is not assigned.</returns>
         public static int[] Run(float[,] costMatrix)
         {
@@ -34,8 +36,8 @@ namespace Bearded.Utilities.Algorithms
         public static int[] Run<TWorker, TJob>(TWorker[] workers, TJob[] jobs, Func<TWorker, TJob, float> getCost)
         {
             var costMatrix = new float[workers.Length, jobs.Length];
-            for (int t = 0; t < jobs.Length; t++)
-                for (int s = 0; s < workers.Length; s++)
+            for (var t = 0; t < jobs.Length; t++)
+                for (var s = 0; s < workers.Length; s++)
                     costMatrix[s, t] = getCost(workers[s], jobs[t]);
 
             return Run(costMatrix);
@@ -65,9 +67,8 @@ namespace Bearded.Utilities.Algorithms
         #endregion
 
         #region Implementation
-        #region Fields
         private readonly float[,] costMatrix;
-        private readonly int rows, cols, dim;
+        private readonly int dim;
         private readonly float[] labelSources;
         private readonly float[] labelDests;
         private readonly int[] minSlackDestBySource;
@@ -76,19 +77,15 @@ namespace Bearded.Utilities.Algorithms
         private readonly int[] destMatches;
         private readonly int[] parentSourceByCommittedDest;
         private readonly bool[] matchedSources;
-        #endregion
 
-        #region Initializaion
-        /// <summary>
-        /// Construct an instance of the algorithm.
-        /// </summary>
-        /// <param name="costMatrix">the cost matrix, where matrix[i][j] holds the cost of assigning worker i to job j, for all i, j.</param>
         private HungarianAlgorithm(float[,] costMatrix)
         {
+            if (costMatrix.GetLength(0) != costMatrix.GetLength(1))
+                throw new ArgumentException("Hungarian algorithm requires a square cost matrix.", nameof(costMatrix));
+            if (costMatrix.Cast<float>().Any(f => float.IsInfinity(f) || float.IsNaN(f)))
+                throw new ArgumentException("Only valid finite costs allowed.", nameof(costMatrix));
             this.costMatrix = costMatrix;
-            rows = this.costMatrix.GetLength(0);
-            cols = this.costMatrix.GetLength(1);
-            dim = System.Math.Max(rows, cols);
+            dim = costMatrix.GetLength(0);
             labelSources = new float[dim];
             labelDests = new float[dim];
             minSlackDestBySource = new int[dim];
@@ -104,13 +101,7 @@ namespace Bearded.Utilities.Algorithms
                 destMatches[i] = -1;
             }
         }
-        #endregion
 
-        #region Execute
-        /// <summary>
-        /// Executes the algorithm.
-        /// </summary>
-        /// <returns>The minimum cost matching of workers to jobs based upon the provided cost matrix. A matching value of -1 indicates that the corresponding worker is unassigned.</returns>
         private int[] execute()
         {
             /*
@@ -130,17 +121,15 @@ namespace Bearded.Utilities.Algorithms
                 t = firstUnmatchedSource();
             }
 
-            var result = new int[rows];
-            Array.Copy(sourceMatches, result, rows);
+            var result = new int[dim];
+            Array.Copy(sourceMatches, result, dim);
             for (var i = 0; i < result.Length; i++)
-                if (result[i] >= cols)
+                if (result[i] >= dim)
                     result[i] = -1;
 
             return result;
         }
-        #endregion
 
-        #region Pre-processing
         /// <summary>
         /// Reduces the cost matrix by subtracting the smallest element of each row from
         /// all elements of the row as well as the smallest element of each column from
@@ -223,9 +212,7 @@ namespace Bearded.Utilities.Algorithms
                 }
             }
         }
-        #endregion
 
-        #region Phase
         /// <summary>
         /// Initializes the next phase of the algorithm by clearing the committed
         /// workers and jobs sets and by initializing the slack arrays to the values
@@ -323,9 +310,7 @@ namespace Bearded.Utilities.Algorithms
                 }
             }
         }
-        #endregion
 
-        #region Helpers
         /// <summary>
         /// Returns the first unmatched source (or dim if none).
         /// </summary>
@@ -382,7 +367,6 @@ namespace Bearded.Utilities.Algorithms
                 }
             }
         }
-        #endregion
         #endregion
     }
 }

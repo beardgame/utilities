@@ -1,6 +1,6 @@
-﻿using Bearded.Utilities.Algorithms;
+﻿using System;
+using Bearded.Utilities.Algorithms;
 using FsCheck.Xunit;
-using OpenTK;
 using Xunit;
 
 namespace Bearded.Utilities.Tests.Algorithms
@@ -14,41 +14,43 @@ namespace Bearded.Utilities.Tests.Algorithms
         }
 
         [Property]
-        public void Run_OneWorker_AssignsWorker(float cost)
+        public void Run_OneSource_AssignsTarget(float cost)
         {
-            Assert.Equal(HungarianAlgorithm.Run(new[,] {{ cost }}), new[] {0});
+            if (float.IsInfinity(cost) || float.IsNaN(cost))
+                Assert.Throws<ArgumentException>(() => HungarianAlgorithm.Run(new[,] {{cost}}));
+            else
+                Assert.Equal(new[] { 0 }, HungarianAlgorithm.Run(new[,] { { cost } }));
         }
 
         [Fact]
-        public void Run_TwoWorkers_AssignsLowestCostWorker()
+        public void Run_TwoSources_AssignsLowestCostTarget()
         {
-            Assert.Equal(HungarianAlgorithm.Run(new[,] {{1f, 5f}, {5f, 1f}}), new[] {0, 1});
+            Assert.Equal(new[] { 0, 1 }, HungarianAlgorithm.Run(new[,] {{1f, 5f}, {5f, 1f}}));
         }
 
         [Fact]
-        public void Run_NoJobs_LeavesWorkerUnassigned()
+        public void Run_MoreSourcesThanTargets_ThrowsException()
         {
-            Assert.Equal(HungarianAlgorithm.Run(new[] {Vector2.Zero}, new Vector2[0]), new[] {-1});
+            Assert.Throws<ArgumentException>(() => HungarianAlgorithm.Run(
+                new float[,]
+                {
+                    {1, 3},
+                    {9, 9},
+                    {3, 1}
+                }
+            ));
         }
 
         [Fact]
-        public void Run_MoreWorkersThanJobs_LeavesWorkersUnassigned()
+        public void Run_MoreTargetsThanSources_AssignsSourcesToCheapest()
         {
-            Assert.Equal(
-                HungarianAlgorithm.Run(
-                    new [] {Vector2.Zero, Vector2.UnitX, Vector2.UnitY},
-                    new [] {.2f * Vector2.UnitY, .8f * Vector2.UnitY}),
-                new [] {0, 1, -1});
-        }
-
-        [Fact]
-        public void Run_MoreJobsThanWorkers_AssignsWorkersToCheapest()
-        {
-            Assert.Equal(
-                HungarianAlgorithm.Run(
-                    new[] { Vector2.Zero, Vector2.UnitX },
-                    new[] { Vector2.UnitY, Vector2.One, 2 * Vector2.One }),
-                new[] { 0, 1 });
+            Assert.Throws<ArgumentException>(() => HungarianAlgorithm.Run(
+                new float[,]
+                {
+                    {1, 9, 3},
+                    {3, 9, 1}
+                }
+            ));
         }
     }
 }
