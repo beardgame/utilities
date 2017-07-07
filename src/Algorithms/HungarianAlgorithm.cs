@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using OpenTK;
 
 namespace Bearded.Utilities.Algorithms
@@ -14,8 +15,9 @@ namespace Bearded.Utilities.Algorithms
         /// <summary>
         /// Evaluates a minimal cost matching using the given cost matrix.
         /// </summary>
-        /// <param name="costMatrix">A matrix of costs of assigning jobs to workers.</param>
-        /// <returns>The minimal cost matching based on the specified cost matrix. A value of -1 means the worker is not assigned.</returns>
+        /// <param name="costMatrix">The cost matrix, where matrix[i, j] holds the cost of assigning worker i to job j,
+        ///     for all i, j. Needs to be square.</param>
+        /// <returns>The minimal cost matching based on the specified cost matrix.</returns>
         public static int[] Run(float[,] costMatrix)
         {
             var instance = new HungarianAlgorithm(costMatrix);
@@ -30,12 +32,12 @@ namespace Bearded.Utilities.Algorithms
         /// <param name="workers">The elements representing the workers.</param>
         /// <param name="jobs">The elements representing the jobs.</param>
         /// <param name="getCost">A function that calculates the cost of assigning a job to a worker.</param>
-        /// <returns>The minimal cost matching based on the specified metric. A value of -1 means the worker is not assigned.</returns>
+        /// <returns>The minimal cost matching based on the specified metric.</returns>
         public static int[] Run<TWorker, TJob>(TWorker[] workers, TJob[] jobs, Func<TWorker, TJob, float> getCost)
         {
             var costMatrix = new float[workers.Length, jobs.Length];
-            for (int t = 0; t < jobs.Length; t++)
-                for (int s = 0; s < workers.Length; s++)
+            for (var t = 0; t < jobs.Length; t++)
+                for (var s = 0; s < workers.Length; s++)
                     costMatrix[s, t] = getCost(workers[s], jobs[t]);
 
             return Run(costMatrix);
@@ -46,7 +48,7 @@ namespace Bearded.Utilities.Algorithms
         /// </summary>
         /// <param name="from">The source vectors.</param>
         /// <param name="to">The destination vectors.</param>
-        /// <returns>The minimal cost matching based on the least-squares metric. A value of -1 means the source vector is not assigned.</returns>
+        /// <returns>The minimal cost matching based on the least-squares metric.</returns>
         public static int[] Run(Vector2[] from, Vector2[] to)
         {
             return Run(from, to, (u, v) => (v - u).LengthSquared);
@@ -57,7 +59,7 @@ namespace Bearded.Utilities.Algorithms
         /// </summary>
         /// <param name="from">The source vectors.</param>
         /// <param name="to">The destination vectors.</param>
-        /// <returns>The minimal cost matching based on the least-squares metric. A value of -1 means the source vector is not assigned.</returns>
+        /// <returns>The minimal cost matching based on the least-squares metric.</returns>
         public static int[] Run(Vector3[] from, Vector3[] to)
         {
             return Run(from, to, (u, v) => (v - u).LengthSquared);
@@ -65,52 +67,41 @@ namespace Bearded.Utilities.Algorithms
         #endregion
 
         #region Implementation
-        #region Fields
         private readonly float[,] costMatrix;
-        private readonly int rows, cols, dim;
-        private readonly float[] labelSources;
-        private readonly float[] labelDests;
-        private readonly int[] minSlackDestBySource;
+        private readonly int dimension;
+        private readonly float[] sourceLabels;
+        private readonly float[] targetLabels;
+        private readonly int[] minSlackTargetBySource;
         private readonly float[] minSlackValueBySource;
         private readonly int[] sourceMatches;
-        private readonly int[] destMatches;
-        private readonly int[] parentSourceByCommittedDest;
+        private readonly int[] targetMatches;
+        private readonly int[] parentSourceByCommittedTarget;
         private readonly bool[] matchedSources;
-        #endregion
 
-        #region Initializaion
-        /// <summary>
-        /// Construct an instance of the algorithm.
-        /// </summary>
-        /// <param name="costMatrix">the cost matrix, where matrix[i][j] holds the cost of assigning worker i to job j, for all i, j.</param>
         private HungarianAlgorithm(float[,] costMatrix)
         {
+            if (costMatrix.GetLength(0) != costMatrix.GetLength(1))
+                throw new ArgumentException("Hungarian algorithm requires a square cost matrix.", nameof(costMatrix));
+            if (costMatrix.Cast<float>().Any(f => float.IsInfinity(f) || float.IsNaN(f)))
+                throw new ArgumentException("Received an infinite or NaN cost in the cost matrix.", nameof(costMatrix));
             this.costMatrix = costMatrix;
-            rows = this.costMatrix.GetLength(0);
-            cols = this.costMatrix.GetLength(1);
-            dim = System.Math.Max(rows, cols);
-            labelSources = new float[dim];
-            labelDests = new float[dim];
-            minSlackDestBySource = new int[dim];
-            minSlackValueBySource = new float[dim];
-            matchedSources = new bool[dim];
-            parentSourceByCommittedDest = new int[dim];
-            sourceMatches = new int[dim];
-            destMatches = new int[dim];
+            dimension = costMatrix.GetLength(0);
+            sourceLabels = new float[dimension];
+            targetLabels = new float[dimension];
+            minSlackTargetBySource = new int[dimension];
+            minSlackValueBySource = new float[dimension];
+            matchedSources = new bool[dimension];
+            parentSourceByCommittedTarget = new int[dimension];
+            sourceMatches = new int[dimension];
+            targetMatches = new int[dimension];
 
-            for (var i = 0; i < dim; i++)
+            for (var i = 0; i < dimension; i++)
             {
                 sourceMatches[i] = -1;
-                destMatches[i] = -1;
+                targetMatches[i] = -1;
             }
         }
-        #endregion
 
-        #region Execute
-        /// <summary>
-        /// Executes the algorithm.
-        /// </summary>
-        /// <returns>The minimum cost matching of workers to jobs based upon the provided cost matrix. A matching value of -1 indicates that the corresponding worker is unassigned.</returns>
         private int[] execute()
         {
             /*
@@ -123,24 +114,22 @@ namespace Bearded.Utilities.Algorithms
             greedyMatch();
 
             var t = firstUnmatchedSource();
-            while (t < dim)
+            while (t < dimension)
             {
                 initializePhase(t);
                 executePhase();
                 t = firstUnmatchedSource();
             }
 
-            var result = new int[rows];
-            Array.Copy(sourceMatches, result, rows);
+            var result = new int[dimension];
+            Array.Copy(sourceMatches, result, dimension);
             for (var i = 0; i < result.Length; i++)
-                if (result[i] >= cols)
+                if (result[i] >= dimension)
                     result[i] = -1;
 
             return result;
         }
-        #endregion
 
-        #region Pre-processing
         /// <summary>
         /// Reduces the cost matrix by subtracting the smallest element of each row from
         /// all elements of the row as well as the smallest element of each column from
@@ -150,30 +139,30 @@ namespace Bearded.Utilities.Algorithms
         /// </summary>
         private void reduce()
         {
-            for (var s = 0; s < dim; s++)
+            for (var s = 0; s < dimension; s++)
             {
                 var min = float.PositiveInfinity;
-                for (var t = 0; t < dim; t++)
+                for (var t = 0; t < dimension; t++)
                 {
                     if (costMatrix[s, t] < min)
                     {
                         min = costMatrix[s, t];
                     }
                 }
-                for (var t = 0; t < dim; t++)
+                for (var t = 0; t < dimension; t++)
                 {
                     costMatrix[s, t] -= min;
                 }
             }
 
-            var mins = new float[dim];
-            for (var t = 0; t < dim; t++)
+            var mins = new float[dimension];
+            for (var t = 0; t < dimension; t++)
             {
                 mins[t] = float.PositiveInfinity;
             }
-            for (var s = 0; s < dim; s++)
+            for (var s = 0; s < dimension; s++)
             {
-                for (var t = 0; t < dim; t++)
+                for (var t = 0; t < dimension; t++)
                 {
                     if (costMatrix[s, t] < mins[t])
                     {
@@ -181,9 +170,9 @@ namespace Bearded.Utilities.Algorithms
                     }
                 }
             }
-            for (var s = 0; s < dim; s++)
+            for (var s = 0; s < dimension; s++)
             {
-                for (var t = 0; t < dim; t++)
+                for (var t = 0; t < dimension; t++)
                 {
                     costMatrix[s, t] -= mins[t];
                 }
@@ -196,13 +185,13 @@ namespace Bearded.Utilities.Algorithms
         /// </summary>
         private void computeInitialFeasibleSolution()
         {
-            for (var t = 0; t < dim; t++)
-                labelDests[t] = float.PositiveInfinity;
+            for (var t = 0; t < dimension; t++)
+                targetLabels[t] = float.PositiveInfinity;
 
-            for (var s = 0; s < dim; s++)
-                for (var t = 0; t < dim; t++)
-                    if (costMatrix[s, t] < labelDests[t])
-                        labelDests[t] = costMatrix[s, t];
+            for (var s = 0; s < dimension; s++)
+                for (var t = 0; t < dimension; t++)
+                    if (costMatrix[s, t] < targetLabels[t])
+                        targetLabels[t] = costMatrix[s, t];
         }
 
         /// <summary>
@@ -210,22 +199,20 @@ namespace Bearded.Utilities.Algorithms
         /// </summary>
         private void greedyMatch()
         {
-            for (var s = 0; s < dim; s++)
+            for (var s = 0; s < dimension; s++)
             {
-                for (var t = 0; t < dim; t++)
+                for (var t = 0; t < dimension; t++)
                 {
-                    if (sourceMatches[s] == -1 && destMatches[t] == -1
+                    if (sourceMatches[s] == -1 && targetMatches[t] == -1
                         // ReSharper disable once CompareOfFloatsByEqualityOperator
-                        && costMatrix[s, t] - labelSources[s] - labelDests[t] == 0)
+                        && costMatrix[s, t] - sourceLabels[s] - targetLabels[t] == 0)
                     {
                         match(s, t);
                     }
                 }
             }
         }
-        #endregion
 
-        #region Phase
         /// <summary>
         /// Initializes the next phase of the algorithm by clearing the committed
         /// workers and jobs sets and by initializing the slack arrays to the values
@@ -237,15 +224,15 @@ namespace Bearded.Utilities.Algorithms
             for (var i = 0; i < matchedSources.Length; i++)
             {
                 matchedSources[i] = false;
-                parentSourceByCommittedDest[i] = -1;
+                parentSourceByCommittedTarget[i] = -1;
             }
 
             matchedSources[s] = true;
-            for (var t = 0; t < dim; t++)
+            for (var t = 0; t < dimension; t++)
             {
-                minSlackValueBySource[t] = costMatrix[s, t] - labelSources[s]
-                    - labelDests[t];
-                minSlackDestBySource[t] = s;
+                minSlackValueBySource[t] = costMatrix[s, t] - sourceLabels[s]
+                    - targetLabels[t];
+                minSlackTargetBySource[t] = s;
             }
         }
 
@@ -274,25 +261,25 @@ namespace Bearded.Utilities.Algorithms
                 int minSlackSource = -1, minSlackDest = -1;
                 var minSlackValue = float.PositiveInfinity;
 
-                for (int t = 0; t < dim; t++)
+                for (int t = 0; t < dimension; t++)
                 {
-                    if (parentSourceByCommittedDest[t] != -1) continue;
+                    if (parentSourceByCommittedTarget[t] != -1) continue;
                     if (!(minSlackValueBySource[t] < minSlackValue)) continue;
 
                     minSlackValue = minSlackValueBySource[t];
-                    minSlackSource = minSlackDestBySource[t];
+                    minSlackSource = minSlackTargetBySource[t];
                     minSlackDest = t;
                 }
 
                 if (minSlackValue > 0)
                     updateLabeling(minSlackValue);
 
-                parentSourceByCommittedDest[minSlackDest] = minSlackSource;
-                if (destMatches[minSlackDest] == -1)
+                parentSourceByCommittedTarget[minSlackDest] = minSlackSource;
+                if (targetMatches[minSlackDest] == -1)
                 {
                     // An augmenting path has been found.
                     var committedJob = minSlackDest;
-                    var parentWorker = parentSourceByCommittedDest[committedJob];
+                    var parentWorker = parentSourceByCommittedTarget[committedJob];
                     while (true)
                     {
                         var temp = sourceMatches[parentWorker];
@@ -302,30 +289,28 @@ namespace Bearded.Utilities.Algorithms
                         {
                             break;
                         }
-                        parentWorker = parentSourceByCommittedDest[committedJob];
+                        parentWorker = parentSourceByCommittedTarget[committedJob];
                     }
                     return;
                 }
 
                 // Update slack values since we increased the size of the committed workers set.
-                var worker = destMatches[minSlackDest];
+                var worker = targetMatches[minSlackDest];
                 matchedSources[worker] = true;
-                for (var j = 0; j < dim; j++)
+                for (var j = 0; j < dimension; j++)
                 {
-                    if (parentSourceByCommittedDest[j] != -1) continue;
+                    if (parentSourceByCommittedTarget[j] != -1) continue;
 
-                    var slack = costMatrix[worker, j] - labelSources[worker] - labelDests[j];
+                    var slack = costMatrix[worker, j] - sourceLabels[worker] - targetLabels[j];
 
                     if (!(minSlackValueBySource[j] > slack)) continue;
 
                     minSlackValueBySource[j] = slack;
-                    minSlackDestBySource[j] = worker;
+                    minSlackTargetBySource[j] = worker;
                 }
             }
         }
-        #endregion
 
-        #region Helpers
         /// <summary>
         /// Returns the first unmatched source (or dim if none).
         /// </summary>
@@ -333,7 +318,7 @@ namespace Bearded.Utilities.Algorithms
         private int firstUnmatchedSource()
         {
             int s;
-            for (s = 0; s < dim; s++)
+            for (s = 0; s < dimension; s++)
             {
                 if (sourceMatches[s] == -1)
                 {
@@ -351,7 +336,7 @@ namespace Bearded.Utilities.Algorithms
         private void match(int s, int t)
         {
             sourceMatches[s] = t;
-            destMatches[t] = s;
+            targetMatches[t] = s;
         }
 
         /// <summary>
@@ -362,19 +347,19 @@ namespace Bearded.Utilities.Algorithms
         /// <param name="slack"></param>
         private void updateLabeling(float slack)
         {
-            for (var s = 0; s < dim; s++)
+            for (var s = 0; s < dimension; s++)
             {
                 if (matchedSources[s])
                 {
-                    labelSources[s] += slack;
+                    sourceLabels[s] += slack;
                 }
             }
 
-            for (var t = 0; t < dim; t++)
+            for (var t = 0; t < dimension; t++)
             {
-                if (parentSourceByCommittedDest[t] != -1)
+                if (parentSourceByCommittedTarget[t] != -1)
                 {
-                    labelDests[t] -= slack;
+                    targetLabels[t] -= slack;
                 }
                 else
                 {
@@ -382,7 +367,6 @@ namespace Bearded.Utilities.Algorithms
                 }
             }
         }
-        #endregion
         #endregion
     }
 }
