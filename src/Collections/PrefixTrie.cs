@@ -7,17 +7,13 @@ using Bearded.Utilities.Linq;
 
 namespace Bearded.Utilities.Collections
 {
-    /// <summary>
-    /// An immutable prefix trie, useful for extending prefixes and getting all strings with a given prefix.
-    /// </summary>
-    sealed public class PrefixTrie : ICollection<string>
+    public sealed class PrefixTrie : ICollection<string>
     {
         private struct Node
         {
             private readonly Dictionary<char, Node> values;
-            private readonly string key;
 
-            public string Key { get { return this.key; } }
+            public string Key { get; }
 
             #region creating
 
@@ -35,7 +31,7 @@ namespace Bearded.Utilities.Collections
 
                 if (s.Length == index)
                 {
-                    this.key = s;
+                    Key = s;
                     iMin++;
                 }
 
@@ -49,18 +45,19 @@ namespace Bearded.Utilities.Collections
 
                 var dict = new Dictionary<char, Node>();
 
-                int index2 = index + 1;
+                var index2 = index + 1;
 
-                char c = values[iMin][index];
-                for (int i = iMin + 1; i < iMax; i++)
+                var c = values[iMin][index];
+                for (var i = iMin + 1; i < iMax; i++)
                 {
                     var c2 = values[i][index];
-                    if (c2 != c)
-                    {
-                        dict.Add(c, new Node(values, index2, iMin, i));
-                        iMin = i;
-                        c = c2;
-                    }
+
+                    if (c2 == c)
+                        continue;
+
+                    dict.Add(c, new Node(values, index2, iMin, i));
+                    iMin = i;
+                    c = c2;
                 }
                 dict.Add(c, new Node(values, index2, iMin, iMax));
 
@@ -80,11 +77,11 @@ namespace Bearded.Utilities.Collections
                     do
                     {
                         var n = stack.Pop();
-                        if (n.key != null)
-                            yield return n.key;
-                        if (n.values != null)
-                            foreach (var n2 in n.values.Values)
-                                stack.Push(n2);
+                        if (n.Key != null)
+                            yield return n.Key;
+                        if (n.values == null) continue;
+                        foreach (var n2 in n.values.Values)
+                            stack.Push(n2);
                     } while (stack.Count > 0);
                 }
             }
@@ -95,7 +92,7 @@ namespace Bearded.Utilities.Collections
                 {
                     var builder = new StringBuilder();
                     var n = this;
-                    while (n.key == null && n.values.Count == 1)
+                    while (n.Key == null && n.values.Count == 1)
                     {
                         var pair = n.values.First();
                         builder.Append(pair.Key);
@@ -109,11 +106,10 @@ namespace Bearded.Utilities.Collections
             {
                 get
                 {
-                    if (this.values == null)
+                    if (values == null)
                         return null;
-                    Node ret;
-                    if (this.values.TryGetValue(character, out ret))
-                        return ret;
+                    if (values.TryGetValue(character, out var node))
+                        return node;
                     return null;
                 }
             }
@@ -122,50 +118,42 @@ namespace Bearded.Utilities.Collections
         }
 
         private readonly Node root;
-        private readonly int count;
 
-        /// <summary>
-        /// Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
-        /// </summary>
-        public int Count { get { return this.count; } }
-
-        /// <summary>
-        /// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
-        /// </summary>
-        public bool IsReadOnly { get { return true; } }
+        public int Count { get; }
+        
+        public bool IsReadOnly => true;
 
         /// <summary>
         /// Initialises a new prefix trie from a sequence of strings.
-        /// Duplicate and null strings and will be ignored.
+        /// Duplicate and null strings will be ignored.
         /// </summary>
-        /// <param name="values">The strings to build the trie from.</param>
         /// <exception cref="ArgumentNullException"><paramref name="values"/> is null.</exception>
         public PrefixTrie(IEnumerable<string> values)
         {
             if (values == null)
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
 
             var valueList = values.NotNull().Distinct()
                 .OrderBy(s => s).ToList();
 
-            this.count = valueList.Count;
+            Count = valueList.Count;
 
             if (valueList.Count == 0)
                 return;
 
-            this.root = new Node(valueList);
+            root = new Node(valueList);
         }
 
         private Node? getNode(string s)
         {
-            if (this.count == 0)
+            if (Count == 0)
                 return null;
 
             if (s == string.Empty)
-                return this.root;
+                return root;
 
             var node = root;
-            foreach (char t in s)
+            foreach (var t in s)
             {
                 var next = node[t];
                 if (!next.HasValue)
@@ -174,17 +162,13 @@ namespace Bearded.Utilities.Collections
             }
             return node;
         }
-
-        /// <summary>
-        /// Determines whether the prefix tree contains a specific string.
-        /// </summary>
+        
         public bool Contains(string s)
         {
             if (s == null)
-                throw new ArgumentNullException("s");
+                throw new ArgumentNullException(nameof(s));
 
-            var node = this.getNode(s);
-            return node.HasValue && node.Value.Key != null;
+            return getNode(s)?.Key != null;
         }
 
         /// <summary>
@@ -195,10 +179,9 @@ namespace Bearded.Utilities.Collections
         public IEnumerable<string> AllKeys(string prefix)
         {
             if (prefix == null)
-                throw new ArgumentNullException("prefix");
-
-            var node = this.getNode(prefix);
-            return node.HasValue ? node.Value.AllKeys : Enumerable.Empty<string>();
+                throw new ArgumentNullException(nameof(prefix));
+            
+            return getNode(prefix)?.AllKeys ?? Enumerable.Empty<string>();
         }
 
         /// <summary>
@@ -209,46 +192,37 @@ namespace Bearded.Utilities.Collections
         public string ExtendPrefix(string prefix)
         {
             if (prefix == null)
-                throw new ArgumentNullException("prefix");
+                throw new ArgumentNullException(nameof(prefix));
 
-            var node = this.getNode(prefix);
+            var node = getNode(prefix);
             return node.HasValue ? prefix + node.Value.LongestPrefixAddition : null;
         }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
+        
         public IEnumerator<string> GetEnumerator()
         {
-            if (this.count == 0)
+            if (Count == 0)
                 yield break;
 
-            foreach (var key in this.root.AllKeys)
+            foreach (var key in root.AllKeys)
                 yield return key;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
-        }
-
-        /// <summary>
-        /// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
-        /// </summary>
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        
         public void CopyTo(string[] array, int arrayIndex)
         {
             if (array == null)
-                throw new ArgumentNullException("array");
+                throw new ArgumentNullException(nameof(array));
             if (arrayIndex < 0)
-                throw new ArgumentOutOfRangeException("arrayIndex");
-            if (arrayIndex + this.count > array.Length)
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+            if (arrayIndex + Count > array.Length)
                 throw new ArgumentException("The array does not have enough available space.");
 
-            if (this.count == 0)
+            if (Count == 0)
                 return;
 
             var i = arrayIndex;
-            foreach (var key in this.root.AllKeys)
+            foreach (var key in root.AllKeys)
             {
                 array[i++] = key;
             }
@@ -257,26 +231,16 @@ namespace Bearded.Utilities.Collections
         /// <summary>
         /// Not implemented. Will throw <see cref="NotSupportedException"/>.
         /// </summary>
-        public void Add(string item)
-        {
-            throw new NotSupportedException();
-        }
+        public void Add(string item) => throw new NotSupportedException();
 
         /// <summary>
         /// Not implemented. Will throw <see cref="NotSupportedException"/>.
         /// </summary>
-        public bool Remove(string item)
-        {
-            throw new NotSupportedException();
-        }
+        public bool Remove(string item) => throw new NotSupportedException();
 
         /// <summary>
         /// Not implemented. Will throw <see cref="NotSupportedException"/>.
         /// </summary>
-        public void Clear()
-        {
-            throw new NotSupportedException();
-        }
-
+        public void Clear() => throw new NotSupportedException();
     }
 }
