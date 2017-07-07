@@ -2,6 +2,7 @@
 
 ## Build Status (branch: develop)
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/27494c3b623e4ea4a52f0c5992835aa0)](https://www.codacy.com/app/beardgame/utilities?utm_source=github.com&utm_medium=referral&utm_content=beardgame/utilities&utm_campaign=badger)
 [![Travis CI Build Status](https://api.travis-ci.org/beardgame/utilities.svg?branch=develop)](https://travis-ci.org/beardgame/utilities "Travis CI Build Overview")
 [![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/36rqmw34wqhcf0h0/branch/develop?svg=true)](https://ci.appveyor.com/project/tomrijnbeek/utilities/branch/develop)
 
