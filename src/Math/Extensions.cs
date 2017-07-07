@@ -286,7 +286,7 @@ namespace Bearded.Utilities.Math
             string exceptionString = "Float is NaN while it is not allowed to.")
         {
             if (float.IsNaN(f))
-                throw new Exception(exceptionString);
+                throw new ArithmeticException(exceptionString);
         }
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace Bearded.Utilities.Math
             string exceptionString = "Vector is NaN while it is not allowed to.")
         {
             if (vector.IsNaN())
-                throw new Exception(exceptionString);
+                throw new ArithmeticException(exceptionString);
         }
 
         /// <summary>
@@ -310,7 +310,7 @@ namespace Bearded.Utilities.Math
             string exceptionString = "Vector is NaN while it is not allowed to.")
         {
             if (vector.IsNaN())
-                throw new Exception(exceptionString);
+                throw new ArithmeticException(exceptionString);
         }
 
         /// <summary>
@@ -322,7 +322,7 @@ namespace Bearded.Utilities.Math
             string exceptionString = "Vector is NaN while it is not allowed to.")
         {
             if (vector.IsNaN())
-                throw new Exception(exceptionString);
+                throw new ArithmeticException(exceptionString);
         }
 
         /// <summary>
