@@ -6,20 +6,18 @@ namespace Bearded.Utilities
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Id<T> : IEquatable<Id<T>>
     {
-        private readonly int value;
-
-        public int Value => value;
+        public int Value { get; }
 
         public Id(int value)
         {
-            this.value = value;
+            Value = value;
         }
 
-        public bool IsValid => value != 0;
+        public bool IsValid => Value != 0;
         public static Id<T> Invalid => new Id<T>(0);
 
-        public override int GetHashCode() => value.GetHashCode();
-        public bool Equals(Id<T> other) => value.Equals(other.value);
+        public override int GetHashCode() => Value.GetHashCode();
+        public bool Equals(Id<T> other) => Value.Equals(other.Value);
         public override bool Equals(object obj) => obj is Id<T> && Equals((Id<T>)obj);
         public static bool operator ==(Id<T> left, Id<T> right) => left.Equals(right);
         public static bool operator !=(Id<T> left, Id<T> right) => !(left == right);
