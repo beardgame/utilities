@@ -1,5 +1,5 @@
-﻿using System.Runtime.Remoting.Messaging;
-using Bearded.Utilities.Algorithms;
+﻿using Bearded.Utilities.Algorithms;
+using FsCheck.Xunit;
 using OpenTK;
 using Xunit;
 
@@ -13,10 +13,10 @@ namespace Bearded.Utilities.Tests.Algorithms
             Assert.Empty(HungarianAlgorithm.Run(new float[0, 0]));
         }
 
-        [Fact]
-        public void Run_OneWorker_AssignsWorker()
+        [Property]
+        public void Run_OneWorker_AssignsWorker(float cost)
         {
-            Assert.Equal(HungarianAlgorithm.Run(new[,] {{5f}}), new[] {0});
+            Assert.Equal(HungarianAlgorithm.Run(new[,] {{ cost }}), new[] {0});
         }
 
         [Fact]
@@ -39,6 +39,16 @@ namespace Bearded.Utilities.Tests.Algorithms
                     new [] {Vector2.Zero, Vector2.UnitX, Vector2.UnitY},
                     new [] {.2f * Vector2.UnitY, .8f * Vector2.UnitY}),
                 new [] {0, 1, -1});
+        }
+
+        [Fact]
+        public void Run_MoreJobsThanWorkers_AssignsWorkersToCheapest()
+        {
+            Assert.Equal(
+                HungarianAlgorithm.Run(
+                    new[] { Vector2.Zero, Vector2.UnitX },
+                    new[] { Vector2.UnitY, Vector2.One, 2 * Vector2.One }),
+                new[] { 0, 1 });
         }
     }
 }
