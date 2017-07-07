@@ -15,36 +15,15 @@ namespace Bearded.Utilities.Collections
 
         private readonly LinkedList<MutableLinkedListEnumerator<T>> enumerators =
             new LinkedList<MutableLinkedListEnumerator<T>>();
-
-        /// <summary>
-        /// Gets the first node in the linked list. Null if empty.
-        /// </summary>
+        
         public MutableLinkedListNode<T> First { get; private set; }
-
-        /// <summary>
-        /// Gets the last node in the linked list. Null if empty.
-        /// </summary>
+        
         public MutableLinkedListNode<T> Last { get; private set; }
-
-        /// <summary>
-        /// Gets the number of elements in the list.
-        /// </summary>
+        
         public int Count { get; private set; }
 
         #endregion
-
-        #region Constructor
-
-        /// <summary>
-        /// Instantiates a new instance.
-        /// </summary>
-        public MutableLinkedList()
-        {
-            this.Count = 0;
-        }
-
-        #endregion
-
+        
         #region Methods
 
         #region Add()
@@ -52,11 +31,10 @@ namespace Bearded.Utilities.Collections
         /// <summary>
         /// Adds an item to the linked list. The node used to store the item is returned.
         /// </summary>
-        /// <param name="item">The item to add.</param>
         public MutableLinkedListNode<T> Add(T item)
         {
             var node = MutableLinkedListNode.For(item);
-            this.Add(node);
+            Add(node);
             return node;
         }
 
@@ -64,27 +42,26 @@ namespace Bearded.Utilities.Collections
         /// Adds a linked list node to this list.
         /// If the node is already in another list, an exception is thrown.
         /// </summary>
-        /// <param name="node">The node to add.</param>
         public void Add(MutableLinkedListNode<T> node)
         {
             if (node.List != null)
-                throw new Exception("Node cannot be in a list when adding it to one.");
+                throw new ArgumentException("Node cannot already be in a list when adding it to one.", nameof(node));
 
             node.List = this;
 
-            if (this.Count == 0)
+            if (Count == 0)
             {
-                this.First = node;
+                First = node;
             }
             else
             {
-                node.Prev = this.Last;
-                this.Last.Next = node;
+                node.Prev = Last;
+                Last.Next = node;
             }
 
-            this.Last = node;
+            Last = node;
 
-            this.Count++;
+            Count++;
         }
 
         #endregion
@@ -96,18 +73,17 @@ namespace Bearded.Utilities.Collections
         /// Returns true if it found and removed the item or false if the item is not in the list.
         /// </summary>
         /// <remarks>This method takes O(Count) time and its use is discouraged.</remarks>
-        /// <param name="item">The item to remove.</param>
         public bool Remove(T item)
         {
-            var n = this.First;
-            while (n != null)
+            var node = First;
+            while (node != null)
             {
-                if (n.Value == item)
+                if (node.Value == item)
                 {
-                    this.Remove(n);
+                    Remove(node);
                     return true;
                 }
-                n = n.Next;
+                node = node.Next;
             }
             return false;
         }
@@ -116,21 +92,20 @@ namespace Bearded.Utilities.Collections
         /// Removes the specified node from the list.
         /// Throws an exception if the given node is not in the list.
         /// </summary>
-        /// <param name="node">The node to remove.</param>
         public void Remove(MutableLinkedListNode<T> node)
         {
             if (node.List != this)
-                throw new Exception("Node must be in list to be removed.");
+                throw new ArgumentException("Node must be in list to be removed.");
 
-            foreach (var e in this.enumerators)
-                e.OnObjectRemove(node);
+            foreach (var enumerator in enumerators)
+                enumerator.OnObjectRemove(node);
 
-            if (node == this.Last)
-                this.Last = node.Prev;
-            if (node == this.First)
-                this.First = node.Next;
+            if (node == Last)
+                Last = node.Prev;
+            if (node == First)
+                First = node.Next;
 
-            this.Count--;
+            Count--;
 
             if (node.Next != null)
             {
@@ -153,14 +128,12 @@ namespace Bearded.Utilities.Collections
         /// Adds a given linked list node before another one already in this list.
         /// This will throw an exception if the node is already in another list, of if the node to add before is null, or not in this list.
         /// </summary>
-        /// <param name="newNode">The node to add and insert.</param>
-        /// <param name="beforeThis">The node to insert before.</param>
         public void AddBefore(MutableLinkedListNode<T> newNode, MutableLinkedListNode<T> beforeThis)
         {
             if (beforeThis.List != this)
-                throw new Exception("The object to insert before must be in the same list.");
-            this.Add(newNode);
-            this.InsertBefore(newNode, beforeThis);
+                throw new ArgumentException("The object to insert before must be in the same list.");
+            Add(newNode);
+            InsertBefore(newNode, beforeThis);
         }
 
         /// <summary>
@@ -168,22 +141,20 @@ namespace Bearded.Utilities.Collections
         /// The given nodes must both be in the list, and the node to insert must be the last one in it.
         /// Otherwise an exception is thrown.
         /// </summary>
-        /// <param name="node">The node to insert.</param>
-        /// <param name="beforeThis">The node to insert before.</param>
         public void InsertBefore(MutableLinkedListNode<T> node, MutableLinkedListNode<T> beforeThis)
         {
             if (node.List != this)
-                throw new Exception("Object must already be in list before inserting.");
+                throw new ArgumentException("Object must already be in list before inserting.");
             if (beforeThis.List != this)
-                throw new Exception("The object to insert before must be in the same list.");
-            if (node != this.Last)
-                throw new Exception("Inserted object must be last object in list.");
+                throw new ArgumentException("The object to insert before must be in the same list.");
+            if (node != Last)
+                throw new ArgumentException("Inserted object must be last object in list.");
             if (node == beforeThis)
-                throw new Exception("Cannot insert object before itself.");
+                throw new ArgumentException("Cannot insert object before itself.");
 
-            this.Last = node.Prev;
-            if (beforeThis == this.First)
-                this.First = node;
+            Last = node.Prev;
+            if (beforeThis == First)
+                First = node;
 
             node.Prev.Next = null;
             node.Prev = beforeThis.Prev;
@@ -197,30 +168,20 @@ namespace Bearded.Utilities.Collections
         #endregion
 
         #region Enumerating
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
+        
         public IEnumerator<T> GetEnumerator()
         {
             var e = new MutableLinkedListEnumerator<T>(this);
-            this.enumerators.AddFirst(e);
-            e.SetNode(this.enumerators.First);
+            enumerators.AddFirst(e);
+            e.SetNode(enumerators.First);
             return e;
         }
 
         internal void ForgetEnumerator(LinkedListNode<MutableLinkedListEnumerator<T>> node)
-        {
-            this.enumerators.Remove(node);
-        }
+            => enumerators.Remove(node);
 
-        /// <summary>
-        /// Returns an enumerator that iterates through a collection.
-        /// </summary>
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
-        }
+            => GetEnumerator();
 
         #endregion
 
