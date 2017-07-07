@@ -9,7 +9,7 @@ namespace Bearded.Utilities
         protected Singleton()
         {
             if (Instance != null)
-                throw new Exception("A singleton can only be instantiated once.");
+                throw new InvalidOperationException("A singleton can only be instantiated once.");
 
             Instance = (TSelf)this;
         }
