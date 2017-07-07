@@ -25,6 +25,8 @@ namespace Bearded.Utilities.Math.Geometry
 
         public Vector2 Center => new Vector2(Left + Width * 0.5f, Top + Height * 0.5f);
 
+        public float Area => Width * Height;
+
         public Rectangle(float x, float y, float width, float height)
         {
             if (width < 0 || height < 0)
