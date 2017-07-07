@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Bearded.Utilities.Math;
 using static System.Math;
 
 namespace Bearded.Utilities
 {
-    /// <summary>
-    /// An event containing a log entry.
-    /// </summary>
     public delegate void LogEvent(Logger.Entry entry);
 
     /// <summary>
@@ -18,9 +16,6 @@ namespace Bearded.Utilities
     public class Logger
     {
         #region Writers
-        /// <summary>
-        /// Provides an interface to log messages at a specific severity.
-        /// </summary>
         public sealed class Writer
         {
             private readonly Logger logger;
@@ -31,64 +26,30 @@ namespace Bearded.Utilities
                 this.logger = logger;
                 this.severity = severity;
             }
-
-            /// <summary>
-            /// Logs a message.
-            /// </summary>
-            /// <param name="text">Text to log.</param>
+            
             public void Log(string text) {
                 logger.AddEntry(new Entry(text, severity));
             }
-
-            /// <summary>
-            /// Logs an object.
-            /// </summary>
-            /// <param name="obj">Value to log.</param>
+            
             public void Log<T>(T obj) {
                 logger.AddEntry(new Entry(obj.ToString(), severity));
             }
-
-            /// <summary>
-            /// Logs a message.
-            /// </summary>
-            /// <param name="text">Template string of the error.</param>
-            /// <param name="parameters">Parameters inserted into template string.</param>
+            
             public void Log(string text, params object[] parameters) {
                 Log(string.Format(text, parameters));
             }
         }
-
-        /// <summary>
-        /// Writer to log fatal messages.
-        /// </summary>
+        
         public Writer Fatal { get; }
-        /// <summary>
-        /// Writer to log error messages.
-        /// </summary>
         public Writer Error { get; }
-        /// <summary>
-        /// Writer to log warning messages.
-        /// </summary>
         public Writer Warning { get; }
-        /// <summary>
-        /// Writer to log info messages.
-        /// </summary>
         public Writer Info { get; }
-        /// <summary>
-        /// Writer to log debug messages.
-        /// </summary>
         public Writer Debug { get; }
-        /// <summary>
-        /// Writer to log trace messages.
-        /// </summary>
         public Writer Trace { get; }
         #endregion
 
         #region types
-
-        /// <summary>
-        /// Used to add semantic categories to log messages.
-        /// </summary>
+        
         public enum Severity
         {
             /// <summary>
@@ -116,43 +77,20 @@ namespace Bearded.Utilities
             /// </summary>
             Trace = 5,
         }
-
-        /// <summary>
-        /// A log entry.
-        /// </summary>
-        public struct Entry
+        
+        public struct Entry : IEquatable<Entry>
         {
-            /// <summary>
-            /// Gets the text of the log entry.
-            /// </summary>
             public string Text { get; }
-
-            /// <summary>
-            /// Gets the severity of the log entry.
-            /// </summary>
+            
             public Severity Severity { get; }
-
-            /// <summary>
-            /// Gets the time of the log entry.
-            /// </summary>
+            
             public DateTime Time { get; }
-
-            /// <summary>
-            /// Creates a log entry.
-            /// </summary>
-            /// <param name="text">The text of the entry.</param>
-            /// <param name="severity">The severity of the entry.</param>
+            
             public Entry(string text, Severity severity = Severity.Debug)
                 : this(text, severity, DateTime.Now)
             {
             }
 
-            /// <summary>
-            /// Creates a log entry that overrides the current time.
-            /// </summary>
-            /// <param name="text">The text of the entry.</param>
-            /// <param name="severity">The severity of the entry.</param>
-            /// <param name="time">The time for the log entry.</param>
             public Entry(string text, Severity severity, DateTime time)
             {
                 Text = text;
@@ -190,6 +128,28 @@ namespace Bearded.Utilities
                 Console.WriteLine(Text);
                 Console.ResetColor();
             }
+            
+            public bool Equals(Entry other)
+                => string.Equals(Text, other.Text) && Severity == other.Severity && Time.Equals(other.Time);
+
+            public override bool Equals(object obj) => obj is Entry && Equals((Entry)obj);
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    var hashCode = Text?.GetHashCode() ?? 0;
+                    hashCode = (hashCode * 397) ^ (int)Severity;
+                    hashCode = (hashCode * 397) ^ Time.GetHashCode();
+                    return hashCode;
+                }
+            }
+
+            public static bool operator ==(Entry left, Entry right)
+                => left.Equals(right);
+
+            public static bool operator !=(Entry left, Entry right)
+                => !left.Equals(right);
         }
         #endregion
 
@@ -279,27 +239,31 @@ namespace Bearded.Utilities
         /// If this is true, all added events are automatically written to the standard output.
         /// Default is true.
         /// </summary>
-        public bool MirrorToConsole { get; set; }
+        public bool MirrorToConsole { get; set; } = true;
+
         /// <summary>
         /// If this is true, the Logged event is raised for every added entry.
         /// Default is true.
         /// </summary>
-        public bool RaiseEvents { get; set; }
+        public bool RaiseEvents { get; set; } = true;
+
         /// <summary>
         /// If this is true, the logged history will be pruned regularly as controlled by MaxHistoryLength and PrunedLength.
         /// Default is true.
         /// </summary>
-        public bool AllowPruning { get; set; }
+        public bool AllowPruning { get; set; } = true;
+
         /// <summary>
         /// If AllowPruning is true, when the log reaches this length, it is pruned by deleting older entries until it is PrunedLength long.
         /// Default is 10,000.
         /// </summary>
-        public int MaxHistoryLength { get; set; }
+        public int MaxHistoryLength { get; set; } = 10000;
+
         /// <summary>
         /// This is the length the list is pruned to everytime it reaches MaxHistoryLength.
         /// Default is 5,000.
         /// </summary>
-        public int PrunedLength { get; set; }
+        public int PrunedLength { get; set; } = 5000;
 
         public Logger()
         {
@@ -311,12 +275,6 @@ namespace Bearded.Utilities
             Trace = new Writer(this, Severity.Trace);
 
             RecentEntries = lines.AsReadOnly();
-
-            MirrorToConsole = true;
-            RaiseEvents = true;
-            AllowPruning = true;
-            MaxHistoryLength = 10000;
-            PrunedLength = 5000;
         }
 
         #endregion
@@ -346,13 +304,10 @@ namespace Bearded.Utilities
             if (lines.Count <= MaxHistoryLength)
                 return;
 
-            var toRemove = Min(Max(lines.Count - PrunedLength, 0), lines.Count);
+            var toRemove = (lines.Count - PrunedLength).Clamped(0, lines.Count);
             lines.RemoveRange(0, toRemove);
         }
-
-        /// <summary>
-        /// Adds an entry to the log.
-        /// </summary>
+        
         public void AddEntry(Entry entry)
         {
             addEntrySafe(entry);
