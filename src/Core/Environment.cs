@@ -70,7 +70,7 @@ namespace Bearded.Utilities
                     // ReSharper disable once AssignNullToNotNullAttribute
                     return string.IsNullOrEmpty(linuxConfigDir) ? "." : Path.Combine(linuxHomeDir, ".config");
                 default:
-                    throw new IndexOutOfRangeException();
+                    throw new InvalidOperationException("Encountered unknown platform.");
             }
         }
 
