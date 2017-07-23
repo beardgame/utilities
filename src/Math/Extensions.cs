@@ -330,17 +330,17 @@ namespace Bearded.Utilities.Math
         /// <summary>
         /// Converts floating point value into a type safe angle representation in radians.
         /// </summary>
-        public static Angle Radians(this float radians) => Angle.FromRadians(radians);
+        public static Angle Radians(this float value) => Angle.FromRadians(value);
 
         /// <summary>
         /// Converts floating point value into a type safe angle representation in degrees.
         /// </summary>
-        public static Angle Degrees(this float degrees) => Angle.FromDegrees(degrees);
+        public static Angle Degrees(this float value) => Angle.FromDegrees(value);
 
         /// <summary>
         /// Converts an integer value into a type safe angle representation in degrees.
         /// </summary>
-        public static Angle Degrees(this int degrees) => Angle.FromDegrees(degrees);
+        public static Angle Degrees(this int value) => Angle.FromDegrees(value);
 
         #endregion
     }
