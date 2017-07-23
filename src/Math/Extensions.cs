@@ -67,6 +67,7 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static double Squared(this double d) => d * d;
 
+
         /// <summary>
         /// Cubes an integer.
         /// </summary>
@@ -82,9 +83,33 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static double Cubed(this double d) => d * d * d;
 
+
+        /// <summary>
+        /// Returns the square root of the specified number.
+        /// </summary>
+        public static float Sqrted(this float f) => (float)System.Math.Sqrt(f);
+
+        /// <summary>
+        /// Returns the square root of the specified number.
+        /// </summary>
+        public static double Sqrted(this double d) => System.Math.Sqrt(d);
+
+
+        /// <summary>
+        /// Returns a specified number raised to the specified power.
+        /// </summary>
+        public static float Powed(this float b, float power) => (float)System.Math.Pow(b, power);
+
+        /// <summary>
+        /// Returns a specified number raised to the specified power.
+        /// </summary>
+        public static double Powed(this double b, double power) => System.Math.Pow(b, power);
+
         #endregion
 
-        #region Float math
+        #region Trigonomitry
+
+        #region Float
         /// <summary>
         /// Returns the cosine of the specified angle.
         /// </summary>
@@ -115,34 +140,9 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static float Atan(this float f) => (float)System.Math.Atan(f);
 
-        /// <summary>
-        /// Returns the square root of the specified number.
-        /// </summary>
-        public static float Sqrted(this float f) => (float)System.Math.Sqrt(f);
-
-        /// <summary>
-        /// Returns a specified number raised to the specified power.
-        /// </summary>
-        public static float Powed(this float b, float power) => (float)System.Math.Pow(b, power);
-
-        /// <summary>
-        /// Returns the lowest integral number higher than or equal to the specified number.
-        /// </summary>
-        public static int CeiledToInt(float f) => (int)System.Math.Ceiling(f);
-
-        /// <summary>
-        /// Returns the highest integral number lower than or equal to the specified number.
-        /// </summary>
-        public static int FlooredToInt(float f) => (int)System.Math.Floor(f);
-
-        /// <summary>
-        /// Returns the integral number closest to the specified number.
-        /// </summary>
-        public static int RoundedToInt(float f) => (int)System.Math.Round(f);
-
         #endregion
 
-        #region Double math
+        #region Double
         /// <summary>
         /// Returns the cosine of the specified angle.
         /// </summary>
@@ -173,26 +173,39 @@ namespace Bearded.Utilities.Math
         /// </summary>
         public static double Atan(this double d) => System.Math.Atan(d);
 
-        /// <summary>
-        /// Returns the square root of the specified number.
-        /// </summary>
-        public static double Sqrted(this double d) => System.Math.Sqrt(d);
+        #endregion
 
+        #endregion
+
+        #region Rounding
+        
         /// <summary>
-        /// Returns a specified number raised to the specified power.
+        /// Returns the lowest integral number higher than or equal to the specified number.
         /// </summary>
-        public static double Powed(this double b, double power) => System.Math.Pow(b, power);
+        public static int CeiledToInt(float f) => (int)System.Math.Ceiling(f);
 
         /// <summary>
         /// Returns the lowest integral number higher than or equal to the specified number.
         /// </summary>
         public static int CeiledToInt(double d) => (int)System.Math.Ceiling(d);
 
+
+        /// <summary>
+        /// Returns the highest integral number lower than or equal to the specified number.
+        /// </summary>
+        public static int FlooredToInt(float f) => (int)System.Math.Floor(f);
+
         /// <summary>
         /// Returns the highest integral number lower than or equal to the specified number.
         /// </summary>
         public static int FlooredToInt(double d) => (int)System.Math.Floor(d);
 
+
+        /// <summary>
+        /// Returns the integral number closest to the specified number.
+        /// </summary>
+        public static int RoundedToInt(float f) => (int)System.Math.Round(f);
+        
         /// <summary>
         /// Returns the integral number closest to the specified number.
         /// </summary>
