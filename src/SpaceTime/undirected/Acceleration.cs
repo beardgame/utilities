@@ -12,10 +12,7 @@ namespace Bearded.Utilities.SpaceTime
         private readonly float value;
 
         #region construction
-
-        /// <summary>
-        /// Creates a new instance of the Acceleration type.
-        /// </summary>
+        
         public Acceleration(float value)
         {
             this.value = value;
@@ -28,22 +25,22 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Returns the numeric value of the acceleration value.
         /// </summary>
-        public float NumericValue { get { return this.value; } }
+        public float NumericValue => value;
 
         /// <summary>
         /// Returns the type-safe square of the acceleration value.
         /// </summary>
-        public Squared<Acceleration> Squared { get { return Squared<Acceleration>.FromRoot(this.value); } }
+        public Squared<Acceleration> Squared => Squared<Acceleration>.FromRoot(value);
 
         /// <summary>
         /// Returns an Acceleration type with value 0.
         /// </summary>
-        public static Acceleration Zero { get { return new Acceleration(0); } }
+        public static Acceleration Zero => new Acceleration(0);
 
         /// <summary>
         /// Returns an Acceleration type with value 1.
         /// </summary>
-        public static Acceleration One { get { return new Acceleration(1); } }
+        public static Acceleration One => new Acceleration(1);
 
         #endregion
 
@@ -51,29 +48,18 @@ namespace Bearded.Utilities.SpaceTime
 
         #region equality and hashcode
 
-        public bool Equals(Acceleration other)
-        {
-            return this.value == other.value;
-        }
+        // ReSharper disable once CompareOfFloatsByEqualityOperator
+        public bool Equals(Acceleration other) => value == other.value;
 
-        public override bool Equals(object obj)
-        {
-            return obj is Acceleration && this.Equals((Acceleration)obj);
-        }
+        public override bool Equals(object obj) => obj is Acceleration && Equals((Acceleration)obj);
 
-        public override int GetHashCode()
-        {
-            return this.value.GetHashCode();
-        }
+        public override int GetHashCode() => value.GetHashCode();
 
         #endregion
 
         #region compare
 
-        public int CompareTo(Acceleration other)
-        {
-            return this.value.CompareTo(other.value);
-        }
+        public int CompareTo(Acceleration other) => value.CompareTo(other.value);
 
         #endregion
 
@@ -86,18 +72,12 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Adds two acceleration values.
         /// </summary>
-        public static Acceleration operator +(Acceleration a0, Acceleration a1)
-        {
-            return new Acceleration(a0.value + a1.value);
-        }
+        public static Acceleration operator +(Acceleration a0, Acceleration a1) => new Acceleration(a0.value + a1.value);
 
         /// <summary>
         /// Subtracts an acceleration value from another.
         /// </summary>
-        public static Acceleration operator -(Acceleration a0, Acceleration a1)
-        {
-            return new Acceleration(a0.value - a1.value);
-        }
+        public static Acceleration operator -(Acceleration a0, Acceleration a1) => new Acceleration(a0.value - a1.value);
 
         #endregion
 
@@ -106,34 +86,22 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Inverts the acceleration value.
         /// </summary>
-        public static Acceleration operator -(Acceleration a)
-        {
-            return new Acceleration(-a.value);
-        }
+        public static Acceleration operator -(Acceleration a) => new Acceleration(-a.value);
 
         /// <summary>
         /// Multiples the acceleration value with a scalar.
         /// </summary>
-        public static Acceleration operator *(Acceleration a, float scalar)
-        {
-            return new Acceleration(a.value * scalar);
-        }
+        public static Acceleration operator *(Acceleration a, float scalar) => new Acceleration(a.value * scalar);
 
         /// <summary>
         /// Multiples the acceleration value with a scalar.
         /// </summary>
-        public static Acceleration operator *(float scalar, Acceleration a)
-        {
-            return new Acceleration(a.value * scalar);
-        }
+        public static Acceleration operator *(float scalar, Acceleration a) => new Acceleration(a.value * scalar);
 
         /// <summary>
         /// Divides the acceleration value by a divisor.
         /// </summary>
-        public static Acceleration operator /(Acceleration a, float divisor)
-        {
-            return new Acceleration(a.value / divisor);
-        }
+        public static Acceleration operator /(Acceleration a, float divisor) => new Acceleration(a.value / divisor);
 
         #endregion
 
@@ -142,10 +110,7 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Devides an acceleration value by another, returning a type-less fraction.
         /// </summary>
-        public static float operator /(Acceleration dividend, Acceleration divisor)
-        {
-            return dividend.value / divisor.value;
-        }
+        public static float operator /(Acceleration dividend, Acceleration divisor) => dividend.value / divisor.value;
 
         #endregion
 
@@ -154,18 +119,12 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Multiplies an acceleration value by a timespan, returning a speed.
         /// </summary>
-        public static Speed operator *(Acceleration a, TimeSpan t)
-        {
-            return new Speed(a.value * (float)t.NumericValue);
-        }
+        public static Speed operator *(Acceleration a, TimeSpan t) => new Speed(a.value * (float)t.NumericValue);
 
         /// <summary>
         /// Multiplies an acceleration value by a timespan, returning a speed.
         /// </summary>
-        public static Speed operator *(TimeSpan t, Acceleration a)
-        {
-            return new Speed(a.value * (float)t.NumericValue);
-        }
+        public static Speed operator *(TimeSpan t, Acceleration a) => new Speed(a.value * (float)t.NumericValue);
 
         #endregion
 
@@ -174,34 +133,22 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Multiplies a direction with an acceleration value, returning a typed acceleration vector of the given direction and length.
         /// </summary>
-        public static Acceleration2 operator *(Acceleration a, Direction2 d)
-        {
-            return new Acceleration2(d.Vector * a.value);
-        }
+        public static Acceleration2 operator *(Acceleration a, Direction2 d) => new Acceleration2(d.Vector * a.value);
 
         /// <summary>
         /// Multiplies a direction with an acceleration value, returning a typed acceleration vector of the given direction and length.
         /// </summary>
-        public static Acceleration2 operator *(Direction2 d, Acceleration a)
-        {
-            return new Acceleration2(d.Vector * a.value);
-        }
+        public static Acceleration2 operator *(Direction2 d, Acceleration a) => new Acceleration2(d.Vector * a.value);
 
         /// <summary>
         /// Multiplies an acceleration value with an untyped vector, returning a typed acceleration vector.
         /// </summary>
-        public static Acceleration2 operator *(Acceleration u, Vector2 v)
-        {
-            return new Acceleration2(v * u.value);
-        }
+        public static Acceleration2 operator *(Acceleration u, Vector2 v) => new Acceleration2(v * u.value);
 
         /// <summary>
         /// Multiplies an acceleration value with an untyped vector, returning a typed acceleration vector.
         /// </summary>
-        public static Acceleration2 operator *(Vector2 v, Acceleration u)
-        {
-            return new Acceleration2(v * u.value);
-        }
+        public static Acceleration2 operator *(Vector2 v, Acceleration u) => new Acceleration2(v * u.value);
 
         #endregion
 
@@ -210,50 +157,32 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Compares two acceleration values for equality.
         /// </summary>
-        public static bool operator ==(Acceleration a0, Acceleration a1)
-        {
-            return a0.Equals(a1);
-        }
+        public static bool operator ==(Acceleration a0, Acceleration a1) => a0.Equals(a1);
 
         /// <summary>
         /// Compares two acceleration values for inequality.
         /// </summary>
-        public static bool operator !=(Acceleration a0, Acceleration a1)
-        {
-            return !(a0 == a1);
-        }
+        public static bool operator !=(Acceleration a0, Acceleration a1) => !(a0 == a1);
 
         /// <summary>
         /// Checks if one acceleration value is smaller than another.
         /// </summary>
-        public static bool operator <(Acceleration a0, Acceleration a1)
-        {
-            return a0.value < a1.value;
-        }
+        public static bool operator <(Acceleration a0, Acceleration a1) => a0.value < a1.value;
 
         /// <summary>
         /// Checks if one acceleration value is larger than another.
         /// </summary>
-        public static bool operator >(Acceleration a0, Acceleration a1)
-        {
-            return a0.value > a1.value;
-        }
+        public static bool operator >(Acceleration a0, Acceleration a1) => a0.value > a1.value;
 
         /// <summary>
         /// Checks if one acceleration value is smaller or equal to another.
         /// </summary>
-        public static bool operator <=(Acceleration a0, Acceleration a1)
-        {
-            return a0.value <= a1.value;
-        }
+        public static bool operator <=(Acceleration a0, Acceleration a1) => a0.value <= a1.value;
 
         /// <summary>
         /// Checks if one acceleration value is larger or equal to another.
         /// </summary>
-        public static bool operator >=(Acceleration a0, Acceleration a1)
-        {
-            return a0.value >= a1.value;
-        }
+        public static bool operator >=(Acceleration a0, Acceleration a1) => a0.value >= a1.value;
 
         #endregion
 
