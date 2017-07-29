@@ -130,7 +130,7 @@ namespace Bearded.Utilities.Input
 
             var axisSelector = GamePadAction.GamePadAxisAction.GetAxisSelector(buttonName);
 
-            if(axisSelector != null)
+            if (axisSelector != null)
                 return new GamePadAxisAction(id, buttonName, axisSelector);
 
             throw new ArgumentException("Gamepad button name unknown.", "name");

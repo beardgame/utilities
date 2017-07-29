@@ -86,7 +86,7 @@ namespace Bearded.Utilities.Collections
             this.list[i] = null;
             this.count--;
 
-            if(this.count == 0)
+            if (this.count == 0)
                 this.list.Clear();
         }
 

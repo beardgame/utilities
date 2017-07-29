@@ -166,7 +166,7 @@ namespace Bearded.Utilities.Math
                 first = value00;
                 second = value01;
             }
-            else if(u >= 1)
+            else if (u >= 1)
             {
                 first = value10;
                 second = value11;
