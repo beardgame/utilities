@@ -12,10 +12,7 @@ namespace Bearded.Utilities.SpaceTime
         private readonly float value;
 
         #region construction
-
-        /// <summary>
-        /// Creates a new instance of the Speed type.
-        /// </summary>
+        
         public Speed(float value)
         {
             this.value = value;
@@ -28,22 +25,22 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Returns the numeric value of the speed value.
         /// </summary>
-        public float NumericValue { get { return this.value; } }
+        public float NumericValue => value;
 
         /// <summary>
         /// Returns the type-safe square of the speed value.
         /// </summary>
-        public Squared<Speed> Squared { get { return Squared<Speed>.FromRoot(this.value); } }
+        public Squared<Speed> Squared => Squared<Speed>.FromRoot(value);
 
         /// <summary>
         /// Returns a Speed type with value 0.
         /// </summary>
-        public static Speed Zero { get { return new Speed(0); } }
+        public static Speed Zero => new Speed(0);
 
         /// <summary>
         /// Returns a Speed type with value 1.
         /// </summary>
-        public static Speed One { get { return new Speed(1); } }
+        public static Speed One => new Speed(1);
 
         #endregion
 
@@ -51,29 +48,18 @@ namespace Bearded.Utilities.SpaceTime
 
         #region equality and hashcode
 
-        public bool Equals(Speed other)
-        {
-            return this.value == other.value;
-        }
+        // ReSharper disable once CompareOfFloatsByEqualityOperator
+        public bool Equals(Speed other) => value == other.value;
 
-        public override bool Equals(object obj)
-        {
-            return obj is Speed && this.Equals((Speed)obj);
-        }
+        public override bool Equals(object obj) => obj is Speed && Equals((Speed)obj);
 
-        public override int GetHashCode()
-        {
-            return this.value.GetHashCode();
-        }
+        public override int GetHashCode() => value.GetHashCode();
 
         #endregion
 
         #region compare
 
-        public int CompareTo(Speed other)
-        {
-            return this.value.CompareTo(other.value);
-        }
+        public int CompareTo(Speed other) => value.CompareTo(other.value);
 
         #endregion
 
@@ -86,18 +72,12 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Adds two speed values.
         /// </summary>
-        public static Speed operator +(Speed s0, Speed s1)
-        {
-            return new Speed(s0.value + s1.value);
-        }
+        public static Speed operator +(Speed s0, Speed s1) => new Speed(s0.value + s1.value);
 
         /// <summary>
         /// Subtracts a speed value from another.
         /// </summary>
-        public static Speed operator -(Speed s0, Speed s1)
-        {
-            return new Speed(s0.value - s1.value);
-        }
+        public static Speed operator -(Speed s0, Speed s1) => new Speed(s0.value - s1.value);
 
         #endregion
 
@@ -106,34 +86,22 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Inverts the speed value.
         /// </summary>
-        public static Speed operator -(Speed s)
-        {
-            return new Speed(-s.value);
-        }
+        public static Speed operator -(Speed s) => new Speed(-s.value);
 
         /// <summary>
         /// Multiplies the speed value with a scalar.
         /// </summary>
-        public static Speed operator *(Speed s, float scalar)
-        {
-            return new Speed(s.value * scalar);
-        }
+        public static Speed operator *(Speed s, float scalar) => new Speed(s.value * scalar);
 
         /// <summary>
         /// Multiplies the speed value with a scalar.
         /// </summary>
-        public static Speed operator *(float scalar, Speed s)
-        {
-            return new Speed(s.value * scalar);
-        }
+        public static Speed operator *(float scalar, Speed s) => new Speed(s.value * scalar);
 
         /// <summary>
         /// Divides the speed value by a divisor.
         /// </summary>
-        public static Speed operator /(Speed s, float divisor)
-        {
-            return new Speed(s.value / divisor);
-        }
+        public static Speed operator /(Speed s, float divisor) => new Speed(s.value / divisor);
 
         #endregion
 
@@ -142,10 +110,7 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Divides a speed value by another, returning a type-less fraction.
         /// </summary>
-        public static float operator /(Speed dividend, Speed divisor)
-        {
-            return dividend.value / divisor.value;
-        }
+        public static float operator /(Speed dividend, Speed divisor) => dividend.value / divisor.value;
 
         #endregion
 
@@ -154,10 +119,7 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Divides a speed value by a timespan, returning an acceleration.
         /// </summary>
-        public static Acceleration operator /(Speed s, TimeSpan t)
-        {
-            return new Acceleration(s.value / (float)t.NumericValue);
-        }
+        public static Acceleration operator /(Speed s, TimeSpan t) => new Acceleration(s.value / (float)t.NumericValue);
 
         #endregion
 
@@ -166,18 +128,12 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Multiplies a speed value by a timespan, returning a unit value.
         /// </summary>
-        public static Unit operator *(Speed s, TimeSpan t)
-        {
-            return new Unit(s.value * (float)t.NumericValue);
-        }
+        public static Unit operator *(Speed s, TimeSpan t) => new Unit(s.value * (float)t.NumericValue);
 
         /// <summary>
         /// Multiplies a speed value by a timespan, returning a unit value.
         /// </summary>
-        public static Unit operator *(TimeSpan t, Speed s)
-        {
-            return new Unit(s.value * (float)t.NumericValue);
-        }
+        public static Unit operator *(TimeSpan t, Speed s) => new Unit(s.value * (float)t.NumericValue);
 
         #endregion
 
@@ -186,34 +142,22 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Multiplies a direction with a speed value, returning a typed speed vector of the given direction and length.
         /// </summary>
-        public static Velocity2 operator *(Speed s, Direction2 d)
-        {
-            return new Velocity2(d.Vector * s.value);
-        }
+        public static Velocity2 operator *(Speed s, Direction2 d) => new Velocity2(d.Vector * s.value);
 
         /// <summary>
         /// Multiplies a direction with a speed value, returning a typed speed vector of the given direction and length.
         /// </summary>
-        public static Velocity2 operator *(Direction2 d, Speed s)
-        {
-            return new Velocity2(d.Vector * s.value);
-        }
+        public static Velocity2 operator *(Direction2 d, Speed s) => new Velocity2(d.Vector * s.value);
 
         /// <summary>
         /// Multiplies a speed value with an untyped vector, returning a typed speed vector.
         /// </summary>
-        public static Velocity2 operator *(Speed u, Vector2 v)
-        {
-            return new Velocity2(v * u.value);
-        }
+        public static Velocity2 operator *(Speed u, Vector2 v) => new Velocity2(v * u.value);
 
         /// <summary>
         /// Multiplies a speed value with an untyped vector, returning a typed speed vector.
         /// </summary>
-        public static Velocity2 operator *(Vector2 v, Speed u)
-        {
-            return new Velocity2(v * u.value);
-        }
+        public static Velocity2 operator *(Vector2 v, Speed u) => new Velocity2(v * u.value);
 
         #endregion
 
@@ -222,50 +166,32 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Compares two speed values for equality.
         /// </summary>
-        public static bool operator ==(Speed s0, Speed s1)
-        {
-            return s0.Equals(s1);
-        }
+        public static bool operator ==(Speed s0, Speed s1) => s0.Equals(s1);
 
         /// <summary>
         /// Compares two speed values for inequality.
         /// </summary>
-        public static bool operator !=(Speed s0, Speed s1)
-        {
-            return !(s0 == s1);
-        }
+        public static bool operator !=(Speed s0, Speed s1) => !(s0 == s1);
 
         /// <summary>
         /// Checks if one speed value is smaller than another.
         /// </summary>
-        public static bool operator <(Speed s0, Speed s1)
-        {
-            return s0.value < s1.value;
-        }
+        public static bool operator <(Speed s0, Speed s1) => s0.value < s1.value;
 
         /// <summary>
         /// Checks if one speed value is larger than another.
         /// </summary>
-        public static bool operator >(Speed s0, Speed s1)
-        {
-            return s0.value > s1.value;
-        }
+        public static bool operator >(Speed s0, Speed s1) => s0.value > s1.value;
 
         /// <summary>
         /// Checks if one speed value is smaller or equal to another.
         /// </summary>
-        public static bool operator <=(Speed s0, Speed s1)
-        {
-            return s0.value <= s1.value;
-        }
+        public static bool operator <=(Speed s0, Speed s1) => s0.value <= s1.value;
 
         /// <summary>
         /// Checks if one speed value is larger or equal to another.
         /// </summary>
-        public static bool operator >=(Speed s0, Speed s1)
-        {
-            return s0.value >= s1.value;
-        }
+        public static bool operator >=(Speed s0, Speed s1) => s0.value >= s1.value;
 
         #endregion
 

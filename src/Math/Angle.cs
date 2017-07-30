@@ -79,7 +79,6 @@ namespace Bearded.Utilities.Math
 
         #endregion
 
-
         #region Static Fields
 
         /// <summary>
@@ -88,8 +87,7 @@ namespace Bearded.Utilities.Math
         public static readonly Angle Zero = new Angle(0);
 
         #endregion
-
-
+        
         #region Properties
 
         /// <summary>
@@ -119,8 +117,7 @@ namespace Bearded.Utilities.Math
 
 
         #endregion
-
-
+        
         #region Methods
 
         #region Arithmetic
@@ -207,8 +204,7 @@ namespace Bearded.Utilities.Math
         #endregion
 
         #endregion
-
-
+        
         #region Operators
 
         #region Arithmetic
