@@ -33,7 +33,7 @@ namespace Bearded.Utilities.SpaceTime
         /// <exception cref="ArgumentOutOfRangeException">If value is negative.</exception>
         public static Squared<T> FromValue(float value)
         {
-            if(value < 0)
+            if (value < 0)
                 throw new ArgumentOutOfRangeException(nameof(value), "Must be non-negative.");
 
             return new Squared<T>(value);
