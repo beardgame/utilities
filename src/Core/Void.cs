@@ -14,6 +14,10 @@ namespace Bearded.Utilities
         // ReSharper disable UnusedParameter.Global
         public static bool operator ==(Void _, Void __) => true;
         public static bool operator !=(Void _, Void __) => false;
+        public static bool operator >=(Void _, Void __) => true;
+        public static bool operator <=(Void _, Void __) => true;
+        public static bool operator >(Void _, Void __) => false;
+        public static bool operator <(Void _, Void __) => false;
         // ReSharper restore UnusedParameter.Global
     }
 }
