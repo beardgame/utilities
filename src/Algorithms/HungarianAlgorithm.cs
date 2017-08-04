@@ -139,22 +139,48 @@ namespace Bearded.Utilities.Algorithms
         /// </summary>
         private void reduce()
         {
+            reduceRows();
+            reduceColumns();
+        }
+
+        private void reduceRows()
+        {
             for (var s = 0; s < dimension; s++)
             {
-                var min = float.PositiveInfinity;
-                for (var t = 0; t < dimension; t++)
+                var min = minimumInRow(s);
+                subsctractValueFromRow(s, min);
+            }
+        }
+
+        private float minimumInRow(int s)
+        {
+            var min = float.PositiveInfinity;
+            for (var t = 0; t < dimension; t++)
+            {
+                if (costMatrix[s, t] < min)
                 {
-                    if (costMatrix[s, t] < min)
-                    {
-                        min = costMatrix[s, t];
-                    }
-                }
-                for (var t = 0; t < dimension; t++)
-                {
-                    costMatrix[s, t] -= min;
+                    min = costMatrix[s, t];
                 }
             }
+            return min;
+        }
 
+        private void subsctractValueFromRow(int s, float value)
+        {
+            for (var t = 0; t < dimension; t++)
+            {
+                costMatrix[s, t] -= value;
+            }
+        }
+        
+        private void reduceColumns()
+        {
+            var mins = findColumnMinimums();
+            substractValuesFromColumns(mins);
+        }
+
+        private float[] findColumnMinimums()
+        {
             var mins = new float[dimension];
             for (var t = 0; t < dimension; t++)
             {
@@ -170,11 +196,16 @@ namespace Bearded.Utilities.Algorithms
                     }
                 }
             }
+            return mins;
+        }
+
+        private void substractValuesFromColumns(float[] values)
+        {
             for (var s = 0; s < dimension; s++)
             {
                 for (var t = 0; t < dimension; t++)
                 {
-                    costMatrix[s, t] -= mins[t];
+                    costMatrix[s, t] -= values[t];
                 }
             }
         }
