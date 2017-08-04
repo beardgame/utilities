@@ -116,7 +116,7 @@ namespace Bearded.Utilities.Algorithms
         /// <exception cref="ArgumentNullException"><paramref name="rectangles"/> is null.</exception>
         public static Result<T> Pack<T>(IEnumerable<Rectangle<T>> rectangles, bool tryMultipleHeuristics = true)
         {
-            if(rectangles == null)
+            if (rectangles == null)
                 throw new ArgumentNullException(nameof(rectangles));
 
             var asList = rectangles.ToList();

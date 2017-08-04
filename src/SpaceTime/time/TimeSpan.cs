@@ -29,11 +29,8 @@ namespace Bearded.Utilities.SpaceTime
 
         #region equality and hashcode
 
-        public bool Equals(TimeSpan other)
-        {
-            // ReSharper disable once CompareOfFloatsByEqualityOperator
-            return value == other.value;
-        }
+        // ReSharper disable once CompareOfFloatsByEqualityOperator
+        public bool Equals(TimeSpan other) => value == other.value;
 
         public override bool Equals(object obj) => obj is TimeSpan && Equals((TimeSpan)obj);
 
@@ -94,7 +91,7 @@ namespace Bearded.Utilities.SpaceTime
         #endregion
 
         #region angle differentiation
-
+        
         public static AngularVelocity operator /(Angle s, TimeSpan t)
             => AngularVelocity.FromRadians(s.Radians / (float)t.value);
 

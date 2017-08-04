@@ -33,8 +33,8 @@ namespace Bearded.Utilities.SpaceTime
         /// <exception cref="ArgumentOutOfRangeException">If value is negative.</exception>
         public static Squared<T> FromValue(float value)
         {
-            if(value < 0)
-                throw new ArgumentOutOfRangeException("value", "Must be non-negative.");
+            if (value < 0)
+                throw new ArgumentOutOfRangeException(nameof(value), "Must be non-negative.");
 
             return new Squared<T>(value);
         }
@@ -46,17 +46,17 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Returns the numeric value of the square.
         /// </summary>
-        public float NumericValue { get { return this.value; } }
+        public float NumericValue => value;
 
         /// <summary>
         /// Returns a Square type of value 0.
         /// </summary>
-        public static Squared<T> Zero { get { return new Squared<T>(0); } }
+        public static Squared<T> Zero => new Squared<T>(0);
 
         /// <summary>
         /// Returns a Square type of value 1.
         /// </summary>
-        public static Squared<T> One { get { return new Squared<T>(1); } }
+        public static Squared<T> One => new Squared<T>(1);
 
         #endregion
 
@@ -64,30 +64,18 @@ namespace Bearded.Utilities.SpaceTime
 
         #region equality and hashcode
 
-        public bool Equals(Squared<T> other)
-        {
-            return this.value == other.value;
-        }
+        // ReSharper disable once CompareOfFloatsByEqualityOperator
+        public bool Equals(Squared<T> other) => value == other.value;
 
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            return obj is Squared<T> && this.Equals((Squared<T>)obj);
-        }
+        public override bool Equals(object obj) => obj is Squared<T> && Equals((Squared<T>)obj);
 
-        public override int GetHashCode()
-        {
-            return this.value.GetHashCode();
-        }
+        public override int GetHashCode() => value.GetHashCode();
 
         #endregion
 
         #region compare
 
-        public int CompareTo(Squared<T> other)
-        {
-            return this.value.CompareTo(other.value);
-        }
+        public int CompareTo(Squared<T> other) => value.CompareTo(other.value);
 
         #endregion
 
@@ -100,10 +88,7 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Adds two squares.
         /// </summary>
-        public static Squared<T> operator +(Squared<T> s0, Squared<T> s1)
-        {
-            return new Squared<T>(s0.value + s1.value);
-        }
+        public static Squared<T> operator +(Squared<T> s0, Squared<T> s1) => new Squared<T>(s0.value + s1.value);
 
         #endregion
 
@@ -112,10 +97,7 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Divides a square by another, returning a type-less fraction.
         /// </summary>
-        public static float operator /(Squared<T> dividend, Squared<T> divisor)
-        {
-            return dividend.value / divisor.value;
-        }
+        public static float operator /(Squared<T> dividend, Squared<T> divisor) => dividend.value / divisor.value;
 
         #endregion
 
@@ -124,50 +106,32 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Compares two squares for equality.
         /// </summary>
-        public static bool operator ==(Squared<T> s0, Squared<T> s1)
-        {
-            return s0.Equals(s1);
-        }
+        public static bool operator ==(Squared<T> s0, Squared<T> s1) => s0.Equals(s1);
 
         /// <summary>
         /// Compares two squares for inequality.
         /// </summary>
-        public static bool operator !=(Squared<T> s0, Squared<T> s1)
-        {
-            return !(s0 == s1);
-        }
+        public static bool operator !=(Squared<T> s0, Squared<T> s1) => !(s0 == s1);
 
         /// <summary>
         /// Checks if one square is smaller than another.
         /// </summary>
-        public static bool operator <(Squared<T> s0, Squared<T> s1)
-        {
-            return s0.value < s1.value;
-        }
+        public static bool operator <(Squared<T> s0, Squared<T> s1) => s0.value < s1.value;
 
         /// <summary>
         /// Checks if one square is larger than another.
         /// </summary>
-        public static bool operator >(Squared<T> s0, Squared<T> s1)
-        {
-            return s0.value > s1.value;
-        }
+        public static bool operator >(Squared<T> s0, Squared<T> s1) => s0.value > s1.value;
 
         /// <summary>
         /// Checks if one square is smaller or equal to another.
         /// </summary>
-        public static bool operator <=(Squared<T> s0, Squared<T> s1)
-        {
-            return s0.value <= s1.value;
-        }
+        public static bool operator <=(Squared<T> s0, Squared<T> s1) => s0.value <= s1.value;
 
         /// <summary>
         /// Checks if one square is larger or equal to another.
         /// </summary>
-        public static bool operator >=(Squared<T> s0, Squared<T> s1)
-        {
-            return s0.value >= s1.value;
-        }
+        public static bool operator >=(Squared<T> s0, Squared<T> s1) => s0.value >= s1.value;
 
         #endregion
 
