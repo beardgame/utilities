@@ -258,18 +258,7 @@ namespace Bearded.Utilities.Algorithms
         {
             while (true)
             {
-                int minSlackSource = -1, minSlackDest = -1;
-                var minSlackValue = float.PositiveInfinity;
-
-                for (int t = 0; t < dimension; t++)
-                {
-                    if (parentSourceByCommittedTarget[t] != -1) continue;
-                    if (!(minSlackValueBySource[t] < minSlackValue)) continue;
-
-                    minSlackValue = minSlackValueBySource[t];
-                    minSlackSource = minSlackTargetBySource[t];
-                    minSlackDest = t;
-                }
+                var (minSlackSource, minSlackDest, minSlackValue) = findMinSlack();
 
                 if (minSlackValue > 0)
                     updateLabeling(minSlackValue);
@@ -278,36 +267,64 @@ namespace Bearded.Utilities.Algorithms
                 if (targetMatches[minSlackDest] == -1)
                 {
                     // An augmenting path has been found.
-                    var committedJob = minSlackDest;
-                    var parentWorker = parentSourceByCommittedTarget[committedJob];
-                    while (true)
-                    {
-                        var temp = sourceMatches[parentWorker];
-                        match(parentWorker, committedJob);
-                        committedJob = temp;
-                        if (committedJob == -1)
-                        {
-                            break;
-                        }
-                        parentWorker = parentSourceByCommittedTarget[committedJob];
-                    }
+                    growMatching(minSlackDest);
                     return;
                 }
 
                 // Update slack values since we increased the size of the committed workers set.
-                var worker = targetMatches[minSlackDest];
-                matchedSources[worker] = true;
-                for (var j = 0; j < dimension; j++)
+                updateSlackValues(minSlackDest);
+            }
+        }
+
+        private (int source, int destinatino, float value) findMinSlack()
+        {
+            var minSlackDest = -1;
+            var minSlackSource = -1;
+            var minSlackValue = float.PositiveInfinity;
+
+            for (var t = 0; t < dimension; t++)
+            {
+                if (parentSourceByCommittedTarget[t] != -1) continue;
+                if (!(minSlackValueBySource[t] < minSlackValue)) continue;
+
+                minSlackValue = minSlackValueBySource[t];
+                minSlackSource = minSlackTargetBySource[t];
+                minSlackDest = t;
+            }
+            return (minSlackSource, minSlackDest, minSlackValue);
+        }
+
+        private void growMatching(int minSlackDest)
+        {
+            var committedJob = minSlackDest;
+            var parentWorker = parentSourceByCommittedTarget[committedJob];
+            while (true)
+            {
+                var temp = sourceMatches[parentWorker];
+                match(parentWorker, committedJob);
+                committedJob = temp;
+                if (committedJob == -1)
                 {
-                    if (parentSourceByCommittedTarget[j] != -1) continue;
-
-                    var slack = costMatrix[worker, j] - sourceLabels[worker] - targetLabels[j];
-
-                    if (!(minSlackValueBySource[j] > slack)) continue;
-
-                    minSlackValueBySource[j] = slack;
-                    minSlackTargetBySource[j] = worker;
+                    break;
                 }
+                parentWorker = parentSourceByCommittedTarget[committedJob];
+            }
+        }
+
+        private void updateSlackValues(int minSlackDest)
+        {
+            var worker = targetMatches[minSlackDest];
+            matchedSources[worker] = true;
+            for (var j = 0; j < dimension; j++)
+            {
+                if (parentSourceByCommittedTarget[j] != -1) continue;
+
+                var slack = costMatrix[worker, j] - sourceLabels[worker] - targetLabels[j];
+
+                if (!(minSlackValueBySource[j] > slack)) continue;
+
+                minSlackValueBySource[j] = slack;
+                minSlackTargetBySource[j] = worker;
             }
         }
 
