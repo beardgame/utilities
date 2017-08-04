@@ -85,7 +85,12 @@ namespace Bearded.Utilities
             public Severity Severity { get; }
             
             public DateTime Time { get; }
-            
+
+            public Entry(string text)
+                : this(text, Severity.Debug, DateTime.Now)
+            {
+            }
+
             public Entry(string text, Severity severity = Severity.Debug)
                 : this(text, severity, DateTime.Now)
             {

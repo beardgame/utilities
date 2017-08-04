@@ -14,14 +14,17 @@ namespace Bearded.Utilities.Math.Geometry
         private readonly Vector3 p3;
 
         /// <summary>
+        /// Initializes the Bezier curve with 100 segments.
+        /// </summary>
+        public Bezier3rd3(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
+            : this(p0, p1, p2, p3, 100)
+        {
+        }
+
+        /// <summary>
         /// Initializes the Bezier curve.
         /// </summary>
-        /// <param name="p0"></param>
-        /// <param name="p1"></param>
-        /// <param name="p2"></param>
-        /// <param name="p3"></param>
-        /// <param name="segments">The amount of linear segments the arc is split in. A larger amount of segments results in higher precision for length and remapping.</param>
-        public Bezier3rd3(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, int segments = 100)
+        public Bezier3rd3(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, int segments)
             : base(segments)
         {
             this.p0 = p0;

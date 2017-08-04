@@ -106,6 +106,19 @@ namespace Bearded.Utilities.Algorithms
         /// </summary>
         /// <typeparam name="T">Type of custom user data associated with the rectangle.</typeparam>
         /// <param name="rectangles">The rectangles to pack.</param>
+        /// <returns>
+        /// Null, if the given list of rectangles is empty.
+        /// Otherwise, an object containing the packed rectangles and some additional information.
+        /// </returns>
+        /// <exception cref="ArgumentNullException"><paramref name="rectangles"/> is null.</exception>
+        public static Result<T> Pack<T>(IEnumerable<Rectangle<T>> rectangles)
+            => Pack(rectangles, true);
+
+        /// <summary>
+        /// Packs a list of rectangles together trying to minimize the size of the containing rectangle.
+        /// </summary>
+        /// <typeparam name="T">Type of custom user data associated with the rectangle.</typeparam>
+        /// <param name="rectangles">The rectangles to pack.</param>
         /// <param name="tryMultipleHeuristics">
         /// If true, the algorithm is run for multiple heuristics and returns the best result.
         /// If false, it is only run for one heuristic, packing rectangles in order of decreasing area, which empirically works well.</param>
@@ -114,7 +127,7 @@ namespace Bearded.Utilities.Algorithms
         /// Otherwise, an object containing the packed rectangles and some additional information.
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="rectangles"/> is null.</exception>
-        public static Result<T> Pack<T>(IEnumerable<Rectangle<T>> rectangles, bool tryMultipleHeuristics = true)
+        public static Result<T> Pack<T>(IEnumerable<Rectangle<T>> rectangles, bool tryMultipleHeuristics)
         {
             if (rectangles == null)
                 throw new ArgumentNullException(nameof(rectangles));

@@ -19,7 +19,7 @@ namespace Bearded.Utilities.Collections
 
         private int enumerators;
         private int count;
-        private float emptyFraction { get { return (float)(this.list.Count - this.count) / this.count; } }
+        private float emptyFraction => (float)(list.Count - count) / count;
 
         /// <summary>
         /// Gets or sets the maximmum fraction of deleted objects this list can contain before it compacts the backing data structure.
@@ -33,20 +33,21 @@ namespace Bearded.Utilities.Collections
         /// Gets an approximation of the number of items in the list.
         /// The value is an inclusive upper bound to the actual number of items.
         /// </summary>
-        public int ApproximateCount { get { return this.count; } }
+        public int ApproximateCount => count;
 
         #endregion
 
         #region Constructor
-
-        /// <summary>
-        /// Initializes a new deletable object list.
-        /// </summary>
-        /// <param name="capacity">Initial capacity of the backing data structure.</param>
+        
+        public DeletableObjectList()
+            : this(4)
+        {
+        }
+        
         public DeletableObjectList(int capacity = 4)
         {
-            this.list = new List<T>(capacity);
-            this.MaxEmptyFraction = 0.2f;
+            list = new List<T>(capacity);
+            MaxEmptyFraction = 0.2f;
         }
 
         #endregion
@@ -59,8 +60,8 @@ namespace Bearded.Utilities.Collections
         /// <param name="item">The item to add.</param>
         public void Add(T item)
         {
-            this.list.Add(item);
-            this.count++;
+            list.Add(item);
+            count++;
         }
 
         /// <summary>
@@ -73,21 +74,21 @@ namespace Bearded.Utilities.Collections
         /// <returns>True if the item was found and removed, false otherwise.</returns>
         public bool Remove(T item)
         {
-            var i = this.list.IndexOf(item);
+            var i = list.IndexOf(item);
             if (i == -1)
                 return false;
-            this.ClearBackingArrayIndex(i);
-            this.considerCompacting();
+            ClearBackingArrayIndex(i);
+            considerCompacting();
             return true;
         }
 
         internal void ClearBackingArrayIndex(int i)
         {
-            this.list[i] = null;
-            this.count--;
+            list[i] = null;
+            count--;
 
-            if (this.count == 0)
-                this.list.Clear();
+            if (count == 0)
+                list.Clear();
         }
 
         /// <summary>
@@ -95,8 +96,8 @@ namespace Bearded.Utilities.Collections
         /// </summary>
         public void Clear()
         {
-            this.list.Clear();
-            this.count = 0;
+            list.Clear();
+            count = 0;
         }
 
         #region Enumeration
@@ -106,7 +107,7 @@ namespace Bearded.Utilities.Collections
         /// </summary>
         public IEnumerator<T> GetEnumerator()
         {
-            return new DeletableObjectListEnumerator<T>(this, this.list);
+            return new DeletableObjectListEnumerator<T>(this, list);
         }
 
         /// <summary>
@@ -114,17 +115,17 @@ namespace Bearded.Utilities.Collections
         /// </summary>
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
         internal void RegisterEnumerator()
         {
-            this.enumerators++;
+            enumerators++;
         }
         internal void UnregisterEnumerator()
         {
-            this.enumerators--;
-            this.considerCompacting();
+            enumerators--;
+            considerCompacting();
         }
 
         #endregion
@@ -133,18 +134,18 @@ namespace Bearded.Utilities.Collections
 
         private void considerCompacting()
         {
-            if (this.enumerators == 0 &&
-                this.count > 0 &&
-                this.emptyFraction > this.MaxEmptyFraction)
+            if (enumerators == 0 &&
+                count > 0 &&
+                emptyFraction > MaxEmptyFraction)
             {
-                this.compact();
+                compact();
             }
         }
 
         private void compact()
         {
-            this.list.RemoveAll(t => t == null || t.Deleted);
-            this.count = list.Count;
+            list.RemoveAll(t => t == null || t.Deleted);
+            count = list.Count;
         }
 
         /// <summary>
@@ -154,7 +155,7 @@ namespace Bearded.Utilities.Collections
         /// </summary>
         public void ForceCompact()
         {
-            this.compact();
+            compact();
         }
 
         /// <summary>
@@ -165,8 +166,8 @@ namespace Bearded.Utilities.Collections
         /// </summary>
         public void TrimExcess()
         {
-            this.compact();
-            this.list.TrimExcess();
+            compact();
+            list.TrimExcess();
         }
 
         #endregion

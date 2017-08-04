@@ -214,51 +214,38 @@ namespace Bearded.Utilities.Math
         #endregion
 
         #region NaN sanity checks
-        /// <summary>
-        /// Throws an exception if the specified double is NaN.
-        /// </summary>
-        public static void ThrowIfNaN(this double d,
-            string exceptionString = "Double is NaN while it is not allowed to.")
+
+        public static void ThrowIfNaN(this double d) => d.ThrowIfNaN("Double is NaN while it is not allowed to.");
+        public static void ThrowIfNaN(this float f) => f.ThrowIfNaN("Double is NaN while it is not allowed to.");
+        public static void ThrowIfNaN(this Vector2 v) => v.ThrowIfNaN("Double is NaN while it is not allowed to.");
+        public static void ThrowIfNaN(this Vector3 v) => v.ThrowIfNaN("Double is NaN while it is not allowed to.");
+        public static void ThrowIfNaN(this Vector4 v) => v.ThrowIfNaN("Double is NaN while it is not allowed to.");
+
+        public static void ThrowIfNaN(this double d, string exceptionString)
         {
             if (double.IsNaN(d))
                 throw new ArithmeticException(exceptionString);
         }
-
-        /// <summary>
-        /// Throws an exception if the specified float is NaN.
-        /// </summary>
-        public static void ThrowIfNaN(this float f,
-            string exceptionString = "Float is NaN while it is not allowed to.")
+        
+        public static void ThrowIfNaN(this float f, string exceptionString)
         {
             if (float.IsNaN(f))
                 throw new ArithmeticException(exceptionString);
         }
-
-        /// <summary>
-        /// Throws an exception if any of the vector components is NaN.
-        /// </summary>
-        public static void ThrowIfNaN(this Vector2 vector,
-            string exceptionString = "Vector is NaN while it is not allowed to.")
+        
+        public static void ThrowIfNaN(this Vector2 vector, string exceptionString)
         {
             if (vector.IsNaN())
                 throw new ArithmeticException(exceptionString);
         }
-
-        /// <summary>
-        /// Throws an exception if any of the vector components is NaN.
-        /// </summary>
-        public static void ThrowIfNaN(this Vector3 vector,
-            string exceptionString = "Vector is NaN while it is not allowed to.")
+        
+        public static void ThrowIfNaN(this Vector3 vector, string exceptionString)
         {
             if (vector.IsNaN())
                 throw new ArithmeticException(exceptionString);
         }
-
-        /// <summary>
-        /// Throws an exception if any of the vector components is NaN.
-        /// </summary>
-        public static void ThrowIfNaN(this Vector4 vector,
-            string exceptionString = "Vector is NaN while it is not allowed to.")
+        
+        public static void ThrowIfNaN(this Vector4 vector, string exceptionString)
         {
             if (vector.IsNaN())
                 throw new ArithmeticException(exceptionString);
@@ -282,19 +269,9 @@ namespace Bearded.Utilities.Math
         #endregion
 
         #region Vector
-        /// <summary>
-        /// Turns the vector into a three-dimensional vector.
-        /// </summary>
-        public static Vector3 WithZ(this Vector2 xy, float z = 0) => new Vector3(xy.X, xy.Y, z);
-
-        /// <summary>
-        /// Turns the vector into a homogenuous vector.
-        /// </summary>
+        public static Vector3 WithZ(this Vector2 xy) => new Vector3(xy.X, xy.Y, 0);
+        public static Vector3 WithZ(this Vector2 xy, float z) => new Vector3(xy.X, xy.Y, z);
         public static Vector4 WithW(this Vector3 xyz, float w) => new Vector4(xyz, w);
-
-        /// <summary>
-        /// Turns the vector into a homogenuous vector.
-        /// </summary>
         public static Vector4 WithZw(this Vector2 xy, float z, float w) => new Vector4(xy.X, xy.Y, z, w);
 
         /// <summary>

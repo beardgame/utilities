@@ -5,7 +5,7 @@ namespace Bearded.Utilities.Math.Geometry
     /// <summary>
     /// Represents a quadratic Bezier curve in two-dimensional space.
     /// </summary>
-// ReSharper disable once InconsistentNaming
+    // ReSharper disable once InconsistentNaming
     public sealed class Bezier2nd2 : Arc2
     {
         private readonly Vector2 p0;
@@ -13,13 +13,17 @@ namespace Bearded.Utilities.Math.Geometry
         private readonly Vector2 p2;
 
         /// <summary>
+        /// Initializes the Bezier curve with 100 segments.
+        /// </summary>
+        public Bezier2nd2(Vector2 p0, Vector2 p1, Vector2 p2)
+            : this(p0, p1, p2, 100)
+        {
+        }
+
+        /// <summary>
         /// Initializes the Bezier curve.
         /// </summary>
-        /// <param name="p0"></param>
-        /// <param name="p1"></param>
-        /// <param name="p2"></param>
-        /// <param name="segments">The amount of linear segments the arc is split in. A larger amount of segments results in higher precision for length and remapping.</param>
-        public Bezier2nd2(Vector2 p0, Vector2 p1, Vector2 p2, int segments = 100)
+        public Bezier2nd2(Vector2 p0, Vector2 p1, Vector2 p2, int segments)
             : base(segments)
         {
             this.p0 = p0;

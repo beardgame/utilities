@@ -141,9 +141,14 @@ namespace Bearded.Utilities
         public static int Sign() => Random.NextSign();
 
         /// <summary>
+        /// Returns true half the time, false otherwise.
+        /// </summary>
+        public static bool Bool() => Random.NextBool();
+
+        /// <summary>
         /// Returns true with the given probability, and false otherwise.
         /// </summary>
-        public static bool Bool(double probability = 0.5) => Random.NextBool(probability);
+        public static bool Bool(double probability) => Random.NextBool(probability);
 
 
         /// <summary>

@@ -116,9 +116,15 @@ namespace Bearded.Utilities
         public static int NextSign(this Random random) => 2 * random.Next(2) - 1;
 
         /// <summary>
+        /// Returns true half the time, false otherwise.
+        /// </summary>
+        public static bool NextBool(this Random random)
+            => random.NextDouble() < 0.5;
+
+        /// <summary>
         /// Returns true with the given probability, and false otherwise.
         /// </summary>
-        public static bool NextBool(this Random random, double probability = 0.5)
+        public static bool NextBool(this Random random, double probability)
             => random.NextDouble() < probability;
 
         /// <summary>
