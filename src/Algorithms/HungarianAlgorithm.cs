@@ -285,7 +285,7 @@ namespace Bearded.Utilities.Algorithms
             for (var t = 0; t < dimension; t++)
             {
                 if (parentSourceByCommittedTarget[t] != -1) continue;
-                if (!(minSlackValueBySource[t] < minSlackValue)) continue;
+                if (minSlackValueBySource[t] >= minSlackValue) continue;
 
                 minSlackValue = minSlackValueBySource[t];
                 minSlackSource = minSlackTargetBySource[t];
