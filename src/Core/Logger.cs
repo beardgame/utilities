@@ -91,7 +91,7 @@ namespace Bearded.Utilities
             {
             }
 
-            public Entry(string text, Severity severity = Severity.Debug)
+            public Entry(string text, Severity severity)
                 : this(text, severity, DateTime.Now)
             {
             }

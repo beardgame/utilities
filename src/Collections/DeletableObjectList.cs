@@ -44,7 +44,7 @@ namespace Bearded.Utilities.Collections
         {
         }
         
-        public DeletableObjectList(int capacity = 4)
+        public DeletableObjectList(int capacity)
         {
             list = new List<T>(capacity);
             MaxEmptyFraction = 0.2f;
