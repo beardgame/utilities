@@ -276,7 +276,7 @@ namespace Bearded.Utilities.Algorithms
             }
         }
 
-        private (int source, int destinatino, float value) findMinSlack()
+        private (int source, int destination, float value) findMinSlack()
         {
             var minSlackDest = -1;
             var minSlackSource = -1;
