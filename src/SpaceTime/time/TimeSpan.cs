@@ -10,14 +10,18 @@ namespace Bearded.Utilities.SpaceTime
     {
         private readonly double value;
 
-        public double NumericValue => value;
-
         #region construction
 
         public TimeSpan(double value)
         {
             this.value = value;
         }
+
+        #endregion
+
+        #region properties
+
+        public double NumericValue => value;
 
         public static TimeSpan Zero => new TimeSpan(0);
 
