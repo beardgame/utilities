@@ -11,7 +11,7 @@ namespace Bearded.Utilities.SpaceTime
         private readonly double value;
 
         #region construction
-        
+
         public TimeSpan(double value)
         {
             this.value = value;
@@ -21,19 +21,10 @@ namespace Bearded.Utilities.SpaceTime
 
         #region properties
 
-        /// <summary>
-        /// Returns the numeric value of the timespan.
-        /// </summary>
         public double NumericValue => value;
 
-        /// <summary>
-        /// Returns the timespan with value 0.
-        /// </summary>
         public static TimeSpan Zero => new TimeSpan(0);
 
-        /// <summary>
-        /// Returns the timespan with value 1.
-        /// </summary>
         public static TimeSpan One => new TimeSpan(1);
 
         #endregion
@@ -63,95 +54,53 @@ namespace Bearded.Utilities.SpaceTime
 
         #region algebra
 
-        /// <summary>
-        /// Adds two timespans.
-        /// </summary>
         public static TimeSpan operator +(TimeSpan t0, TimeSpan t1) => new TimeSpan(t0.value + t1.value);
-
-        /// <summary>
-        /// Adds two timespans.
-        /// </summary>
+        
         public static TimeSpan operator -(TimeSpan t0, TimeSpan t1) => new TimeSpan(t0.value - t1.value);
+
+        public static TimeSpan operator -(TimeSpan t) => new TimeSpan(-t.value);
 
         #endregion
 
         #region scaling
 
-        /// <summary>
-        /// Inverts the timespan.
-        /// </summary>
-        public static TimeSpan operator -(TimeSpan t) => new TimeSpan(-t.value);
+        public static TimeSpan operator *(TimeSpan t, double scalar) => new TimeSpan(t.value * scalar);
 
-        /// <summary>
-        /// Multiples the timespan with a scalar.
-        /// </summary>
-        public static TimeSpan operator *(TimeSpan t, float scalar) => new TimeSpan(t.value * scalar);
+        public static TimeSpan operator *(double scalar, TimeSpan t) => new TimeSpan(t.value * scalar);
 
-        /// <summary>
-        /// Multiples the timespan with a scalar.
-        /// </summary>
-        public static TimeSpan operator *(float scalar, TimeSpan t) => new TimeSpan(t.value * scalar);
-
-        /// <summary>
-        /// Divides the timespan by a divisor.
-        /// </summary>
-        public static TimeSpan operator /(TimeSpan t, float divisor) => new TimeSpan(t.value / divisor);
+        public static TimeSpan operator /(TimeSpan t, double divisor) => new TimeSpan(t.value / divisor);
 
         #endregion
 
         #region ratio
 
-        /// <summary>
-        /// Devides a timespan by another, returning a type-less fraction.
-        /// </summary>
         public static double operator /(TimeSpan dividend, TimeSpan divisor) => dividend.value / divisor.value;
 
         #endregion
 
         #region comparision
 
-        /// <summary>
-        /// Compares two timespans for equality.
-        /// </summary>
         public static bool operator ==(TimeSpan t0, TimeSpan t1) => t0.Equals(t1);
 
-        /// <summary>
-        /// Compares two timespans for inequality.
-        /// </summary>
         public static bool operator !=(TimeSpan t0, TimeSpan t1) => !(t0 == t1);
 
-        /// <summary>
-        /// Checks if one timespan is smaller than another.
-        /// </summary>
         public static bool operator <(TimeSpan t0, TimeSpan t1) => t0.value < t1.value;
 
-        /// <summary>
-        /// Checks if one timespan is larger than another.
-        /// </summary>
         public static bool operator >(TimeSpan t0, TimeSpan t1) => t0.value > t1.value;
-
-        /// <summary>
-        /// Checks if one timespan is smaller or equal to another.
-        /// </summary>
+        
         public static bool operator <=(TimeSpan t0, TimeSpan t1) => t0.value <= t1.value;
 
-        /// <summary>
-        /// Checks if one timespan is larger or equal to another.
-        /// </summary>
         public static bool operator >=(TimeSpan t0, TimeSpan t1) => t0.value >= t1.value;
 
         #endregion
 
         #region angle differentiation
-
-        /// <summary>
-        /// Divides an angle by a timespan, returning an angular acceleration.
-        /// </summary>
-        public static AngularVelocity operator /(Angle s, TimeSpan t) => AngularVelocity.FromRadians(s.Radians / (float)t.value);
+        
+        public static AngularVelocity operator /(Angle s, TimeSpan t)
+            => AngularVelocity.FromRadians(s.Radians / (float)t.value);
 
         #endregion
 
         #endregion
-
     }
 }
