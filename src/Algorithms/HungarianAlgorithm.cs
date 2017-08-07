@@ -352,7 +352,7 @@ namespace Bearded.Utilities.Algorithms
 
                 var slack = costMatrix[worker, j] - sourceLabels[worker] - targetLabels[j];
 
-                if (!(minSlackValueBySource[j] > slack)) continue;
+                if (minSlackValueBySource[j] <= slack) continue;
 
                 minSlackValueBySource[j] = slack;
                 minSlackTargetBySource[j] = worker;
