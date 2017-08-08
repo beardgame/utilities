@@ -197,5 +197,15 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
+        #region static methods
+
+        public static Speed Min(Speed s1, Speed s2)
+            => new Speed(System.Math.Min(s1.NumericValue, s2.NumericValue));
+
+        public static Speed Max(Speed s1, Speed s2)
+            => new Speed(System.Math.Max(s1.NumericValue, s2.NumericValue));
+
+        #endregion
+
     }
 }
