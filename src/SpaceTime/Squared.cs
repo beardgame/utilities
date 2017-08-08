@@ -136,5 +136,15 @@ namespace Bearded.Utilities.SpaceTime
         #endregion
 
         #endregion
+
+        #region static methods
+
+        public static Squared<T> Min(Squared<T> s1, Squared<T> s2)
+            => new Squared<T>(System.Math.Min(s1.NumericValue, s2.NumericValue));
+
+        public static Squared<T> Max(Squared<T> s1, Squared<T> s2)
+            => new Squared<T>(System.Math.Max(s1.NumericValue, s2.NumericValue));
+
+        #endregion
     }
 }

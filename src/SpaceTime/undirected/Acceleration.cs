@@ -188,5 +188,15 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
+        #region static methods
+
+        public static Acceleration Min(Acceleration s1, Acceleration s2)
+            => new Acceleration(System.Math.Min(s1.NumericValue, s2.NumericValue));
+
+        public static Acceleration Max(Acceleration s1, Acceleration s2)
+            => new Acceleration(System.Math.Max(s1.NumericValue, s2.NumericValue));
+
+        #endregion
+
     }
 }
