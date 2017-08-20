@@ -65,6 +65,12 @@ namespace Bearded.Utilities.SpaceTime
         public override int GetHashCode() => value.GetHashCode();
 
         #endregion
+        
+        #region tostring
+
+        public override string ToString() => $"{value} rad/t";
+
+        #endregion
 
         #region compare
 

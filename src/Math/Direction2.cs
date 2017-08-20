@@ -245,6 +245,12 @@ namespace Bearded.Utilities.Math
 
         #endregion
 
+        #region tostring
+
+        public override string ToString() => $"{Radians} rad";
+
+        #endregion
+
         #region Casts
 
         #endregion

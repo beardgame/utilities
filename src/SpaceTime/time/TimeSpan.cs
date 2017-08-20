@@ -42,6 +42,12 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
+        #region tostring
+
+        public override string ToString() => $"{value} t";
+
+        #endregion
+
         #region compare
 
         public int CompareTo(TimeSpan other) => value.CompareTo(other.value);

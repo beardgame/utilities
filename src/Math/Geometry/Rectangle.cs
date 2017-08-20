@@ -78,6 +78,8 @@ namespace Bearded.Utilities.Math.Geometry
                 return hashCode;
             }
         }
+        
+        public override string ToString() => $"[{Left}, {Top}] x [{Right}, {Bottom}]";
 
         public static bool operator ==(Rectangle left, Rectangle right) => left.Equals(right);
         public static bool operator !=(Rectangle left, Rectangle right) => !left.Equals(right);

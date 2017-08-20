@@ -62,6 +62,12 @@ namespace Bearded.Utilities.SpaceTime
         public int CompareTo(Unit other) => value.CompareTo(other.value);
 
         #endregion
+        
+        #region tostring
+
+        public override string ToString() => $"{value} u";
+
+        #endregion
 
         #endregion
 

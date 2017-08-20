@@ -80,6 +80,12 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
+        #region tostring
+
+        public override string ToString() => $"{value} u";
+
+        #endregion
+
         #endregion
 
         #region operators

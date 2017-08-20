@@ -66,6 +66,12 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
+        #region tostring
+
+        public override string ToString() => $"{value} rad/t²";
+
+        #endregion
+
         #region compare
 
         public int CompareTo(AngularAcceleration other) => value.CompareTo(other.value);

@@ -78,6 +78,12 @@ namespace Bearded.Utilities.SpaceTime
         public int CompareTo(Squared<T> other) => value.CompareTo(other.value);
 
         #endregion
+        
+        #region tostring
+
+        public override string ToString() => $"|{value}|";
+
+        #endregion
 
         #endregion
 
