@@ -72,7 +72,7 @@ namespace Bearded.Utilities.SpaceTime
         public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
 
         public string ToString(string format, IFormatProvider formatProvider)
-            => $"{value.ToString(format, formatProvider)} rad/t";
+            => $"{Mathf.RadiansToDegrees(value).ToString(format, formatProvider)} °/t";
 
         #endregion
 

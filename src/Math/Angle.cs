@@ -356,7 +356,7 @@ namespace Bearded.Utilities.Math
         public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
 
         public string ToString(string format, IFormatProvider formatProvider)
-            => $"{radians.ToString(format, formatProvider)} rad";
+            => $"{Degrees.ToString(format, formatProvider)}°";
 
         #endregion
 
