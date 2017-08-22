@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Bearded.Utilities.Math;
 
 namespace Bearded.Utilities.SpaceTime
@@ -6,7 +7,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of a signed timespan.
     /// </summary>
-    public struct TimeSpan : IEquatable<TimeSpan>, IComparable<TimeSpan>
+    public struct TimeSpan : IEquatable<TimeSpan>, IComparable<TimeSpan>, IFormattable
     {
         private readonly double value;
 
@@ -44,7 +45,10 @@ namespace Bearded.Utilities.SpaceTime
 
         #region tostring
 
-        public override string ToString() => $"{value} t";
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"{value.ToString(format, formatProvider)} t";
 
         #endregion
 

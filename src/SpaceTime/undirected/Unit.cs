@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Bearded.Utilities.Math;
 using OpenTK;
 
@@ -7,7 +8,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of an undirected signed distance or length.
     /// </summary>
-    public struct Unit : IEquatable<Unit>, IComparable<Unit>
+    public struct Unit : IEquatable<Unit>, IComparable<Unit>, IFormattable
     {
         private readonly float value;
 
@@ -62,10 +63,13 @@ namespace Bearded.Utilities.SpaceTime
         public int CompareTo(Unit other) => value.CompareTo(other.value);
 
         #endregion
-        
+
         #region tostring
 
-        public override string ToString() => $"{value} u";
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"{value.ToString(format, formatProvider)} u";
 
         #endregion
 

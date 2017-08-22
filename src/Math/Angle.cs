@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using OpenTK;
 
 namespace Bearded.Utilities.Math
@@ -6,7 +7,7 @@ namespace Bearded.Utilities.Math
     /// <summary>
     /// A typesafe representation of a signed angle.
     /// </summary>
-    public struct Angle : IEquatable<Angle>
+    public struct Angle : IEquatable<Angle>, IFormattable
     {
         private readonly float radians;
 
@@ -352,7 +353,10 @@ namespace Bearded.Utilities.Math
 
         #region String
 
-        public override string ToString() => $"{radians} rad";
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"{radians.ToString(format, formatProvider)} rad";
 
         #endregion
 

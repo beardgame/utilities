@@ -7,7 +7,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of a 2d directed velocity vector.
     /// </summary>
-    public struct Velocity2 : IEquatable<Velocity2>
+    public struct Velocity2 : IEquatable<Velocity2>, IFormattable
     {
         private readonly Vector2 value;
 
@@ -129,6 +129,9 @@ namespace Bearded.Utilities.SpaceTime
         #region tostring
 
         public override string ToString() => $"{value} u/t";
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"({value.X.ToString(format, formatProvider)}, {value.Y.ToString(format, formatProvider)}) u/t";
 
         #endregion
 

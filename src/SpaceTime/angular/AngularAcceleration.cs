@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Bearded.Utilities.Math;
 
 namespace Bearded.Utilities.SpaceTime
@@ -6,7 +7,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of a signed ancular acceleration.
     /// </summary>
-    public struct AngularAcceleration : IEquatable<AngularAcceleration>, IComparable<AngularAcceleration>
+    public struct AngularAcceleration : IEquatable<AngularAcceleration>, IComparable<AngularAcceleration>, IFormattable
     {
         private readonly float value;
 
@@ -68,7 +69,10 @@ namespace Bearded.Utilities.SpaceTime
 
         #region tostring
 
-        public override string ToString() => $"{value} rad/t²";
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"{value.ToString(format, formatProvider)} rad/t²";
 
         #endregion
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Bearded.Utilities.Math;
 using OpenTK;
 
@@ -7,7 +8,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of an undirected signed acceleration.
     /// </summary>
-    public struct Acceleration : IEquatable<Acceleration>, IComparable<Acceleration>
+    public struct Acceleration : IEquatable<Acceleration>, IComparable<Acceleration>, IFormattable
     {
         private readonly float value;
 
@@ -59,7 +60,10 @@ namespace Bearded.Utilities.SpaceTime
 
         #region tostring
 
-        public override string ToString() => $"{value} u/t²";
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"{value.ToString(format, formatProvider)} u/t²";
 
         #endregion
 

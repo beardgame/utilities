@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using OpenTK;
 
 namespace Bearded.Utilities.Math.Geometry
@@ -6,7 +7,7 @@ namespace Bearded.Utilities.Math.Geometry
     /// <summary>
     /// Represents a position in two-dimensional space using polar coordinates.
     /// </summary>
-    public struct PolarPosition : IEquatable<PolarPosition>
+    public struct PolarPosition : IEquatable<PolarPosition>, IFormattable
     {
         #region Properties
         /// <summary>
@@ -103,7 +104,11 @@ namespace Bearded.Utilities.Math.Geometry
             }
         }
 
-        public override string ToString() => $"{R} ∠{Angle}";
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"{R.ToString(format, formatProvider)} ∠{Angle.ToString(format, formatProvider)}";
+
         #endregion
 
         #region Operator
