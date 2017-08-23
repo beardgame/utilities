@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using OpenTK;
 
 namespace Bearded.Utilities.SpaceTime
@@ -81,6 +82,8 @@ namespace Bearded.Utilities.SpaceTime
         #endregion
 
         #region tostring
+
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
 
         public string ToString(string format, IFormatProvider formatProvider)
             => $"({value.X.ToString(format, formatProvider)}, {value.Y.ToString(format, formatProvider)}) u";
