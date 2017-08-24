@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Bearded.Utilities.Math;
 using OpenTK;
 
@@ -7,7 +8,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of an undirected signed speed.
     /// </summary>
-    public struct Speed : IEquatable<Speed>, IComparable<Speed>
+    public struct Speed : IEquatable<Speed>, IComparable<Speed>, IFormattable
     {
         private readonly float value;
 
@@ -60,6 +61,15 @@ namespace Bearded.Utilities.SpaceTime
         #region compare
 
         public int CompareTo(Speed other) => value.CompareTo(other.value);
+
+        #endregion
+        
+        #region tostring
+
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"{value.ToString(format, formatProvider)} u/t";
 
         #endregion
 

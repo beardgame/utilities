@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using OpenTK;
 
 namespace Bearded.Utilities.Math.Geometry
@@ -6,29 +7,19 @@ namespace Bearded.Utilities.Math.Geometry
     /// <summary>
     /// Represents a position in two-dimensional space using polar coordinates.
     /// </summary>
-    public struct PolarPosition : IEquatable<PolarPosition>
+    public struct PolarPosition : IEquatable<PolarPosition>, IFormattable
     {
-        #region Fields
-        private readonly float r;
-        private readonly Direction2 angle;
-        #endregion
-
         #region Properties
         /// <summary>
         /// Distance from the origin.
         /// </summary>
-        public float R
-        {
-            get { return this.r; }
-        }
+        public float R { get; }
 
         /// <summary>
         /// Direction of the vector originating from the origin pointing towards the point.
         /// </summary>
-        public Direction2 Angle
-        {
-            get { return this.angle; }
-        }
+        public Direction2 Angle { get; }
+
         #endregion
 
         /// <summary>
@@ -41,8 +32,8 @@ namespace Bearded.Utilities.Math.Geometry
             if (r < 0)
                 throw new ArgumentException("The radius has to be non-negative.");
 
-            this.r = r;
-            this.angle = angle;
+            R = r;
+            Angle = angle;
         }
 
         #region Conversion methods
@@ -52,7 +43,7 @@ namespace Bearded.Utilities.Math.Geometry
         /// <returns>Vector corresponding to the vector originating in the origin pointing towards this point.</returns>
         public Vector2 ToVector2()
         {
-            return this.angle.Vector * this.r;
+            return Angle.Vector * R;
         }
         #endregion
 
@@ -78,7 +69,9 @@ namespace Bearded.Utilities.Math.Geometry
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(PolarPosition other)
         {
-            return this.r == other.r && (this.r == 0 || this.angle == other.angle);
+            // ReSharper disable CompareOfFloatsByEqualityOperator
+            return R == other.R && (R == 0 || Angle == other.Angle);
+            // ReSharper restore CompareOfFloatsByEqualityOperator
         }
         #endregion
 
@@ -90,10 +83,7 @@ namespace Bearded.Utilities.Math.Geometry
         /// true if <paramref name="obj"/> and this instance are the same type and represent the same value; otherwise, false.
         /// </returns>
         /// <param name="obj">Another object to compare to. </param><filterpriority>2</filterpriority>
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
+        public override bool Equals(object obj) => base.Equals(obj);
 
         /// <summary>
         /// Returns the hash code for this instance.
@@ -104,14 +94,21 @@ namespace Bearded.Utilities.Math.Geometry
         /// <filterpriority>2</filterpriority>
         public override int GetHashCode()
         {
-            if (r == 0)
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
+            if (R == 0)
                 return 0;
 
             unchecked
             {
-                return (this.r.GetHashCode() * 397) ^ this.angle.GetHashCode();
+                return (R.GetHashCode() * 397) ^ Angle.GetHashCode();
             }
         }
+
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"{R.ToString(format, formatProvider)} ∠{Angle.ToString(format, formatProvider)}";
+
         #endregion
 
         #region Operator

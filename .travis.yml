@@ -2,7 +2,7 @@ language: csharp
 solution: Bearded.Utilities.sln
 
 mono:
- - latest
+ - alpha
 
 install:
   - nuget restore Bearded.Utilities.sln

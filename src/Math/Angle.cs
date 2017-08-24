@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using OpenTK;
 
 namespace Bearded.Utilities.Math
@@ -6,7 +7,7 @@ namespace Bearded.Utilities.Math
     /// <summary>
     /// A typesafe representation of a signed angle.
     /// </summary>
-    public struct Angle : IEquatable<Angle>
+    public struct Angle : IEquatable<Angle>, IFormattable
     {
         private readonly float radians;
 
@@ -93,28 +94,27 @@ namespace Bearded.Utilities.Math
         /// <summary>
         /// Gets the value of the angle in radians.
         /// </summary>
-        public float Radians { get { return this.radians; } }
+        public float Radians => this.radians;
 
         /// <summary>
         /// Gets the value of the angle in degrees.
         /// </summary>
-        public float Degrees { get { return Mathf.RadiansToDegrees(this.radians); } }
+        public float Degrees => Mathf.RadiansToDegrees(this.radians);
 
         /// <summary>
         /// Gets a 2x2 rotation matrix that rotates vectors by this angle.
         /// </summary>
-        public Matrix2 Transformation { get { return Matrix2.CreateRotation(this.radians); } }
+        public Matrix2 Transformation => Matrix2.CreateRotation(this.radians);
 
         /// <summary>
         /// Gets the magnitude (absolute value) of the angle in radians.
         /// </summary>
-        public float MagnitudeInRadians { get { return System.Math.Abs(this.radians); } }
+        public float MagnitudeInRadians => System.Math.Abs(this.radians);
 
         /// <summary>
         /// Gets the magnitude (absolute value) of the angle in degrees.
         /// </summary>
-        public float MagnitudeInDegrees { get { return System.Math.Abs(this.Degrees); } }
-
+        public float MagnitudeInDegrees => System.Math.Abs(this.Degrees);
 
         #endregion
         
@@ -348,6 +348,15 @@ namespace Bearded.Utilities.Math
         {
             return x.radians >= y.radians;
         }
+
+        #endregion
+
+        #region String
+
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"{Degrees.ToString(format, formatProvider)}°";
 
         #endregion
 

@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Bearded.Utilities.SpaceTime
 {
     /// <summary>
     /// A type-safe representation of an absolute instant in time.
     /// </summary>
-    public struct Instant : IEquatable<Instant>, IComparable<Instant>
+    public struct Instant : IEquatable<Instant>, IComparable<Instant>, IFormattable
     {
         private readonly double value;
 
@@ -48,6 +49,15 @@ namespace Bearded.Utilities.SpaceTime
         #region compare
 
         public int CompareTo(Instant other) => value.CompareTo(other.value);
+
+        #endregion
+
+        #region tostring
+
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"{value.ToString(format, formatProvider)} t";
 
         #endregion
 

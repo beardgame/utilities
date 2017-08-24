@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Bearded.Utilities.Math;
 using OpenTK;
 
@@ -7,7 +8,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of a 2d directed velocity vector.
     /// </summary>
-    public struct Velocity2 : IEquatable<Velocity2>
+    public struct Velocity2 : IEquatable<Velocity2>, IFormattable
     {
         private readonly Vector2 value;
 
@@ -123,6 +124,15 @@ namespace Bearded.Utilities.SpaceTime
         public override bool Equals(object obj) => obj is Velocity2 && Equals((Velocity2)obj);
 
         public override int GetHashCode() => value.GetHashCode();
+
+        #endregion
+
+        #region tostring
+
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"({value.X.ToString(format, formatProvider)}, {value.Y.ToString(format, formatProvider)}) u/t";
 
         #endregion
 
