@@ -1,4 +1,3 @@
-
 namespace Bearded.Utilities
 {
     public sealed class Box<T> where T : struct
