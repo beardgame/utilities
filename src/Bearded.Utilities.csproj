@@ -133,9 +133,10 @@
     <Compile Include="Math\Angle.cs" />
     <Compile Include="Math\Direction2.cs" />
     <Compile Include="Math\Arc.cs" />
-    <Compile Include="Math\Extensions.cs" />
+    <Compile Include="Core\MathExtensions.cs" />
+    <Compile Include="Math\GeometryExtensions.cs" />
     <Compile Include="Math\Interval.cs" />
-    <Compile Include="Math\Mathf.cs" />
+    <Compile Include="Core\Mathf.cs" />
     <Compile Include="Math\Geometry\arcs\Arc2.cs" />
     <Compile Include="Math\Geometry\arcs\Arc3.cs" />
     <Compile Include="Math\Geometry\arcs\Bezier2nd2.cs" />
@@ -144,7 +145,7 @@
     <Compile Include="Math\Geometry\arcs\Bezier3rd3.cs" />
     <Compile Include="Math\Geometry\PolarPosition.cs" />
     <Compile Include="Math\Geometry\Rectangle.cs" />
-    <Compile Include="Math\Interpolate.cs" />
+    <Compile Include="Core\Interpolate.cs" />
     <Compile Include="SpaceTime\angular\AngularAcceleration.cs" />
     <Compile Include="SpaceTime\angular\AngularVelocity.cs" />
     <Compile Include="SpaceTime\Extensions.cs" />

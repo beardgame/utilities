@@ -1,5 +1,5 @@
 ﻿
-namespace Bearded.Utilities.Math
+namespace Bearded.Utilities
 {
     /// <summary>
     /// Collection of math-related functions.
