@@ -134,6 +134,7 @@
     <Compile Include="Math\Direction2.cs" />
     <Compile Include="Math\Arc.cs" />
     <Compile Include="Core\MathExtensions.cs" />
+    <Compile Include="Math\GeometryExtensions.cs" />
     <Compile Include="Math\Interval.cs" />
     <Compile Include="Core\Mathf.cs" />
     <Compile Include="Math\Geometry\arcs\Arc2.cs" />
