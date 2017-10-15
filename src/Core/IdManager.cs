@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Bearded.Utilities.Linq;
 
 namespace Bearded.Utilities
 {
@@ -11,7 +10,15 @@ namespace Bearded.Utilities
         public Id<T> GetNext<T>()
         {
             var type = typeof(T);
-            var id = lastIds.ValueOrDefault(type) + 1;
+            int id;
+            if (lastIds.TryGetValue(type, out var lastId))
+            {
+                id = lastId + 1;
+            }
+            else
+            {
+                id = 1;
+            }
             lastIds[type] = id;
             return new Id<T>(id);
         }
