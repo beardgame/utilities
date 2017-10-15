@@ -1,9 +1,10 @@
 using System;
+using Bearded.Utilities.Math;
 using OpenTK;
 
-namespace Bearded.Utilities.Math
+namespace Bearded.Utilities
 {
-    public static class Extensions
+    public static class MathExtensions
     {
         #region Clamped
         /// <summary>

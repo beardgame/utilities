@@ -1,6 +1,6 @@
 using OpenTK;
 
-namespace Bearded.Utilities.Math
+namespace Bearded.Utilities
 {
     public static class Interpolate
     {
