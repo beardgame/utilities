@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using Bearded.Utilities.Math;
 
 namespace Bearded.Utilities.SpaceTime
 {

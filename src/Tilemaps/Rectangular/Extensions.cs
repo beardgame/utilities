@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Bearded.Utilities.Geometry;
 
 namespace Bearded.Utilities.Tilemaps.Rectangular
 {
@@ -80,7 +81,7 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         /// <summary>
         /// Returns the closest of the eight directions inside a rectangular tilemap, by angle.
         /// </summary>
-        public static Direction Octagonal(this Math.Direction2 direction)
+        public static Direction Octagonal(this Direction2 direction)
         {
             return (Direction)((int)System.Math.Floor(direction.Degrees * (1 / 45f) + 0.5f) % 8 + 1);
         }
@@ -88,7 +89,7 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         /// <summary>
         /// Returns the closest of the four non-diagonal directions inside a rectangular tilemap, by angle.
         /// </summary>
-        public static Direction Quadrogonal(this Math.Direction2 direction)
+        public static Direction Quadrogonal(this Direction2 direction)
         {
             return (Direction)((
                 (int)System.Math.Floor(direction.Degrees * (1 / 90f) + 0.5f) % 4

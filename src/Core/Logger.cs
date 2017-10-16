@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Bearded.Utilities.Math;
 using static System.Math;
 
 namespace Bearded.Utilities
