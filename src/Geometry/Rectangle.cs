@@ -2,7 +2,7 @@
 using System.Globalization;
 using OpenTK;
 
-namespace Bearded.Utilities.Math.Geometry
+namespace Bearded.Utilities.Geometry
 {
     /// <summary>
     /// Represents an axis-aligned rectangle.

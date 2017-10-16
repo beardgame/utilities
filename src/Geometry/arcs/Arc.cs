@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bearded.Utilities.Math
+namespace Bearded.Utilities.Geometry
 {
     /// <summary>
     /// Represents a generic arc.

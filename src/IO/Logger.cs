@@ -24,20 +24,20 @@ namespace Bearded.Utilities.IO
                 this.logger = logger;
                 this.severity = severity;
             }
-            
+
             public void Log(string text) {
                 logger.AddEntry(new Entry(text, severity));
             }
-            
+
             public void Log<T>(T obj) {
                 logger.AddEntry(new Entry(obj.ToString(), severity));
             }
-            
+
             public void Log(string text, params object[] parameters) {
                 Log(string.Format(text, parameters));
             }
         }
-        
+
         public Writer Fatal { get; }
         public Writer Error { get; }
         public Writer Warning { get; }
@@ -47,7 +47,7 @@ namespace Bearded.Utilities.IO
         #endregion
 
         #region types
-        
+
         public enum Severity
         {
             /// <summary>
@@ -75,13 +75,13 @@ namespace Bearded.Utilities.IO
             /// </summary>
             Trace = 5,
         }
-        
+
         public struct Entry : IEquatable<Entry>
         {
             public string Text { get; }
-            
+
             public Severity Severity { get; }
-            
+
             public DateTime Time { get; }
 
             public Entry(string text)
@@ -131,7 +131,7 @@ namespace Bearded.Utilities.IO
                 Console.WriteLine(Text);
                 Console.ResetColor();
             }
-            
+
             public bool Equals(Entry other)
                 => string.Equals(Text, other.Text) && Severity == other.Severity && Time.Equals(other.Time);
 
@@ -310,7 +310,7 @@ namespace Bearded.Utilities.IO
             var toRemove = (lines.Count - PrunedLength).Clamped(0, lines.Count);
             lines.RemoveRange(0, toRemove);
         }
-        
+
         public void AddEntry(Entry entry)
         {
             addEntrySafe(entry);

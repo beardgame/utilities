@@ -2,7 +2,7 @@
 using System.Globalization;
 using OpenTK;
 
-namespace Bearded.Utilities.Math.Geometry
+namespace Bearded.Utilities.Geometry
 {
     /// <summary>
     /// Represents a position in two-dimensional space using polar coordinates.
