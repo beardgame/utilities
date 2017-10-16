@@ -99,7 +99,7 @@
     <Compile Include="Collections\IIdable.cs" />
     <Compile Include="Collections\PrefixTrie.cs" />
     <Compile Include="Core\IdManager.cs" />
-    <Compile Include="Core\Logger.cs" />
+    <Compile Include="IO\Logger.cs" />
     <Compile Include="Core\StaticRandom.cs" />
     <Compile Include="Core\RandomExtensions.cs" />
     <Compile Include="Core\Box.cs" />

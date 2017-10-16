@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using static System.Math;
 
-namespace Bearded.Utilities
+namespace Bearded.Utilities.IO
 {
     public delegate void LogEvent(Logger.Entry entry);
 
@@ -25,20 +24,20 @@ namespace Bearded.Utilities
                 this.logger = logger;
                 this.severity = severity;
             }
-            
+
             public void Log(string text) {
                 logger.AddEntry(new Entry(text, severity));
             }
-            
+
             public void Log<T>(T obj) {
                 logger.AddEntry(new Entry(obj.ToString(), severity));
             }
-            
+
             public void Log(string text, params object[] parameters) {
                 Log(string.Format(text, parameters));
             }
         }
-        
+
         public Writer Fatal { get; }
         public Writer Error { get; }
         public Writer Warning { get; }
@@ -48,7 +47,7 @@ namespace Bearded.Utilities
         #endregion
 
         #region types
-        
+
         public enum Severity
         {
             /// <summary>
@@ -76,13 +75,13 @@ namespace Bearded.Utilities
             /// </summary>
             Trace = 5,
         }
-        
+
         public struct Entry : IEquatable<Entry>
         {
             public string Text { get; }
-            
+
             public Severity Severity { get; }
-            
+
             public DateTime Time { get; }
 
             public Entry(string text)
@@ -132,7 +131,7 @@ namespace Bearded.Utilities
                 Console.WriteLine(Text);
                 Console.ResetColor();
             }
-            
+
             public bool Equals(Entry other)
                 => string.Equals(Text, other.Text) && Severity == other.Severity && Time.Equals(other.Time);
 
@@ -229,7 +228,7 @@ namespace Bearded.Utilities
         private static void ensureListCapacity(List<Entry> list, int neededCapacity)
         {
             if (list.Capacity < neededCapacity)
-                list.Capacity = Max(list.Capacity * 2, neededCapacity);
+                list.Capacity = System.Math.Max(list.Capacity * 2, neededCapacity);
         }
 
         /// <summary>
@@ -311,7 +310,7 @@ namespace Bearded.Utilities
             var toRemove = (lines.Count - PrunedLength).Clamped(0, lines.Count);
             lines.RemoveRange(0, toRemove);
         }
-        
+
         public void AddEntry(Entry entry)
         {
             addEntrySafe(entry);
