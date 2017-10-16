@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Bearded.Utilities.Math;
-using static System.Math;
 
-namespace Bearded.Utilities
+namespace Bearded.Utilities.IO
 {
     public delegate void LogEvent(Logger.Entry entry);
 
@@ -230,7 +228,7 @@ namespace Bearded.Utilities
         private static void ensureListCapacity(List<Entry> list, int neededCapacity)
         {
             if (list.Capacity < neededCapacity)
-                list.Capacity = Max(list.Capacity * 2, neededCapacity);
+                list.Capacity = System.Math.Max(list.Capacity * 2, neededCapacity);
         }
 
         /// <summary>
