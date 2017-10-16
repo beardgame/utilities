@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using OpenTK;
 
-namespace Bearded.Utilities.Math
+namespace Bearded.Utilities.Geometry
 {
     /// <summary>
     /// A typesafe representation of a signed angle.

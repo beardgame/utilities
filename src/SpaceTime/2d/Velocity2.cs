@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using Bearded.Utilities.Math;
+using Bearded.Utilities.Geometry;
 using OpenTK;
 
 namespace Bearded.Utilities.SpaceTime

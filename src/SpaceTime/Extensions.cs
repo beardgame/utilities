@@ -1,6 +1,4 @@
-﻿using Bearded.Utilities.Math;
-
-namespace Bearded.Utilities.SpaceTime
+﻿namespace Bearded.Utilities.SpaceTime
 {
     /// <summary>
     /// Contains a variety of extension methods for the SpaceTime namespace.

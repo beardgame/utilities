@@ -1,4 +1,4 @@
-﻿namespace Bearded.Utilities.Math
+﻿namespace Bearded.Utilities.Geometry
 {
     public static class GeometryExtensions
     {
