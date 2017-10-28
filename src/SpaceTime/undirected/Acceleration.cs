@@ -1,5 +1,6 @@
 ﻿using System;
-using Bearded.Utilities.Math;
+using System.Globalization;
+using Bearded.Utilities.Geometry;
 using OpenTK;
 
 namespace Bearded.Utilities.SpaceTime
@@ -7,7 +8,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of an undirected signed acceleration.
     /// </summary>
-    public struct Acceleration : IEquatable<Acceleration>, IComparable<Acceleration>
+    public struct Acceleration : IEquatable<Acceleration>, IComparable<Acceleration>, IFormattable
     {
         private readonly float value;
 
@@ -54,6 +55,15 @@ namespace Bearded.Utilities.SpaceTime
         public override bool Equals(object obj) => obj is Acceleration && Equals((Acceleration)obj);
 
         public override int GetHashCode() => value.GetHashCode();
+
+        #endregion
+
+        #region tostring
+
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"{value.ToString(format, formatProvider)} u/t²";
 
         #endregion
 
@@ -185,6 +195,16 @@ namespace Bearded.Utilities.SpaceTime
         public static bool operator >=(Acceleration a0, Acceleration a1) => a0.value >= a1.value;
 
         #endregion
+
+        #endregion
+
+        #region static methods
+
+        public static Acceleration Min(Acceleration s1, Acceleration s2)
+            => new Acceleration(System.Math.Min(s1.NumericValue, s2.NumericValue));
+
+        public static Acceleration Max(Acceleration s1, Acceleration s2)
+            => new Acceleration(System.Math.Max(s1.NumericValue, s2.NumericValue));
 
         #endregion
 

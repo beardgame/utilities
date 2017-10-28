@@ -1,5 +1,5 @@
 ﻿using System;
-using Bearded.Utilities.Math;
+using System.Globalization;
 
 namespace Bearded.Utilities.SpaceTime
 {
@@ -7,7 +7,7 @@ namespace Bearded.Utilities.SpaceTime
     /// Represents a type-safe squared value, backed by a float.
     /// </summary>
     /// <typeparam name="T">The squared type.</typeparam>
-    public struct Squared<T> : IEquatable<Squared<T>>, IComparable<Squared<T>>
+    public struct Squared<T> : IEquatable<Squared<T>>, IComparable<Squared<T>>, IFormattable
         where T : struct
     {
         private readonly float value;
@@ -78,6 +78,15 @@ namespace Bearded.Utilities.SpaceTime
         public int CompareTo(Squared<T> other) => value.CompareTo(other.value);
 
         #endregion
+        
+        #region tostring
+
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"|{value.ToString(format, formatProvider)}|";
+
+        #endregion
 
         #endregion
 
@@ -134,6 +143,16 @@ namespace Bearded.Utilities.SpaceTime
         public static bool operator >=(Squared<T> s0, Squared<T> s1) => s0.value >= s1.value;
 
         #endregion
+
+        #endregion
+
+        #region static methods
+
+        public static Squared<T> Min(Squared<T> s1, Squared<T> s2)
+            => new Squared<T>(System.Math.Min(s1.NumericValue, s2.NumericValue));
+
+        public static Squared<T> Max(Squared<T> s1, Squared<T> s2)
+            => new Squared<T>(System.Math.Max(s1.NumericValue, s2.NumericValue));
 
         #endregion
     }

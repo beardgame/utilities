@@ -1,9 +1,9 @@
 using System;
 using OpenTK;
 
-namespace Bearded.Utilities.Math
+namespace Bearded.Utilities
 {
-    public static class Extensions
+    public static class MathExtensions
     {
         #region Clamped
         /// <summary>
@@ -301,24 +301,6 @@ namespace Bearded.Utilities.Math
 
             return lSqrd == 0 ? new Vector4() : vector / lSqrd.Sqrted();
         }
-        #endregion
-
-        #region Geometric
-        /// <summary>
-        /// Converts floating point value into a type safe angle representation in radians.
-        /// </summary>
-        public static Angle Radians(this float value) => Angle.FromRadians(value);
-
-        /// <summary>
-        /// Converts floating point value into a type safe angle representation in degrees.
-        /// </summary>
-        public static Angle Degrees(this float value) => Angle.FromDegrees(value);
-
-        /// <summary>
-        /// Converts an integer value into a type safe angle representation in degrees.
-        /// </summary>
-        public static Angle Degrees(this int value) => Angle.FromDegrees(value);
-
         #endregion
     }
 }

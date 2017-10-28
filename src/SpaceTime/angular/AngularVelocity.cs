@@ -1,12 +1,13 @@
 ﻿using System;
-using Bearded.Utilities.Math;
+using System.Globalization;
+using Bearded.Utilities.Geometry;
 
 namespace Bearded.Utilities.SpaceTime
 {
     /// <summary>
     /// A type-safe representation of a signed ancular velocity.
     /// </summary>
-    public struct AngularVelocity : IEquatable<AngularVelocity>, IComparable<AngularVelocity>
+    public struct AngularVelocity : IEquatable<AngularVelocity>, IComparable<AngularVelocity>, IFormattable
     {
         private readonly float value;
 
@@ -63,6 +64,15 @@ namespace Bearded.Utilities.SpaceTime
         public override bool Equals(object obj) => obj is AngularVelocity && Equals((AngularVelocity)obj);
 
         public override int GetHashCode() => value.GetHashCode();
+
+        #endregion
+
+        #region tostring
+
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"{Mathf.RadiansToDegrees(value).ToString(format, formatProvider)} °/t";
 
         #endregion
 

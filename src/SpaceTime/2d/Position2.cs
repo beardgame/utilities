@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using OpenTK;
 
 namespace Bearded.Utilities.SpaceTime
@@ -6,7 +7,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of an absolute 2d position vector.
     /// </summary>
-    public struct Position2 : IEquatable<Position2>
+    public struct Position2 : IEquatable<Position2>, IFormattable
     {
         private readonly Vector2 value;
 
@@ -77,6 +78,15 @@ namespace Bearded.Utilities.SpaceTime
         public override bool Equals(object obj) => obj is Position2 && Equals((Position2)obj);
 
         public override int GetHashCode() => value.GetHashCode();
+
+        #endregion
+
+        #region tostring
+
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"({value.X.ToString(format, formatProvider)}, {value.Y.ToString(format, formatProvider)}) u";
 
         #endregion
 

@@ -1,12 +1,13 @@
 using System;
+using System.Globalization;
 using OpenTK;
 
-namespace Bearded.Utilities.Math
+namespace Bearded.Utilities.Geometry
 {
     /// <summary>
     /// A typesafe representation of a direction in two dimensional space.
     /// </summary>
-    public struct Direction2 : IEquatable<Direction2>
+    public struct Direction2 : IEquatable<Direction2>, IFormattable
     {
         private const float fromRadians = uint.MaxValue / Mathf.TwoPi;
         private const float toRadians = Mathf.TwoPi / uint.MaxValue;
@@ -242,6 +243,15 @@ namespace Bearded.Utilities.Math
         {
             return !(x == y);
         }
+
+        #endregion
+
+        #region tostring
+
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"{Radians.ToString(format, formatProvider)} rad";
 
         #endregion
 

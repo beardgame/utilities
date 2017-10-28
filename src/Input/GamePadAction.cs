@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Bearded.Utilities.Math;
 using OpenTK.Input;
 
 namespace Bearded.Utilities.Input

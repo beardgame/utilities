@@ -1,12 +1,13 @@
 ﻿using System;
-using Bearded.Utilities.Math;
+using System.Globalization;
+using Bearded.Utilities.Geometry;
 
 namespace Bearded.Utilities.SpaceTime
 {
     /// <summary>
     /// A type-safe representation of a signed timespan.
     /// </summary>
-    public struct TimeSpan : IEquatable<TimeSpan>, IComparable<TimeSpan>
+    public struct TimeSpan : IEquatable<TimeSpan>, IComparable<TimeSpan>, IFormattable
     {
         private readonly double value;
 
@@ -39,6 +40,15 @@ namespace Bearded.Utilities.SpaceTime
         public override bool Equals(object obj) => obj is TimeSpan && Equals((TimeSpan)obj);
 
         public override int GetHashCode() => value.GetHashCode();
+
+        #endregion
+
+        #region tostring
+
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"{value.ToString(format, formatProvider)} t";
 
         #endregion
 
@@ -78,7 +88,7 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
-        #region comparision
+        #region comparison
 
         public static bool operator ==(TimeSpan t0, TimeSpan t1) => t0.Equals(t1);
 
@@ -100,6 +110,16 @@ namespace Bearded.Utilities.SpaceTime
             => AngularVelocity.FromRadians(s.Radians / (float)t.value);
 
         #endregion
+
+        #endregion
+
+        #region static methods
+
+        public static TimeSpan Min(TimeSpan t1, TimeSpan t2)
+            => new TimeSpan(System.Math.Min(t1.NumericValue, t2.NumericValue));
+
+        public static TimeSpan Max(TimeSpan t1, TimeSpan t2)
+            => new TimeSpan(System.Math.Max(t1.NumericValue, t2.NumericValue));
 
         #endregion
     }

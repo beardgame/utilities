@@ -1,6 +1,6 @@
 ﻿using OpenTK;
 
-namespace Bearded.Utilities.Math.Geometry
+namespace Bearded.Utilities.Geometry
 {
     /// <summary>
     /// Represents an arc in two-dimensional Euclidean space.

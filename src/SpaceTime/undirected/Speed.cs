@@ -1,5 +1,6 @@
 ﻿using System;
-using Bearded.Utilities.Math;
+using System.Globalization;
+using Bearded.Utilities.Geometry;
 using OpenTK;
 
 namespace Bearded.Utilities.SpaceTime
@@ -7,7 +8,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of an undirected signed speed.
     /// </summary>
-    public struct Speed : IEquatable<Speed>, IComparable<Speed>
+    public struct Speed : IEquatable<Speed>, IComparable<Speed>, IFormattable
     {
         private readonly float value;
 
@@ -60,6 +61,15 @@ namespace Bearded.Utilities.SpaceTime
         #region compare
 
         public int CompareTo(Speed other) => value.CompareTo(other.value);
+
+        #endregion
+        
+        #region tostring
+
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"{value.ToString(format, formatProvider)} u/t";
 
         #endregion
 
@@ -194,6 +204,16 @@ namespace Bearded.Utilities.SpaceTime
         public static bool operator >=(Speed s0, Speed s1) => s0.value >= s1.value;
 
         #endregion
+
+        #endregion
+
+        #region static methods
+
+        public static Speed Min(Speed s1, Speed s2)
+            => new Speed(System.Math.Min(s1.NumericValue, s2.NumericValue));
+
+        public static Speed Max(Speed s1, Speed s2)
+            => new Speed(System.Math.Max(s1.NumericValue, s2.NumericValue));
 
         #endregion
 

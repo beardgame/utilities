@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Globalization;
 using OpenTK;
 
-namespace Bearded.Utilities.Math.Geometry
+namespace Bearded.Utilities.Geometry
 {
     /// <summary>
     /// Represents an axis-aligned rectangle.
     /// All properties assume the x axis pointing right and the y axis pointing down.
     /// Negative width or height rectangles are not allowed, and the constructor will throw with those values.
     /// </summary>
-    public struct Rectangle : IEquatable<Rectangle>
+    public struct Rectangle : IEquatable<Rectangle>, IFormattable
     {
         public float Left { get; }
         public float Top { get; }
@@ -78,6 +79,12 @@ namespace Bearded.Utilities.Math.Geometry
                 return hashCode;
             }
         }
+        
+        public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
+
+        public string ToString(string format, IFormatProvider formatProvider)
+            => $"[{Left.ToString(format, formatProvider)}, {Top.ToString(format, formatProvider)} x " +
+               $"[{Right.ToString(format, formatProvider)}, {Bottom.ToString(format, formatProvider)}";
 
         public static bool operator ==(Rectangle left, Rectangle right) => left.Equals(right);
         public static bool operator !=(Rectangle left, Rectangle right) => !left.Equals(right);
