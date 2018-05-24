@@ -1,0 +1,4 @@
+*.cs text=auto
+*.csproj text=auto
+*.config text=auto
+.sln text=auto
