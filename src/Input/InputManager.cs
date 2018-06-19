@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using OpenTK;
@@ -9,12 +8,11 @@ namespace Bearded.Utilities.Input
 {
     public sealed partial class InputManager
     {
+        private readonly INativeWindow nativeWindow;
         private readonly KeyboardEvents keyboardEvents;
 
         private readonly AsyncAtomicUpdating<KeyboardState> keyboardState = new AsyncAtomicUpdating<KeyboardState>();
         private readonly AsyncAtomicUpdating<MouseState> mouseState = new AsyncAtomicUpdating<MouseState>();
-
-        private readonly Func<System.Drawing.Point, Vector2> screenToClient;
 
         private bool windowWasActiveLastUpdate;
 
@@ -22,8 +20,8 @@ namespace Bearded.Utilities.Input
 
         public InputManager(INativeWindow nativeWindow)
         {
+            this.nativeWindow = nativeWindow;
             keyboardEvents = new KeyboardEvents(nativeWindow);
-            screenToClient = point => toVector(nativeWindow.PointToClient(point));
 
             GamePads = Enumerable.Range(0, int.MaxValue - 1)
                 .TakeWhile(i => GamePad.GetState(i).IsConnected)
@@ -49,6 +47,8 @@ namespace Bearded.Utilities.Input
                 keyboardEvents.Update();
                 keyboardState.Update();
                 mouseState.Update();
+                MousePosition = toVector(nativeWindow.PointToClient(
+                    new System.Drawing.Point(mouseState.Current.X, mouseState.Current.Y)));
                 if (!windowWasActiveLastUpdate)
                 {
                     // mouse state is updated in a special way so that scroll delta doesnt jump
@@ -68,8 +68,8 @@ namespace Bearded.Utilities.Input
             windowWasActiveLastUpdate = windowIsActive;
         }
 
-        public Vector2 MousePosition
-            => screenToClient(new System.Drawing.Point(mouseState.Current.X, mouseState.Current.Y));
+        public Vector2 MousePosition { get; private set; }
+
         public bool MouseMoved => mouseState.Current.X != mouseState.Previous.X
                                   || mouseState.Current.Y != mouseState.Previous.Y;
         public int DeltaScroll => mouseState.Current.ScrollWheelValue - mouseState.Previous.ScrollWheelValue;
