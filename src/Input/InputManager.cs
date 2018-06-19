@@ -8,6 +8,7 @@ namespace Bearded.Utilities.Input
 {
     public sealed partial class InputManager
     {
+        private readonly INativeWindow nativeWindow;
         private readonly KeyboardEvents keyboardEvents;
 
         private readonly AsyncAtomicUpdating<KeyboardState> keyboardState = new AsyncAtomicUpdating<KeyboardState>();
@@ -19,6 +20,7 @@ namespace Bearded.Utilities.Input
 
         public InputManager(INativeWindow nativeWindow)
         {
+            this.nativeWindow = nativeWindow;
             keyboardEvents = new KeyboardEvents(nativeWindow);
 
             GamePads = Enumerable.Range(0, int.MaxValue - 1)
@@ -45,6 +47,8 @@ namespace Bearded.Utilities.Input
                 keyboardEvents.Update();
                 keyboardState.Update();
                 mouseState.Update();
+                MousePosition = toVector(nativeWindow.PointToClient(
+                    new System.Drawing.Point(mouseState.Current.X, mouseState.Current.Y)));
                 if (!windowWasActiveLastUpdate)
                 {
                     // mouse state is updated in a special way so that scroll delta doesnt jump
@@ -64,7 +68,8 @@ namespace Bearded.Utilities.Input
             windowWasActiveLastUpdate = windowIsActive;
         }
 
-        public Vector2 MousePosition => new Vector2(mouseState.Current.X, mouseState.Current.Y);
+        public Vector2 MousePosition { get; private set; }
+
         public bool MouseMoved => mouseState.Current.X != mouseState.Previous.X
                                   || mouseState.Current.Y != mouseState.Previous.Y;
         public int DeltaScroll => mouseState.Current.ScrollWheelValue - mouseState.Previous.ScrollWheelValue;
@@ -90,9 +95,14 @@ namespace Bearded.Utilities.Input
         public bool IsKeyHit(Key k) => IsKeyPressed(k) && keyboardState.Previous.IsKeyUp(k);
         public bool IsKeyReleased(Key k) => !IsKeyPressed(k) && keyboardState.Previous.IsKeyDown(k);
         
-        public bool IsMouseInRectangle(System.Drawing.Rectangle rect) => rect.Contains(mouseState.Current.X, mouseState.Current.Y);
+        public bool IsMouseInRectangle(System.Drawing.Rectangle rect) => rect.Contains((int) MousePosition.X, (int) MousePosition.Y);
 
         public IReadOnlyList<(KeyboardKeyEventArgs args, bool isPressed)> KeyEvents => keyboardEvents.KeyEvents;
         public IReadOnlyList<char> PressedCharacters => keyboardEvents.PressedCharacters;
+        
+        private static Vector2 toVector(System.Drawing.Point point)
+        {
+            return new Vector2(point.X, point.Y);
+        }
     }
 }
