@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using OpenTK;
 using OpenTK.Input;
@@ -7,7 +8,7 @@ namespace Bearded.Utilities.Input
 {
     public sealed partial class InputManager
     {
-        private readonly MouseDevice mouse;
+        private readonly KeyboardEvents keyboardEvents;
 
         private readonly AsyncAtomicUpdating<KeyboardState> keyboardState = new AsyncAtomicUpdating<KeyboardState>();
         private readonly AsyncAtomicUpdating<MouseState> mouseState = new AsyncAtomicUpdating<MouseState>();
@@ -16,9 +17,9 @@ namespace Bearded.Utilities.Input
 
         public ReadOnlyCollection<GamePadStateManager> GamePads { get; }
 
-        public InputManager(MouseDevice mouse)
+        public InputManager(INativeWindow nativeWindow)
         {
-            this.mouse = mouse;
+            keyboardEvents = new KeyboardEvents(nativeWindow);
 
             GamePads = Enumerable.Range(0, int.MaxValue - 1)
                 .TakeWhile(i => GamePad.GetState(i).IsConnected)
@@ -29,7 +30,7 @@ namespace Bearded.Utilities.Input
         public void ProcessEventsAsync()
         {
             keyboardState.SetLastKnownState(Keyboard.GetState());
-            mouseState.SetLastKnownState(mouse.GetCursorState());
+            mouseState.SetLastKnownState(Mouse.GetCursorState());
 
             foreach (var gamepad in GamePads)
             {
@@ -41,6 +42,7 @@ namespace Bearded.Utilities.Input
         {
             if (windowIsActive)
             {
+                keyboardEvents.Update();
                 keyboardState.Update();
                 mouseState.Update();
                 if (!windowWasActiveLastUpdate)
@@ -62,7 +64,7 @@ namespace Bearded.Utilities.Input
             windowWasActiveLastUpdate = windowIsActive;
         }
 
-        public Vector2 MousePosition => new Vector2(mouse.X, mouse.Y);
+        public Vector2 MousePosition => new Vector2(mouseState.Current.X, mouseState.Current.Y);
         public bool MouseMoved => mouseState.Current.X != mouseState.Previous.X
                                   || mouseState.Current.Y != mouseState.Previous.Y;
         public int DeltaScroll => mouseState.Current.ScrollWheelValue - mouseState.Previous.ScrollWheelValue;
@@ -89,5 +91,8 @@ namespace Bearded.Utilities.Input
         public bool IsKeyReleased(Key k) => !IsKeyPressed(k) && keyboardState.Previous.IsKeyDown(k);
         
         public bool IsMouseInRectangle(System.Drawing.Rectangle rect) => rect.Contains(mouseState.Current.X, mouseState.Current.Y);
+
+        public IReadOnlyList<(KeyboardKeyEventArgs args, bool isPressed)> KeyEvents => keyboardEvents.KeyEvents;
+        public IReadOnlyList<char> PressedCharacters => keyboardEvents.PressedCharacters;
     }
 }

@@ -114,6 +114,7 @@
     <Compile Include="Input\Actions\KeyboardAction.cs" />
     <Compile Include="Input\Actions\LambdaAction.cs" />
     <Compile Include="Input\Actions\MouseAction.cs" />
+    <Compile Include="Input\KeyboardEvents.cs" />
     <Compile Include="IO\Logger.cs" />
     <Compile Include="Core\StaticRandom.cs" />
     <Compile Include="Core\RandomExtensions.cs" />
