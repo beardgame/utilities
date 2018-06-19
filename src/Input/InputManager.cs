@@ -27,11 +27,6 @@ namespace Bearded.Utilities.Input
                 .ToList().AsReadOnly();
         }
 
-        private void onKeyPress(object sender, KeyPressEventArgs e)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public void ProcessEventsAsync()
         {
             keyboardState.SetLastKnownState(Keyboard.GetState());
