@@ -34,7 +34,7 @@ namespace Bearded.Utilities.Input
 
         private void onKeyUp(object sender, KeyboardKeyEventArgs e)
         {
-            keyEventsQueue.Enqueue((new KeyboardKeyEventArgs(e), true));
+            keyEventsQueue.Enqueue((new KeyboardKeyEventArgs(e), false));
         }
 
         private void onKeyPress(object sender, KeyPressEventArgs e)
