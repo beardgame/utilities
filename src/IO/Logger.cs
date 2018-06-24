@@ -135,7 +135,7 @@ namespace Bearded.Utilities.IO
             public bool Equals(Entry other)
                 => string.Equals(Text, other.Text) && Severity == other.Severity && Time.Equals(other.Time);
 
-            public override bool Equals(object obj) => obj is Entry && Equals((Entry)obj);
+            public override bool Equals(object obj) => obj is Entry entry && Equals(entry);
 
             public override int GetHashCode()
             {
@@ -228,7 +228,7 @@ namespace Bearded.Utilities.IO
         private static void ensureListCapacity(List<Entry> list, int neededCapacity)
         {
             if (list.Capacity < neededCapacity)
-                list.Capacity = System.Math.Max(list.Capacity * 2, neededCapacity);
+                list.Capacity = Math.Max(list.Capacity * 2, neededCapacity);
         }
 
         /// <summary>
@@ -268,17 +268,22 @@ namespace Bearded.Utilities.IO
         /// </summary>
         public int PrunedLength { get; set; } = 5000;
 
-        public Logger()
+        public Logger() : this(new HashSet<Severity>(Enum.GetValues(typeof(Severity)).Cast<Severity>())) { }
+
+        public Logger(ICollection<Severity> enabledSeverities)
         {
-            Fatal = new Writer(this, Severity.Fatal);
-            Error = new Writer(this, Severity.Error);
-            Warning = new Writer(this, Severity.Warning);
-            Info = new Writer(this, Severity.Info);
-            Debug = new Writer(this, Severity.Debug);
-            Trace = new Writer(this, Severity.Trace);
+            Fatal = getWriterIfSeverityEnabled(enabledSeverities, Severity.Fatal);
+            Error = getWriterIfSeverityEnabled(enabledSeverities, Severity.Error);
+            Warning = getWriterIfSeverityEnabled(enabledSeverities, Severity.Warning);
+            Info = getWriterIfSeverityEnabled(enabledSeverities, Severity.Info);
+            Debug = getWriterIfSeverityEnabled(enabledSeverities, Severity.Debug);
+            Trace = getWriterIfSeverityEnabled(enabledSeverities, Severity.Trace);
 
             RecentEntries = lines.AsReadOnly();
         }
+
+        private Writer getWriterIfSeverityEnabled(ICollection<Severity> enabledSeverities, Severity severity)
+            => enabledSeverities.Contains(severity) ? new Writer(this, severity) : null;
 
         #endregion
 
