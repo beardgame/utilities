@@ -57,6 +57,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="OpenTK">
       <HintPath>$(SolutionDir)\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
@@ -95,6 +98,8 @@
   <ItemGroup>
     <Compile Include="Algorithms\HungarianAlgorithm.cs" />
     <Compile Include="Algorithms\BinPacking.cs" />
+    <Compile Include="Collections\DirectedAcyclicGraph.cs" />
+    <Compile Include="Collections\DirectedAcyclicGraphTransitiveReducer.cs" />
     <Compile Include="Collections\IdDictionary.cs" />
     <Compile Include="Collections\IIdable.cs" />
     <Compile Include="Collections\PrefixTrie.cs" />
