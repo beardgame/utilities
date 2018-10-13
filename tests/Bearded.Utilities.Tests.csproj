@@ -64,6 +64,9 @@
       <HintPath>..\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
@@ -94,12 +97,14 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Algorithms\CoffmanGrahamTests.cs" />
     <Compile Include="Algorithms\HungarianAlgorithmTests.cs" />
     <Compile Include="Collections\DirectedAcyclicGraphTests.cs" />
     <Compile Include="Collections\PrefixTrieTests.cs" />
     <Compile Include="Algorithms\BinPackingTests.cs" />
     <Compile Include="Collections\PriorityQueueTests.cs" />
     <Compile Include="Collections\StaticPriorityQueueTests.cs" />
+    <Compile Include="Generators\DirectedAcyclicGraphGenerators.cs" />
     <Compile Include="Generators\FloatGenerators.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tilemaps\RectangularTilemapTests.cs" />
