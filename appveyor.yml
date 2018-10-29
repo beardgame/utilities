@@ -1,0 +1,37 @@
+version: 0.2.0.{build}
+pull_requests:
+  do_not_increment_build_number: true
+image: Visual Studio 2017
+configuration: Release
+init:
+- ps: >-
+    $env:nuget_version = "$env:appveyor_build_version"
+
+    if($env:appveyor_repo_branch -ne 'master') {
+      $env:nuget_version = "$env:appveyor_build_version-$env:appveyor_repo_branch"
+    }
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: $(nuget_version)
+before_build:
+- cmd: nuget restore
+build:
+  verbosity: minimal
+before_package:
+- ps: nuget pack $env:appveyor_build_folder/src/Bearded.Utilities.csproj -version $env:nuget_version
+test:
+  assemblies:
+    only:
+    - '**\*.Tests.dll'
+artifacts:
+- path: '**\Bearded.Utilities.*.nupkg'
+  name: NuGet package
+deploy:
+- provider: NuGet
+  api_key:
+    secure: 66eCD2M6zt2mygZBECVRL3Ez7I35RRj4a1iWqQqucfVqHX6hAnKqKXVu/FhTBIW/
+  on:
+    branch: /^(develop|master)$/
