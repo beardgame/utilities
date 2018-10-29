@@ -72,6 +72,9 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FluentAssertions">
+      <Version>5.4.2</Version>
+    </PackageReference>
     <PackageReference Include="FsCheck.Xunit">
       <Version>2.12.1</Version>
     </PackageReference>
