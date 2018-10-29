@@ -57,6 +57,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="OpenTK">
       <HintPath>$(SolutionDir)\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
@@ -100,6 +103,12 @@
     <Compile Include="Collections\PrefixTrie.cs" />
     <Compile Include="Core\AsyncAtomicUpdating.cs" />
     <Compile Include="Core\IdManager.cs" />
+    <Compile Include="Graphs\AdjacencyListDag.cs" />
+    <Compile Include="Graphs\AdjacencyListDiGraph.cs" />
+    <Compile Include="Graphs\DirectedAcyclicGraphTransitiveReducer.cs" />
+    <Compile Include="Graphs\DirectedGraphBuilder.cs" />
+    <Compile Include="Graphs\IDirectedAcyclicGraph.cs" />
+    <Compile Include="Graphs\IDirectedGraph.cs" />
     <Compile Include="Input\Actions\DigitalAction.cs" />
     <Compile Include="Input\Actions\DummyAction.cs" />
     <Compile Include="Input\Actions\GamePadAction.cs" />
