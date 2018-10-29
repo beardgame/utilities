@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\xunit.core.2.1.0\build\portable-net45+win8+wp8+wpa81\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.1.0\build\portable-net45+win8+wp8+wpa81\xunit.core.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -29,16 +28,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <CustomCommands>
-      <CustomCommands>
-        <Command>
-          <type>Custom</type>
-          <name>Run tests</name>
-          <command>mono packages/xunit.runner.console.2.0.0/tools/xunit.console.exe tests/bin/${ProjectConfigName}/Bearded.Utilities.Tests.dll</command>
-          <workingdir>${SolutionDir}</workingdir>
-        </Command>
-      </CustomCommands>
-    </CustomCommands>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -94,7 +83,7 @@
       <Version>4.5.0</Version>
     </PackageReference>
     <PackageReference Include="xunit">
-      <Version>2.2.0</Version>
+      <Version>2.4.1</Version>
     </PackageReference>
     <PackageReference Include="xunit.abstractions">
       <Version>2.0.3</Version>
@@ -103,10 +92,10 @@
       <Version>0.10.0</Version>
     </PackageReference>
     <PackageReference Include="xunit.core">
-      <Version>2.2.0</Version>
+      <Version>2.4.1</Version>
     </PackageReference>
     <PackageReference Include="xunit.runner.console">
-      <Version>2.2.0</Version>
+      <Version>2.4.1</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
