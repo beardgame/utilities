@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace Bearded.Utilities.Collections
@@ -13,6 +12,9 @@ namespace Bearded.Utilities.Collections
         private readonly DeletableObjectList<T> deletableObjectList;
         private readonly List<T> list;
         private int i;
+
+        object System.Collections.IEnumerator.Current => Current;
+        public T Current { get; private set; }
 
         public DeletableObjectListEnumerator(DeletableObjectList<T> deletableObjectList, List<T> list)
         {
@@ -55,9 +57,5 @@ namespace Bearded.Utilities.Collections
         {
             i = 0;
         }
-
-        public T Current { get; private set; }
-
-        object System.Collections.IEnumerator.Current => Current;
     }
 }

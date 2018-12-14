@@ -106,20 +106,17 @@ namespace Bearded.Utilities.Collections
 
         #region Enumeration
 
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
-        public IEnumerator<T> GetEnumerator() => new DeletableObjectListEnumerator<T>(this, list);
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
+        /// <inheritdoc />
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /// <inheritdoc />
+        public IEnumerator<T> GetEnumerator() => new DeletableObjectListEnumerator<T>(this, list);
 
         internal void RegisterEnumerator()
         {
             enumerators++;
         }
+
         internal void UnregisterEnumerator()
         {
             enumerators--;
@@ -130,20 +127,16 @@ namespace Bearded.Utilities.Collections
 
         #region Compaction and Trimming
 
-        private void considerCompacting()
+        /// <summary>
+        /// Force the list to compact its backing data structure for optimal enumeration performance.
+        /// It further trims it to use minimal memory.
+        /// This operation takes O(n) time, where n the number of items in the list,
+        /// assuming frequent enumeration or forced compaction.
+        /// </summary>
+        public void TrimExcess()
         {
-            if (enumerators == 0 &&
-                count > 0 &&
-                emptyFraction > MaxEmptyFraction)
-            {
-                compact();
-            }
-        }
-
-        private void compact()
-        {
-            list.RemoveAll(t => t == null || t.Deleted);
-            count = list.Count;
+            ForceCompact();
+            list.TrimExcess();
         }
 
         /// <summary>
@@ -163,16 +156,20 @@ namespace Bearded.Utilities.Collections
             compact();
         }
 
-        /// <summary>
-        /// Force the list to compact its backing data structure for optimal enumeration performance.
-        /// It further trims it to use minimal memory.
-        /// This operation takes O(n) time, where n the number of items in the list,
-        /// assuming frequent enumeration or forced compaction.
-        /// </summary>
-        public void TrimExcess()
+        private void considerCompacting()
         {
-            ForceCompact();
-            list.TrimExcess();
+            if (enumerators == 0 &&
+                count > 0 &&
+                emptyFraction > MaxEmptyFraction)
+            {
+                compact();
+            }
+        }
+
+        private void compact()
+        {
+            list.RemoveAll(t => t == null || t.Deleted);
+            count = list.Count;
         }
 
         #endregion
