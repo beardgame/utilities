@@ -23,7 +23,7 @@ namespace Bearded.Utilities.Collections
         private float emptyFraction => (float)(list.Count - count) / count;
 
         /// <summary>
-        /// Gets or sets the maximmum fraction of deleted objects this list can contain before it compacts the backing data structure.
+        /// Gets or sets the maximum fraction of deleted objects this list can contain before it compacts the backing data structure.
         /// The lower the value, the more aggressively and more often is the list compacted.
         /// A value of 0 compacts as often as possible.
         /// </summary>
