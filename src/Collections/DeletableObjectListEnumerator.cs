@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Bearded.Utilities.Collections
@@ -23,40 +24,40 @@ namespace Bearded.Utilities.Collections
 
         public void Dispose()
         {
-            this.deletableObjectList.UnregisterEnumerator();
+            deletableObjectList.UnregisterEnumerator();
         }
 
         public bool MoveNext()
         {
-            while (this.list.Count > this.i)
+            while (list.Count > i)
             {
-                var item = this.list[this.i];
+                var item = list[i];
                 if (item != null)
+                {
                     if (item.Deleted)
                     {
-                        this.deletableObjectList.ClearBackingArrayIndex(this.i);
+                        deletableObjectList.ClearBackingArrayIndex(i);
                     }
                     else
                     {
-                        this.Current = item;
-                        this.i++;
+                        Current = item;
+                        i++;
                         return true;
                     }
-                this.i++;
+                }
+
+                i++;
             }
             return false;
         }
 
         public void Reset()
         {
-            this.i = 0;
+            i = 0;
         }
 
         public T Current { get; private set; }
 
-        object System.Collections.IEnumerator.Current
-        {
-            get { return this.Current; }
-        }
+        object System.Collections.IEnumerator.Current => Current;
     }
 }
