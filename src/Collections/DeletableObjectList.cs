@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Bearded.Utilities.Collections
@@ -38,12 +39,12 @@ namespace Bearded.Utilities.Collections
         #endregion
 
         #region Constructor
-        
+
         public DeletableObjectList()
             : this(4)
         {
         }
-        
+
         public DeletableObjectList(int capacity)
         {
             list = new List<T>(capacity);
@@ -55,11 +56,14 @@ namespace Bearded.Utilities.Collections
         #region Methods
 
         /// <summary>
-        /// Adds an item to this deletable object list.
+        /// Adds an item to this deletable object list. The item cannot be null.
         /// </summary>
         /// <param name="item">The item to add.</param>
         public void Add(T item)
         {
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+
             list.Add(item);
             count++;
         }
@@ -105,18 +109,12 @@ namespace Bearded.Utilities.Collections
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
-        public IEnumerator<T> GetEnumerator()
-        {
-            return new DeletableObjectListEnumerator<T>(this, list);
-        }
+        public IEnumerator<T> GetEnumerator() => new DeletableObjectListEnumerator<T>(this, list);
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
 
         internal void RegisterEnumerator()
         {
@@ -155,6 +153,13 @@ namespace Bearded.Utilities.Collections
         /// </summary>
         public void ForceCompact()
         {
+            if (enumerators != 0)
+            {
+                throw new InvalidOperationException(
+                    "Cannot compact list while enumerating. " +
+                    "If you were not enumerating, check that your enumerators are disposed of correctly.");
+            }
+
             compact();
         }
 
@@ -166,7 +171,7 @@ namespace Bearded.Utilities.Collections
         /// </summary>
         public void TrimExcess()
         {
-            compact();
+            ForceCompact();
             list.TrimExcess();
         }
 
