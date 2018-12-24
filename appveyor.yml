@@ -7,8 +7,10 @@ init:
 - ps: >-
     $env:nuget_version = "$env:appveyor_build_version"
 
-    if($env:appveyor_repo_branch -ne 'master') {
-      $env:nuget_version = "$env:appveyor_build_version-$env:appveyor_repo_branch"
+    if($env:appveyor_repo_tag -eq $true) {
+      $env:nuget_version = "$env:appveyor_repo_tag_name"
+    } else {
+      $env:nuget_version = "$env:appveyor_build_version-dev"
     }
 assembly_info:
   patch: true
