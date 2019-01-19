@@ -46,7 +46,7 @@ namespace Bearded.Utilities.Tests.Collections
         public class TheIntParameterConstructor
         {
             [Fact]
-            public void CreatesEmptyListForZeroValues()
+            public void CreatesEmptyListForZeroValue()
             {
                 var list = new DeletableObjectList<IDeletable>(0);
                 
