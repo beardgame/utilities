@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Bearded.Utilities.Collections;
 using Bearded.Utilities.Linq;
+using FsCheck;
+using FsCheck.Xunit;
 using Xunit;
+using Random = System.Random;
 
 namespace Bearded.Utilities.Tests.Collections
 {
@@ -156,8 +159,10 @@ namespace Bearded.Utilities.Tests.Collections
 
         public class TheRemoveMethod : MethodThatDoesNotThrowsWhenEnumeratingTests
         {
+            private readonly Random random = new Random(0);
+
             protected override void CallMethod(DeletableObjectList<TestDeletable> list)
-                => list.Remove(list.RandomElement());
+                => list.Remove(list.RandomElement(random));
             
             [Fact]
             public void ReturnsFalseOnANewList()
@@ -381,14 +386,15 @@ namespace Bearded.Utilities.Tests.Collections
 
         public class Enumeration
         {
-            [Fact]
-            public void SkipsDeletedItems()
+            [Property]
+            public void SkipsDeletedItems(NonEmptyArray<bool> someBools)
             {
+                var boolQueue = someBools.Get.Looping();
                 var (list, items) = createPopulatedList(20);
 
                 foreach (var item in list)
                 {
-                    if (StaticRandom.Bool())
+                    if (boolQueue.Next())
                         item.Deleted = true;
                 }
                 
@@ -487,35 +493,37 @@ namespace Bearded.Utilities.Tests.Collections
                 Assert.Equal(0, list.ApproximateCount);
             }
             
-            [Theory]
-            [MemberData(nameof(PositiveCounts), MemberType = typeof(DeletableObjectListTests))]
-            public void IsAccurateWhenAddingAndRemoving(int itemsToAdd)
+            [Property]
+            public void IsAccurateWhenAddingAndRemoving(PositiveInt itemsToAdd, int randomSeed)
             {
+                var itemCount = itemsToAdd.Get;
+                var random = new Random(randomSeed);
                 var list = new DeletableObjectList<TestDeletable>();
 
-                foreach (var i in Enumerable.Range(1, itemsToAdd))
+                foreach (var i in Enumerable.Range(1, itemCount))
                 {
                     list.Add(new TestDeletable());
                     Assert.Equal(i, list.ApproximateCount);
                 }
                 
-                foreach (var i in Enumerable.Range(1, itemsToAdd))
+                foreach (var i in Enumerable.Range(1, itemCount))
                 {
-                    list.Remove(list.RandomElement());
-                    Assert.Equal(itemsToAdd - i, list.ApproximateCount);
+                    list.Remove(list.RandomElement(random));
+                    Assert.Equal(itemCount - i, list.ApproximateCount);
                 }
             }
             
-            [Theory]
-            [MemberData(nameof(PositiveCounts), MemberType = typeof(DeletableObjectListTests))]
-            public void IsAccurateAfterEnumerating(int itemsToAdd)
+            [Property]
+            public void IsAccurateAfterEnumerating(PositiveInt itemsToAdd, int randomSeed)
             {
-                var (list, items) = createPopulatedList(itemsToAdd);
-                items.RandomElement().Deleted = true;
+                var itemCount = itemsToAdd.Get;
+                var random = new Random(randomSeed);
+                var (list, items) = createPopulatedList(itemCount);
+                items.RandomElement(random).Deleted = true;
 
                 _ = list.Count();
                 
-                Assert.Equal(itemsToAdd - 1, list.ApproximateCount);
+                Assert.Equal(itemCount - 1, list.ApproximateCount);
             }
         }
     }
