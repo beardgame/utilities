@@ -13,7 +13,7 @@ namespace Bearded.Utilities.SpaceTime
         private readonly float value;
 
         #region construction
-        
+
         public Unit(float value)
         {
             this.value = value;

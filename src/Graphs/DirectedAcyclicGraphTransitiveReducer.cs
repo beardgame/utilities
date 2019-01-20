@@ -29,7 +29,8 @@ namespace Bearded.Utilities.Graphs
 
         private static IEnumerable<T> getOnlyDirectChildren(IDirectedGraph<T> graph, T element)
         {
-            var children = graph.GetDirectSuccessorsOf(element);
+            var children = graph.GetDirectSuccessorsOf(element) as IList<T>
+                ?? graph.GetDirectSuccessorsOf(element).ToList();
             var reducedEdges = new HashSet<T>(children);
 
             foreach (var child in children)
