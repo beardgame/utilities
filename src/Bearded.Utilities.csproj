@@ -150,6 +150,7 @@
     <Compile Include="SpaceTime\angular\AngularAcceleration.cs" />
     <Compile Include="SpaceTime\angular\AngularVelocity.cs" />
     <Compile Include="SpaceTime\Extensions.cs" />
+    <Compile Include="SpaceTime\gravity\GravitationalConstant.cs" />
     <Compile Include="SpaceTime\gravity\Mass.cs" />
     <Compile Include="SpaceTime\Squared.cs" />
     <Compile Include="SpaceTime\undirected\Acceleration.cs" />
