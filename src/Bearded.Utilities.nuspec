@@ -9,9 +9,9 @@
     <licenseUrl>https://github.com/beardgame/utilities/blob/develop/LICENSE</licenseUrl>
     <projectUrl>https://github.com/beardgame/utilities</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
+    <description>Set of basic utilities on top of OpenTK, mostly aimed at games.</description>
     <releaseNotes>Initial release.</releaseNotes>
-    <copyright>Copyright 2017</copyright>
+    <copyright>Copyright 2019</copyright>
     <tags>gamedev</tags>
   </metadata>
 </package>
