@@ -94,8 +94,8 @@
     <Compile Include="Collections\PrefixTrie.cs" />
     <Compile Include="Core\AsyncAtomicUpdating.cs" />
     <Compile Include="Core\IdManager.cs" />
-    <Compile Include="Graphs\AdjacencyListDag.cs" />
-    <Compile Include="Graphs\AdjacencyListDiGraph.cs" />
+    <Compile Include="Graphs\AdjacencyListDirectedAcyclicGraph.cs" />
+    <Compile Include="Graphs\AdjacencyListDirectedGraph.cs" />
     <Compile Include="Graphs\DirectedAcyclicGraphTransitiveReducer.cs" />
     <Compile Include="Graphs\DirectedGraphBuilder.cs" />
     <Compile Include="Graphs\IDirectedAcyclicGraph.cs" />

@@ -93,6 +93,14 @@ namespace Bearded.Utilities.Tests.Graphs
 
             builder.Invoking(b => b.AddElement(null)).Should().Throw<ArgumentNullException>();
         }
+        
+        [Fact]
+        public void AddElement_ShouldThrowOnDuplicate()
+        {
+            var builder = DirectedGraphBuilder<string>.NewBuilder().AddElement("element");
+
+            builder.Invoking(b => b.AddElement("element")).Should().Throw<ArgumentException>();
+        }
 
         [Fact]
         public void AddElement_DoesNotAddDirectSuccessors()
@@ -171,120 +179,40 @@ namespace Bearded.Utilities.Tests.Graphs
         }
 
         [Fact]
-        public void AddArrow_ThrowsOnFromAndToEqual()
+        public void AddArrow_ThrowsOnDuplicate()
         {
-            var builder = DirectedGraphBuilder<string>.NewBuilder().AddElement("from_and_to");
-            
-            builder.Invoking(b => b.AddArrow("from_and_to", "from_and_to")).Should().Throw<InvalidOperationException>();
-        }
-
-        [Fact]
-        public void RemoveElement_RemovesElement()
-        {
-            var graph = DirectedGraphBuilder<string>.NewBuilder()
-                .AddElement("element")
-                .RemoveElement("element")
-                .CreateGraph();
-
-            graph.Elements.Should().NotContain("element");
-        }
-
-        [Fact]
-        public void RemoveElement_ThrowsOnNull()
-        {
-            var builder = DirectedGraphBuilder<string>.NewBuilder();
-
-            builder.Invoking(b => b.RemoveElement(null)).Should().Throw<ArgumentNullException>();
-        }
-
-        [Fact]
-        public void RemoveElement_RemovesItAsDirectSuccessor()
-        {
-            var graph = DirectedGraphBuilder<string>.NewBuilder()
+            var builder = DirectedGraphBuilder<string>.NewBuilder()
                 .AddElement("from")
                 .AddElement("to")
-                .AddArrow("from", "to")
-                .RemoveElement("to")
-                .CreateGraph();
+                .AddArrow("from", "to");
 
-            graph.GetDirectSuccessorsOf("from").Should().NotContain("to");
+            builder.Invoking(b => b.AddArrow("from", "to")).Should().Throw<ArgumentException>();
         }
-        
+
         [Fact]
-        public void RemoveElement_RemovesItAsDirectPredecessor()
+        public void AddArrow_AddsSelfEdges()
         {
             var graph = DirectedGraphBuilder<string>.NewBuilder()
-                .AddElement("from")
-                .AddElement("to")
-                .AddArrow("from", "to")
-                .RemoveElement("from")
+                .AddElement("from_and_to")
+                .AddArrow("from_and_to", "from_and_to")
                 .CreateGraph();
 
-            graph.GetDirectPredecessorsOf("to").Should().NotContain("from");
-        }
-
-        [Fact]
-        public void RemoveArrow_RemovesDirectSuccessor()
-        {
-            var graph = DirectedGraphBuilder<string>.NewBuilder()
-                .AddElement("from")
-                .AddElement("to")
-                .AddArrow("from", "to")
-                .RemoveArrow("from", "to")
-                .CreateGraph();
-
-            graph.GetDirectSuccessorsOf("from").Should().NotContain("to");
-        }
-
-        [Fact]
-        public void RemoveArrow_RemovesDirectPredecessor()
-        {
-            var graph = DirectedGraphBuilder<string>.NewBuilder()
-                .AddElement("from")
-                .AddElement("to")
-                .AddArrow("from", "to")
-                .RemoveArrow("from", "to")
-                .CreateGraph();
-
-            graph.GetDirectPredecessorsOf("to").Should().NotContain("from");
-        }
-
-        [Fact]
-        public void RemoveArrow_ThrowsOnFromMissing()
-        {
-            var builder = DirectedGraphBuilder<string>.NewBuilder().AddElement("to");
-
-            builder.Invoking(b => b.RemoveArrow("from", "to")).Should().Throw<ArgumentException>();
-        }
-
-        [Fact]
-        public void RemoveArrow_ThrowsOnToMissing()
-        {
-            var builder = DirectedGraphBuilder<string>.NewBuilder().AddElement("from");
-
-            builder.Invoking(b => b.RemoveArrow("from", "to")).Should().Throw<ArgumentException>();
-        }
-
-        [Fact]
-        public void RemoveArrow_ThrowsOnFromNull()
-        {
-            var builder = DirectedGraphBuilder<string>.NewBuilder().AddElement("to");
-
-            builder.Invoking(b => b.RemoveArrow(null, "to")).Should().Throw<ArgumentException>();
-        }
-
-        [Fact]
-        public void RemoveArrow_ThrowsOnToNull()
-        {
-            var builder = DirectedGraphBuilder<string>.NewBuilder().AddElement("from");
-
-            builder.Invoking(b => b.RemoveArrow("from", null)).Should().Throw<ArgumentException>();
+            graph.GetDirectSuccessorsOf("from_and_to").Should().Contain("from_and_to");
+            graph.GetDirectPredecessorsOf("from_and_to").Should().Contain("from_and_to");
         }
 
         [Fact]
         public void CreateGraph_DoesNotThrowOnCycle()
         {
             var builder = createBuilderForTriangle();
+            
+            builder.Invoking(b => b.CreateGraph()).Should().NotThrow();
+        }
+
+        [Fact]
+        public void CreateGraph_DoesNotThrowOnSelfEdge()
+        {
+            var builder = createBuilderForSelfEdge();
             
             builder.Invoking(b => b.CreateGraph()).Should().NotThrow();
         }
@@ -298,9 +226,25 @@ namespace Bearded.Utilities.Tests.Graphs
         }
 
         [Fact]
+        public void CreateAcyclicGraph_ThrowsOnSelfEdge()
+        {
+            var builder = createBuilderForSelfEdge();
+
+            builder.Invoking(b => b.CreateAcyclicGraph()).Should().Throw<InvalidOperationException>();
+        }
+
+        [Fact]
         public void CreateAcyclicGraphUnsafe_DoesNotThrowOnCycle()
         {
             var builder = createBuilderForTriangle();
+            
+            builder.Invoking(b => b.CreateAcyclicGraphUnsafe()).Should().NotThrow();
+        }
+
+        [Fact]
+        public void CreateAcyclicGraphUnsafe_DoesNotThrowOnSelfEdge()
+        {
+            var builder = createBuilderForSelfEdge();
             
             builder.Invoking(b => b.CreateAcyclicGraphUnsafe()).Should().NotThrow();
         }
@@ -314,6 +258,13 @@ namespace Bearded.Utilities.Tests.Graphs
                 .AddArrow("A", "B")
                 .AddArrow("B", "C")
                 .AddArrow("C", "A");
+        }
+
+        private static DirectedGraphBuilder<string> createBuilderForSelfEdge()
+        {
+            return DirectedGraphBuilder<string>.NewBuilder()
+                .AddElement("A")
+                .AddArrow("A", "A");
         }
     }
 }

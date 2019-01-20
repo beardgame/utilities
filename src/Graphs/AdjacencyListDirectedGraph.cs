@@ -4,19 +4,19 @@ using System.Collections.Immutable;
 
 namespace Bearded.Utilities.Graphs
 {
-    class AdjacencyListDiGraph<T> : IDirectedGraph<T> where T : IEquatable<T>
+    class AdjacencyListDirectedGraph<T> : IDirectedGraph<T> where T : IEquatable<T>
     {
-        private readonly ImmutableHashSet<T> elements;
-        private readonly ImmutableDictionary<T, ImmutableHashSet<T>> directSuccessors;
-        private readonly ImmutableDictionary<T, ImmutableHashSet<T>> directPredecessors;
+        private readonly ImmutableList<T> elements;
+        private readonly ImmutableDictionary<T, ImmutableList<T>> directSuccessors;
+        private readonly ImmutableDictionary<T, ImmutableList<T>> directPredecessors;
 
         public IEnumerable<T> Elements => elements;
         public int Count => elements.Count;
 
-        public AdjacencyListDiGraph(
-            ImmutableHashSet<T> elements,
-            ImmutableDictionary<T, ImmutableHashSet<T>> directSuccessors,
-            ImmutableDictionary<T, ImmutableHashSet<T>> directPredecessors)
+        public AdjacencyListDirectedGraph(
+            ImmutableList<T> elements,
+            ImmutableDictionary<T, ImmutableList<T>> directSuccessors,
+            ImmutableDictionary<T, ImmutableList<T>> directPredecessors)
         {
             this.elements = elements;
             this.directSuccessors = directSuccessors;

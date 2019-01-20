@@ -30,6 +30,7 @@ namespace Bearded.Utilities.Graphs
 
                 builder.directSuccessors.Add(element, successors);
                 builder.directPredecessors.Add(element, predecessors);
+
                 if (predecessors.Count == 0)
                 {
                     builder.sources.Add(element);
@@ -49,11 +50,8 @@ namespace Bearded.Utilities.Graphs
         public DirectedGraphBuilder<T> AddElement(T element)
         {
             if (element == null) throw new ArgumentNullException(nameof(element));
+            if (!elements.Add(element)) throw new ArgumentException("Element already in graph.", nameof(element));
 
-            if (!elements.Add(element))
-            {
-                return this;
-            }
             sources.Add(element);
             directSuccessors.Add(element, new HashSet<T>());
             directPredecessors.Add(element, new HashSet<T>());
@@ -67,10 +65,7 @@ namespace Bearded.Utilities.Graphs
             if (to == null) throw new ArgumentNullException(nameof(to));
             if (!elements.Contains(from)) throw new ArgumentException("Element not in graph.", nameof(from));
             if (!elements.Contains(to)) throw new ArgumentException("Element not in graph.", nameof(to));
-            if (from.Equals(to))
-            {
-                throw new InvalidOperationException("Cannot make self-edges in directed acyclic graph.");
-            }
+            if (directSuccessors[from].Contains(to)) throw new ArgumentException("Arrow already in graph.");
 
             directSuccessors[from].Add(to);
             directPredecessors[to].Add(from);
@@ -83,66 +78,19 @@ namespace Bearded.Utilities.Graphs
             return this;
         }
 
-        public DirectedGraphBuilder<T> RemoveElement(T element)
-        {
-            if (element == null) throw new ArgumentNullException(nameof(element));
-
-            if (!elements.Remove(element))
-            {
-                return this;
-            }
-            sources.Remove(element);
-
-            foreach (var to in directSuccessors[element])
-            {
-                directPredecessors[to].Remove(element);
-                if (directPredecessors[to].Count == 0)
-                {
-                    sources.Add(to);
-                }
-            }
-            foreach (var from in directPredecessors[element])
-            {
-                directSuccessors[from].Remove(element);
-            }
-
-            return this;
-        }
-
-        public DirectedGraphBuilder<T> RemoveArrow(T from, T to)
-        {
-            if (from == null) throw new ArgumentNullException(nameof(from));
-            if (to == null) throw new ArgumentNullException(nameof(to));
-            if (!elements.Contains(from)) throw new ArgumentException("Element not in graph.", nameof(from));
-            if (!elements.Contains(to)) throw new ArgumentException("Element not in graph.", nameof(to));
-
-            if (!directSuccessors[from].Remove(to))
-            {
-                return this;
-            }
-
-            directPredecessors[to].Remove(from);
-            if (directPredecessors[to].Count == 0)
-            {
-                sources.Add(to);
-            }
-
-            return this;
-        }
-
         /// <summary>
         /// Creates an immutable directed graph instance.
         /// </summary>
         public IDirectedGraph<T> CreateGraph()
         {
-            return new AdjacencyListDiGraph<T>(
-                ImmutableHashSet.CreateRange(elements),
+            return new AdjacencyListDirectedGraph<T>(
+                ImmutableList.CreateRange(elements),
                 directSuccessors.ToImmutableDictionary(
                     pair => pair.Key,
-                    pair => ImmutableHashSet.CreateRange(pair.Value)),
+                    pair => ImmutableList.CreateRange(pair.Value)),
                 directPredecessors.ToImmutableDictionary(
                     pair => pair.Key,
-                    pair => ImmutableHashSet.CreateRange(pair.Value)));
+                    pair => ImmutableList.CreateRange(pair.Value)));
         }
 
         /// <summary>
@@ -197,14 +145,14 @@ namespace Bearded.Utilities.Graphs
         /// </summary>
         public IDirectedAcyclicGraph<T> CreateAcyclicGraphUnsafe()
         {
-            return new AdjacencyListDag<T>(
-                ImmutableHashSet.CreateRange(elements),
+            return new AdjacencyListDirectedAcyclicGraph<T>(
+                ImmutableList.CreateRange(elements),
                 directSuccessors.ToImmutableDictionary(
                     pair => pair.Key,
-                    pair => ImmutableHashSet.CreateRange(pair.Value)),
+                    pair => ImmutableList.CreateRange(pair.Value)),
                 directPredecessors.ToImmutableDictionary(
                     pair => pair.Key,
-                    pair => ImmutableHashSet.CreateRange(pair.Value)));
+                    pair => ImmutableList.CreateRange(pair.Value)));
         }
     }
 }
