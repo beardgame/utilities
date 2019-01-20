@@ -32,7 +32,7 @@ namespace Bearded.Utilities.SpaceTime
             return acceleration * directionVector;
         }
 
-        public Acceleration AccelerationOnLineTowards(Mass mass, Unit differenceToOther)
+        public Acceleration AccelerationTowards(Mass mass, Unit differenceToOther)
         {
             var directionVector = Math.Sign(differenceToOther.NumericValue);
             var acceleration = AccelerationAtDistance(mass, differenceToOther);
