@@ -17,7 +17,7 @@ namespace Bearded.Utilities.Tests.Graphs
                 .AddArrow("two", "three")
                 .AddArrow("one", "three")
                 .CreateAcyclicGraphUnsafe();
-            
+
             var reducedGraph = graph.GetTransitiveReduction();
 
             reducedGraph.Elements.Should().Contain(graph.Elements);
