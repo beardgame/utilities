@@ -84,8 +84,8 @@ namespace Bearded.Utilities.Tests.Algorithms
                 var area = r.Width * r.Height;
                 coveredPixels += area;
 
-                maxX = System.Math.Max(maxX, r.X + r.Width);
-                maxY = System.Math.Max(maxY, r.Y + r.Height);
+                maxX = Math.Max(maxX, r.X + r.Width);
+                maxY = Math.Max(maxY, r.Y + r.Height);
             }
 
             Assert.Equal(maxX, result.Width);
