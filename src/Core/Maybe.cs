@@ -14,15 +14,15 @@ namespace Bearded.Utilities
             this.value = value;
         }
 
-        public static Maybe<T> Nothing() => new Maybe<T>();
+        internal static Maybe<T> Nothing() => new Maybe<T>();
 
-        public static Maybe<T> Just(T value) => new Maybe<T>(value);
+        internal static Maybe<T> Just(T value) => new Maybe<T>(value);
 
         public T ValueOrDefault(T @default) => hasValue ? value : @default;
 
-        public Maybe<TOut> Select<TOut>(Func<T, TOut> map) => hasValue ? Maybe.Just(map(value)) : Maybe<TOut>.Nothing();
+        public Maybe<TOut> Select<TOut>(Func<T, TOut> map) => hasValue ? Maybe.Just(map(value)) : Maybe.Nothing<TOut>();
 
-        public Maybe<TOut> SelectMany<TOut>(Func<T, Maybe<TOut>> map) => hasValue ? map(value) : Maybe<TOut>.Nothing();
+        public Maybe<TOut> SelectMany<TOut>(Func<T, Maybe<TOut>> map) => hasValue ? map(value) : Maybe.Nothing<TOut>();
 
         public void Match(Action<T> onValue, Action onNothing)
         {
@@ -55,5 +55,7 @@ namespace Bearded.Utilities
             value.HasValue ? Maybe<T>.Just(value.Value) : Maybe<T>.Nothing();
 
         public static Maybe<T> Just<T>(T value) => Maybe<T>.Just(value);
+
+        public static Maybe<T> Nothing<T>() => Maybe<T>.Nothing();
     }
 }

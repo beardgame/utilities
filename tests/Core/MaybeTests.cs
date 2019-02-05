@@ -9,7 +9,7 @@ namespace Bearded.Utilities.Tests.Core
         [Fact]
         public void ValueOrDefault_ReturnsDefaultOnNothing()
         {
-            var maybe = Maybe<int>.Nothing();
+            var maybe = Maybe.Nothing<int>();
 
             maybe.ValueOrDefault(100).Should().Be(100);
         }
@@ -25,9 +25,9 @@ namespace Bearded.Utilities.Tests.Core
         [Fact]
         public void Select_MapsNothingToNothing()
         {
-            var maybe = Maybe<int>.Nothing();
+            var maybe = Maybe.Nothing<int>();
 
-            maybe.Select(i => i * 2).Should().Be(Maybe<int>.Nothing());
+            maybe.Select(i => i * 2).Should().Be(Maybe.Nothing<int>());
         }
 
         [Fact]
@@ -41,9 +41,9 @@ namespace Bearded.Utilities.Tests.Core
         [Fact]
         public void SelectMany_MapsNothingToNothing()
         {
-            var maybe = Maybe<int>.Nothing();
+            var maybe = Maybe.Nothing<int>();
 
-            maybe.SelectMany(i => Maybe.Just(i * 2)).Should().Be(Maybe<int>.Nothing());
+            maybe.SelectMany(i => Maybe.Just(i * 2)).Should().Be(Maybe.Nothing<int>());
         }
 
         [Fact]
@@ -59,13 +59,13 @@ namespace Bearded.Utilities.Tests.Core
         {
             var maybe = Maybe<int>.Just(100);
 
-            maybe.SelectMany(i => Maybe<int>.Nothing()).Should().Be(Maybe<int>.Nothing());
+            maybe.SelectMany(i => Maybe.Nothing<int>()).Should().Be(Maybe.Nothing<int>());
         }
 
         [Fact]
         public void Match_CallsOnNothingOnNothing()
         {
-            var maybe = Maybe<int>.Nothing();
+            var maybe = Maybe.Nothing<int>();
 
             maybe.Match(onValue: (val) => throw new XunitException("Wrong method called"), onNothing: () => { });
         }
