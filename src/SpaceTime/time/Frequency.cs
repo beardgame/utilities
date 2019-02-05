@@ -94,6 +94,13 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
+        #region angle differentiation
+
+        public static AngularVelocity operator *(Angle s, Frequency f)
+            => AngularVelocity.FromRadians(s.Radians * (float)f.value);
+
+        #endregion
+
         #region TimeSpan interaction
 
         public static double operator *(Frequency f, TimeSpan t) => f.value * t.NumericValue;

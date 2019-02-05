@@ -13,7 +13,7 @@ namespace Bearded.Utilities.SpaceTime
         private readonly float value;
 
         #region construction
-        
+
         public Speed(float value)
         {
             this.value = value;
@@ -63,7 +63,7 @@ namespace Bearded.Utilities.SpaceTime
         public int CompareTo(Speed other) => value.CompareTo(other.value);
 
         #endregion
-        
+
         #region tostring
 
         public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
@@ -131,6 +131,10 @@ namespace Bearded.Utilities.SpaceTime
         /// </summary>
         public static Acceleration operator /(Speed s, TimeSpan t) => new Acceleration(s.value / (float)t.NumericValue);
 
+        public static Acceleration operator *(Speed s, Frequency f) => new Acceleration(s.value * (float)f.NumericValue);
+
+        public static Acceleration operator *(Frequency f, Speed s) => new Acceleration(s.value * (float)f.NumericValue);
+
         #endregion
 
         #region integrate
@@ -144,6 +148,8 @@ namespace Bearded.Utilities.SpaceTime
         /// Multiplies a speed value by a timespan, returning a unit value.
         /// </summary>
         public static Unit operator *(TimeSpan t, Speed s) => new Unit(s.value * (float)t.NumericValue);
+
+        public static Unit operator /(Speed s, Frequency f) => new Unit(s.value / (float)f.NumericValue);
 
         #endregion
 
