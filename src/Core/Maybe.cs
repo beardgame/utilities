@@ -4,8 +4,8 @@ namespace Bearded.Utilities
 {
     public struct Maybe<T>
     {
-        private bool hasValue;
-        private T value;
+        private readonly bool hasValue;
+        private readonly T value;
 
         private Maybe(T value)
         {
@@ -17,13 +17,38 @@ namespace Bearded.Utilities
 
         public static Maybe<T> Just(T value) => new Maybe<T>(value);
 
-        public T OrElse(T @default) => hasValue ? value : @default;
+        public T ValueOrDefault(T @default) => hasValue ? value : @default;
 
-        public T OrThrow(Func<Exception> exceptionProvider) => hasValue ? value : throw exceptionProvider();
+        public Maybe<TOut> Select<TOut>(Func<T, TOut> map) => hasValue ? Maybe.Just(map(value)) : Maybe<TOut>.Nothing();
 
-        public Maybe<TOut> Map<TOut>(Func<T, TOut> map) =>
-            hasValue ? new Maybe<TOut>(map(value)) : Maybe<TOut>.Nothing();
+        public Maybe<TOut> SelectMany<TOut>(Func<T, Maybe<TOut>> map) => hasValue ? map(value) : Maybe<TOut>.Nothing();
 
-        public Maybe<TOut> FlatMap<TOut>(Func<T, Maybe<TOut>> map) => hasValue ? map(value) : Maybe<TOut>.Nothing();
+        public void Consume(Action<T> action)
+        {
+            Match(onValue: action, onNothing: () => { });
+        }
+
+        public void Match(Action<T> onValue, Action onNothing)
+        {
+            if (hasValue)
+            {
+                onValue(value);
+            }
+            else
+            {
+                onNothing();
+            }
+        }
+    }
+
+    public static class Maybe
+    {
+        public static Maybe<T> FromNullable<T>(T value) where T : class =>
+            value == null ? Maybe<T>.Nothing() : Maybe<T>.Just(value);
+
+        public static Maybe<T> FromNullable<T>(T? value) where T : struct =>
+            value.HasValue ? Maybe<T>.Just(value.Value) : Maybe<T>.Nothing();
+
+        public static Maybe<T> Just<T>(T value) => Maybe<T>.Just(value);
     }
 }
