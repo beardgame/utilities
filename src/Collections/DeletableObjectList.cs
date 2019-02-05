@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Bearded.Utilities.Collections
@@ -22,7 +23,7 @@ namespace Bearded.Utilities.Collections
         private float emptyFraction => (float)(list.Count - count) / count;
 
         /// <summary>
-        /// Gets or sets the maximmum fraction of deleted objects this list can contain before it compacts the backing data structure.
+        /// Gets or sets the maximum fraction of deleted objects this list can contain before it compacts the backing data structure.
         /// The lower the value, the more aggressively and more often is the list compacted.
         /// A value of 0 compacts as often as possible.
         /// </summary>
@@ -38,12 +39,12 @@ namespace Bearded.Utilities.Collections
         #endregion
 
         #region Constructor
-        
+
         public DeletableObjectList()
             : this(4)
         {
         }
-        
+
         public DeletableObjectList(int capacity)
         {
             list = new List<T>(capacity);
@@ -55,11 +56,14 @@ namespace Bearded.Utilities.Collections
         #region Methods
 
         /// <summary>
-        /// Adds an item to this deletable object list.
+        /// Adds an item to this deletable object list. The item cannot be null.
         /// </summary>
         /// <param name="item">The item to add.</param>
         public void Add(T item)
         {
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+
             list.Add(item);
             count++;
         }
@@ -102,26 +106,17 @@ namespace Bearded.Utilities.Collections
 
         #region Enumeration
 
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
-        public IEnumerator<T> GetEnumerator()
-        {
-            return new DeletableObjectListEnumerator<T>(this, list);
-        }
+        /// <inheritdoc />
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
 
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        /// <inheritdoc />
+        public IEnumerator<T> GetEnumerator() => new DeletableObjectListEnumerator<T>(this, list);
 
         internal void RegisterEnumerator()
         {
             enumerators++;
         }
+
         internal void UnregisterEnumerator()
         {
             enumerators--;
@@ -131,6 +126,35 @@ namespace Bearded.Utilities.Collections
         #endregion
 
         #region Compaction and Trimming
+
+        /// <summary>
+        /// Force the list to compact its backing data structure for optimal enumeration performance.
+        /// It further trims it to use minimal memory.
+        /// This operation takes O(n) time, where n the number of items in the list,
+        /// assuming frequent enumeration or forced compaction.
+        /// </summary>
+        public void TrimExcess()
+        {
+            ForceCompact();
+            list.TrimExcess();
+        }
+
+        /// <summary>
+        /// Force the list to compact its backing data structure for optimal enumeration performance.
+        /// This operation takes O(n) time, where n the number of items in the list,
+        /// assuming frequent enumeration or forced compaction.
+        /// </summary>
+        public void ForceCompact()
+        {
+            if (enumerators != 0)
+            {
+                throw new InvalidOperationException(
+                    "Cannot compact list while enumerating. " +
+                    "If you were not enumerating, check that your enumerators are disposed of correctly.");
+            }
+
+            compact();
+        }
 
         private void considerCompacting()
         {
@@ -146,28 +170,6 @@ namespace Bearded.Utilities.Collections
         {
             list.RemoveAll(t => t == null || t.Deleted);
             count = list.Count;
-        }
-
-        /// <summary>
-        /// Force the list to compact its backing data structure for optimal enumeration performance.
-        /// This operation takes O(n) time, where n the number of items in the list,
-        /// assuming frequent enumeration or forced compaction.
-        /// </summary>
-        public void ForceCompact()
-        {
-            compact();
-        }
-
-        /// <summary>
-        /// Force the list to compact its backing data structure for optimal enumeration performance.
-        /// It further trims it to use minimal memory.
-        /// This operation takes O(n) time, where n the number of items in the list,
-        /// assuming frequent enumeration or forced compaction.
-        /// </summary>
-        public void TrimExcess()
-        {
-            compact();
-            list.TrimExcess();
         }
 
         #endregion
