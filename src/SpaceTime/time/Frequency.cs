@@ -24,7 +24,7 @@ namespace Bearded.Utilities.SpaceTime
 
         public double NumericValue => value;
 
-        public static Frequency Zero => new Frequency(0);
+        public static Frequency Never => new Frequency(0);
 
         public static Frequency One => new Frequency(1);
 
