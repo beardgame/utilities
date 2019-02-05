@@ -42,6 +42,8 @@ namespace Bearded.Utilities
         public override bool Equals(object obj) => obj is Maybe<T> other && Equals(other);
 
         public override int GetHashCode() => hasValue ? EqualityComparer<T>.Default.GetHashCode(value) : 0;
+
+        public override string ToString() => hasValue ? $"just {value}" : "nothing";
     }
 
     public static class Maybe
