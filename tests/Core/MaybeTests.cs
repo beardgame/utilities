@@ -33,7 +33,7 @@ namespace Bearded.Utilities.Tests.Core
         [Fact]
         public void Select_MapsValueToJust()
         {
-            var maybe = Maybe<int>.Just(100);
+            var maybe = Maybe.Just(100);
 
             maybe.Select(i => i * 2).Should().Be(Maybe.Just(200));
         }
@@ -49,7 +49,7 @@ namespace Bearded.Utilities.Tests.Core
         [Fact]
         public void SelectMany_MapsValueToJust()
         {
-            var maybe = Maybe<int>.Just(100);
+            var maybe = Maybe.Just(100);
 
             maybe.SelectMany(i => Maybe.Just(i * 2)).Should().Be(Maybe.Just(200));
         }
@@ -57,7 +57,7 @@ namespace Bearded.Utilities.Tests.Core
         [Fact]
         public void SelectMany_MapsValueToNothing()
         {
-            var maybe = Maybe<int>.Just(100);
+            var maybe = Maybe.Just(100);
 
             maybe.SelectMany(i => Maybe.Nothing<int>()).Should().Be(Maybe.Nothing<int>());
         }
@@ -67,17 +67,53 @@ namespace Bearded.Utilities.Tests.Core
         {
             var maybe = Maybe.Nothing<int>();
 
-            maybe.Match(onValue: (val) => throw new XunitException("Wrong method called"), onNothing: () => { });
+            var isCalled = false;
+            maybe.Match(
+                onValue: (val) => throw new XunitException("Wrong method called"),
+                onNothing: () => isCalled = true);
+
+            isCalled.Should().BeTrue("onNothing should have been called");
         }
         
         [Fact]
         public void Match_CallsOnValueWithValueOnJust()
         {
-            var maybe = Maybe<int>.Just(100);
+            var maybe = Maybe.Just(100);
 
+            var isCalled = false;
             maybe.Match(
-                onValue: (val) => val.Should().Be(100),
+                onValue: (val) =>
+                {
+                    val.Should().Be(100);
+                    isCalled = true;
+                },
                 onNothing: () => throw new XunitException("Wrong method called"));
+            
+            isCalled.Should().BeTrue("onValue should have been called");
+        }
+
+        [Fact]
+        public void FromNullable_OnReferenceTypeNull_ReturnsEmpty()
+        {
+            Maybe.FromNullable((string) null).Should().Be(Maybe.Nothing<string>());
+        }
+
+        [Fact]
+        public void FromNullable_OnReferenceTypeSet_ReturnsJust()
+        {
+            Maybe.FromNullable("the game").Should().Be(Maybe.Just("the game"));
+        }
+        
+        [Fact]
+        public void FromNullable_OnNullableNoValue_ReturnsEmpty()
+        {
+            Maybe.FromNullable((int?) null).Should().Be(Maybe.Nothing<int>());
+        }
+        
+        [Fact]
+        public void FromNullable_OnNullableWithValue_ReturnsJust()
+        {
+            Maybe.FromNullable((int?) 10).Should().Be(Maybe.Just(10));
         }
     }
 }

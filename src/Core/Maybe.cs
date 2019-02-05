@@ -20,9 +20,11 @@ namespace Bearded.Utilities
 
         public T ValueOrDefault(T @default) => hasValue ? value : @default;
 
-        public Maybe<TOut> Select<TOut>(Func<T, TOut> map) => hasValue ? Maybe.Just(map(value)) : Maybe.Nothing<TOut>();
+        public Maybe<TOut> Select<TOut>(Func<T, TOut> selector) =>
+            hasValue ? Maybe.Just(selector(value)) : Maybe.Nothing<TOut>();
 
-        public Maybe<TOut> SelectMany<TOut>(Func<T, Maybe<TOut>> map) => hasValue ? map(value) : Maybe.Nothing<TOut>();
+        public Maybe<TOut> SelectMany<TOut>(Func<T, Maybe<TOut>> selector) =>
+            hasValue ? selector(value) : Maybe.Nothing<TOut>();
 
         public void Match(Action<T> onValue, Action onNothing)
         {
