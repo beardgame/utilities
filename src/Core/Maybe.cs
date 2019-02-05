@@ -24,6 +24,6 @@ namespace Bearded.Utilities
         public Maybe<TOut> Map<TOut>(Func<T, TOut> map) =>
             hasValue ? new Maybe<TOut>(map(value)) : Maybe<TOut>.Nothing();
 
-        public Maybe<TOut> Map<TOut>(Func<T, Maybe<TOut>> map) => hasValue ? map(value) : Maybe<TOut>.Nothing();
+        public Maybe<TOut> FlatMap<TOut>(Func<T, Maybe<TOut>> map) => hasValue ? map(value) : Maybe<TOut>.Nothing();
     }
 }
