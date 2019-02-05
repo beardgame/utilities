@@ -93,7 +93,7 @@ namespace Bearded.Utilities.Tests.Core
         }
 
         [Fact]
-        public void FromNullable_OnReferenceTypeNull_ReturnsEmpty()
+        public void FromNullable_OnReferenceTypeNull_ReturnsNothing()
         {
             Maybe.FromNullable((string) null).Should().Be(Maybe.Nothing<string>());
         }
@@ -105,7 +105,7 @@ namespace Bearded.Utilities.Tests.Core
         }
         
         [Fact]
-        public void FromNullable_OnNullableNoValue_ReturnsEmpty()
+        public void FromNullable_OnNullableNoValue_ReturnsNothing()
         {
             Maybe.FromNullable((int?) null).Should().Be(Maybe.Nothing<int>());
         }
