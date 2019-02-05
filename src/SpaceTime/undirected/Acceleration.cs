@@ -13,7 +13,7 @@ namespace Bearded.Utilities.SpaceTime
         private readonly float value;
 
         #region construction
-        
+
         public Acceleration(float value)
         {
             this.value = value;
@@ -135,6 +135,8 @@ namespace Bearded.Utilities.SpaceTime
         /// Multiplies an acceleration value by a timespan, returning a speed.
         /// </summary>
         public static Speed operator *(TimeSpan t, Acceleration a) => new Speed(a.value * (float)t.NumericValue);
+
+        public static Speed operator /(Acceleration a, Frequency f) => new Speed(a.value / (float)f.NumericValue);
 
         #endregion
 
