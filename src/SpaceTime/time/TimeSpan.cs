@@ -122,10 +122,10 @@ namespace Bearded.Utilities.SpaceTime
         #region static methods
 
         public static TimeSpan Min(TimeSpan t1, TimeSpan t2)
-            => new TimeSpan(System.Math.Min(t1.NumericValue, t2.NumericValue));
+            => new TimeSpan(Math.Min(t1.NumericValue, t2.NumericValue));
 
         public static TimeSpan Max(TimeSpan t1, TimeSpan t2)
-            => new TimeSpan(System.Math.Max(t1.NumericValue, t2.NumericValue));
+            => new TimeSpan(Math.Max(t1.NumericValue, t2.NumericValue));
 
         #endregion
     }
