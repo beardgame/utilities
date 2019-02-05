@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Bearded.Utilities.Geometry;
 
 namespace Bearded.Utilities.SpaceTime
 {
@@ -61,16 +62,6 @@ namespace Bearded.Utilities.SpaceTime
 
         #region operators
 
-        #region algebra
-
-        public static Frequency operator +(Frequency f0, Frequency f1) => new Frequency(f0.value + f1.value);
-
-        public static Frequency operator -(Frequency f0, Frequency f1) => new Frequency(f0.value - f1.value);
-
-        public static Frequency operator -(Frequency f) => new Frequency(-f.value);
-
-        #endregion
-
         #region scaling
 
         public static Frequency operator *(Frequency t, double scalar) => new Frequency(t.value * scalar);
@@ -118,10 +109,10 @@ namespace Bearded.Utilities.SpaceTime
         #region static methods
 
         public static Frequency Min(Frequency f1, Frequency t2)
-            => new Frequency(System.Math.Min(f1.NumericValue, t2.NumericValue));
+            => new Frequency(Math.Min(f1.NumericValue, t2.NumericValue));
 
         public static Frequency Max(Frequency f1, Frequency t2)
-            => new Frequency(System.Math.Max(f1.NumericValue, t2.NumericValue));
+            => new Frequency(Math.Max(f1.NumericValue, t2.NumericValue));
 
         #endregion
     }
