@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 
 namespace Bearded.Utilities
 {
-    public struct Maybe<T>
+    public struct Maybe<T> : IEquatable<Maybe<T>>
     {
         private readonly bool hasValue;
         private readonly T value;
@@ -23,11 +24,6 @@ namespace Bearded.Utilities
 
         public Maybe<TOut> SelectMany<TOut>(Func<T, Maybe<TOut>> map) => hasValue ? map(value) : Maybe<TOut>.Nothing();
 
-        public void Consume(Action<T> action)
-        {
-            Match(onValue: action, onNothing: () => { });
-        }
-
         public void Match(Action<T> onValue, Action onNothing)
         {
             if (hasValue)
@@ -39,6 +35,13 @@ namespace Bearded.Utilities
                 onNothing();
             }
         }
+
+        public bool Equals(Maybe<T> other) =>
+            hasValue == other.hasValue && EqualityComparer<T>.Default.Equals(value, other.value);
+
+        public override bool Equals(object obj) => obj is Maybe<T> other && Equals(other);
+
+        public override int GetHashCode() => hasValue ? EqualityComparer<T>.Default.GetHashCode(value) : 0;
     }
 
     public static class Maybe
