@@ -172,7 +172,9 @@ namespace Bearded.Utilities.Collections
         /// <param name="i2">The index of the second element.</param>
         protected virtual void swap(int i1, int i2)
         {
-            Do.Swap(ref this.data[i1], ref this.data[i2]);
+            var oldFirst = this.data[i1];
+            this.data[i1] = this.data[i2];
+            this.data[i2] = oldFirst;
         }
 
         /// <summary>
