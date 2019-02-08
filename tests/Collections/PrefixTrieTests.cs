@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Bearded.Utilities.Collections;
+using FluentAssertions;
 using Xunit;
 
 namespace Bearded.Utilities.Tests.Collections
@@ -15,12 +16,12 @@ namespace Bearded.Utilities.Tests.Collections
             var trie = new PrefixTrie(
                 new[] { "one", "two", "three" }
                 );
-            Assert.Equal(3, trie.Count);
+            trie.Count.Should().Be(3);
 
             trie = new PrefixTrie(
                 new string[0]
                 );
-            Assert.Equal(0, trie.Count);
+            trie.Count.Should().Be(0);
         }
 
         [Fact]
@@ -29,7 +30,7 @@ namespace Bearded.Utilities.Tests.Collections
             var trie = new PrefixTrie(
                 new[] { "one", "two", "three", null }
                 );
-            Assert.Equal(3, trie.Count);
+            trie.Should().HaveCount(3);
         }
 
         [Fact]
@@ -38,7 +39,7 @@ namespace Bearded.Utilities.Tests.Collections
             var trie = new PrefixTrie(
                 new[] { "one", "two", "three", "two" }
                 );
-            Assert.Equal(3, trie.Count);
+            trie.Should().HaveCount(3);
         }
 
         #endregion
@@ -51,12 +52,9 @@ namespace Bearded.Utilities.Tests.Collections
             var trie = new PrefixTrie(
                 new[] { "one", "two", "three" }
                 );
-
-            Assert.True(trie.Contains("one"));
-            Assert.True(trie.Contains("two"));
-            Assert.True(trie.Contains("three"));
-            Assert.False(trie.Contains("four"));
-            Assert.False(trie.Contains("threeAndSome"));
+            
+            trie.Should().Contain(new[] {"one", "two", "three"});
+            trie.Should().NotContain(new[] {"four", "threeAndSome"});
         }
 
         [Fact]
@@ -65,10 +63,8 @@ namespace Bearded.Utilities.Tests.Collections
             var trie = new PrefixTrie(
                 new[] { "one", "two", "three" }
                 );
-
-            Assert.False(trie.Contains(""));
-            Assert.False(trie.Contains("t"));
-            Assert.False(trie.Contains("tw"));
+            
+            trie.Should().NotContain(new[] {"", "t", "tw"});
         }
 
         #endregion
@@ -81,11 +77,12 @@ namespace Bearded.Utilities.Tests.Collections
             var trie = new PrefixTrie(
                 new[] { "one", "two", "three", "threshing" }
                 );
-            Assert.Equal("one", trie.ExtendPrefix("o"));
-            Assert.Equal("one", trie.ExtendPrefix("one"));
 
-            Assert.Equal("t", trie.ExtendPrefix("t"));
-            Assert.Equal("thre", trie.ExtendPrefix("th"));
+            trie.ExtendPrefix("o").Should().Be("one");
+            trie.ExtendPrefix("one").Should().Be("one");
+            
+            trie.ExtendPrefix("t").Should().Be("t");
+            trie.ExtendPrefix("th").Should().Be("thre");
         }
 
         [Fact]
@@ -95,8 +92,8 @@ namespace Bearded.Utilities.Tests.Collections
                 new[] { "one", "two", "three" }
                 );
 
-            Assert.Null(trie.ExtendPrefix("a"));
-            Assert.Null(trie.ExtendPrefix("twofold"));
+            trie.ExtendPrefix("a").Should().BeNull();
+            trie.ExtendPrefix("twofold").Should().BeNull();
         }
 
         #endregion
@@ -112,16 +109,13 @@ namespace Bearded.Utilities.Tests.Collections
 
             var withPrefixO = trie.AllKeys("o").ToList();
 
-            Assert.Equal(1, withPrefixO.Count);
-            Assert.Equal("one", withPrefixO[0]);
+            withPrefixO.Should().HaveCount(1);
+            withPrefixO.Should().Contain("one");
 
             var withPrefixTh = trie.AllKeys("th").ToList();
 
-            Assert.Equal(2, withPrefixTh.Count);
-            foreach (var word in words.Where(w => w.StartsWith("th")))
-            {
-                Assert.True(withPrefixTh.Contains(word));
-            }
+            withPrefixTh.Should().HaveCount(2);
+            withPrefixTh.Should().Contain(words.Where(w => w.StartsWith("th")));
         }
 
         [Fact]
@@ -133,11 +127,8 @@ namespace Bearded.Utilities.Tests.Collections
 
             var withPrefixEmptyString = trie.AllKeys("").ToList();
 
-            Assert.Equal(words.Length, withPrefixEmptyString.Count);
-            foreach (var word in words)
-            {
-                Assert.True(withPrefixEmptyString.Contains(word));
-            }
+            withPrefixEmptyString.Should().HaveCount(words.Length);
+            withPrefixEmptyString.Should().Contain(words);
         }
 
         [Fact]
@@ -149,7 +140,7 @@ namespace Bearded.Utilities.Tests.Collections
 
             var withPrefixEmptyString = trie.AllKeys("twofold").ToList();
 
-            Assert.Equal(0, withPrefixEmptyString.Count);
+            withPrefixEmptyString.Should().BeEmpty();
         }
 
         #endregion
@@ -169,17 +160,14 @@ namespace Bearded.Utilities.Tests.Collections
             {
                 for (int i = 0; i < words.Length; i++)
                 {
-                    Assert.True(enumerator.MoveNext());
+                    enumerator.MoveNext().Should().BeTrue();
                     list.Add(enumerator.Current);
                 }
                 
-                Assert.False(enumerator.MoveNext());
+                enumerator.MoveNext().Should().BeFalse();
             }
 
-            foreach (var word in words)
-            {
-                Assert.True(list.Contains(word));
-            }
+            list.Should().Contain(words);
         }
 
         #endregion
