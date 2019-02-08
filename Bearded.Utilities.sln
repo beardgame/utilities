@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Utilities", "src\Be
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Utilities.Tests", "tests\Bearded.Utilities.Tests.csproj", "{7EDB76CB-E9DC-4BCC-A610-12BE4976A701}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Utilities.Testing", "Bearded.Utilities.Testing\Bearded.Utilities.Testing.csproj", "{C83131DC-2AD2-4B35-BD77-735A937B70C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7EDB76CB-E9DC-4BCC-A610-12BE4976A701}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EDB76CB-E9DC-4BCC-A610-12BE4976A701}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EDB76CB-E9DC-4BCC-A610-12BE4976A701}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C83131DC-2AD2-4B35-BD77-735A937B70C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C83131DC-2AD2-4B35-BD77-735A937B70C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C83131DC-2AD2-4B35-BD77-735A937B70C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C83131DC-2AD2-4B35-BD77-735A937B70C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

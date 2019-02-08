@@ -12,7 +12,7 @@ namespace Bearded.Utilities.SpaceTime
         private readonly float value;
 
         #region constructing
-        
+
         public AngularAcceleration(Angle value)
             : this(value.Radians)
         {
@@ -144,6 +144,8 @@ namespace Bearded.Utilities.SpaceTime
         /// Multiplies an angular acceleration by a timespan, returning an anglular velocity.
         /// </summary>
         public static AngularVelocity operator *(TimeSpan t, AngularAcceleration s) => AngularVelocity.FromRadians(s.value * (float)t.NumericValue);
+
+        public static AngularVelocity operator /(AngularAcceleration a, Frequency f) => AngularVelocity.FromRadians(a.value / (float)f.NumericValue);
 
         #endregion
 
