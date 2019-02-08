@@ -62,4 +62,11 @@ namespace Bearded.Utilities.Graphs
             }
         }
     }
+
+    public static class DirectedAcyclicGraphTransitiveReducer
+    {
+        public static IDirectedAcyclicGraph<T> ReduceGraph<T>(IDirectedAcyclicGraph<T> graph)
+                where T : IEquatable<T>
+            => DirectedAcyclicGraphTransitiveReducer<T>.ReduceGraph(graph);
+    }
 }

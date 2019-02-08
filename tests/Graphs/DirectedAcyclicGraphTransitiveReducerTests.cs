@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Bearded.Utilities.Tests.Graphs
 {
-    public class AdjacencyListDirectedAcyclicGraphTests
+    public class DirectedAcyclicGraphTransitiveReducerTests
     {
         [Fact]
         public void GetTransitiveReduction_DoesNotRemoveElements()
@@ -18,7 +18,7 @@ namespace Bearded.Utilities.Tests.Graphs
                 .AddArrow("one", "three")
                 .CreateAcyclicGraphUnsafe();
 
-            var reducedGraph = graph.GetTransitiveReduction();
+            var reducedGraph = DirectedAcyclicGraphTransitiveReducer.ReduceGraph(graph);
 
             reducedGraph.Elements.Should().Contain(graph.Elements);
         }
@@ -35,7 +35,7 @@ namespace Bearded.Utilities.Tests.Graphs
                 .AddArrow("one", "three")
                 .CreateAcyclicGraphUnsafe();
 
-            var reducedGraph = graph.GetTransitiveReduction();
+            var reducedGraph = DirectedAcyclicGraphTransitiveReducer.ReduceGraph(graph);
 
             reducedGraph.GetDirectSuccessorsOf("one").Should().NotContain("three");
             reducedGraph.GetDirectPredecessorsOf("three").Should().NotContain("one");
@@ -53,7 +53,7 @@ namespace Bearded.Utilities.Tests.Graphs
                 .AddArrow("one", "three")
                 .CreateAcyclicGraphUnsafe();
 
-            var reducedGraph = graph.GetTransitiveReduction();
+            var reducedGraph = DirectedAcyclicGraphTransitiveReducer.ReduceGraph(graph);
 
             reducedGraph.GetDirectSuccessorsOf("one").Should().Contain("two");
             reducedGraph.GetDirectPredecessorsOf("two").Should().Contain("one");

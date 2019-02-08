@@ -14,8 +14,5 @@ namespace Bearded.Utilities.Graphs
                 elements,
                 directSuccessors,
                 directPredecessors) { }
-
-        public IDirectedAcyclicGraph<T> GetTransitiveReduction()
-            => DirectedAcyclicGraphTransitiveReducer<T>.ReduceGraph(this);
     }
 }
