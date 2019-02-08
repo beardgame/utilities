@@ -24,6 +24,7 @@ build:
   verbosity: minimal
 before_package:
 - ps: nuget pack $env:appveyor_build_folder/src/Bearded.Utilities.csproj -version $env:nuget_version
+- ps: nuget pack $env:appveyor_build_folder/testing/Bearded.Utilities.Testing.csproj -version $env:nuget_version
 test:
   assemblies:
     only:
@@ -34,6 +35,6 @@ artifacts:
 deploy:
 - provider: NuGet
   api_key:
-    secure: 66eCD2M6zt2mygZBECVRL3Ez7I35RRj4a1iWqQqucfVqHX6hAnKqKXVu/FhTBIW/
+    secure: BBDmgOZL5KQ5tvZRZ4Qv1YOElpfvpS1Mr1z8aUE6xpCRfhqxzTm6UeTKMrbR+xZV
   on:
     branch: /^(develop|master)$/
