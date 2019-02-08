@@ -57,6 +57,7 @@
     <Compile Include="Collections\PriorityQueueTests.cs" />
     <Compile Include="Collections\StaticPriorityQueueTests.cs" />
     <Compile Include="Generators\FloatGenerators.cs" />
+    <Compile Include="Helpers\NumericAssertionsExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpaceTime\GravitationalConstantTests.cs" />
     <Compile Include="Tilemaps\RectangularTilemapTests.cs" />

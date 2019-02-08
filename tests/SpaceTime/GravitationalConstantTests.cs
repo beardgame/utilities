@@ -1,6 +1,8 @@
 ﻿using System;
 using Bearded.Utilities.SpaceTime;
+using Bearded.Utilities.Tests.Helpers;
 using FluentAssertions;
+using FsCheck;
 using FsCheck.Xunit;
 using Xunit;
 
@@ -15,7 +17,7 @@ namespace Bearded.Utilities.Tests.SpaceTime
             {
                 var g = new GravitationalConstant(value);
 
-                Assert.Equal(value, g.NumericValue);
+                g.NumericValue.Should().Be(value);
             }
         }
 
@@ -26,7 +28,7 @@ namespace Bearded.Utilities.Tests.SpaceTime
             {
                 var zero = GravitationalConstant.Zero;
 
-                Assert.Equal(0, zero.NumericValue);
+                zero.NumericValue.Should().Be(0);
             }
         }
 
@@ -37,7 +39,7 @@ namespace Bearded.Utilities.Tests.SpaceTime
             {
                 var one = GravitationalConstant.One;
 
-                Assert.Equal(0, one.NumericValue);
+                one.NumericValue.Should().Be(1);
             }
         }
 
@@ -55,7 +57,8 @@ namespace Bearded.Utilities.Tests.SpaceTime
 
                 var acceleration = g.AccelerationAtDistance(mass, distanceSquared);
 
-                Assert.Equal(expectedAcceleration, acceleration.NumericValue, 5);
+                acceleration.NumericValue.Should()
+                    .BeApproximatelyOrBothNaNOrInfinity(expectedAcceleration);
             }
         }
 
@@ -71,8 +74,9 @@ namespace Bearded.Utilities.Tests.SpaceTime
                 var expectedAcceleration = gValue * massValue / distanceValue.Squared();
 
                 var acceleration = g.AccelerationAtDistance(mass, distance);
-
-                Assert.Equal(expectedAcceleration, acceleration.NumericValue, 5);
+                
+                acceleration.NumericValue.Should()
+                    .BeApproximatelyOrBothNaNOrInfinity(expectedAcceleration);
             }
         }
 
@@ -82,23 +86,16 @@ namespace Bearded.Utilities.Tests.SpaceTime
             public void CalculatesAccelerationCorrectly(
                 float gValue, float massValue, float differenceXValue, float differenceYValue)
             {
-                gValue = -14.9230766f;
-                massValue = -3.40282347e+38f;
-                differenceXValue = -16.181818f;
-                differenceYValue = -8.33333302f;
-
                 var g = new GravitationalConstant(gValue);
                 var mass = new Mass(massValue);
                 var difference = new Difference2(differenceXValue, differenceYValue);
-                var expectedAcceleration = gValue * massValue
+                var expectedAcceleration = gValue *massValue
                     / (differenceXValue.Squared() + differenceYValue.Squared());
 
                 var acceleration = g.AccelerationAtDistance(mass, difference);
 
-
-                var expectedAsDouble = Math.Round((double)expectedAcceleration, 5);
-                var actualAsDouble = Math.Round((double)acceleration.NumericValue, 5);
-                Assert.Equal(expectedAsDouble, actualAsDouble, 5);
+                acceleration.NumericValue.Should()
+                    .BeApproximatelyOrBothNaNOrInfinity(expectedAcceleration);
             }
         }
     }
