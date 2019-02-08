@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Bearded.Utilities.Collections;
+using Bearded.Utilities.Graphs;
 using FsCheck;
 using Random = System.Random;
 
@@ -12,45 +12,47 @@ namespace Bearded.Utilities.Tests.Generators
 
         public static class NoEdgesConnected<T> where T : IEquatable<T>
         {
-            public static Arbitrary<DirectedAcyclicGraph<T>> Graphs() => Arb.From(Helpers<T>.EmptyGraphGen);
+            public static Arbitrary<IDirectedAcyclicGraph<T>> Graphs() => Arb.From(Helpers<T>.EmptyGraphGen);
         }
 
-        public static class HalfEdgesConnected<T> where T : IEquatable<T>
+        public static class ApproximatelyHalfEdgesConnected<T> where T : IEquatable<T>
         {
-            public static Arbitrary<DirectedAcyclicGraph<T>> Graphs()
+            public static Arbitrary<IDirectedAcyclicGraph<T>> Graphs()
             {
                 var graphGen = Helpers<T>.EmptyGraphGen;
                 return Arb.From(graphGen.Select(graph =>
                 {
                     var elements = graph.Elements.ToList();
+                    var builder = DirectedGraphBuilder<T>.FromExistingGraph(graph);
 
                     for (var i = 0; i < elements.Count; i++)
                     {
                         for (var j = i + 1; j < elements.Count; j++)
                         {
                             if (random.NextBool())
-                                graph.AddEdge(elements[i], elements[j]);
+                                builder.AddArrow(elements[i], elements[j]);
                         }
                     }
 
-                    return graph;
+                    return builder.CreateAcyclicGraphUnsafe();
                 }));
             }
         }
 
         private static class Helpers<T> where T : IEquatable<T>
         {
-            private static Gen<T[]> arrayGen => Gen.ArrayOf(Arb.Generate<T>().Where(e => e != null)).Where(arr => arr != null);
+            private static Gen<T[]> arrayGen =>
+                Gen.ArrayOf(Arb.Generate<T>().Where(e => e != null)).Where(arr => arr != null);
 
-            internal static Gen<DirectedAcyclicGraph<T>> EmptyGraphGen => arrayGen.Select(array =>
+            internal static Gen<IDirectedAcyclicGraph<T>> EmptyGraphGen => arrayGen.Select(array =>
             {
-                var graph = new DirectedAcyclicGraph<T>();
+                var builder = DirectedGraphBuilder<T>.NewBuilder();
                 foreach (var element in array)
                 {
-                    graph.AddElement(element);
+                    builder.AddElement(element);
                 }
 
-                return graph;
+                return builder.CreateAcyclicGraphUnsafe();
             });
         }
     }

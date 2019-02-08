@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Bearded.Utilities.Algorithms;
-using Bearded.Utilities.Collections;
+using Bearded.Utilities.Graphs;
 using Bearded.Utilities.Tests.Generators;
 using FluentAssertions;
 using FsCheck;
@@ -14,7 +14,7 @@ namespace Bearded.Utilities.Tests.Algorithms
         [Fact]
         public void Solve_EmptyInput_ReturnsEmptyOutput()
         {
-            var instance = CoffmanGraham.InstanceForGraph(new DirectedAcyclicGraph<string>(), 1);
+            var instance = CoffmanGraham.InstanceForGraph(DirectedGraphBuilder<string>.EmptyGraph(), 1);
 
             instance.Solve().Should().BeEmpty();
         }
@@ -22,8 +22,9 @@ namespace Bearded.Utilities.Tests.Algorithms
         [Fact]
         public void Solve_SingleInput_ReturnsSingleLayer()
         {
-            var graph = new DirectedAcyclicGraph<string>();
-            graph.AddElement("element");
+            var graph = DirectedGraphBuilder<string>.NewBuilder()
+                .AddElement("element")
+                .CreateAcyclicGraphUnsafe();
             var instance = CoffmanGraham.InstanceForGraph(graph, 1);
 
             var solution = instance.Solve();
@@ -33,8 +34,8 @@ namespace Bearded.Utilities.Tests.Algorithms
         }
 
         [Property(Arbitrary = new[]
-            {typeof(DirectedAcyclicGraphGenerators.HalfEdgesConnected<int>)})]
-        public void Solve_NeverCreatesLayersTooLarge(DirectedAcyclicGraph<int> graph, PositiveInt width)
+            {typeof(DirectedAcyclicGraphGenerators.ApproximatelyHalfEdgesConnected<int>)})]
+        public void Solve_NeverCreatesLayersTooLarge(IDirectedAcyclicGraph<int> graph, PositiveInt width)
         {
             var instance = CoffmanGraham.InstanceForGraph(graph, width.Get);
 
@@ -47,8 +48,8 @@ namespace Bearded.Utilities.Tests.Algorithms
         }
 
         [Property(Arbitrary = new[]
-            {typeof(DirectedAcyclicGraphGenerators.HalfEdgesConnected<int>)})]
-        public void Solve_AlwaysIncludesAllElementsInLayers(DirectedAcyclicGraph<int> graph, PositiveInt width)
+            {typeof(DirectedAcyclicGraphGenerators.ApproximatelyHalfEdgesConnected<int>)})]
+        public void Solve_AlwaysIncludesAllElementsInLayers(IDirectedAcyclicGraph<int> graph, PositiveInt width)
         {
             var instance = CoffmanGraham.InstanceForGraph(graph, width.Get);
 
