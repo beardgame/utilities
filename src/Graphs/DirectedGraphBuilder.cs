@@ -111,13 +111,13 @@ namespace Bearded.Utilities.Graphs
         private bool isGraphCyclic()
         {
             var visited = new HashSet<T>();
-            var currentStack = new HashSet<T>();
+            var currentPath = new HashSet<T>();
 
-            return elements.Where(checkGraphCycleUsingDepthFirst).Any();
+            return elements.Any(leadsBackToCurrentPath);
 
-            bool checkGraphCycleUsingDepthFirst(T element)
+            bool leadsBackToCurrentPath(T element)
             {
-                if (currentStack.Contains(element))
+                if (currentPath.Contains(element))
                 {
                     return true;
                 }
@@ -127,14 +127,14 @@ namespace Bearded.Utilities.Graphs
                 }
 
                 visited.Add(element);
-                currentStack.Add(element);
+                currentPath.Add(element);
 
-                if (directSuccessors[element].Where(checkGraphCycleUsingDepthFirst).Any())
+                if (directSuccessors[element].Any(leadsBackToCurrentPath))
                 {
                     return true;
                 }
 
-                currentStack.Remove(element);
+                currentPath.Remove(element);
 
                 return false;
             }
