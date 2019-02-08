@@ -13,7 +13,7 @@ namespace Bearded.Utilities.SpaceTime
         private readonly float value;
 
         #region construction
-        
+
         public Unit(float value)
         {
             this.value = value;
@@ -130,6 +130,10 @@ namespace Bearded.Utilities.SpaceTime
         /// Divides a unit value by a timespan, returning a speed.
         /// </summary>
         public static Speed operator /(Unit u, TimeSpan t) => new Speed(u.value / (float)t.NumericValue);
+
+        public static Speed operator *(Unit u, Frequency f) => new Speed(u.value * (float)f.NumericValue);
+
+        public static Speed operator *(Frequency f, Unit u) => new Speed(u.value * (float)f.NumericValue);
 
         #endregion
 
