@@ -70,10 +70,7 @@ namespace Bearded.Utilities.Graphs
             directSuccessors[from].Add(to);
             directPredecessors[to].Add(from);
 
-            if (sources.Contains(to))
-            {
-                sources.Remove(to);
-            }
+            sources.Remove(to);
 
             return this;
         }
