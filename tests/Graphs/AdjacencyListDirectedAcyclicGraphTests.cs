@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Bearded.Utilities.Tests.Graphs
 {
-    public class AdjacencyListDagTests
+    public class AdjacencyListDirectedAcyclicGraphTests
     {
         [Fact]
         public void GetTransitiveReduction_DoesNotRemoveElements()
