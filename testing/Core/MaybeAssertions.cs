@@ -29,7 +29,7 @@ namespace Bearded.Utilities.Testing
                 }, onNothing: () => { });
 
             Execute.Assertion
-                .BecauseOf(because, because)
+                .BecauseOf(because, becauseArgs)
                 .ForCondition(onValueCalled)
                 .FailWith("Expected maybe to have value, but had none.");
             
@@ -44,7 +44,7 @@ namespace Bearded.Utilities.Testing
             subject.Match(onValue: _ => { }, onNothing: () => onNothingCalled = true);
 
             Execute.Assertion
-                .BecauseOf(because, because)
+                .BecauseOf(because, becauseArgs)
                 .ForCondition(onNothingCalled)
                 .FailWith("Expected maybe to be nothing, but had value.");
         }
