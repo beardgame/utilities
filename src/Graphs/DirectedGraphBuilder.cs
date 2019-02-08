@@ -117,15 +117,15 @@ namespace Bearded.Utilities.Graphs
 
             bool leadsBackToCurrentPath(T element)
             {
-                if (visited.Contains(element))
+                if (elementWasSeenBefore(element))
                 {
-                    return currentPath.Contains(element);
+                    return elementIsOnCurrentPath(element);
                 }
 
                 visited.Add(element);
                 currentPath.Add(element);
 
-                if (directSuccessors[element].Any(leadsBackToCurrentPath))
+                if (successorsLeadBackToCurrentPath(element))
                 {
                     return true;
                 }
@@ -134,6 +134,11 @@ namespace Bearded.Utilities.Graphs
 
                 return false;
             }
+
+            bool elementWasSeenBefore(T element) => visited.Contains(element);
+            bool elementIsOnCurrentPath(T element) => currentPath.Contains(element);
+            bool successorsLeadBackToCurrentPath(T element)
+                => directSuccessors[element].Any(leadsBackToCurrentPath);
         }
 
         /// <summary>
