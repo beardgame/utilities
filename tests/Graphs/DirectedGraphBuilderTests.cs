@@ -208,6 +208,15 @@ namespace Bearded.Utilities.Tests.Graphs
             graph.GetDirectSuccessorsOf("from_and_to").Should().Contain("from_and_to");
             graph.GetDirectPredecessorsOf("from_and_to").Should().Contain("from_and_to");
         }
+        
+        [Fact]
+        public void CreateGraph_DoesNotThrowOnAcyclicGraph()
+        {
+            var builder = createBuilderForAcyclicGraph();
+
+            Action createGraph = () => builder.CreateGraph();
+            createGraph.Should().NotThrow();
+        }
 
         [Fact]
         public void CreateGraph_DoesNotThrowOnCycle()
@@ -225,6 +234,15 @@ namespace Bearded.Utilities.Tests.Graphs
             
             Action createGraph = () => builder.CreateGraph();
             createGraph.Should().NotThrow();
+        }
+        
+        [Fact]
+        public void CreateAcyclicGraph_DoesNotThrowOnAcyclicGraph()
+        {
+            var builder = createBuilderForAcyclicGraph();
+
+            Action createAcyclicGraph = () => builder.CreateAcyclicGraph();
+            createAcyclicGraph.Should().NotThrow();
         }
 
         [Fact]
@@ -244,6 +262,15 @@ namespace Bearded.Utilities.Tests.Graphs
             Action createAcyclicGraph = () => builder.CreateAcyclicGraph();
             createAcyclicGraph.Should().Throw<InvalidOperationException>();
         }
+        
+        [Fact]
+        public void CreateAcyclicGraphUnsafe_DoesNotThrowOnAcyclicGraph()
+        {
+            var builder = createBuilderForAcyclicGraph();
+
+            Action createAcyclicGraphUnsafe = () => builder.CreateAcyclicGraphUnsafe();
+            createAcyclicGraphUnsafe.Should().NotThrow();
+        }
 
         [Fact]
         public void CreateAcyclicGraphUnsafe_DoesNotThrowOnCycle()
@@ -251,7 +278,7 @@ namespace Bearded.Utilities.Tests.Graphs
             var builder = createBuilderForTriangle();
             
             Action createAcyclicGraphUnsafe = () => builder.CreateAcyclicGraphUnsafe();
-            createAcyclicGraphUnsafe.Should().Throw<InvalidOperationException>();
+            createAcyclicGraphUnsafe.Should().NotThrow();
         }
 
         [Fact]
@@ -260,7 +287,15 @@ namespace Bearded.Utilities.Tests.Graphs
             var builder = createBuilderForSelfEdge();
             
             Action createAcyclicGraphUnsafe = () => builder.CreateAcyclicGraphUnsafe();
-            createAcyclicGraphUnsafe.Should().Throw<InvalidOperationException>();
+            createAcyclicGraphUnsafe.Should().NotThrow();
+        }
+        
+        private static DirectedGraphBuilder<string> createBuilderForAcyclicGraph()
+        {
+            return DirectedGraphBuilder<string>.NewBuilder()
+                .AddElement("A")
+                .AddElement("B")
+                .AddArrow("A", "B");
         }
 
         private static DirectedGraphBuilder<string> createBuilderForTriangle()
