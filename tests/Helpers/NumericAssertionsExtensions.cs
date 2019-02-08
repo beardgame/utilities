@@ -14,7 +14,7 @@ namespace Bearded.Utilities.Tests.Helpers
             string because = "",
             params object[] becauseArgs)
         {
-            if(bothMatch(IsNaN) || bothMatch(IsPositiveInfinity) || bothMatch(IsNegativeInfinity))
+            if (bothMatch(IsNaN) || bothMatch(IsPositiveInfinity) || bothMatch(IsNegativeInfinity))
                 return new AndConstraint<NumericAssertions<float>>(parent);
 
             return parent.BeApproximately(expectedValue,
