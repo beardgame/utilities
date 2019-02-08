@@ -24,6 +24,7 @@ build:
   verbosity: minimal
 before_package:
 - ps: nuget pack $env:appveyor_build_folder/src/Bearded.Utilities.csproj -version $env:nuget_version
+- ps: nuget pack $env:appveyor_build_folder/src/Bearded.Utilities.Testing.csproj -version $env:nuget_version
 test:
   assemblies:
     only:
