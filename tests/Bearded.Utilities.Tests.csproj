@@ -58,6 +58,7 @@
     <Compile Include="Collections\StaticPriorityQueueTests.cs" />
     <Compile Include="Generators\FloatGenerators.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpaceTime\GravitationalConstantTests.cs" />
     <Compile Include="Tilemaps\RectangularTilemapTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +71,7 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.6.0" />
     <PackageReference Include="FsCheck.Xunit">
       <Version>2.12.1</Version>
     </PackageReference>
