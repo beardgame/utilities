@@ -87,7 +87,7 @@ namespace Bearded.Utilities.Tests.SpaceTime
 
         public class TheAccelerationAtDistanceWithSquaredUnitMethod
         {
-            [Property]
+            [Property(Arbitrary = new []{typeof(LimitedRangeFloatGenerator)})]
             public void CalculatesAccelerationCorrectly(
                 float gValue, float massValue, float distanceSquaredValueWithSign)
             {
@@ -106,7 +106,7 @@ namespace Bearded.Utilities.Tests.SpaceTime
 
         public class TheAccelerationAtDistanceWithUnitMethod
         {
-            [Property]
+            [Property(Arbitrary = new []{typeof(LimitedRangeFloatGenerator)})]
             public void CalculatesAccelerationCorrectly(
                 float gValue, float massValue, float distanceValue)
             {
@@ -124,7 +124,7 @@ namespace Bearded.Utilities.Tests.SpaceTime
 
         public class TheAccelerationAtDistanceWithDifference2Method
         {
-            [Property]
+            [Property(Arbitrary = new []{typeof(LimitedRangeFloatGenerator)})]
             public void CalculatesAccelerationCorrectly(
                 float gValue, float massValue, float differenceXValue, float differenceYValue)
             {
