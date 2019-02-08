@@ -2,6 +2,7 @@
 using Bearded.Utilities.Graphs;
 using FluentAssertions;
 using Xunit;
+// ReSharper disable ConvertToLocalFunction
 
 namespace Bearded.Utilities.Tests.Graphs
 {
@@ -91,7 +92,8 @@ namespace Bearded.Utilities.Tests.Graphs
         {
             var builder = DirectedGraphBuilder<string>.NewBuilder();
 
-            builder.Invoking(b => b.AddElement(null)).Should().Throw<ArgumentNullException>();
+            Action addNullElement = () => builder.AddElement(null);
+            addNullElement.Should().Throw<ArgumentNullException>();
         }
         
         [Fact]
@@ -99,7 +101,8 @@ namespace Bearded.Utilities.Tests.Graphs
         {
             var builder = DirectedGraphBuilder<string>.NewBuilder().AddElement("element");
 
-            builder.Invoking(b => b.AddElement("element")).Should().Throw<ArgumentException>();
+            Action addDuplicateElement = () => builder.AddElement("element");
+            addDuplicateElement.Should().Throw<ArgumentException>();
         }
 
         [Fact]
@@ -151,7 +154,8 @@ namespace Bearded.Utilities.Tests.Graphs
         {
             var builder = DirectedGraphBuilder<string>.NewBuilder().AddElement("from");
 
-            builder.Invoking(b => b.AddArrow("from", "to")).Should().Throw<ArgumentException>();
+            Action addArrowFromFromToTo = () => builder.AddArrow("from", "to");
+            addArrowFromFromToTo.Should().Throw<ArgumentException>();
         }
 
         [Fact]
@@ -159,7 +163,8 @@ namespace Bearded.Utilities.Tests.Graphs
         {
             var builder = DirectedGraphBuilder<string>.NewBuilder().AddElement("to");
 
-            builder.Invoking(b => b.AddArrow("from", "to")).Should().Throw<ArgumentException>();
+            Action addArrowFromFromToTo = () => builder.AddArrow("from", "to");
+            addArrowFromFromToTo.Should().Throw<ArgumentException>();
         }
 
         [Fact]
@@ -167,7 +172,8 @@ namespace Bearded.Utilities.Tests.Graphs
         {
             var builder = DirectedGraphBuilder<string>.NewBuilder().AddElement("to");
 
-            builder.Invoking(b => b.AddArrow(null, "to")).Should().Throw<ArgumentNullException>();
+            Action addArrowFromNullToTo = () => builder.AddArrow(null, "to");
+            addArrowFromNullToTo.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -175,7 +181,8 @@ namespace Bearded.Utilities.Tests.Graphs
         {
             var builder = DirectedGraphBuilder<string>.NewBuilder().AddElement("from");
 
-            builder.Invoking(b => b.AddArrow("from", null)).Should().Throw<ArgumentNullException>();
+            Action addArrowFromFromToNull = () => builder.AddArrow("from", null);
+            addArrowFromFromToNull.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -186,7 +193,8 @@ namespace Bearded.Utilities.Tests.Graphs
                 .AddElement("to")
                 .AddArrow("from", "to");
 
-            builder.Invoking(b => b.AddArrow("from", "to")).Should().Throw<ArgumentException>();
+            Action addDuplicateArrow = () => builder.AddArrow("from", "to");
+            addDuplicateArrow.Should().Throw<ArgumentException>();
         }
 
         [Fact]
@@ -205,8 +213,9 @@ namespace Bearded.Utilities.Tests.Graphs
         public void CreateGraph_DoesNotThrowOnCycle()
         {
             var builder = createBuilderForTriangle();
-            
-            builder.Invoking(b => b.CreateGraph()).Should().NotThrow();
+
+            Action createGraph = () => builder.CreateGraph();
+            createGraph.Should().NotThrow();
         }
 
         [Fact]
@@ -214,7 +223,8 @@ namespace Bearded.Utilities.Tests.Graphs
         {
             var builder = createBuilderForSelfEdge();
             
-            builder.Invoking(b => b.CreateGraph()).Should().NotThrow();
+            Action createGraph = () => builder.CreateGraph();
+            createGraph.Should().NotThrow();
         }
 
         [Fact]
@@ -222,7 +232,8 @@ namespace Bearded.Utilities.Tests.Graphs
         {
             var builder = createBuilderForTriangle();
 
-            builder.Invoking(b => b.CreateAcyclicGraph()).Should().Throw<InvalidOperationException>();
+            Action createAcyclicGraph = () => builder.CreateAcyclicGraph();
+            createAcyclicGraph.Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -230,7 +241,8 @@ namespace Bearded.Utilities.Tests.Graphs
         {
             var builder = createBuilderForSelfEdge();
 
-            builder.Invoking(b => b.CreateAcyclicGraph()).Should().Throw<InvalidOperationException>();
+            Action createAcyclicGraph = () => builder.CreateAcyclicGraph();
+            createAcyclicGraph.Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -238,7 +250,8 @@ namespace Bearded.Utilities.Tests.Graphs
         {
             var builder = createBuilderForTriangle();
             
-            builder.Invoking(b => b.CreateAcyclicGraphUnsafe()).Should().NotThrow();
+            Action createAcyclicGraphUnsafe = () => builder.CreateAcyclicGraphUnsafe();
+            createAcyclicGraphUnsafe.Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -246,7 +259,8 @@ namespace Bearded.Utilities.Tests.Graphs
         {
             var builder = createBuilderForSelfEdge();
             
-            builder.Invoking(b => b.CreateAcyclicGraphUnsafe()).Should().NotThrow();
+            Action createAcyclicGraphUnsafe = () => builder.CreateAcyclicGraphUnsafe();
+            createAcyclicGraphUnsafe.Should().Throw<InvalidOperationException>();
         }
 
         private static DirectedGraphBuilder<string> createBuilderForTriangle()
