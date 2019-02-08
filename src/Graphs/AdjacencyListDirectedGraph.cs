@@ -13,7 +13,7 @@ namespace Bearded.Utilities.Graphs
         public IEnumerable<T> Elements => elements;
         public int Count => elements.Count;
 
-        public AdjacencyListDirectedGraph(
+        internal AdjacencyListDirectedGraph(
             ImmutableList<T> elements,
             ImmutableDictionary<T, ImmutableList<T>> directSuccessors,
             ImmutableDictionary<T, ImmutableList<T>> directPredecessors)
@@ -24,12 +24,12 @@ namespace Bearded.Utilities.Graphs
         }
 
         public IEnumerable<T> GetDirectSuccessorsOf(T element) =>
-            directSuccessors.ContainsKey(element)
-                ? directSuccessors[element]
+            directSuccessors.TryGetValue(element, out var successor)
+                ? successor
                 : throw new ArgumentOutOfRangeException(nameof(element), "Element not found in graph.");
         public IEnumerable<T> GetDirectPredecessorsOf(T element) =>
-            directPredecessors.ContainsKey(element)
-                ? directPredecessors[element]
+            directPredecessors.TryGetValue(element, out var predecessor)
+                ? predecessor
                 : throw new ArgumentOutOfRangeException(nameof(element), "Element not found in graph.");
     }
 }

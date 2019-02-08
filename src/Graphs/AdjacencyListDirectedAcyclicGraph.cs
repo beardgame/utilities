@@ -6,7 +6,7 @@ namespace Bearded.Utilities.Graphs
     sealed class AdjacencyListDirectedAcyclicGraph<T> : AdjacencyListDirectedGraph<T>, IDirectedAcyclicGraph<T>
         where T : IEquatable<T>
     {
-        public AdjacencyListDirectedAcyclicGraph(
+        internal AdjacencyListDirectedAcyclicGraph(
             ImmutableList<T> elements,
             ImmutableDictionary<T, ImmutableList<T>> directSuccessors,
             ImmutableDictionary<T, ImmutableList<T>> directPredecessors)

@@ -8,7 +8,8 @@ namespace Bearded.Utilities.Graphs
     {
         public static IDirectedAcyclicGraph<T> ReduceGraph(IDirectedAcyclicGraph<T> graph)
         {
-            var elements = graph.Elements as IList<T> ?? graph.Elements.ToList();
+            var elementsEnumerable = graph.Elements;
+            var elements = elementsEnumerable as IList<T> ?? elementsEnumerable.ToList();
             var graphBuilder = DirectedGraphBuilder<T>.NewBuilder();
 
             foreach (var element in elements)
@@ -18,19 +19,20 @@ namespace Bearded.Utilities.Graphs
 
             foreach (var element in elements)
             {
-                foreach (var neighbor in getOnlyDirectChildren(graph, element))
+                foreach (var child in getOnlyChildrenWithoutIndirectPath(graph, element))
                 {
-                    graphBuilder.AddArrow(element, neighbor);
+                    graphBuilder.AddArrow(element, child);
                 }
             }
 
             return graphBuilder.CreateAcyclicGraphUnsafe();
         }
 
-        private static IEnumerable<T> getOnlyDirectChildren(IDirectedGraph<T> graph, T element)
+        private static IEnumerable<T> getOnlyChildrenWithoutIndirectPath(IDirectedAcyclicGraph<T> graph, T element)
         {
-            var children = graph.GetDirectSuccessorsOf(element) as IList<T>
-                ?? graph.GetDirectSuccessorsOf(element).ToList();
+            var childrenEnumerable = graph.GetDirectSuccessorsOf(element);
+            var children = childrenEnumerable as IList<T>
+                ?? childrenEnumerable.ToList();
             var reducedEdges = new HashSet<T>(children);
 
             foreach (var child in children)
@@ -50,12 +52,13 @@ namespace Bearded.Utilities.Graphs
             return reducedEdges;
         }
 
-        private static IEnumerable<T> getAllSuccessorsRecursively(IDirectedGraph<T> graph, T start)
+        // ReSharper disable once SuggestBaseTypeForParameter
+        private static IEnumerable<T> getAllSuccessorsRecursively(IDirectedAcyclicGraph<T> graph, T start)
         {
             yield return start;
-            foreach (var neighbor in graph.GetDirectSuccessorsOf(start))
+            foreach (var child in graph.GetDirectSuccessorsOf(start))
             {
-                foreach (var descendant in getAllSuccessorsRecursively(graph, neighbor))
+                foreach (var descendant in getAllSuccessorsRecursively(graph, child))
                 {
                     yield return descendant;
                 }
