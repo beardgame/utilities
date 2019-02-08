@@ -30,7 +30,7 @@ namespace Bearded.Utilities.Testing
 
             Execute.Assertion
                 .BecauseOf(because, because)
-                .ForCondition(!onValueCalled)
+                .ForCondition(onValueCalled)
                 .FailWith("Expected maybe to have value, but had none.");
             
             return new AndWhichConstraint<MaybeAssertions<T>, T>(this, matched);
@@ -45,7 +45,7 @@ namespace Bearded.Utilities.Testing
 
             Execute.Assertion
                 .BecauseOf(because, because)
-                .ForCondition(!onNothingCalled)
+                .ForCondition(onNothingCalled)
                 .FailWith("Expected maybe to be nothing, but had value.");
         }
     }
