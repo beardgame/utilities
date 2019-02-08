@@ -131,6 +131,10 @@ namespace Bearded.Utilities.SpaceTime
         /// </summary>
         public static Speed operator /(Unit u, TimeSpan t) => new Speed(u.value / (float)t.NumericValue);
 
+        public static Speed operator *(Unit u, Frequency f) => new Speed(u.value * (float)f.NumericValue);
+
+        public static Speed operator *(Frequency f, Unit u) => new Speed(u.value * (float)f.NumericValue);
+
         #endregion
 
         #region add dimension

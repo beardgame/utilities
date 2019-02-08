@@ -13,17 +13,17 @@ namespace Bearded.Utilities.SpaceTime
         private readonly Vector2 value;
 
         #region constructing
-        
+
         public Difference2(Vector2 value)
         {
             this.value = value;
         }
-        
+
         public Difference2(float x, float y)
             : this(new Vector2(x, y))
         {
         }
-        
+
         public Difference2(Unit x, Unit y)
             : this(new Vector2(x.NumericValue, y.NumericValue))
         {
@@ -193,6 +193,10 @@ namespace Bearded.Utilities.SpaceTime
         /// Divides a difference vector by a timespan, returning an velocity vector.
         /// </summary>
         public static Velocity2 operator /(Difference2 d, TimeSpan t) => new Velocity2(d.value / (float)t.NumericValue);
+
+        public static Velocity2 operator *(Difference2 d, Frequency f) => new Velocity2(d.value * (float)f.NumericValue);
+
+        public static Velocity2 operator *(Frequency f, Difference2 d) => new Velocity2(d.value * (float)f.NumericValue);
 
         #endregion
 
