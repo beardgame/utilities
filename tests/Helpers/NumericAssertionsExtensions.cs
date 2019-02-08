@@ -15,8 +15,7 @@ namespace Bearded.Utilities.Tests.Helpers
             params object[] becauseArgs)
         {
             if(bothMatch(IsNaN) || bothMatch(IsPositiveInfinity) || bothMatch(IsNegativeInfinity))
-                // this will always be true and is only used to get the correct return type
-                return parent.NotBe(0); 
+                return new AndConstraint<NumericAssertions<float>>(parent);
 
             return parent.BeApproximately(expectedValue,
                 Math.Abs(expectedValue) * (float)Math.Pow(0.1, precisionDigits),

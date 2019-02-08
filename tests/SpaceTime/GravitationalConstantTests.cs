@@ -2,7 +2,6 @@
 using Bearded.Utilities.SpaceTime;
 using Bearded.Utilities.Tests.Helpers;
 using FluentAssertions;
-using FsCheck;
 using FsCheck.Xunit;
 using Xunit;
 
