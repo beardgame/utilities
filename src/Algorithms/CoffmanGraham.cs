@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Bearded.Utilities.Collections;
+using Bearded.Utilities.Graphs;
 using Bearded.Utilities.Linq;
 
 namespace Bearded.Utilities.Algorithms
@@ -32,11 +33,11 @@ namespace Bearded.Utilities.Algorithms
     {
         public class Instance<T> where T : IEquatable<T>
         {
-            private readonly DirectedAcyclicGraph<T> graph;
+            private readonly IDirectedAcyclicGraph<T> graph;
             private readonly int maxLayerSize;
             private readonly bool isGraphReduced;
 
-            internal Instance(DirectedAcyclicGraph<T> graph, int maxLayerSize, bool isGraphReduced)
+            internal Instance(IDirectedAcyclicGraph<T> graph, int maxLayerSize, bool isGraphReduced)
             {
                 this.graph = graph;
                 this.maxLayerSize = maxLayerSize;
@@ -47,25 +48,26 @@ namespace Bearded.Utilities.Algorithms
             {
                 if (graph.Count == 0) return ImmutableList<ImmutableHashSet<T>>.Empty;
 
-                var reducedGraph = isGraphReduced ? graph : graph.GetTransitiveReduction();
+                var reducedGraph = isGraphReduced ? graph : DirectedAcyclicGraphTransitiveReducer<T>.ReduceGraph(graph);
                 var ordering = createTopologicalOrdering(reducedGraph);
                 return createLayers(reducedGraph, ordering, maxLayerSize);
             }
 
-            private static IList<T> createTopologicalOrdering(DirectedAcyclicGraph<T> graph)
+            // ReSharper disable once SuggestBaseTypeForParameter
+            private static IList<T> createTopologicalOrdering(IDirectedAcyclicGraph<T> graph)
             {
                 var ordering = new List<T>(graph.Count);
 
                 var elements = new HashSet<T>(graph.Elements);
                 var elementToIndex = new Dictionary<T, int>();
-                var incomingEdges = elements.ToImmutableDictionary(e => e, graph.GetIncomingEdgesFor);
+                var predecessors = elements.ToImmutableDictionary(e => e, graph.GetDirectPredecessorsOf);
 
                 while (ordering.Count < graph.Count)
                 {
                     var next = elements
-                        .Where(e => incomingEdges[e].All(n => elementToIndex.ContainsKey(n)))
+                        .Where(e => predecessors[e].All(n => elementToIndex.ContainsKey(n)))
                         .MinBy(e => DecreasingNumberSequence
-                            .FromUnsortedNumbers(incomingEdges[e].Select(n => elementToIndex[n]).ToArray()));
+                            .FromUnsortedNumbers(predecessors[e].Select(n => elementToIndex[n]).ToArray()));
 
                     elementToIndex.Add(next, ordering.Count);
                     ordering.Add(next);
@@ -76,16 +78,16 @@ namespace Bearded.Utilities.Algorithms
             }
 
             private static ImmutableList<ImmutableHashSet<T>> createLayers(
-                DirectedAcyclicGraph<T> graph, IList<T> ordering, int maxLayerSize)
+                IDirectedAcyclicGraph<T> graph, IList<T> ordering, int maxLayerSize)
             {
                 var layers = new List<HashSet<T>>();
                 var elementToLayer = new Dictionary<T, int>();
 
                 for (var i = ordering.Count - 1; i >= 0; i--)
                 {
-                    var outgoingEdges = graph.GetOutgoingEdgesFor(ordering[i]);
+                    var outgoingEdges = graph.GetDirectSuccessorsOf(ordering[i]);
                     var lowestPossibleLevel =
-                        outgoingEdges.Count == 0 ? 0 : outgoingEdges.Min(e => elementToLayer[e] + 1);
+                        !outgoingEdges.Any() ? 0 : outgoingEdges.Min(e => elementToLayer[e] + 1);
 
                     while (lowestPossibleLevel < layers.Count && layers[lowestPossibleLevel].Count == maxLayerSize)
                     {
@@ -104,13 +106,13 @@ namespace Bearded.Utilities.Algorithms
             }
         }
 
-        public static Instance<T> InstanceForGraph<T>(DirectedAcyclicGraph<T> graph, int maxLayerSize)
+        public static Instance<T> InstanceForGraph<T>(IDirectedAcyclicGraph<T> graph, int maxLayerSize)
             where T : IEquatable<T>
         {
             return new Instance<T>(graph, maxLayerSize, isGraphReduced: false);
         }
 
-        public static Instance<T> InstanceForAlreadyReducedGraph<T>(DirectedAcyclicGraph<T> graph, int maxLayerSize)
+        public static Instance<T> InstanceForAlreadyReducedGraph<T>(IDirectedAcyclicGraph<T> graph, int maxLayerSize)
             where T : IEquatable<T>
         {
             return new Instance<T>(graph, maxLayerSize, isGraphReduced: true);
@@ -124,7 +126,7 @@ namespace Bearded.Utilities.Algorithms
             {
                 this.numbers = numbers;
             }
-            
+
             public int CompareTo(object obj)
             {
                 switch (obj) {
