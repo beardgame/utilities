@@ -117,13 +117,9 @@ namespace Bearded.Utilities.Graphs
 
             bool leadsBackToCurrentPath(T element)
             {
-                if (currentPath.Contains(element))
-                {
-                    return true;
-                }
                 if (visited.Contains(element))
                 {
-                    return false;
+                    return currentPath.Contains(element);
                 }
 
                 visited.Add(element);
