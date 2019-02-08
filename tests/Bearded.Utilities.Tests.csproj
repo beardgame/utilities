@@ -14,6 +14,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\Bearded.Utilities.csproj" />
-    <ProjectReference Include="..\testing\Bearded.Utilities.Testing.csproj" />
   </ItemGroup>
 </Project>

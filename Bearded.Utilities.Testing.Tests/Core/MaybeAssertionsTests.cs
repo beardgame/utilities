@@ -1,10 +1,9 @@
 using System;
-using Bearded.Utilities.Testing;
 using FluentAssertions;
 using Xunit;
 using Xunit.Sdk;
 
-namespace Bearded.Utilities.Tests
+namespace Bearded.Utilities.Testing.Tests
 {
     public class MaybeAssertionsTests
     {
