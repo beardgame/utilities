@@ -23,7 +23,13 @@ namespace Bearded.Utilities.Graphs
             this.directPredecessors = directPredecessors;
         }
 
-        public IEnumerable<T> GetDirectSuccessorsOf(T element) => directSuccessors[element];
-        public IEnumerable<T> GetDirectPredecessorsOf(T element) => directPredecessors[element];
+        public IEnumerable<T> GetDirectSuccessorsOf(T element) =>
+            directSuccessors.ContainsKey(element)
+                ? directSuccessors[element]
+                : throw new ArgumentOutOfRangeException(nameof(element), "Element not found in graph.");
+        public IEnumerable<T> GetDirectPredecessorsOf(T element) =>
+            directPredecessors.ContainsKey(element)
+                ? directPredecessors[element]
+                : throw new ArgumentOutOfRangeException(nameof(element), "Element not found in graph.");
     }
 }
