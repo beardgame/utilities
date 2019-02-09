@@ -1,10 +1,7 @@
 ﻿using System.Linq;
 using Bearded.Utilities.Algorithms;
 using Bearded.Utilities.Graphs;
-using Bearded.Utilities.Tests.Generators;
 using FluentAssertions;
-using FsCheck;
-using FsCheck.Xunit;
 using Xunit;
 
 namespace Bearded.Utilities.Tests.Algorithms
@@ -32,37 +29,157 @@ namespace Bearded.Utilities.Tests.Algorithms
             solution.Should().HaveCount(1);
             solution[0].Should().Contain("element");
         }
-
-        [Property(Arbitrary = new[]
-            {typeof(DirectedAcyclicGraphGenerators.ApproximatelyHalfEdgesConnected<int>)})]
-        public void Solve_NeverCreatesLayersTooLarge(IDirectedAcyclicGraph<int> graph, PositiveInt width)
+        
+        [Fact]
+        public void Solve_NoArrows_DoesNotLeaveLayersEmpty()
         {
-            var instance = CoffmanGraham.InstanceForGraph(graph, width.Get);
+            const int width = 2;
+            const int numElements = 3;
+
+            var graph = createGraphWithoutArrows(numElements);
+            var instance = CoffmanGraham.InstanceForGraph(graph, width);
 
             var solution = instance.Solve();
 
             foreach (var layer in solution)
             {
-                layer.Should().HaveCountLessOrEqualTo(width.Get);
+                layer.Should().NotBeEmpty();
             }
         }
-
-        [Property(Arbitrary = new[]
-            {typeof(DirectedAcyclicGraphGenerators.ApproximatelyHalfEdgesConnected<int>)})]
-        public void Solve_AlwaysIncludesAllElementsInLayers(IDirectedAcyclicGraph<int> graph, PositiveInt width)
+        
+        [Fact]
+        public void Solve_MoreChildrenThanMaxWidth_DoesNotLeaveLayersEmpty()
         {
-            var instance = CoffmanGraham.InstanceForGraph(graph, width.Get);
+            const int width = 3;
+            const int numChildren = width * 3;
+            
+            var graph = createGraphWithManyChildren(numChildren);
+            var instance = CoffmanGraham.InstanceForGraph(graph, width);
 
             var solution = instance.Solve();
 
-            if (graph.Count == 0)
+            foreach (var layer in solution)
             {
-                solution.Should().HaveCount(0);
+                layer.Should().NotBeEmpty();
             }
-            else
+        }
+
+        [Fact]
+        public void Solve_NoArrows_DoesNotCreatesLayersTooLarge()
+        {
+            const int width = 2;
+            const int numElements = 3;
+
+            var graph = createGraphWithoutArrows(numElements);
+            var instance = CoffmanGraham.InstanceForGraph(graph, width);
+
+            var solution = instance.Solve();
+
+            foreach (var layer in solution)
             {
-                solution.SelectMany(s => s).Should().Contain(graph.Elements);
+                layer.Should().HaveCountLessOrEqualTo(width);
             }
+        }
+        
+        [Fact]
+        public void Solve_MoreChildrenThanMaxWidth_DoesNotCreateLayersTooLarge()
+        {
+            const int width = 3;
+            const int numChildren = width * 3;
+            
+            var graph = createGraphWithManyChildren(numChildren);
+            var instance = CoffmanGraham.InstanceForGraph(graph, width);
+
+            var solution = instance.Solve();
+
+            foreach (var layer in solution)
+            {
+                layer.Should().HaveCountLessOrEqualTo(width);
+            }
+        }
+
+        [Fact]
+        public void Solve_NoArrows_IncludesAllElementsInLayers()
+        {
+            const int width = 3;
+            const int numElements = 100;
+            
+            var graph = createGraphWithoutArrows(numElements);
+            var instance = CoffmanGraham.InstanceForGraph(graph, width);
+
+            var solution = instance.Solve();
+
+            solution.SelectMany(s => s).Should().Contain(graph.Elements);
+        }
+        
+        [Fact]
+        public void Solve_MoreChildrenThanMaxWidth_IncludesAllElementsInLayers()
+        {
+            const int width = 3;
+            const int numChildren = width * 3;
+            
+            var graph = createGraphWithManyChildren(numChildren);
+            var instance = CoffmanGraham.InstanceForGraph(graph, width);
+
+            var solution = instance.Solve();
+
+            solution.SelectMany(s => s).Should().Contain(graph.Elements);
+        }
+        
+        [Fact]
+        public void Solve_PutsChildrenInSeparateLayers()
+        {
+            const int numElements = 10;
+            
+            var graph = createLine(numElements);
+            var instance = CoffmanGraham.InstanceForGraph(graph, 100);
+
+            var solution = instance.Solve();
+            
+            for (var i = 0; i < solution.Count; i++)
+            {
+                solution[i].Should().ContainSingle().Which.Should().Be(i);
+            }
+        }
+
+        private static IDirectedAcyclicGraph<int> createGraphWithoutArrows(int numElements)
+        {
+            var builder = DirectedGraphBuilder<int>.NewBuilder();
+            
+            for (var i = 0; i < numElements; i++)
+            {
+                builder.AddElement(i);
+            }
+
+            var graph = builder.CreateAcyclicGraphUnsafe();
+            return graph;
+        }
+        
+        private static IDirectedAcyclicGraph<int> createGraphWithManyChildren(int numDirectSuccessors)
+        {
+            var builder = DirectedGraphBuilder<int>.NewBuilder().AddElement(-1);
+            
+            for (var i = 0; i < numDirectSuccessors; i++)
+            {
+                builder.AddElement(i).AddArrow(-1, i);
+            }
+
+            var graph = builder.CreateAcyclicGraphUnsafe();
+            return graph;
+        }
+        
+        private static IDirectedAcyclicGraph<int> createLine(int numElements)
+        {
+            var builder = DirectedGraphBuilder<int>.NewBuilder();
+            
+            for (var i = 0; i < numElements; i++)
+            {
+                builder.AddElement(i);
+                if (i > 0) builder.AddArrow(i - 1, i);
+            }
+
+            var graph = builder.CreateAcyclicGraphUnsafe();
+            return graph;
         }
     }
 }
