@@ -29,40 +29,6 @@ namespace Bearded.Utilities.Tests.Algorithms
             solution.Should().HaveCount(1);
             solution[0].Should().Contain("element");
         }
-        
-        [Fact]
-        public void Solve_NoArrows_DoesNotLeaveLayersEmpty()
-        {
-            const int width = 2;
-            const int numElements = 3;
-
-            var graph = createGraphWithoutArrows(numElements);
-            var instance = CoffmanGraham.InstanceForGraph(graph, width);
-
-            var solution = instance.Solve();
-
-            foreach (var layer in solution)
-            {
-                layer.Should().NotBeEmpty();
-            }
-        }
-        
-        [Fact]
-        public void Solve_MoreChildrenThanMaxWidth_DoesNotLeaveLayersEmpty()
-        {
-            const int width = 3;
-            const int numChildren = width * 3;
-            
-            var graph = createGraphWithManyChildren(numChildren);
-            var instance = CoffmanGraham.InstanceForGraph(graph, width);
-
-            var solution = instance.Solve();
-
-            foreach (var layer in solution)
-            {
-                layer.Should().NotBeEmpty();
-            }
-        }
 
         [Fact]
         public void Solve_NoArrows_DoesNotCreatesLayersTooLarge()
@@ -96,6 +62,36 @@ namespace Bearded.Utilities.Tests.Algorithms
             {
                 layer.Should().HaveCountLessOrEqualTo(width);
             }
+        }
+        
+        [Fact]
+        public void Solve_NoArrows_UsesTheMinimumNumberOfLayers()
+        {
+            const int width = 3;
+            const int numElements = 18;
+            const int expectedLayers = 6;
+
+            var graph = createGraphWithoutArrows(numElements);
+            var instance = CoffmanGraham.InstanceForGraph(graph, width);
+
+            var solution = instance.Solve();
+
+            solution.Should().HaveCount(expectedLayers);
+        }
+        
+        [Fact]
+        public void Solve_MoreChildrenThanMaxWidth_UsesTheMinimumNumberOfLayers()
+        {
+            const int width = 4;
+            const int numChildren = 17;
+            const int expectedLayers = 6; // 1 [root] + ceil(17 / 4) [children]
+            
+            var graph = createGraphWithManyChildren(numChildren);
+            var instance = CoffmanGraham.InstanceForGraph(graph, width);
+
+            var solution = instance.Solve();
+
+            solution.Should().HaveCount(expectedLayers);
         }
 
         [Fact]
