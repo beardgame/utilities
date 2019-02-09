@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Bearded.Utilities.Collections;
 using Bearded.Utilities.Graphs;
 using Bearded.Utilities.Linq;
 
 namespace Bearded.Utilities.Algorithms
 {
     /// <summary>
-    /// This class contains logic to take a partially ordered set of elements (in the form of a directed acyclic graph)
-    /// and split it in a sequence of layers such that the following holds:
+    /// This class contains logic to take a partially ordered set of elements and split it in a sequence of layers such
+    /// that the following holds:
     ///
     /// <list type="number">
     /// <item>
@@ -22,6 +21,10 @@ namespace Bearded.Utilities.Algorithms
     /// Every layer contains at most a fixed number of W elements.
     /// </item>
     /// </list>
+    ///
+    /// <para>
+    /// The input is given as a directed acyclic graph, such that there is an arrow from x to y if x is smaller than y.
+    /// </para>
     ///
     /// <para>
     /// The algorithm itself takes O(n^2), but requires an order that is transitively reduced. The runtime for the
@@ -64,10 +67,16 @@ namespace Bearded.Utilities.Algorithms
 
                 while (ordering.Count < graph.Count)
                 {
-                    var next = elements
-                        .Where(e => predecessors[e].All(n => elementToIndex.ContainsKey(n)))
-                        .MinBy(e => DecreasingNumberSequence
-                            .FromUnsortedNumbers(predecessors[e].Select(n => elementToIndex[n]).ToArray()));
+                    // All the remaining elements which have no predecessors, or all their predecessors have been added
+                    // to the topological ordering already.
+                    var sources = elements.Where(e => predecessors[e].All(n => elementToIndex.ContainsKey(n)));
+
+                    // For each element, we look at the place of all their predecessors in the partial topological
+                    // ordering we have constructed so far. We then pick the element for which the predecessor most
+                    // recently added to the order is earlier than the most recently added predecessor of all remaining
+                    // elements. If there are ties, we look at the second highest predecessor. If all predecessors are
+                    // the same, we pick the element with the least predecessors.
+                    var next = sources.MinBy(createDecreasingNumberSequenceOfPredecessorIndices);
 
                     elementToIndex.Add(next, ordering.Count);
                     ordering.Add(next);
@@ -75,34 +84,53 @@ namespace Bearded.Utilities.Algorithms
                 }
 
                 return ordering;
+
+                DecreasingNumberSequence createDecreasingNumberSequenceOfPredecessorIndices(T e)
+                {
+                    var predecessorIndices = predecessors[e].Select(n => elementToIndex[n]);
+                    return DecreasingNumberSequence.FromUnsortedNumbers(predecessorIndices);
+                }
             }
 
             private static ImmutableList<ImmutableHashSet<T>> createLayers(
+                // ReSharper disable once SuggestBaseTypeForParameter
                 IDirectedAcyclicGraph<T> graph, IList<T> ordering, int maxLayerSize)
             {
-                var layers = new List<HashSet<T>>();
+                var layersReversed = new List<ImmutableHashSet<T>.Builder>();
                 var elementToLayer = new Dictionary<T, int>();
 
                 for (var i = ordering.Count - 1; i >= 0; i--)
                 {
-                    var outgoingEdges = graph.GetDirectSuccessorsOf(ordering[i]);
-                    var lowestPossibleLevel =
-                        !outgoingEdges.Any() ? 0 : outgoingEdges.Min(e => elementToLayer[e] + 1);
+                    // We fill in the layers back-to-front, always choosing the highest layer for the current element,
+                    // such that all its successors are in a higher layer, and the layer has less than W elements.
+                    // Since we are using a list where the right-most layer is 0, we are looking for the lowest k such
+                    // that (1) each successor is in a layer lower than k, and (2) layer k has less than W elements.
 
-                    while (lowestPossibleLevel < layers.Count && layers[lowestPossibleLevel].Count == maxLayerSize)
+                    // Requirement (1)
+                    var highestSuccessorLevel = graph.GetDirectSuccessorsOf(ordering[i])
+                        .Select(elmt => elementToLayer[elmt] + 1)
+                        .Aggregate(0, Math.Max);
+
+                    // Requirement (2)
+                    var candidateLayer = highestSuccessorLevel;
+                    while (
+                        candidateLayer < layersReversed.Count && layersReversed[candidateLayer].Count == maxLayerSize)
                     {
-                        lowestPossibleLevel++;
-                    }
-                    while (lowestPossibleLevel >= layers.Count)
-                    {
-                        layers.Add(new HashSet<T>());
+                        candidateLayer++;
                     }
 
-                    layers[lowestPossibleLevel].Add(ordering[i]);
-                    elementToLayer.Add(ordering[i], lowestPossibleLevel);
+                    // Expand the list as needed
+                    while (candidateLayer >= layersReversed.Count)
+                    {
+                        layersReversed.Add(ImmutableHashSet.CreateBuilder<T>());
+                    }
+
+                    // Add the element to the layer
+                    layersReversed[candidateLayer].Add(ordering[i]);
+                    elementToLayer.Add(ordering[i], candidateLayer);
                 }
 
-                return ImmutableList.CreateRange(layers.Select(ImmutableHashSet.CreateRange));
+                return ImmutableList.CreateRange(layersReversed.Select(b => b.ToImmutable()).Reverse());
             }
         }
 
