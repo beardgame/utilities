@@ -52,9 +52,16 @@ namespace Bearded.Utilities.Tests.Collections
             var trie = new PrefixTrie(
                 new[] { "one", "two", "three" }
                 );
+
+            foreach (var contained in new[] {"one", "two", "three"})
+            {
+                trie.Contains(contained).Should().BeTrue();
+            }
             
-            trie.Should().Contain(new[] {"one", "two", "three"});
-            trie.Should().NotContain(new[] {"four", "threeAndSome"});
+            foreach (var notContained in new[] {"four", "threeAndSome"})
+            {
+                trie.Contains(notContained).Should().BeFalse();
+            }
         }
 
         [Fact]
@@ -64,7 +71,10 @@ namespace Bearded.Utilities.Tests.Collections
                 new[] { "one", "two", "three" }
                 );
             
-            trie.Should().NotContain(new[] {"", "t", "tw"});
+            foreach (var notContained in new[] {"", "t", "tw"})
+            {
+                trie.Contains(notContained).Should().BeFalse();
+            }
         }
 
         #endregion
