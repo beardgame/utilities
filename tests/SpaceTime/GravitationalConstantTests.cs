@@ -53,8 +53,8 @@ namespace Bearded.Utilities.Tests.SpaceTime
                 var mass = new Mass(massValue);
                 var difference = new Difference2(differenceXValue, differenceYValue);
                 var expectedAcceleration = gValue * massValue
-                    * new Vector2(differenceXValue, differenceYValue).Normalized()
-                    / (differenceXValue.Squared() + differenceYValue.Squared());
+                    / new Vector2(differenceXValue, differenceYValue).LengthSquared
+                    * new Vector2(differenceXValue, differenceYValue).Normalized();
 
                 var acceleration = g.AccelerationTowards(mass, difference);
 
@@ -75,8 +75,8 @@ namespace Bearded.Utilities.Tests.SpaceTime
                 var mass = new Mass(massValue);
                 var difference = new Unit(differenceValue);
                 var expectedAcceleration = gValue * massValue
-                    * Math.Sign(differenceValue)
-                    / differenceValue.Squared();
+                    / differenceValue.Squared()
+                    * Math.Sign(differenceValue);
 
                 var acceleration = g.AccelerationTowards(mass, difference);
 
@@ -131,8 +131,8 @@ namespace Bearded.Utilities.Tests.SpaceTime
                 var g = new GravitationalConstant(gValue);
                 var mass = new Mass(massValue);
                 var difference = new Difference2(differenceXValue, differenceYValue);
-                var expectedAcceleration = gValue *massValue
-                    / (differenceXValue.Squared() + differenceYValue.Squared());
+                var expectedAcceleration = gValue * massValue
+                    / new Vector2(differenceXValue, differenceYValue).LengthSquared;
 
                 var acceleration = g.AccelerationAtDistance(mass, difference);
 
