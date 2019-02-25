@@ -94,7 +94,7 @@ namespace Bearded.Utilities.Tests.SpaceTime
                 var g = new GravitationalConstant(gValue);
                 var mass = new Mass(massValue);
                 var distanceSquaredValue = Math.Abs(distanceSquaredValueWithSign);
-                var distanceSquared = new Squared<Unit>(Math.Abs(distanceSquaredValue));
+                var distanceSquared = new Squared<Unit>(distanceSquaredValue);
                 var expectedAcceleration = gValue * massValue / distanceSquaredValue;
 
                 var acceleration = g.AccelerationAtDistance(mass, distanceSquared);
