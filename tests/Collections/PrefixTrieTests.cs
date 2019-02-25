@@ -119,13 +119,11 @@ namespace Bearded.Utilities.Tests.Collections
 
             var withPrefixO = trie.AllKeys("o").ToList();
 
-            withPrefixO.Should().HaveCount(1);
-            withPrefixO.Should().Contain("one");
+            withPrefixO.Should().BeEquivalentTo(new[] { "one" });
 
             var withPrefixTh = trie.AllKeys("th").ToList();
 
-            withPrefixTh.Should().HaveCount(2);
-            withPrefixTh.Should().Contain(words.Where(w => w.StartsWith("th")));
+            withPrefixTh.Should().BeEquivalentTo(words.Where(w => w.StartsWith("th")));
         }
 
         [Fact]
@@ -137,8 +135,7 @@ namespace Bearded.Utilities.Tests.Collections
 
             var withPrefixEmptyString = trie.AllKeys("").ToList();
 
-            withPrefixEmptyString.Should().HaveCount(words.Length);
-            withPrefixEmptyString.Should().Contain(words);
+            withPrefixEmptyString.Should().BeEquivalentTo(words);
         }
 
         [Fact]
