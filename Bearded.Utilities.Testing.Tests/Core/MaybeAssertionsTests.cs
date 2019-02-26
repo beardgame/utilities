@@ -8,7 +8,7 @@ namespace Bearded.Utilities.Testing.Tests
     public class MaybeAssertionsTests
     {
         [Fact]
-        public void BeJust_SucceedsWhenMaybeHasValue()
+        public void BeJust_ForJust_Succeeds()
         {
             var maybe = Maybe.Just(100);
 
@@ -18,7 +18,7 @@ namespace Bearded.Utilities.Testing.Tests
         }
         
         [Fact]
-        public void BeJust_FailsWhenMaybeIsNothing()
+        public void BeJust_ForNothing_Fails()
         {
             var maybe = Maybe.Nothing<int>();
 
@@ -28,7 +28,7 @@ namespace Bearded.Utilities.Testing.Tests
         }
         
         [Fact]
-        public void BeJust_SucceedsWithAndConstraint()
+        public void BeJust_ForJustWithAndConstraint_AndConstraintSucceeds_Succeeds()
         {
             var maybe = Maybe.Just(100);
 
@@ -38,7 +38,7 @@ namespace Bearded.Utilities.Testing.Tests
         }
         
         [Fact]
-        public void BeJust_FailsWhenAndConstraintIsNotMet()
+        public void BeJust_ForJustWithAndConstraint_AndConstraintFails_Fails()
         {
             var maybe = Maybe.Just(100);
 
@@ -48,7 +48,7 @@ namespace Bearded.Utilities.Testing.Tests
         }
 
         [Fact]
-        public void BeJust_SucceedsWhenComparingToMaybeWithRightValue()
+        public void BeJust_ForJustWithValue_ComparedToSameValue_Succeeds()
         {
             var maybe = Maybe.Just(100);
 
@@ -58,7 +58,7 @@ namespace Bearded.Utilities.Testing.Tests
         }
 
         [Fact]
-        public void BeJust_FailsWhenComparingToMaybeWithWrongValue()
+        public void BeJust_ForJustWithValue_ComparedToDifferentValue_Succeeds()
         {
             var maybe = Maybe.Just(100);
 
@@ -68,7 +68,7 @@ namespace Bearded.Utilities.Testing.Tests
         }
 
         [Fact]
-        public void BeJust_FailsWhenComparingToNothing()
+        public void BeJust_ForNothing_ComparedToValue_Fails()
         {
             var maybe = Maybe.Nothing<int>();
 
@@ -78,7 +78,7 @@ namespace Bearded.Utilities.Testing.Tests
         }
 
         [Fact]
-        public void BeNothing_SucceedsWhenMaybeIsNothing()
+        public void BeNothing_ForNothing_Succeeds()
         {
             var maybe = Maybe.Nothing<int>();
 
@@ -88,7 +88,7 @@ namespace Bearded.Utilities.Testing.Tests
         }
 
         [Fact]
-        public void BeNothing_FailsWhenMaybeHasValue()
+        public void BeNothing_ForJust_Fails()
         {
             var maybe = Maybe.Just(100);
 
