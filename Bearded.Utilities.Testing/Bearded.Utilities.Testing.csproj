@@ -6,6 +6,6 @@
     <PackageReference Include="FluentAssertions" Version="5.6.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\Bearded.Utilities.csproj" />
+    <ProjectReference Include="..\Bearded.Utilities\Bearded.Utilities.csproj" />
   </ItemGroup>
 </Project>
