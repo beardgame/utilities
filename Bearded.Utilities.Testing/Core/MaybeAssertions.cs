@@ -12,7 +12,7 @@ namespace Bearded.Utilities.Testing
         [CustomAssertion]
         public void BeJust(T value, string because = "", params object[] becauseArgs)
         {
-            BeJust().Which.Should().BeEquivalentTo(value, because, becauseArgs);
+            BeJust().Which.Should().Be(value, because, becauseArgs);
         }
 
         [CustomAssertion]
