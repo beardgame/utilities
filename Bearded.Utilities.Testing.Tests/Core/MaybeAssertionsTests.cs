@@ -5,96 +5,145 @@ using Xunit.Sdk;
 
 namespace Bearded.Utilities.Testing.Tests
 {
-    public class MaybeAssertionsTests
+    public sealed class MaybeAssertionsTests
     {
-        [Fact]
-        public void BeJust_ForJust_Succeeds()
+        public sealed class BeJustWithNoParameter
         {
-            var maybe = Maybe.Just(100);
+            [Fact]
+            public void SucceedsWhenJust()
+            {
+                var maybe = Maybe.Just(100);
 
-            Action assertion = () => maybe.Should().BeJust();
+                Action assertion = () => maybe.Should().BeJust();
             
-            assertion.Should().NotThrow();
-        }
+                assertion.Should().NotThrow();
+            }
         
-        [Fact]
-        public void BeJust_ForNothing_Fails()
-        {
-            var maybe = Maybe.Nothing<int>();
+            [Fact]
+            public void FailsWhenNothing()
+            {
+                var maybe = Maybe.Nothing<int>();
 
-            Action assertion = () => maybe.Should().BeJust();
+                Action assertion = () => maybe.Should().BeJust();
             
-            assertion.Should().Throw<XunitException>();
-        }
+                assertion.Should().Throw<XunitException>();
+            }
+            
+            [Fact]
+            public void ReturnsAndConstraintThatSucceedsAsExpected()
+            {
+                var maybe = Maybe.Just(100);
+
+                Action assertion = () => maybe.Should().BeJust().And.Should().NotBeNull();
+            
+                assertion.Should().NotThrow();
+            }
         
-        [Fact]
-        public void BeJust_ForJustWithAndConstraint_AndConstraintSucceeds_Succeeds()
-        {
-            var maybe = Maybe.Just(100);
+            [Fact]
+            public void ReturnsAndConstraintThatFailsAsExpected()
+            {
+                var maybe = Maybe.Just(100);
 
-            Action assertion = () => maybe.Should().BeJust().Which.Should().Be(100);
+                Action assertion = () => maybe.Should().BeJust().And.Should().BeNull();
             
-            assertion.Should().NotThrow();
-        }
+                assertion.Should().Throw<XunitException>();
+            }
+            
+            [Fact]
+            public void FailsWhenNothingEvenIfAndConstraintSucceeds()
+            {
+                var maybe = Maybe.Just(100);
+
+                Action assertion = () => maybe.Should().BeJust().And.Should().NotBeNull();
+            
+                assertion.Should().NotThrow();
+            }
+            
+            [Fact]
+            public void ReturnsWhichConstraintThatSucceedsAsExpected()
+            {
+                var maybe = Maybe.Just(100);
+
+                Action assertion = () => maybe.Should().BeJust().Which.Should().Be(100);
+            
+                assertion.Should().NotThrow();
+            }
         
-        [Fact]
-        public void BeJust_ForJustWithAndConstraint_AndConstraintFails_Fails()
-        {
-            var maybe = Maybe.Just(100);
+            [Fact]
+            public void ReturnsWhichConstraintThatFailsAsExpected()
+            {
+                var maybe = Maybe.Just(100);
 
-            Action assertion = () => maybe.Should().BeJust().Which.Should().Be(200);
+                Action assertion = () => maybe.Should().BeJust().Which.Should().Be(200);
             
-            assertion.Should().Throw<XunitException>();
+                assertion.Should().Throw<XunitException>();
+            }
+            
+            [Fact]
+            public void FailsWhenNothingEvenIfWhichConstraintSucceeds()
+            {
+                var maybe = Maybe.Just(100);
+
+                Action assertion = () => maybe.Should().BeJust().Which.Should().Be(100);
+            
+                assertion.Should().NotThrow();
+            }
         }
 
-        [Fact]
-        public void BeJust_ForJustWithValue_ComparedToSameValue_Succeeds()
+        public sealed class BeJustWithValue
         {
-            var maybe = Maybe.Just(100);
+            [Fact]
+            public void SucceedsWhenJustComparedToSameValue()
+            {
+                var maybe = Maybe.Just(100);
 
-            Action assertion = () => maybe.Should().BeJust(100);
+                Action assertion = () => maybe.Should().BeJust(100);
             
-            assertion.Should().NotThrow();
+                assertion.Should().NotThrow();
+            }
+
+            [Fact]
+            public void FailsWhenJustComparedToDifferentValue()
+            {
+                var maybe = Maybe.Just(100);
+
+                Action assertion = () => maybe.Should().BeJust(200);
+            
+                assertion.Should().Throw<XunitException>();
+            }
+
+            [Fact]
+            public void FailsWhenNothing()
+            {
+                var maybe = Maybe.Nothing<int>();
+
+                Action assertion = () => maybe.Should().BeJust(200);
+            
+                assertion.Should().Throw<XunitException>();
+            }
         }
 
-        [Fact]
-        public void BeJust_ForJustWithValue_ComparedToDifferentValue_Succeeds()
+        public sealed class BeNothing
         {
-            var maybe = Maybe.Just(100);
+            [Fact]
+            public void SucceedsWhenNothing()
+            {
+                var maybe = Maybe.Nothing<int>();
 
-            Action assertion = () => maybe.Should().BeJust(200);
+                Action assertion = () => maybe.Should().BeNothing();
             
-            assertion.Should().Throw<XunitException>();
-        }
+                assertion.Should().NotThrow();
+            }
 
-        [Fact]
-        public void BeJust_ForNothing_ComparedToValue_Fails()
-        {
-            var maybe = Maybe.Nothing<int>();
+            [Fact]
+            public void FailsWhenJust()
+            {
+                var maybe = Maybe.Just(100);
 
-            Action assertion = () => maybe.Should().BeJust(200);
+                Action assertion = () => maybe.Should().BeNothing();
             
-            assertion.Should().Throw<XunitException>();
-        }
-
-        [Fact]
-        public void BeNothing_ForNothing_Succeeds()
-        {
-            var maybe = Maybe.Nothing<int>();
-
-            Action assertion = () => maybe.Should().BeNothing();
-            
-            assertion.Should().NotThrow();
-        }
-
-        [Fact]
-        public void BeNothing_ForJust_Fails()
-        {
-            var maybe = Maybe.Just(100);
-
-            Action assertion = () => maybe.Should().BeNothing();
-            
-            assertion.Should().Throw<XunitException>();
+                assertion.Should().Throw<XunitException>();
+            }
         }
     }
 }
