@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Utilities", "src\Bearded.Utilities.csproj", "{2F580B9D-6255-4427-8395-5EF236C9401C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Utilities", "Bearded.Utilities\Bearded.Utilities.csproj", "{2F580B9D-6255-4427-8395-5EF236C9401C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Utilities.Tests", "tests\Bearded.Utilities.Tests.csproj", "{7EDB76CB-E9DC-4BCC-A610-12BE4976A701}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Utilities.Tests", "Bearded.Utilities.Tests\Bearded.Utilities.Tests.csproj", "{7EDB76CB-E9DC-4BCC-A610-12BE4976A701}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bearded.Utilities.Testing", "Bearded.Utilities.Testing\Bearded.Utilities.Testing.csproj", "{C83131DC-2AD2-4B35-BD77-735A937B70C7}"
 EndProject
