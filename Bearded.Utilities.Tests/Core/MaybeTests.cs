@@ -2,7 +2,7 @@ using FluentAssertions;
 using Xunit;
 using Xunit.Sdk;
 
-namespace Bearded.Utilities.Tests.Core
+namespace Bearded.Utilities.Tests
 {
     public class MaybeTests
     {

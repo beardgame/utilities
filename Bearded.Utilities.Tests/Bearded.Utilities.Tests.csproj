@@ -13,6 +13,6 @@
     <PackageReference Include="xunit.runner.console" Version="2.4.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\Bearded.Utilities.csproj" />
+    <ProjectReference Include="..\Bearded.Utilities\Bearded.Utilities.csproj" />
   </ItemGroup>
 </Project>
