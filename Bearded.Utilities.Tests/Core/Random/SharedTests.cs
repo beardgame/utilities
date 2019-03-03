@@ -4,6 +4,7 @@ using System.Linq;
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
+// ReSharper disable CompareOfFloatsByEqualityOperator because we mean to test equality below
 
 namespace Bearded.Utilities.Tests.Random
 {
@@ -175,7 +176,6 @@ namespace Bearded.Utilities.Tests.Random
                 Seed(seed);
                 var first = CallMethod();
 
-                // ReSharper disable once CompareOfFloatsByEqualityOperator
                 sequence(100, CallMethod)
                     .Should().Contain(i => i != first);
             }
@@ -349,7 +349,7 @@ namespace Bearded.Utilities.Tests.Random
             [Property]
             public void ReturnsBothPossibleValues(int seed, byte parameter)
             {
-                // ensure 0<<p<<1
+                // ensure 0<<p<<1 to ensure the test is very likely to pass
                 var p = 0.5f + (parameter - byte.MaxValue * 0.5f) / (3f * byte.MaxValue);
                 Seed(seed);
                 sequence(100, () => CallMethod(p))

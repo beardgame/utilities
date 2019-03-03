@@ -4,7 +4,27 @@ namespace Bearded.Utilities.Tests.Random
 {
     public class BaseTests
     {
-        public abstract class RandomMethodWithoutParameters<T>
+        public abstract class RandomMethodBase<TMethod>
+        {
+            // ReSharper disable once VirtualMemberCallInConstructor
+            // it's magic to make actual tests more concise, yet enforce implementing setup
+            // (though we can't enforce _correct_ implementation)
+            protected RandomMethodBase() => Setup();
+
+            protected abstract void Setup();
+
+            protected void Setup(Action<int> seed, TMethod method)
+            {
+                Seed = seed;
+                CallMethod = method;
+            }
+            
+            public TMethod CallMethod { get; set; }
+
+            public Action<int> Seed { get; set; }
+        }
+        
+        public abstract class RandomMethodWithoutParameters<T> : RandomMethodBase<Func<T>>
             where T : struct, IComparable<T>
         {
             protected Func<T> CallingWith(int seed)
@@ -15,10 +35,6 @@ namespace Bearded.Utilities.Tests.Random
                 Seed(seed);
                 return CallMethod();
             }
-
-            protected abstract T CallMethod();
-
-            protected abstract void Seed(int seed);
         }
 
         public abstract class RandomMethodWithOneParameter<T>
@@ -28,7 +44,7 @@ namespace Bearded.Utilities.Tests.Random
             
         }
         
-        public abstract class RandomMethodWithOneParameter<T, TParameter>
+        public abstract class RandomMethodWithOneParameter<T, TParameter> : RandomMethodBase<Func<TParameter, T>>
             where T : struct, IComparable<T>
         {
             protected Func<T> CallingWith(int seed, TParameter parameter)
@@ -39,13 +55,9 @@ namespace Bearded.Utilities.Tests.Random
                 Seed(seed);
                 return CallMethod(parameter);
             }
-
-            protected abstract T CallMethod(TParameter parameter);
-
-            protected abstract void Seed(int seed);
         }
 
-        public abstract class RandomMethodWithTwoParameters<T>
+        public abstract class RandomMethodWithTwoParameters<T> : RandomMethodBase<Func<T, T, T>>
             where T : struct, IComparable<T>
         {
             protected Func<T> CallingWith(int seed, T parameter1, T parameter2)
@@ -56,10 +68,6 @@ namespace Bearded.Utilities.Tests.Random
                 Seed(seed);
                 return CallMethod(parameter1, parameter2);
             }
-
-            protected abstract T CallMethod(T parameter1, T parameter2);
-
-            protected abstract void Seed(int seed);
         }
     }
 }
