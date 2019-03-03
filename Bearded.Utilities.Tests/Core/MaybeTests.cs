@@ -72,6 +72,41 @@ namespace Bearded.Utilities.Tests
             }
         }
 
+        public sealed class Where
+        {
+            [Fact]
+            public void MapsNothingToNothingIfPredicateReturnsFalse()
+            {
+                var maybe = Maybe.Nothing<int>();
+
+                maybe.Where(_ => false).Should().Be(Maybe.Nothing<int>());
+            }
+            
+            [Fact]
+            public void MapsNothingToNothingIfPredicateReturnsTrue()
+            {
+                var maybe = Maybe.Nothing<int>();
+
+                maybe.Where(_ => true).Should().Be(Maybe.Nothing<int>());
+            }
+            
+            [Fact]
+            public void MapsJustToNothingIfPredicateReturnsFalse()
+            {
+                var maybe = Maybe.Just(100);
+
+                maybe.Where(_ => false).Should().Be(Maybe.Nothing<int>());
+            }
+            
+            [Fact]
+            public void MapsJustToJustIfPredicateReturnsTrue()
+            {
+                var maybe = Maybe.Just(100);
+
+                maybe.Where(_ => true).Should().Be(Maybe.Just(100));
+            }
+        }
+
         public sealed class Match
         {
             [Fact]
