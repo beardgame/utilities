@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
-using FsCheck.Xunit;
 
-namespace Bearded.Utilities.Tests.Core.Random
+namespace Bearded.Utilities.Tests.Random
 {
     public class StaticRandomTests
     {
@@ -37,6 +32,33 @@ namespace Bearded.Utilities.Tests.Core.Random
         {
             protected override int CallMethod(int parameter1, int parameter2)
                 => StaticRandom.Int(parameter1, parameter2);
+
+            protected override void Seed(int seed)
+                => StaticRandom.SeedWith(seed);
+        }
+        
+        public class TheLongMethod : SharedTests.TheLongMethod
+        {
+            protected override long CallMethod()
+                => StaticRandom.Long();
+
+            protected override void Seed(int seed)
+                => StaticRandom.SeedWith(seed);
+        }
+        
+        public class TheLongWithMaxMethod : SharedTests.TheLongWithMaxMethod
+        {
+            protected override long CallMethod(long parameter)
+                => StaticRandom.Long(parameter);
+
+            protected override void Seed(int seed)
+                => StaticRandom.SeedWith(seed);
+        }
+
+        public class TheLongWithMinAndMaxMethod : SharedTests.TheLongWithMinAndMaxMethod
+        {
+            protected override long CallMethod(long parameter1, long parameter2)
+                => StaticRandom.Long(parameter1, parameter2);
 
             protected override void Seed(int seed)
                 => StaticRandom.SeedWith(seed);
@@ -127,6 +149,42 @@ namespace Bearded.Utilities.Tests.Core.Random
         {
             protected override int CallMethod(float parameter)
                 => StaticRandom.Discretise(parameter);
+
+            protected override void Seed(int seed)
+                => StaticRandom.SeedWith(seed);
+        }
+
+        public class TheNormalFloatMethod : SharedTests.TheNormalFloatMethod
+        {
+            protected override float CallMethod()
+                => StaticRandom.NormalFloat();
+
+            protected override void Seed(int seed)
+                => StaticRandom.SeedWith(seed);
+        }
+
+        public class TheNormalFloatWithParametersMethod : SharedTests.TheNormalFloatWithParametersMethod
+        {
+            protected override float CallMethod(float parameter1, float parameter2)
+                => StaticRandom.NormalFloat(parameter1, parameter2);
+
+            protected override void Seed(int seed)
+                => StaticRandom.SeedWith(seed);
+        }
+
+        public class TheNormalDoubleMethod : SharedTests.TheNormalDoubleMethod
+        {
+            protected override double CallMethod()
+                => StaticRandom.NormalDouble();
+
+            protected override void Seed(int seed)
+                => StaticRandom.SeedWith(seed);
+        }
+        
+        public class TheNormalDoubleWithParametersMethod : SharedTests.TheNormalDoubleWithParametersMethod
+        {
+            protected override double CallMethod(double parameter1, double parameter2)
+                => StaticRandom.NormalDouble(parameter1, parameter2);
 
             protected override void Seed(int seed)
                 => StaticRandom.SeedWith(seed);

@@ -1,6 +1,6 @@
 using System;
 
-namespace Bearded.Utilities.Tests.Core.Random
+namespace Bearded.Utilities.Tests.Random
 {
     public class BaseTests
     {

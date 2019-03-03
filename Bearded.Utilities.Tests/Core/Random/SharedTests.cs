@@ -5,7 +5,7 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 
-namespace Bearded.Utilities.Tests.Core.Random
+namespace Bearded.Utilities.Tests.Random
 {
     public class SharedTests
     {
@@ -98,6 +98,75 @@ namespace Bearded.Utilities.Tests.Core.Random
             }
         }
         
+        public abstract class TheLongMethod : BaseTests.RandomMethodWithoutParameters<long>
+        {
+            [Property]
+            public void ShouldReturnDifferentValues(int seed)
+            {
+                Seed(seed);
+                var first = CallMethod();
+
+                sequence(100, CallMethod)
+                    .Should().Contain(i => i != first);
+            }
+        }
+
+        public abstract class TheLongWithMaxMethod : BaseTests.RandomMethodWithOneParameter<long>
+        {
+            [Property]
+            public void ShouldReturnValueInRange(int seed, long max)
+            {
+                max = Math.Max(1, max);
+                ResultOfCallingWith(seed, max)
+                    .Should().BeInRange(0, max);
+            }
+
+            [Property]
+            public void ShouldThrowForNegativeMaximum(int seed, long max)
+            {
+                max = Math.Min(-1, max);
+                CallingWith(seed, max).Should().Throw<ArgumentException>();
+            }
+
+            [Property]
+            public void ShouldReturnZeroForZeroMaximum(int seed)
+            {
+                ResultOfCallingWith(seed, 0).Should().Be(0);
+            }
+        }
+
+        public abstract class TheLongWithMinAndMaxMethod : BaseTests.RandomMethodWithTwoParameters<long>
+        {
+            [Property]
+            public void ShouldReturnValueInRange(int seed, long min, long max)
+            {
+                if (max < min)
+                    (min, max) = (max, min);
+
+                ResultOfCallingWith(seed, min, max)
+                    .Should().BeInRange(min, max);
+            }
+
+            [Property]
+            public void ShouldThrowIfMaximumLessThanMinimum(int seed, long min, long max)
+            {
+                if (max == min)
+                    max--;
+                if (max > min)
+                    (min, max) = (max, min);
+
+                CallingWith(seed, min, max)
+                    .Should().Throw<ArgumentException>();
+            }
+
+            [Property]
+            public void ShouldReturnMinimumIfMinimumEqualsMaximum(int seed, long minMax)
+            {
+                ResultOfCallingWith(seed, minMax, minMax)
+                    .Should().Be(minMax);
+            }
+        }
+        
         public abstract class TheFloatMethod : BaseTests.RandomMethodWithoutParameters<float>
         {
             [Property]
@@ -121,13 +190,14 @@ namespace Bearded.Utilities.Tests.Core.Random
         public abstract class TheFloatWithOneBoundMethod : BaseTests.RandomMethodWithOneParameter<float>
         {
             [Property]
-            public void ShouldReturnValueInRange(int seed, float bound)
+            public void ShouldReturnValueInRange(int seed, NormalFloat bound)
             {
-                var (minimumValue, maximumValue) = bound > 0
-                    ? (0f, bound)
-                    : (bound, 0f);
+                var b = (float) bound.Get;
+                var (minimumValue, maximumValue) = b > 0
+                    ? (0f, b)
+                    : (b, 0f);
                 
-                ResultOfCallingWith(seed, bound)
+                ResultOfCallingWith(seed, b)
                     .Should().BeInRange(minimumValue, maximumValue);
             }
 
@@ -141,21 +211,22 @@ namespace Bearded.Utilities.Tests.Core.Random
         public abstract class TheFloatWithTwoBoundsMethod : BaseTests.RandomMethodWithTwoParameters<float>
         {
             [Property]
-            public void ShouldReturnValueInRange(int seed, int bound1, int bound2)
+            public void ShouldReturnValueInRange(int seed, NormalFloat bound1, NormalFloat bound2)
             {
-                var (minimumValue, maximumValue) = bound1 < bound2
-                    ? (bound1, bound2)
-                    : (bound2, bound1);
+                var (b1, b2) = ((float)bound1.Get, (float)bound2.Get);
+                var (minimumValue, maximumValue) = b1 < b2
+                    ? (b1, b2)
+                    : (b2, b1);
 
-                ResultOfCallingWith(seed, bound1, bound2)
+                ResultOfCallingWith(seed, b1, b2)
                     .Should().BeInRange(minimumValue, maximumValue);
             }
 
             [Property]
-            public void ShouldReturnBoundIfBoundsAreEqual(int seed, int bound)
+            public void ShouldReturnBoundIfBoundsAreEqual(int seed, NormalFloat bound)
             {
-                ResultOfCallingWith(seed, bound, bound)
-                    .Should().Be(bound);
+                var b = (float) bound.Get;
+                ResultOfCallingWith(seed, b, b).Should().Be(b);
             }
         }
         public abstract class TheDoubleMethod : BaseTests.RandomMethodWithoutParameters<double>
@@ -181,13 +252,14 @@ namespace Bearded.Utilities.Tests.Core.Random
         public abstract class TheDoubleWithOneBoundMethod : BaseTests.RandomMethodWithOneParameter<double>
         {
             [Property]
-            public void ShouldReturnValueInRange(int seed, double bound)
+            public void ShouldReturnValueInRange(int seed, NormalFloat bound)
             {
-                var (minimumValue, maximumValue) = bound > 0
-                    ? (0d, bound)
-                    : (bound, 0d);
+                var b = bound.Get;
+                var (minimumValue, maximumValue) = b > 0
+                    ? (0d, b)
+                    : (b, 0d);
                 
-                ResultOfCallingWith(seed, bound)
+                ResultOfCallingWith(seed, b)
                     .Should().BeInRange(minimumValue, maximumValue);
             }
 
@@ -201,21 +273,22 @@ namespace Bearded.Utilities.Tests.Core.Random
         public abstract class TheDoubleWithTwoBoundsMethod : BaseTests.RandomMethodWithTwoParameters<double>
         {
             [Property]
-            public void ShouldReturnValueInRange(int seed, int bound1, int bound2)
+            public void ShouldReturnValueInRange(int seed, NormalFloat bound1, NormalFloat bound2)
             {
-                var (minimumValue, maximumValue) = bound1 < bound2
-                    ? (bound1, bound2)
-                    : (bound2, bound1);
+                var (b1, b2) = (bound1.Get, bound2.Get);
+                var (minimumValue, maximumValue) = b1 < b2
+                    ? (b1, b2)
+                    : (b2, b1);
 
-                ResultOfCallingWith(seed, bound1, bound2)
+                ResultOfCallingWith(seed, b1, b2)
                     .Should().BeInRange(minimumValue, maximumValue);
             }
 
             [Property]
-            public void ShouldReturnBoundIfBoundsAreEqual(int seed, int bound)
+            public void ShouldReturnBoundIfBoundsAreEqual(int seed, NormalFloat bound)
             {
-                ResultOfCallingWith(seed, bound, bound)
-                    .Should().Be(bound);
+                var b = (float) bound.Get;
+                ResultOfCallingWith(seed, b, b).Should().Be(b);
             }
         }
 
@@ -274,10 +347,12 @@ namespace Bearded.Utilities.Tests.Core.Random
             }
             
             [Property]
-            public void ReturnsBothPossibleValues(int seed)
+            public void ReturnsBothPossibleValues(int seed, byte parameter)
             {
+                // ensure 0<<p<<1
+                var p = 0.5f + (parameter - byte.MaxValue * 0.5f) / (3f * byte.MaxValue);
                 Seed(seed);
-                sequence(100, () => CallMethod(0.5f))
+                sequence(100, () => CallMethod(p))
                     .Should().Contain(new []{true, false});
             }
         }
@@ -291,10 +366,75 @@ namespace Bearded.Utilities.Tests.Core.Random
             }
 
             [Property]
-            public void ReturnsEitherFloorOrCeilOfParameter(int seed, float parameter)
+            public void ReturnsEitherFloorOrCeilOfParameter(int seed, NormalFloat parameter)
             {
-                ResultOfCallingWith(seed, parameter)
-                    .Should().BeOneOf((int)Math.Floor(parameter), (int)Math.Ceiling(parameter));
+                var f = (float)parameter.Get;
+                ResultOfCallingWith(seed, f)
+                    .Should().BeOneOf((int)Math.Floor(f), (int)Math.Ceiling(f));
+            }
+        }
+
+        public abstract class TheNormalFloatMethod : BaseTests.RandomMethodWithoutParameters<float>
+        {
+            [Property]
+            public void ReturnsDifferentValues(int seed)
+            {
+                Seed(seed);
+                var first = CallMethod();
+                
+                sequence(100, CallMethod)
+                    .Should().Contain(f => f != first);
+            }
+        }
+        
+        public abstract class TheNormalFloatWithParametersMethod : BaseTests.RandomMethodWithTwoParameters<float>
+        {
+            [Property]
+            public void ReturnsValuesOtherThanMeanForNonZeroDeviation(int seed, int mean, short deviation)
+            {
+                var m = (float) mean;
+                var d = (float) deviation + deviation > 0 ? 100 : -100;
+                Seed(seed);
+                sequence(100, () => CallMethod(m, d))
+                    .Should().Contain(f => f != m);
+            }
+
+            [Property]
+            public void ReturnsMeanForZeroDeviation(int seed, float mean)
+            {
+                ResultOfCallingWith(seed, mean, 0).Should().Be(mean);
+            }
+        }
+        
+        public abstract class TheNormalDoubleMethod : BaseTests.RandomMethodWithoutParameters<double>
+        {
+            [Property]
+            public void ReturnsDifferentValues(int seed)
+            {
+                Seed(seed);
+                var first = CallMethod();
+                
+                sequence(100, CallMethod)
+                    .Should().Contain(d => d != first);
+            }
+        }
+        
+        public abstract class TheNormalDoubleWithParametersMethod : BaseTests.RandomMethodWithTwoParameters<double>
+        {
+            [Property]
+            public void ReturnsValuesOtherThanMeanForNonZeroDeviation(int seed, int mean, short deviation)
+            {
+                var m = (double) mean;
+                var d = (double) deviation + deviation > 0 ? 100 : -100;
+                Seed(seed);
+                sequence(100, () => CallMethod(m, d))
+                    .Should().Contain(f => f != m);
+            }
+
+            [Property]
+            public void ReturnsMeanForZeroDeviation(int seed, double mean)
+            {
+                ResultOfCallingWith(seed, mean, 0).Should().Be(mean);
             }
         }
     }
