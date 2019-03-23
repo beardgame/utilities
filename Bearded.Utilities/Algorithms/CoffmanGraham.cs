@@ -27,7 +27,8 @@ namespace Bearded.Utilities.Algorithms
     /// </para>
     ///
     /// <para>
-    /// The algorithm itself takes O(n^2), but requires an order that is transitively reduced. The runtime for the
+    /// The algorithm itself takes O(n^2), but requires an order that is transitively reduced. If the provided graph is
+    /// not representing a transitively reduced ordering, the algorithm will create one. The runtime for the
     /// transitive reduction of the directed acyclic graph is not included in the runtime, and is not known to be
     /// possible in O(n^2).
     /// </para>
@@ -62,32 +63,43 @@ namespace Bearded.Utilities.Algorithms
                 var ordering = new List<T>(graph.Count);
 
                 var elements = new HashSet<T>(graph.Elements);
-                var elementToIndex = new Dictionary<T, int>();
-                var predecessors = elements.ToImmutableDictionary(e => e, graph.GetDirectPredecessorsOf);
+                var orderedElementIndices = new Dictionary<T, int>();
 
                 while (ordering.Count < graph.Count)
                 {
-                    // All the remaining elements which have no predecessors, or all their predecessors have been added
-                    // to the topological ordering already.
-                    var sources = elements.Where(e => predecessors[e].All(n => elementToIndex.ContainsKey(n)));
+                    // All the remaining elements which have all their predecessors added to the topological ordering
+                    // already. This includes elements which have no predecessors at all. This is equivalent to the set
+                    // of sources in a directed acyclic graph where all already elements and adjacent arrows have been
+                    // removed.
+                    var sources = elements.Where(allPredecessorsHaveBeenOrdered);
 
-                    // For each element, we look at the place of all their predecessors in the partial topological
-                    // ordering we have constructed so far. We then pick the element for which the predecessor most
-                    // recently added to the order is earlier than the most recently added predecessor of all remaining
-                    // elements. If there are ties, we look at the second highest predecessor. If all predecessors are
-                    // the same, we pick the element with the least predecessors.
+                    // For each considered element, we look at the place of all their predecessors in the partial
+                    // topological ordering we have constructed so far.
+                    // * We first consider the most recently added predecessor of each element. That is, the predecessor
+                    //   of said element that is the highest in the current partial topological ordering.
+                    // * Of all these predecessors, we pick the predecessor that comes earliest in the ordering. If
+                    //   there is only one element with said predecessor, that element is added to the ordering next.
+                    // * Ties are broken by looking at the next highest ordered predecessor of all tied elements.
+                    // * If all predecessors of 2 or more elements are the same, we pick the element with the least
+                    //   predecessors.
+                    // This selection process is implemented by representing the predecessors of an element as a
+                    // decreasing number sequence of the predecessors' indices, and selecting the lowest of those in a
+                    // reflected lexicographic ordering.
                     var next = sources.MinBy(createDecreasingNumberSequenceOfPredecessorIndices);
 
-                    elementToIndex.Add(next, ordering.Count);
+                    orderedElementIndices.Add(next, ordering.Count);
                     ordering.Add(next);
                     elements.Remove(next);
                 }
 
                 return ordering;
 
+                bool allPredecessorsHaveBeenOrdered(T e) => graph.GetDirectPredecessorsOf(e)
+                    .All(n => orderedElementIndices.ContainsKey(n));
+
                 DecreasingNumberSequence createDecreasingNumberSequenceOfPredecessorIndices(T e)
                 {
-                    var predecessorIndices = predecessors[e].Select(n => elementToIndex[n]);
+                    var predecessorIndices = graph.GetDirectPredecessorsOf(e).Select(n => orderedElementIndices[n]);
                     return DecreasingNumberSequence.FromUnsortedNumbers(predecessorIndices);
                 }
             }
@@ -155,20 +167,14 @@ namespace Bearded.Utilities.Algorithms
                 this.numbers = numbers;
             }
 
-            public int CompareTo(object obj)
-            {
-                switch (obj) {
-                    case null:
-                        return 1;
-                    case DecreasingNumberSequence sequence:
-                        return CompareTo(sequence);
-                    default:
-                        throw new ArgumentException("Not a number sequence", nameof(obj));
-                }
-            }
+            public int CompareTo(object obj) => CompareTo((DecreasingNumberSequence) obj);
 
             public int CompareTo(DecreasingNumberSequence other)
             {
+                // The comparison between decreasing number sequences is implemented as a reflected lexicographic order.
+                // That is, a number sequence n_0...n_i is considered smaller than a sequence m_0...m_j if either:
+                // * there exists a s >=0 such that n_k = m_k for 0 <= k < s and n_s < m_s, or
+                // * n_k = m_k for 0 <= k <= min(i, j) and i < j.
                 for (var i = 0; i < Math.Min(numbers.Length, other.numbers.Length); i++)
                 {
                     if (numbers[i] != other.numbers[i])
