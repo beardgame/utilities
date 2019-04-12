@@ -10,6 +10,9 @@ namespace Bearded.Utilities.Tests.Random
 {
     public class SharedTests
     {
+        private const int sequenceCount = 100;
+        private const int diviationOffset = 100;
+        
         private static IEnumerable<T> sequence<T>(int count, Func<T> function)
             => Enumerable.Range(0, count).Select(_ => function());
 
@@ -22,10 +25,10 @@ namespace Bearded.Utilities.Tests.Random
             public void LeadsToPredictableResultsWithSameSeed(int seed)
             {
                 Seed(seed);
-                var sequence1 = list(100, CallMethod);
+                var sequence1 = list(sequenceCount, CallMethod);
 
                 Seed(seed);
-                var sequence2 = list(100, CallMethod);
+                var sequence2 = list(sequenceCount, CallMethod);
 
                 sequence1.Should().BeEquivalentTo(sequence2,
                     options => options.WithStrictOrdering());
@@ -40,7 +43,7 @@ namespace Bearded.Utilities.Tests.Random
                 Seed(seed);
                 var first = CallMethod();
 
-                sequence(100, CallMethod)
+                sequence(sequenceCount, CallMethod)
                     .Should().Contain(i => i != first);
             }
         }
@@ -107,7 +110,7 @@ namespace Bearded.Utilities.Tests.Random
                 Seed(seed);
                 var first = CallMethod();
 
-                sequence(100, CallMethod)
+                sequence(sequenceCount, CallMethod)
                     .Should().Contain(i => i != first);
             }
         }
@@ -176,7 +179,7 @@ namespace Bearded.Utilities.Tests.Random
                 Seed(seed);
                 var first = CallMethod();
 
-                sequence(100, CallMethod)
+                sequence(sequenceCount, CallMethod)
                     .Should().Contain(i => i != first);
             }
             
@@ -237,7 +240,7 @@ namespace Bearded.Utilities.Tests.Random
                 Seed(seed);
                 var first = CallMethod();
 
-                sequence(100, CallMethod)
+                sequence(sequenceCount, CallMethod)
                     .Should().Contain(i => i != first);
             }
             
@@ -286,7 +289,7 @@ namespace Bearded.Utilities.Tests.Random
             [Property]
             public void ShouldReturnBoundIfBoundsAreEqual(int seed, NormalFloat bound)
             {
-                var b = (float) bound.Get;
+                var b = bound.Get;
                 ResultOfCallingWith(seed, b, b).Should().Be(b);
             }
         }
@@ -303,7 +306,7 @@ namespace Bearded.Utilities.Tests.Random
             public void ReturnsBothValidValues(int seed)
             {
                 Seed(seed);
-                sequence(100, CallMethod)
+                sequence(sequenceCount, CallMethod)
                     .Should().Contain(new []{-1, 1});
             }
         }
@@ -314,7 +317,7 @@ namespace Bearded.Utilities.Tests.Random
             public void ReturnsBothPossibleValues(int seed)
             {
                 Seed(seed);
-                sequence(100, CallMethod)
+                sequence(sequenceCount, CallMethod)
                     .Should().Contain(new []{true, false});
             }
         }
@@ -351,7 +354,7 @@ namespace Bearded.Utilities.Tests.Random
                 // ensure 0<<p<<1 to ensure the test is very likely to pass
                 var p = 0.5f + (parameter - byte.MaxValue * 0.5f) / (3f * byte.MaxValue);
                 Seed(seed);
-                sequence(100, () => CallMethod(p))
+                sequence(sequenceCount, () => CallMethod(p))
                     .Should().Contain(new []{true, false});
             }
         }
@@ -381,7 +384,7 @@ namespace Bearded.Utilities.Tests.Random
                 Seed(seed);
                 var first = CallMethod();
                 
-                sequence(100, CallMethod)
+                sequence(sequenceCount, CallMethod)
                     .Should().Contain(f => f != first);
             }
         }
@@ -392,9 +395,9 @@ namespace Bearded.Utilities.Tests.Random
             public void ReturnsValuesOtherThanMeanForNonZeroDeviation(int seed, int mean, short deviation)
             {
                 var m = (float) mean;
-                var d = (float) deviation + deviation > 0 ? 100 : -100;
+                var d = (float) deviation + deviation > 0 ? diviationOffset : -diviationOffset;
                 Seed(seed);
-                sequence(100, () => CallMethod(m, d))
+                sequence(sequenceCount, () => CallMethod(m, d))
                     .Should().Contain(f => f != m);
             }
 
@@ -413,7 +416,7 @@ namespace Bearded.Utilities.Tests.Random
                 Seed(seed);
                 var first = CallMethod();
                 
-                sequence(100, CallMethod)
+                sequence(sequenceCount, CallMethod)
                     .Should().Contain(d => d != first);
             }
         }
@@ -424,9 +427,9 @@ namespace Bearded.Utilities.Tests.Random
             public void ReturnsValuesOtherThanMeanForNonZeroDeviation(int seed, int mean, short deviation)
             {
                 var m = (double) mean;
-                var d = (double) deviation + deviation > 0 ? 100 : -100;
+                var d = (double) deviation + deviation > 0 ? diviationOffset : -diviationOffset;
                 Seed(seed);
-                sequence(100, () => CallMethod(m, d))
+                sequence(sequenceCount, () => CallMethod(m, d))
                     .Should().Contain(f => f != m);
             }
 
