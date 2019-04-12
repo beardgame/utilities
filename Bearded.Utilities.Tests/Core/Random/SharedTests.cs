@@ -237,7 +237,6 @@ namespace Bearded.Utilities.Tests.Random
                 Seed(seed);
                 var first = CallMethod();
 
-                // ReSharper disable once CompareOfDoublesByEqualityOperator
                 sequence(100, CallMethod)
                     .Should().Contain(i => i != first);
             }
