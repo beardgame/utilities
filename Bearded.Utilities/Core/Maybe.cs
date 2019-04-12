@@ -26,6 +26,8 @@ namespace Bearded.Utilities
         public Maybe<TOut> SelectMany<TOut>(Func<T, Maybe<TOut>> selector) =>
             hasValue ? selector(value) : Maybe.Nothing<TOut>();
 
+        public Maybe<T> Where(Func<T, bool> predicate) => hasValue && predicate(value) ? this : Nothing();
+
         public void Match(Action<T> onValue, Action onNothing)
         {
             if (hasValue)
