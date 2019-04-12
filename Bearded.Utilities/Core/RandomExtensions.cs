@@ -25,11 +25,17 @@ namespace Bearded.Utilities
         /// </summary>
         public static long NextLong(this Random random, long min, long max)
         {
+            if (min == max)
+                return min;
+
+            if (min > max)
+                throw new ArgumentException("Maximum must be larger or equal to minimum bound.");
+
             // "awmygawd this is so biased" - Tom Rijnbeek
             var buf = new byte[8];
             random.NextBytes(buf);
             var longRand = BitConverter.ToInt64(buf, 0);
-            
+
             return System.Math.Abs(longRand % (max - min)) + min;
         }
 

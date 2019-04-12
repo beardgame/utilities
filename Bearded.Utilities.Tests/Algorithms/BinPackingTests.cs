@@ -11,7 +11,7 @@ namespace Bearded.Utilities.Tests.Algorithms
         [Fact]
         public void TestPackedRectangles_IncludesAll()
         {
-            var random = new Random(0);
+            var random = new System.Random(0);
             var input = Enumerable.Range(0, 100)
                 .Select(i => new BinPacking.Rectangle<int>(i, random.Next(5, 20), random.Next(5, 20)))
                 .ToList();
@@ -36,7 +36,7 @@ namespace Bearded.Utilities.Tests.Algorithms
         [Fact]
         public void TestPackedRectangles_NoOverlap()
         {
-            var random = new Random(0);
+            var random = new System.Random(0);
             var input = Enumerable.Range(0, 100)
                 .Select(i => new BinPacking.Rectangle<int>(i, random.Next(5, 20), random.Next(5, 20)))
                 .ToList();
@@ -63,7 +63,7 @@ namespace Bearded.Utilities.Tests.Algorithms
         [Fact]
         public void TestPackedRectangles_CorrectResultStatistics()
         {
-            var random = new Random(0);
+            var random = new System.Random(0);
             var input = Enumerable.Range(0, 100)
                 .Select(i => new BinPacking.Rectangle<int>(i, random.Next(5, 20), random.Next(5, 20)))
                 .ToList();
@@ -99,7 +99,7 @@ namespace Bearded.Utilities.Tests.Algorithms
         [Fact]
         public void TestPackedRectangles_MultipleHeuristicsEqualOrBetter()
         {
-            var random = new Random(0);
+            var random = new System.Random(0);
             var input = Enumerable.Range(0, 100)
                 .Select(i => new BinPacking.Rectangle<int>(i, random.Next(5, 20), random.Next(5, 20)))
                 .ToList();
