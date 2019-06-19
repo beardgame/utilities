@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Bearded.Utilities
 {
@@ -14,19 +15,19 @@ namespace Bearded.Utilities
             this.value = value;
         }
 
-        internal static Maybe<T> Nothing() => new Maybe<T>();
+        public static Maybe<T> Nothing => default(Maybe<T>);
 
         internal static Maybe<T> Just(T value) => new Maybe<T>(value);
 
         public T ValueOrDefault(T @default) => hasValue ? value : @default;
 
         public Maybe<TOut> Select<TOut>(Func<T, TOut> selector) =>
-            hasValue ? Maybe.Just(selector(value)) : Maybe.Nothing<TOut>();
+            hasValue ? Maybe.Just(selector(value)) : Maybe<TOut>.Nothing;
 
         public Maybe<TOut> SelectMany<TOut>(Func<T, Maybe<TOut>> selector) =>
-            hasValue ? selector(value) : Maybe.Nothing<TOut>();
+            hasValue ? selector(value) : Maybe<TOut>.Nothing;
 
-        public Maybe<T> Where(Func<T, bool> predicate) => hasValue && predicate(value) ? this : Nothing();
+        public Maybe<T> Where(Func<T, bool> predicate) => hasValue && predicate(value) ? this : Nothing;
 
         public void Match(Action<T> onValue, Action onNothing)
         {
@@ -48,18 +49,25 @@ namespace Bearded.Utilities
         public override int GetHashCode() => hasValue ? EqualityComparer<T>.Default.GetHashCode(value) : 0;
 
         public override string ToString() => hasValue ? $"just {value}" : "nothing";
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Maybe<T>(Nothing _) => Nothing;
     }
 
     public static class Maybe
     {
         public static Maybe<T> FromNullable<T>(T value) where T : class =>
-            value == null ? Maybe<T>.Nothing() : Maybe<T>.Just(value);
+            value == null ? Nothing : Maybe<T>.Just(value);
 
         public static Maybe<T> FromNullable<T>(T? value) where T : struct =>
-            value.HasValue ? Maybe<T>.Just(value.Value) : Maybe<T>.Nothing();
+            value.HasValue ? Maybe<T>.Just(value.Value) : Nothing;
 
         public static Maybe<T> Just<T>(T value) => Maybe<T>.Just(value);
 
-        public static Maybe<T> Nothing<T>() => Maybe<T>.Nothing();
+        public static Nothing Nothing => default(Nothing);
+    }
+
+    public struct Nothing
+    {
     }
 }
