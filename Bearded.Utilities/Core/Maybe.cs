@@ -51,7 +51,7 @@ namespace Bearded.Utilities
         public override string ToString() => hasValue ? $"just {value}" : "nothing";
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Maybe<T>(Nothing _) => Nothing;
+        public static implicit operator Maybe<T>(NothingMaybe _) => Nothing;
     }
 
     public static class Maybe
@@ -64,10 +64,10 @@ namespace Bearded.Utilities
 
         public static Maybe<T> Just<T>(T value) => Maybe<T>.Just(value);
 
-        public static Nothing Nothing => default(Nothing);
+        public static NothingMaybe Nothing => default(NothingMaybe);
     }
 
-    public struct Nothing
+    public struct NothingMaybe
     {
     }
 }
