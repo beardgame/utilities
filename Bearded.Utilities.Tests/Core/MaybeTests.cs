@@ -5,6 +5,7 @@ using Xunit.Sdk;
 
 namespace Bearded.Utilities.Tests
 {
+    [SuppressMessage("ReSharper", "ArgumentsStyleAnonymousFunction")]
     public sealed class MaybeTests
     {
         public sealed class ValueOrDefault
@@ -107,10 +108,9 @@ namespace Bearded.Utilities.Tests
             }
         }
 
-        public sealed class Match
+        public sealed class MatchWithTwoParameters
         {
             [Fact]
-            [SuppressMessage("ReSharper", "ArgumentsStyleAnonymousFunction")]
             public void CallsOnNothingOnNothing()
             {
                 var maybe = Maybe<int>.Nothing;
@@ -124,7 +124,6 @@ namespace Bearded.Utilities.Tests
             }
         
             [Fact]
-            [SuppressMessage("ReSharper", "ArgumentsStyleAnonymousFunction")]
             public void CallsOnValueWithValueOnJust()
             {
                 var maybe = Maybe.Just(100);
@@ -137,6 +136,33 @@ namespace Bearded.Utilities.Tests
                         isCalled = true;
                     },
                     onNothing: () => throw new XunitException("Wrong method called"));
+            
+                isCalled.Should().BeTrue("onValue should have been called");
+            }
+        }
+
+        public sealed class MatchWithOneParameter
+        {
+            [Fact]
+            public void DoesNotCallOnValueWithNothing()
+            {
+                var maybe = Maybe<int>.Nothing;
+
+                maybe.Match(onValue: (val) => throw new XunitException("Wrong method called"));
+            }
+        
+            [Fact]
+            public void CallsOnValueWithValueOnJust()
+            {
+                var maybe = Maybe.Just(100);
+
+                var isCalled = false;
+                maybe.Match(
+                    onValue: (val) =>
+                    {
+                        val.Should().Be(100);
+                        isCalled = true;
+                    });
             
                 isCalled.Should().BeTrue("onValue should have been called");
             }
