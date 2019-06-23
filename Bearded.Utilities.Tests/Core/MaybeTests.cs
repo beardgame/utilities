@@ -108,6 +108,33 @@ namespace Bearded.Utilities.Tests
             }
         }
 
+        public sealed class MatchWithOneParameter
+        {
+            [Fact]
+            public void DoesNotCallOnValueWithNothing()
+            {
+                var maybe = Maybe<int>.Nothing;
+
+                maybe.Match(onValue: (val) => throw new XunitException("Wrong method called"));
+            }
+        
+            [Fact]
+            public void CallsOnValueWithValueOnJust()
+            {
+                var maybe = Maybe.Just(100);
+
+                var isCalled = false;
+                maybe.Match(
+                    onValue: (val) =>
+                    {
+                        val.Should().Be(100);
+                        isCalled = true;
+                    });
+            
+                isCalled.Should().BeTrue("onValue should have been called");
+            }
+        }
+
         public sealed class MatchWithTwoParameters
         {
             [Fact]
@@ -136,33 +163,6 @@ namespace Bearded.Utilities.Tests
                         isCalled = true;
                     },
                     onNothing: () => throw new XunitException("Wrong method called"));
-            
-                isCalled.Should().BeTrue("onValue should have been called");
-            }
-        }
-
-        public sealed class MatchWithOneParameter
-        {
-            [Fact]
-            public void DoesNotCallOnValueWithNothing()
-            {
-                var maybe = Maybe<int>.Nothing;
-
-                maybe.Match(onValue: (val) => throw new XunitException("Wrong method called"));
-            }
-        
-            [Fact]
-            public void CallsOnValueWithValueOnJust()
-            {
-                var maybe = Maybe.Just(100);
-
-                var isCalled = false;
-                maybe.Match(
-                    onValue: (val) =>
-                    {
-                        val.Should().Be(100);
-                        isCalled = true;
-                    });
             
                 isCalled.Should().BeTrue("onValue should have been called");
             }

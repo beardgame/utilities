@@ -29,6 +29,12 @@ namespace Bearded.Utilities
 
         public Maybe<T> Where(Func<T, bool> predicate) => hasValue && predicate(value) ? this : Nothing;
 
+        public void Match(Action<T> onValue)
+        {
+            if (hasValue)
+                onValue(value);
+        }
+
         public void Match(Action<T> onValue, Action onNothing)
         {
             if (hasValue)
@@ -39,12 +45,6 @@ namespace Bearded.Utilities
             {
                 onNothing();
             }
-        }
-
-        public void Match(Action<T> onValue)
-        {
-            if (hasValue)
-                onValue(value);
         }
 
         public TResult Match<TResult>(Func<T, TResult> onValue, Func<TResult> onNothing)
