@@ -47,6 +47,11 @@ namespace Bearded.Utilities
                 onValue(value);
         }
 
+        public TResult Match<TResult>(Func<T, TResult> onValue, Func<TResult> onNothing)
+        {
+            return hasValue ? onValue(value) : onNothing();
+        }
+
         public bool Equals(Maybe<T> other) =>
             hasValue == other.hasValue && EqualityComparer<T>.Default.Equals(value, other.value);
 

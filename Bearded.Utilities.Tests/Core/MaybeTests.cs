@@ -167,7 +167,39 @@ namespace Bearded.Utilities.Tests
                 isCalled.Should().BeTrue("onValue should have been called");
             }
         }
+        
+        public sealed class ReturningMatch
+        {
+            [Fact]
+            public void CallsOnNothingOnNothingAndReturnsItsValue()
+            {
+                var maybe = Maybe<int>.Nothing;
+                var expectedResult = "expected result";
 
+                var actualResult = maybe.Match(
+                    onValue: (val) => throw new XunitException("Wrong method called"),
+                    onNothing: () => expectedResult);
+
+                actualResult.Should().Be(expectedResult, "onNothing should have been called");
+            }
+        
+            [Fact]
+            public void CallsOnValueWithValueOnJustAndReturnsItsValue()
+            {
+                var maybe = Maybe.Just(100);
+                var expectedResult = "expected result";
+
+                var actualResult = maybe.Match(
+                    onValue: (val) => {
+                        val.Should().Be(100);
+                        return expectedResult;
+                    },
+                    onNothing: () => throw new XunitException("Wrong method called"));
+
+                actualResult.Should().Be(expectedResult, "onValue should have been called");
+            }
+        }
+        
         public sealed class FromNullable
         {
             [Fact]
