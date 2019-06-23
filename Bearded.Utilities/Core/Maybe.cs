@@ -41,6 +41,12 @@ namespace Bearded.Utilities
             }
         }
 
+        public void Match(Action<T> onValue)
+        {
+            if (hasValue)
+                onValue(value);
+        }
+
         public bool Equals(Maybe<T> other) =>
             hasValue == other.hasValue && EqualityComparer<T>.Default.Equals(value, other.value);
 
