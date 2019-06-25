@@ -108,6 +108,33 @@ namespace Bearded.Utilities.Tests
             }
         }
 
+        public sealed class MatchWithOneParameter
+        {
+            [Fact]
+            public void DoesNotCallOnValueWithNothing()
+            {
+                var maybe = Maybe<int>.Nothing;
+
+                maybe.Match(onValue: (val) => throw new XunitException("Wrong method called"));
+            }
+        
+            [Fact]
+            public void CallsOnValueWithValueOnJust()
+            {
+                var maybe = Maybe.Just(100);
+
+                var isCalled = false;
+                maybe.Match(
+                    onValue: (val) =>
+                    {
+                        val.Should().Be(100);
+                        isCalled = true;
+                    });
+            
+                isCalled.Should().BeTrue("onValue should have been called");
+            }
+        }
+
         public sealed class MatchWithTwoParameters
         {
             [Fact]
@@ -140,34 +167,39 @@ namespace Bearded.Utilities.Tests
                 isCalled.Should().BeTrue("onValue should have been called");
             }
         }
-
-        public sealed class MatchWithOneParameter
+        
+        public sealed class ReturningMatch
         {
             [Fact]
-            public void DoesNotCallOnValueWithNothing()
+            public void CallsOnNothingOnNothingAndReturnsItsValue()
             {
                 var maybe = Maybe<int>.Nothing;
+                var expectedResult = "expected result";
 
-                maybe.Match(onValue: (val) => throw new XunitException("Wrong method called"));
+                var actualResult = maybe.Match(
+                    onValue: (val) => throw new XunitException("Wrong method called"),
+                    onNothing: () => expectedResult);
+
+                actualResult.Should().Be(expectedResult, "onNothing should have been called");
             }
         
             [Fact]
-            public void CallsOnValueWithValueOnJust()
+            public void CallsOnValueWithValueOnJustAndReturnsItsValue()
             {
                 var maybe = Maybe.Just(100);
+                var expectedResult = "expected result";
 
-                var isCalled = false;
-                maybe.Match(
-                    onValue: (val) =>
-                    {
+                var actualResult = maybe.Match(
+                    onValue: (val) => {
                         val.Should().Be(100);
-                        isCalled = true;
-                    });
-            
-                isCalled.Should().BeTrue("onValue should have been called");
+                        return expectedResult;
+                    },
+                    onNothing: () => throw new XunitException("Wrong method called"));
+
+                actualResult.Should().Be(expectedResult, "onValue should have been called");
             }
         }
-
+        
         public sealed class FromNullable
         {
             [Fact]
