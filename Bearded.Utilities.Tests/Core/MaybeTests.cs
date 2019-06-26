@@ -5,6 +5,7 @@ using Xunit.Sdk;
 
 namespace Bearded.Utilities.Tests
 {
+    [SuppressMessage("ReSharper", "ArgumentsStyleAnonymousFunction")]
     public sealed class MaybeTests
     {
         public sealed class ValueOrDefault
@@ -12,7 +13,7 @@ namespace Bearded.Utilities.Tests
             [Fact]
             public void ReturnsDefaultOnNothing()
             {
-                var maybe = Maybe.Nothing<int>();
+                var maybe = Maybe<int>.Nothing;
 
                 maybe.ValueOrDefault(100).Should().Be(100);
             }
@@ -31,9 +32,9 @@ namespace Bearded.Utilities.Tests
             [Fact]
             public void MapsNothingToNothing()
             {
-                var maybe = Maybe.Nothing<int>();
+                var maybe = Maybe<int>.Nothing;
 
-                maybe.Select(i => i * 2).Should().Be(Maybe.Nothing<int>());
+                maybe.Select(i => i * 2).Should().Be(Maybe<int>.Nothing);
             }
 
             [Fact]
@@ -50,9 +51,9 @@ namespace Bearded.Utilities.Tests
             [Fact]
             public void MapsNothingToNothing()
             {
-                var maybe = Maybe.Nothing<int>();
+                var maybe = Maybe<int>.Nothing;
 
-                maybe.SelectMany(i => Maybe.Just(i * 2)).Should().Be(Maybe.Nothing<int>());
+                maybe.SelectMany(i => Maybe.Just(i * 2)).Should().Be(Maybe<int>.Nothing);
             }
 
             [Fact]
@@ -68,7 +69,7 @@ namespace Bearded.Utilities.Tests
             {
                 var maybe = Maybe.Just(100);
 
-                maybe.SelectMany(i => Maybe.Nothing<int>()).Should().Be(Maybe.Nothing<int>());
+                maybe.SelectMany(i => Maybe<int>.Nothing).Should().Be(Maybe<int>.Nothing);
             }
         }
 
@@ -77,17 +78,17 @@ namespace Bearded.Utilities.Tests
             [Fact]
             public void MapsNothingToNothingIfPredicateReturnsFalse()
             {
-                var maybe = Maybe.Nothing<int>();
+                var maybe = Maybe<int>.Nothing;
 
-                maybe.Where(_ => false).Should().Be(Maybe.Nothing<int>());
+                maybe.Where(_ => false).Should().Be(Maybe<int>.Nothing);
             }
             
             [Fact]
             public void MapsNothingToNothingIfPredicateReturnsTrue()
             {
-                var maybe = Maybe.Nothing<int>();
+                var maybe = Maybe<int>.Nothing;
 
-                maybe.Where(_ => true).Should().Be(Maybe.Nothing<int>());
+                maybe.Where(_ => true).Should().Be(Maybe<int>.Nothing);
             }
             
             [Fact]
@@ -95,7 +96,7 @@ namespace Bearded.Utilities.Tests
             {
                 var maybe = Maybe.Just(100);
 
-                maybe.Where(_ => false).Should().Be(Maybe.Nothing<int>());
+                maybe.Where(_ => false).Should().Be(Maybe<int>.Nothing);
             }
             
             [Fact]
@@ -107,13 +108,39 @@ namespace Bearded.Utilities.Tests
             }
         }
 
-        public sealed class Match
+        public sealed class MatchWithOneParameter
         {
             [Fact]
-            [SuppressMessage("ReSharper", "ArgumentsStyleAnonymousFunction")]
+            public void DoesNotCallOnValueWithNothing()
+            {
+                var maybe = Maybe<int>.Nothing;
+
+                maybe.Match(onValue: (val) => throw new XunitException("Wrong method called"));
+            }
+        
+            [Fact]
+            public void CallsOnValueWithValueOnJust()
+            {
+                var maybe = Maybe.Just(100);
+
+                var isCalled = false;
+                maybe.Match(
+                    onValue: (val) =>
+                    {
+                        val.Should().Be(100);
+                        isCalled = true;
+                    });
+            
+                isCalled.Should().BeTrue("onValue should have been called");
+            }
+        }
+
+        public sealed class MatchWithTwoParameters
+        {
+            [Fact]
             public void CallsOnNothingOnNothing()
             {
-                var maybe = Maybe.Nothing<int>();
+                var maybe = Maybe<int>.Nothing;
 
                 var isCalled = false;
                 maybe.Match(
@@ -124,7 +151,6 @@ namespace Bearded.Utilities.Tests
             }
         
             [Fact]
-            [SuppressMessage("ReSharper", "ArgumentsStyleAnonymousFunction")]
             public void CallsOnValueWithValueOnJust()
             {
                 var maybe = Maybe.Just(100);
@@ -141,13 +167,45 @@ namespace Bearded.Utilities.Tests
                 isCalled.Should().BeTrue("onValue should have been called");
             }
         }
+        
+        public sealed class ReturningMatch
+        {
+            [Fact]
+            public void CallsOnNothingOnNothingAndReturnsItsValue()
+            {
+                var maybe = Maybe<int>.Nothing;
+                var expectedResult = "expected result";
 
+                var actualResult = maybe.Match(
+                    onValue: (val) => throw new XunitException("Wrong method called"),
+                    onNothing: () => expectedResult);
+
+                actualResult.Should().Be(expectedResult, "onNothing should have been called");
+            }
+        
+            [Fact]
+            public void CallsOnValueWithValueOnJustAndReturnsItsValue()
+            {
+                var maybe = Maybe.Just(100);
+                var expectedResult = "expected result";
+
+                var actualResult = maybe.Match(
+                    onValue: (val) => {
+                        val.Should().Be(100);
+                        return expectedResult;
+                    },
+                    onNothing: () => throw new XunitException("Wrong method called"));
+
+                actualResult.Should().Be(expectedResult, "onValue should have been called");
+            }
+        }
+        
         public sealed class FromNullable
         {
             [Fact]
             public void ReturnsNothingOnReferenceTypeNull()
             {
-                Maybe.FromNullable((string) null).Should().Be(Maybe.Nothing<string>());
+                Maybe.FromNullable((string) null).Should().Be(Maybe<string>.Nothing);
             }
 
             [Fact]
@@ -159,7 +217,7 @@ namespace Bearded.Utilities.Tests
             [Fact]
             public void ReturnsNothingOnNullableNoValue()
             {
-                Maybe.FromNullable((int?) null).Should().Be(Maybe.Nothing<int>());
+                Maybe.FromNullable((int?) null).Should().Be(Maybe<int>.Nothing);
             }
         
             [Fact]
