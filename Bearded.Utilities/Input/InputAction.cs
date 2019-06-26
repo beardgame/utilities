@@ -73,7 +73,10 @@ namespace Bearded.Utilities.Input
             if (others == null)
                 throw new ArgumentNullException(nameof(others));
 
-            return AnyOf(others.Prepend(me));
+            // Call extension method explicitly since there is ambiguity between System.Linq.Enumerable.Prepend and
+            // Bearded.Utilities.Linq.Extensions.Prepend. (Introduced in .NET Framework 4.8 and .NET Standard 2.0.)
+            // ReSharper disable once InvokeAsExtensionMethod
+            return AnyOf(Extensions.Prepend(others, me));
         }
 
         private abstract class BinaryAction : IAction
