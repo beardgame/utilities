@@ -25,9 +25,10 @@ namespace Bearded.Utilities.Linq
         /// </summary>
         /// <param name="target">The original sequence.</param>
         /// <param name="item">The item to append.</param>
+        [Obsolete("Use Append of the System.Linq library instead.")]
         public static IEnumerable<T> Append<T>(this IEnumerable<T> target, T item)
         {
-            foreach (T t in target) yield return t;
+            foreach (var t in target) yield return t;
             yield return item;
         }
 
@@ -36,6 +37,7 @@ namespace Bearded.Utilities.Linq
         /// </summary>
         /// <param name="target">The original sequence.</param>
         /// <param name="item">The item to prepend.</param>
+        [Obsolete("Use Prepend of the System.Linq library instead.")]
         public static IEnumerable<T> Prepend<T>(this IEnumerable<T> target, T item)
         {
             yield return item;

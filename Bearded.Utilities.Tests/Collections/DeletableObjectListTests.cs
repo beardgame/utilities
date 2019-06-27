@@ -7,7 +7,6 @@ using Bearded.Utilities.Linq;
 using FsCheck;
 using FsCheck.Xunit;
 using Xunit;
-using Random = System.Random;
 
 namespace Bearded.Utilities.Tests.Collections
 {
@@ -159,7 +158,7 @@ namespace Bearded.Utilities.Tests.Collections
 
         public class TheRemoveMethod : MethodThatDoesNotThrowsWhenEnumeratingTests
         {
-            private readonly Random random = new Random(0);
+            private readonly System.Random random = new System.Random(0);
 
             protected override void CallMethod(DeletableObjectList<TestDeletable> list)
                 => list.Remove(list.RandomElement(random));
@@ -497,7 +496,7 @@ namespace Bearded.Utilities.Tests.Collections
             public void IsAccurateWhenAddingAndRemoving(PositiveInt itemsToAdd, int randomSeed)
             {
                 var itemCount = itemsToAdd.Get;
-                var random = new Random(randomSeed);
+                var random = new System.Random(randomSeed);
                 var list = new DeletableObjectList<TestDeletable>();
 
                 foreach (var i in Enumerable.Range(1, itemCount))
@@ -517,7 +516,7 @@ namespace Bearded.Utilities.Tests.Collections
             public void IsAccurateAfterEnumerating(PositiveInt itemsToAdd, int randomSeed)
             {
                 var itemCount = itemsToAdd.Get;
-                var random = new Random(randomSeed);
+                var random = new System.Random(randomSeed);
                 var (list, items) = createPopulatedList(itemCount);
                 items.RandomElement(random).Deleted = true;
 

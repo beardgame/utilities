@@ -22,7 +22,7 @@ namespace Bearded.Utilities.Testing.Tests
             [Fact]
             public void FailsWhenNothing()
             {
-                var maybe = Maybe.Nothing<int>();
+                var maybe = Maybe<int>.Nothing;
 
                 Action assertion = () => maybe.Should().BeJust();
             
@@ -115,7 +115,7 @@ namespace Bearded.Utilities.Testing.Tests
             [Fact]
             public void FailsWhenNothing()
             {
-                var maybe = Maybe.Nothing<int>();
+                var maybe = Maybe<int>.Nothing;
 
                 Action assertion = () => maybe.Should().BeJust(200);
             
@@ -128,7 +128,7 @@ namespace Bearded.Utilities.Testing.Tests
             [Fact]
             public void SucceedsWhenNothing()
             {
-                var maybe = Maybe.Nothing<int>();
+                var maybe = Maybe<int>.Nothing;
 
                 Action assertion = () => maybe.Should().BeNothing();
             

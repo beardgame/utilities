@@ -23,8 +23,8 @@ before_build:
 build:
   verbosity: minimal
 before_package:
-- ps: nuget pack $env:appveyor_build_folder/Bearded.Utilities/Bearded.Utilities.csproj -version $env:nuget_version
-- ps: nuget pack $env:appveyor_build_folder/Bearded.Utilities.Testing/Bearded.Utilities.Testing.csproj -version $env:nuget_version
+- ps: dotnet pack $env:appveyor_build_folder/Bearded.Utilities/Bearded.Utilities.csproj --configuration Release /p:Version="$env:nuget_version"
+- ps: dotnet pack $env:appveyor_build_folder/Bearded.Utilities.Testing/Bearded.Utilities.Testing.csproj --configuration Release /p:Version="$env:nuget_version"
 test:
   assemblies:
     only:
