@@ -11,9 +11,10 @@ namespace Bearded.Utilities.Tests.Algorithms
         [Fact]
         public void Solve_EmptyInput_ReturnsEmptyOutput()
         {
-            var instance = CoffmanGraham.InstanceForGraph(DirectedGraphBuilder<string>.EmptyGraph(), 1);
+            var graph = DirectedGraphBuilder<string>.EmptyGraph();
+            var solver = CoffmanGraham.SolverForArbitraryGraphs(1);
 
-            instance.Solve().Should().BeEmpty();
+            solver.Solve(graph).Should().BeEmpty();
         }
 
         [Fact]
@@ -22,9 +23,9 @@ namespace Bearded.Utilities.Tests.Algorithms
             var graph = DirectedGraphBuilder<string>.NewBuilder()
                 .AddElement("element")
                 .CreateAcyclicGraphUnsafe();
-            var instance = CoffmanGraham.InstanceForGraph(graph, 1);
+            var solver = CoffmanGraham.SolverForArbitraryGraphs(1);
 
-            var solution = instance.Solve();
+            var solution = solver.Solve(graph);
 
             solution.Should().HaveCount(1);
             solution[0].Should().Contain("element");
@@ -37,33 +38,33 @@ namespace Bearded.Utilities.Tests.Algorithms
             const int numElements = 3;
 
             var graph = createGraphWithoutArrows(numElements);
-            var instance = CoffmanGraham.InstanceForGraph(graph, width);
+            var solver = CoffmanGraham.SolverForArbitraryGraphs(width);
 
-            var solution = instance.Solve();
+            var solution = solver.Solve(graph);
 
             foreach (var layer in solution)
             {
                 layer.Should().HaveCountLessOrEqualTo(width);
             }
         }
-        
+
         [Fact]
         public void Solve_MoreChildrenThanMaxWidth_DoesNotCreateLayersTooLarge()
         {
             const int width = 3;
             const int numChildren = width * 3;
-            
-            var graph = createGraphWithManyChildren(numChildren);
-            var instance = CoffmanGraham.InstanceForGraph(graph, width);
 
-            var solution = instance.Solve();
+            var graph = createGraphWithManyChildren(numChildren);
+            var solver = CoffmanGraham.SolverForArbitraryGraphs(width);
+
+            var solution = solver.Solve(graph);
 
             foreach (var layer in solution)
             {
                 layer.Should().HaveCountLessOrEqualTo(width);
             }
         }
-        
+
         [Fact]
         public void Solve_NoArrows_UsesTheMinimumNumberOfLayers()
         {
@@ -72,24 +73,24 @@ namespace Bearded.Utilities.Tests.Algorithms
             const int expectedLayers = 6;
 
             var graph = createGraphWithoutArrows(numElements);
-            var instance = CoffmanGraham.InstanceForGraph(graph, width);
+            var solver = CoffmanGraham.SolverForArbitraryGraphs(width);
 
-            var solution = instance.Solve();
+            var solution = solver.Solve(graph);
 
             solution.Should().HaveCount(expectedLayers);
         }
-        
+
         [Fact]
         public void Solve_MoreChildrenThanMaxWidth_UsesTheMinimumNumberOfLayers()
         {
             const int width = 4;
             const int numChildren = 17;
             const int expectedLayers = 6; // 1 [root] + ceil(17 / 4) [children]
-            
-            var graph = createGraphWithManyChildren(numChildren);
-            var instance = CoffmanGraham.InstanceForGraph(graph, width);
 
-            var solution = instance.Solve();
+            var graph = createGraphWithManyChildren(numChildren);
+            var solver = CoffmanGraham.SolverForArbitraryGraphs(width);
+
+            var solution = solver.Solve(graph);
 
             solution.Should().HaveCount(expectedLayers);
         }
@@ -99,39 +100,39 @@ namespace Bearded.Utilities.Tests.Algorithms
         {
             const int width = 3;
             const int numElements = 100;
-            
-            var graph = createGraphWithoutArrows(numElements);
-            var instance = CoffmanGraham.InstanceForGraph(graph, width);
 
-            var solution = instance.Solve();
+            var graph = createGraphWithoutArrows(numElements);
+            var solver = CoffmanGraham.SolverForArbitraryGraphs(width);
+
+            var solution = solver.Solve(graph);
 
             solution.SelectMany(s => s).Should().Contain(graph.Elements);
         }
-        
+
         [Fact]
         public void Solve_MoreChildrenThanMaxWidth_IncludesAllElementsInLayers()
         {
             const int width = 3;
             const int numChildren = width * 3;
-            
-            var graph = createGraphWithManyChildren(numChildren);
-            var instance = CoffmanGraham.InstanceForGraph(graph, width);
 
-            var solution = instance.Solve();
+            var graph = createGraphWithManyChildren(numChildren);
+            var solver = CoffmanGraham.SolverForArbitraryGraphs(width);
+
+            var solution = solver.Solve(graph);
 
             solution.SelectMany(s => s).Should().Contain(graph.Elements);
         }
-        
+
         [Fact]
         public void Solve_PutsChildrenInSeparateLayers()
         {
             const int numElements = 10;
-            
-            var graph = createLine(numElements);
-            var instance = CoffmanGraham.InstanceForGraph(graph, 100);
 
-            var solution = instance.Solve();
-            
+            var graph = createLine(numElements);
+            var solver = CoffmanGraham.SolverForArbitraryGraphs(100);
+
+            var solution = solver.Solve(graph);
+
             for (var i = 0; i < solution.Count; i++)
             {
                 solution[i].Should().ContainSingle().Which.Should().Be(i);
@@ -141,7 +142,7 @@ namespace Bearded.Utilities.Tests.Algorithms
         private static IDirectedAcyclicGraph<int> createGraphWithoutArrows(int numElements)
         {
             var builder = DirectedGraphBuilder<int>.NewBuilder();
-            
+
             for (var i = 0; i < numElements; i++)
             {
                 builder.AddElement(i);
@@ -150,11 +151,11 @@ namespace Bearded.Utilities.Tests.Algorithms
             var graph = builder.CreateAcyclicGraphUnsafe();
             return graph;
         }
-        
+
         private static IDirectedAcyclicGraph<int> createGraphWithManyChildren(int numDirectSuccessors)
         {
             var builder = DirectedGraphBuilder<int>.NewBuilder().AddElement(-1);
-            
+
             for (var i = 0; i < numDirectSuccessors; i++)
             {
                 builder.AddElement(i).AddArrow(-1, i);
@@ -163,11 +164,11 @@ namespace Bearded.Utilities.Tests.Algorithms
             var graph = builder.CreateAcyclicGraphUnsafe();
             return graph;
         }
-        
+
         private static IDirectedAcyclicGraph<int> createLine(int numElements)
         {
             var builder = DirectedGraphBuilder<int>.NewBuilder();
-            
+
             for (var i = 0; i < numElements; i++)
             {
                 builder.AddElement(i);

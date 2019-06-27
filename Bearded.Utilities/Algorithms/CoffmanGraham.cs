@@ -35,30 +35,50 @@ namespace Bearded.Utilities.Algorithms
     /// </summary>
     public static class CoffmanGraham
     {
-        public class Instance<T> where T : IEquatable<T>
+        public interface ISolver
         {
-            private readonly IDirectedAcyclicGraph<T> graph;
-            private readonly int maxLayerSize;
-            private readonly bool isGraphReduced;
+            ImmutableList<ImmutableHashSet<T>> Solve<T>(IDirectedAcyclicGraph<T> graph)
+                where T : IEquatable<T>;
+        }
 
-            internal Instance(IDirectedAcyclicGraph<T> graph, int maxLayerSize, bool isGraphReduced)
+        private class ArbitraryGraphSolver : ISolver
+        {
+            private readonly ReducedGraphSolver internalSolver;
+
+            internal ArbitraryGraphSolver(int maxLayerSize)
             {
-                this.graph = graph;
-                this.maxLayerSize = maxLayerSize;
-                this.isGraphReduced = isGraphReduced;
+                internalSolver = new ReducedGraphSolver(maxLayerSize);
             }
 
-            public ImmutableList<ImmutableHashSet<T>> Solve()
+            public ImmutableList<ImmutableHashSet<T>> Solve<T>(IDirectedAcyclicGraph<T> graph)
+                where T : IEquatable<T>
+            {
+                var reducedGraph = DirectedAcyclicGraphTransitiveReducer<T>.ReduceGraph(graph);
+                return internalSolver.Solve(reducedGraph);
+            }
+        }
+
+        private class ReducedGraphSolver : ISolver
+        {
+            private readonly int maxLayerSize;
+
+            internal ReducedGraphSolver(int maxLayerSize)
+            {
+                this.maxLayerSize = maxLayerSize;
+            }
+
+            public ImmutableList<ImmutableHashSet<T>> Solve<T>(IDirectedAcyclicGraph<T> graph)
+                where T : IEquatable<T>
             {
                 if (graph.Count == 0) return ImmutableList<ImmutableHashSet<T>>.Empty;
 
-                var reducedGraph = isGraphReduced ? graph : DirectedAcyclicGraphTransitiveReducer<T>.ReduceGraph(graph);
-                var ordering = createTopologicalOrdering(reducedGraph);
-                return createLayers(reducedGraph, ordering, maxLayerSize);
+                var ordering = createTopologicalOrdering(graph);
+                return createLayers(graph, ordering, maxLayerSize);
             }
 
             // ReSharper disable once SuggestBaseTypeForParameter
-            private static IList<T> createTopologicalOrdering(IDirectedAcyclicGraph<T> graph)
+            private static IList<T> createTopologicalOrdering<T>(IDirectedAcyclicGraph<T> graph)
+                where T : IEquatable<T>
             {
                 var ordering = new List<T>(graph.Count);
 
@@ -104,9 +124,10 @@ namespace Bearded.Utilities.Algorithms
                 }
             }
 
-            private static ImmutableList<ImmutableHashSet<T>> createLayers(
+            private static ImmutableList<ImmutableHashSet<T>> createLayers<T>(
                 // ReSharper disable once SuggestBaseTypeForParameter
                 IDirectedAcyclicGraph<T> graph, IList<T> ordering, int maxLayerSize)
+                where T : IEquatable<T>
             {
                 var layersReversed = new List<ImmutableHashSet<T>.Builder>();
                 var elementToLayer = new Dictionary<T, int>();
@@ -146,17 +167,9 @@ namespace Bearded.Utilities.Algorithms
             }
         }
 
-        public static Instance<T> InstanceForGraph<T>(IDirectedAcyclicGraph<T> graph, int maxLayerSize)
-            where T : IEquatable<T>
-        {
-            return new Instance<T>(graph, maxLayerSize, isGraphReduced: false);
-        }
+        public static ISolver SolverForArbitraryGraphs(int maxLayerSize) => new ArbitraryGraphSolver(maxLayerSize);
 
-        public static Instance<T> InstanceForAlreadyReducedGraph<T>(IDirectedAcyclicGraph<T> graph, int maxLayerSize)
-            where T : IEquatable<T>
-        {
-            return new Instance<T>(graph, maxLayerSize, isGraphReduced: true);
-        }
+        public static ISolver SolverForReducedGraphs(int maxLayerSize) => new ReducedGraphSolver(maxLayerSize);
 
         private struct DecreasingNumberSequence : IComparable<DecreasingNumberSequence>, IComparable
         {
