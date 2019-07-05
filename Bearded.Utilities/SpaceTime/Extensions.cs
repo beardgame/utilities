@@ -34,5 +34,7 @@
         /// Returns the typed square root of the squared acceleration.
         /// </summary>
         public static Acceleration Sqrt(this Squared<Acceleration> square) => new Acceleration(square.NumericValue.Sqrted());
+
+        public static TimeSpan Sqrt(this Squared<TimeSpan> square) => new TimeSpan(square.NumericValue.Sqrted());
     }
 }

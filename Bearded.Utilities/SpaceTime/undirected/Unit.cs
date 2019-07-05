@@ -34,6 +34,11 @@ namespace Bearded.Utilities.SpaceTime
         public Squared<Unit> Squared => Squared<Unit>.FromRoot(value);
 
         /// <summary>
+        /// Returns the type-safe cube of the unit value.
+        /// </summary>
+        public Cubed<Unit> Cubed => Cubed<Unit>.FromRoot(value);
+
+        /// <summary>
         /// Returns a Unit type with value 0.
         /// </summary>
         public static Unit Zero => new Unit(0);

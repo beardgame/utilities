@@ -51,5 +51,8 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
+        public static StandardGravitationalParameter operator *(GravitationalConstant G, Mass m) =>
+            new StandardGravitationalParameter(G.value * m.NumericValue);
+
     }
 }

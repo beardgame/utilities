@@ -117,6 +117,23 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
+        #region rotation
+
+        public Difference2 Rotated(Angle angle) => new Difference2(transformVector(value, angle.Transformation));
+
+        private static Vector2 transformVector(Vector2 vec, Matrix2 mat)
+        {
+            return new Vector2
+            {
+                X = (vec.X * mat.Row0.X) +
+                    (vec.Y * mat.Row1.X),
+                Y = (vec.X * mat.Row0.Y) +
+                    (vec.Y * mat.Row1.Y)
+            };
+        }
+
+        #endregion
+
         #region equality and hashcode
 
         public bool Equals(Difference2 other) => value == other.value;
