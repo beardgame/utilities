@@ -103,7 +103,22 @@ namespace Bearded.Utilities.SpaceTime
 
         #region projection
 
-        // TODO
+        /// <summary>
+        /// Projects the difference vector onto an untyped vector, returning the speed component in that vector's direction.
+        /// </summary>
+        public Unit ProjectedOn(Vector3 vector) => projectedOn(vector.NormalizedSafe());
+
+        /// <summary>
+        /// Projects the difference vector onto a difference vector, returning the speed component in that vector's direction.
+        /// </summary>
+        public Unit ProjectedOn(Difference3 vector) => projectedOn(vector.NumericValue.NormalizedSafe());
+
+        /// <summary>
+        /// Projects the difference vector onto a direction, returning the speed component in that direction.
+        /// </summary>
+        public Unit ProjectedOn(Direction3 direction) => projectedOn(direction.Vector);
+
+        private Unit projectedOn(Vector3 normalisedVector) => new Unit(Vector3.Dot(value, normalisedVector));
 
         #endregion
 
