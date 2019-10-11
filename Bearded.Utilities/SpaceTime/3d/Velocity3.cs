@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using Bearded.Utilities.Geometry;
 using OpenTK;
 
 namespace Bearded.Utilities.SpaceTime
@@ -29,11 +28,6 @@ namespace Bearded.Utilities.SpaceTime
         {
         }
 
-        /// <summary>
-        /// Creates a new instance of the Velocity3 type with a given direction and magnitude.
-        /// </summary>
-        public static Velocity3 In(Direction3 direction, Speed s) => direction * s;
-
         #endregion
 
         #region properties
@@ -54,9 +48,9 @@ namespace Bearded.Utilities.SpaceTime
         public Speed Y => new Speed(value.Y);
 
         /// <summary>
-        /// Returns the direction of the velocity vector.
+        /// Returns the Z component of the velocity vector.
         /// </summary>
-        public Direction3 Direction => Direction3.Of(value);
+        public Speed Z => new Speed(value.Z);
 
         /// <summary>
         /// Returns the typed magnitude of the velocity vector.
@@ -107,11 +101,6 @@ namespace Bearded.Utilities.SpaceTime
         /// Projects the velocity vector onto a difference vector, returning the speed component in that vector's direction.
         /// </summary>
         public Speed ProjectedOn(Difference3 vector) => projectedOn(vector.NumericValue.NormalizedSafe());
-
-        /// <summary>
-        /// Projects the velocity vector onto a direction, returning the speed component in that direction.
-        /// </summary>
-        public Speed ProjectedOn(Direction3 direction) => projectedOn(direction.Vector);
 
         private Speed projectedOn(Vector3 normalisedVector) => new Speed(Vector3.Dot(value, normalisedVector));
 
@@ -224,7 +213,7 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
-        #region comparision
+        #region comparison
 
         /// <summary>
         /// Compares two velocity vectors for equality.

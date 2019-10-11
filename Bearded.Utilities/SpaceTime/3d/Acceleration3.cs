@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using Bearded.Utilities.Geometry;
 using OpenTK;
 
 namespace Bearded.Utilities.SpaceTime
@@ -29,11 +28,6 @@ namespace Bearded.Utilities.SpaceTime
         {
         }
 
-        /// <summary>
-        /// Creates a new instance of the Acceleration3 type with a given direction and magnitude.
-        /// </summary>
-        public static Acceleration3 In(Direction3 direction, Acceleration u) => direction * u;
-
         #endregion
 
         #region properties
@@ -54,9 +48,9 @@ namespace Bearded.Utilities.SpaceTime
         public Acceleration Y => new Acceleration(value.Y);
 
         /// <summary>
-        /// Returns the direction of the acceleration vector.
+        /// Returns the Z component of the acceleration vector.
         /// </summary>
-        public Direction3 Direction => Direction3.Of(value);
+        public Acceleration Z => new Acceleration(value.Z);
 
         /// <summary>
         /// Returns the typed magnitude of the acceleration vector.
@@ -109,11 +103,6 @@ namespace Bearded.Utilities.SpaceTime
         /// vector's direction.
         /// </summary>
         public Acceleration ProjectedOn(Difference3 vector) => projectedOn(vector.NumericValue.NormalizedSafe());
-
-        /// <summary>
-        /// Projects the acceleration vector onto a direction, returning the acceleration component in that direction.
-        /// </summary>
-        public Acceleration ProjectedOn(Direction3 direction) => projectedOn(direction.Vector);
 
         private Acceleration projectedOn(Vector3 normalisedVector) =>
             new Acceleration(Vector3.Dot(value, normalisedVector));
@@ -210,7 +199,7 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
-        #region comparision
+        #region comparison
 
         /// <summary>
         /// Compares two acceleration vectors for equality.

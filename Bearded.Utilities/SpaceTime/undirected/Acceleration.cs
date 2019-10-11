@@ -167,16 +167,6 @@ namespace Bearded.Utilities.SpaceTime
         #region add two dimensions
 
         /// <summary>
-        /// Multiplies a direction with an acceleration value, returning a typed acceleration vector of the given direction and length.
-        /// </summary>
-        public static Acceleration3 operator *(Acceleration a, Direction3 d) => new Acceleration3(d.Vector * a.value);
-
-        /// <summary>
-        /// Multiplies a direction with an acceleration value, returning a typed acceleration vector of the given direction and length.
-        /// </summary>
-        public static Acceleration3 operator *(Direction3 d, Acceleration a) => new Acceleration3(d.Vector * a.value);
-
-        /// <summary>
         /// Multiplies an acceleration value with an untyped vector, returning a typed acceleration vector.
         /// </summary>
         public static Acceleration3 operator *(Acceleration u, Vector3 v) => new Acceleration3(v * u.value);

@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using Bearded.Utilities.Geometry;
 using OpenTK;
 
 namespace Bearded.Utilities.SpaceTime
@@ -29,11 +28,6 @@ namespace Bearded.Utilities.SpaceTime
         {
         }
 
-        /// <summary>
-        /// Creates a new instance of the Difference3 type with a given direction and magnitude.
-        /// </summary>
-        public static Difference3 In(Direction3 direction, Unit u) => direction * u;
-
         #endregion
 
         #region properties
@@ -57,11 +51,6 @@ namespace Bearded.Utilities.SpaceTime
         /// Returns the Z component of the difference vector.
         /// </summary>
         public Unit Z => new Unit(value.Z);
-
-        /// <summary>
-        /// Returns the direction of the difference vector.
-        /// </summary>
-        public Direction3 Direction => Direction3.Of(value);
 
         /// <summary>
         /// Returns the typed magnitude of the difference vector.
@@ -112,11 +101,6 @@ namespace Bearded.Utilities.SpaceTime
         /// Projects the difference vector onto a difference vector, returning the speed component in that vector's direction.
         /// </summary>
         public Unit ProjectedOn(Difference3 vector) => projectedOn(vector.NumericValue.NormalizedSafe());
-
-        /// <summary>
-        /// Projects the difference vector onto a direction, returning the speed component in that direction.
-        /// </summary>
-        public Unit ProjectedOn(Direction3 direction) => projectedOn(direction.Vector);
 
         private Unit projectedOn(Vector3 normalisedVector) => new Unit(Vector3.Dot(value, normalisedVector));
 
@@ -210,7 +194,7 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
-        #region comparision
+        #region comparison
 
         /// <summary>
         /// Compares two difference vectors for equality.

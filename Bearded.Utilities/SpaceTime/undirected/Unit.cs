@@ -164,16 +164,6 @@ namespace Bearded.Utilities.SpaceTime
         #region add two dimensions
 
         /// <summary>
-        /// Multiplies a direction with a unit value, returning a typed vector of the given direction and length.
-        /// </summary>
-        public static Difference3 operator *(Unit u, Direction3 d) => new Difference3(d.Vector * u.value);
-
-        /// <summary>
-        /// Multiplies a direction with a unit value, returning a typed vector of the given direction and length.
-        /// </summary>
-        public static Difference3 operator *(Direction3 d, Unit u) => new Difference3(d.Vector * u.value);
-
-        /// <summary>
         /// Multiplies a unit value with an untyped vector, returning a typed vector.
         /// </summary>
         public static Difference3 operator *(Unit u, Vector3 v) => new Difference3(v * u.value);

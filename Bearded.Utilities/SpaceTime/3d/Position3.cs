@@ -129,7 +129,7 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
-        #region comparision
+        #region comparison
 
         /// <summary>
         /// Compares two position vectors for equality.
