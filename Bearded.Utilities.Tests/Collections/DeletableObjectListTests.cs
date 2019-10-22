@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Bearded.Utilities.Collections;
 using Bearded.Utilities.Linq;
+using FluentAssertions;
+using FluentAssertions.Equivalency;
 using FsCheck;
 using FsCheck.Xunit;
 using Xunit;
@@ -12,6 +14,9 @@ namespace Bearded.Utilities.Tests.Collections
 {
     public class DeletableObjectListTests
     {
+        private static readonly Func<EquivalencyAssertionOptions<TestDeletable>, EquivalencyAssertionOptions<TestDeletable>>
+            withExactSameItems = o => o.WithStrictOrdering().ComparingByValue<TestDeletable>();
+
         public static IEnumerable<object[]> PositiveCounts =>
             new [] {1, 2, 3, 4, 5, 7, 10, 13, 37, 42, 1337}
                 .Select(i => new object[] { i });
@@ -40,8 +45,8 @@ namespace Bearded.Utilities.Tests.Collections
             public void CreatesEmptyList()
             {
                 var list = new DeletableObjectList<IDeletable>();
-                
-                Assert.Empty(list);
+
+                list.Should().BeEmpty();
             }
         }
         
@@ -52,7 +57,7 @@ namespace Bearded.Utilities.Tests.Collections
             {
                 var list = new DeletableObjectList<IDeletable>(0);
                 
-                Assert.Empty(list);
+                list.Should().BeEmpty();
             }
             
             [Theory]
@@ -61,7 +66,7 @@ namespace Bearded.Utilities.Tests.Collections
             {
                 var list = new DeletableObjectList<IDeletable>(count);
                 
-                Assert.Empty(list);
+                list.Should().BeEmpty();
             }
             
             [Theory]
@@ -70,7 +75,7 @@ namespace Bearded.Utilities.Tests.Collections
             {
                 Action createListWithNegativeValue = () => new DeletableObjectList<IDeletable>(-count);
 
-                Assert.Throws<ArgumentOutOfRangeException>(createListWithNegativeValue);
+                createListWithNegativeValue.Should().Throw<ArgumentOutOfRangeException>();
             }
         }
         
@@ -107,8 +112,8 @@ namespace Bearded.Utilities.Tests.Collections
                 var deletable = new TestDeletable();
                 
                 list.Add(deletable);
-                
-                Assert.Equal(deletable, list.Single());
+
+                list.Should().ContainSingle().Which.Should().Be(deletable);
             }
 
             [Fact]
@@ -118,7 +123,7 @@ namespace Bearded.Utilities.Tests.Collections
 
                 Action addingNull = () => list.Add(null);
 
-                Assert.Throws<ArgumentNullException>(addingNull);
+                addingNull.Should().Throw<ArgumentNullException>();
             }
 
             [Theory]
@@ -131,7 +136,7 @@ namespace Bearded.Utilities.Tests.Collections
                 foreach (var item in items)
                     list.Add(item);
                 
-                Assert.True(items.SequenceEqual(list));
+                list.Should().BeEquivalentTo(items, withExactSameItems);
             }
 
             [Fact]
@@ -150,9 +155,8 @@ namespace Bearded.Utilities.Tests.Collections
                         addItems--;
                     }
                 }
-                
-                Assert.Equal(4, list.Count());
-                Assert.True(items.SequenceEqual(list));
+
+                list.Should().HaveCount(4).And.BeEquivalentTo(items, withExactSameItems);
             }
         }
 
@@ -169,8 +173,8 @@ namespace Bearded.Utilities.Tests.Collections
                 var list = new DeletableObjectList<TestDeletable>();
 
                 var returnValue = list.Remove(new TestDeletable());
-                
-                Assert.False(returnValue);
+
+                returnValue.Should().BeFalse();
             }
             
             [Fact]
@@ -180,7 +184,7 @@ namespace Bearded.Utilities.Tests.Collections
 
                 var returnValue = list.Remove(new TestDeletable());
                 
-                Assert.False(returnValue);
+                returnValue.Should().BeFalse();
             }
             
             [Fact]
@@ -190,7 +194,7 @@ namespace Bearded.Utilities.Tests.Collections
 
                 var returnValue = list.Remove(null);
                 
-                Assert.False(returnValue);
+                returnValue.Should().BeFalse();
             }
             
             [Fact]
@@ -200,7 +204,7 @@ namespace Bearded.Utilities.Tests.Collections
 
                 var returnValue = list.Remove(items[0]);
                 
-                Assert.True(returnValue);
+                returnValue.Should().BeTrue();
             }
             
             [Fact]
@@ -211,7 +215,7 @@ namespace Bearded.Utilities.Tests.Collections
                 list.Remove(items[0]);
                 var returnValue = list.Remove(items[0]);
                 
-                Assert.False(returnValue);
+                returnValue.Should().BeFalse();
             }
             
             [Fact]
@@ -222,7 +226,7 @@ namespace Bearded.Utilities.Tests.Collections
                
                 var returnValue = list.Remove(items[0]);
                 
-                Assert.False(returnValue);
+                returnValue.Should().BeFalse();
             }
             
             [Theory]
@@ -234,10 +238,10 @@ namespace Bearded.Utilities.Tests.Collections
                 foreach (var item in items)
                 {
                     var returnValue = list.Remove(item);
-                    Assert.True(returnValue);
+                    returnValue.Should().BeTrue();
                 }
-                
-                Assert.Empty(list);
+
+                list.Should().BeEmpty();
             }
 
             [Fact]
@@ -251,8 +255,8 @@ namespace Bearded.Utilities.Tests.Collections
                     enumeratedItems.Add(item);
                     list.Remove(item);
                 }
-                
-                Assert.True(items.SequenceEqual(enumeratedItems));
+
+                enumeratedItems.Should().BeEquivalentTo(items, withExactSameItems);
             }
 
             [Fact]
@@ -268,7 +272,7 @@ namespace Bearded.Utilities.Tests.Collections
                     list.Remove(toRemove);
                 }
                 
-                Assert.True(items.Take(10).SequenceEqual(enumeratedItems));
+                enumeratedItems.Should().BeEquivalentTo(items.Take(10), withExactSameItems);
             }
         }
 
@@ -292,8 +296,8 @@ namespace Bearded.Utilities.Tests.Collections
                 var (list, _) = createPopulatedList(itemsToAdd);
                 
                 list.Clear();
-                
-                Assert.Empty(list);
+
+                list.Should().BeEmpty();
             }
         }
         
@@ -316,8 +320,8 @@ namespace Bearded.Utilities.Tests.Collections
                 var (list, items) = createPopulatedList(itemsToAdd);
                 
                 CallMethod(list);
-                
-                Assert.True(items.SequenceEqual(list));
+
+                list.Should().BeEquivalentTo(items, withExactSameItems);
             }
 
             [Fact]
@@ -328,7 +332,7 @@ namespace Bearded.Utilities.Tests.Collections
                 
                 Action callingWhileEnumerating = () => CallMethod(list);
 
-                Assert.Throws<InvalidOperationException>(callingWhileEnumerating);
+                callingWhileEnumerating.Should().Throw<InvalidOperationException>();
             }
             
             [Fact]
@@ -355,7 +359,7 @@ namespace Bearded.Utilities.Tests.Collections
                 
                 Action callingWhileEnumerating = () => CallMethod(list);
 
-                Assert.Throws<InvalidOperationException>(callingWhileEnumerating);
+                callingWhileEnumerating.Should().Throw<InvalidOperationException>();
             }
             
             [Fact]
@@ -396,8 +400,8 @@ namespace Bearded.Utilities.Tests.Collections
                     if (boolQueue.Next())
                         item.Deleted = true;
                 }
-                
-                Assert.True(items.Where(i => !i.Deleted).SequenceEqual(list));
+
+                list.Should().BeEquivalentTo(items.Where(i => !i.Deleted), withExactSameItems);
             }
 
             [Fact]
@@ -411,9 +415,9 @@ namespace Bearded.Utilities.Tests.Collections
                     enumeratedItems.Add(item);
                     list.Last().Deleted = true;
                 }
-                
-                Assert.True(items.Take(10).SequenceEqual(enumeratedItems));
-                Assert.True(items.Take(10).SequenceEqual(list));
+
+                enumeratedItems.Should().BeEquivalentTo(items.Take(10), withExactSameItems);
+                list.Should().BeEquivalentTo(items.Take(10), withExactSameItems);
             }
 
             [Fact]
@@ -428,8 +432,8 @@ namespace Bearded.Utilities.Tests.Collections
                     list.First().Deleted = true;
                 }
                 
-                Assert.True(items.SequenceEqual(enumeratedItems));
-                Assert.Empty(list);
+                enumeratedItems.Should().BeEquivalentTo(items, withExactSameItems);
+                list.Should().BeEmpty();
             }
 
             [Fact]
@@ -452,8 +456,8 @@ namespace Bearded.Utilities.Tests.Collections
                 {
                     enumeratedItems.Add(enumerator.Current);
                 }
-                
-                Assert.True(items.Skip(2).SequenceEqual(enumeratedItems));
+
+                enumeratedItems.Should().BeEquivalentTo(items.Skip(2), withExactSameItems);
             }
 
             [Fact]
@@ -468,7 +472,7 @@ namespace Bearded.Utilities.Tests.Collections
                     enumeratedItems.Add((TestDeletable) item);
                 }
                 
-                Assert.True(items.SequenceEqual(enumeratedItems));
+                enumeratedItems.Should().BeEquivalentTo(items, withExactSameItems);
             }
         }
 
@@ -478,8 +482,8 @@ namespace Bearded.Utilities.Tests.Collections
             public void IsZeroForEmptyList()
             {
                 var list = new DeletableObjectList<TestDeletable>();
-                
-                Assert.Equal(0, list.ApproximateCount);
+
+                list.ApproximateCount.Should().Be(0);
             }
             
             [Fact]
@@ -489,7 +493,7 @@ namespace Bearded.Utilities.Tests.Collections
                 
                 list.Clear();
                 
-                Assert.Equal(0, list.ApproximateCount);
+                list.ApproximateCount.Should().Be(0);
             }
             
             [Property]
@@ -502,13 +506,13 @@ namespace Bearded.Utilities.Tests.Collections
                 foreach (var i in Enumerable.Range(1, itemCount))
                 {
                     list.Add(new TestDeletable());
-                    Assert.Equal(i, list.ApproximateCount);
+                    list.ApproximateCount.Should().Be(i);
                 }
                 
                 foreach (var i in Enumerable.Range(1, itemCount))
                 {
                     list.Remove(list.RandomElement(random));
-                    Assert.Equal(itemCount - i, list.ApproximateCount);
+                    list.ApproximateCount.Should().Be(itemCount - i);
                 }
             }
             
@@ -522,7 +526,7 @@ namespace Bearded.Utilities.Tests.Collections
 
                 _ = list.Count();
                 
-                Assert.Equal(itemCount - 1, list.ApproximateCount);
+                list.ApproximateCount.Should().Be(itemCount - 1);
             }
         }
     }
