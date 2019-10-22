@@ -9,6 +9,7 @@ using FluentAssertions.Equivalency;
 using FsCheck;
 using FsCheck.Xunit;
 using Xunit;
+// ReSharper disable AssignmentIsFullyDiscarded
 
 namespace Bearded.Utilities.Tests.Collections
 {
@@ -73,7 +74,7 @@ namespace Bearded.Utilities.Tests.Collections
             [MemberData(nameof(PositiveCounts), MemberType = typeof(DeletableObjectListTests))]
             public void ThrowsForNegativeValues(int count)
             {
-                Action createListWithNegativeValue = () => new DeletableObjectList<IDeletable>(-count);
+                Action createListWithNegativeValue = () => _ = new DeletableObjectList<IDeletable>(-count);
 
                 createListWithNegativeValue.Should().Throw<ArgumentOutOfRangeException>();
             }
@@ -145,7 +146,7 @@ namespace Bearded.Utilities.Tests.Collections
                 var (list, items) = createPopulatedList(1);
                 var addItems = 3;
 
-                foreach (var item in list)
+                foreach (var _ in list)
                 {
                     if (addItems > 0)
                     {
@@ -328,7 +329,7 @@ namespace Bearded.Utilities.Tests.Collections
             public void ThrowsIfEnumerating()
             {
                 var list = new DeletableObjectList<TestDeletable>();
-                list.GetEnumerator();
+                _ = list.GetEnumerator();
                 
                 Action callingWhileEnumerating = () => CallMethod(list);
 
@@ -442,6 +443,7 @@ namespace Bearded.Utilities.Tests.Collections
                 var (list, items) = createPopulatedList(20);
                 var enumeratedItems = new List<TestDeletable>();
 
+                // ReSharper disable once GenericEnumeratorNotDisposed
                 var enumerator = list.GetEnumerator();
                 enumerator.MoveNext();
                 enumerator.MoveNext();
@@ -464,14 +466,10 @@ namespace Bearded.Utilities.Tests.Collections
             public void WorksNonGenerically()
             {
                 var (list, items) = createPopulatedList(20);
-                var enumeratedItems = new List<TestDeletable>();
                 var nonGenericList = (IEnumerable) list;
 
-                foreach (var item in nonGenericList)
-                {
-                    enumeratedItems.Add((TestDeletable) item);
-                }
-                
+                var enumeratedItems = nonGenericList.Cast<TestDeletable>().ToList();
+
                 enumeratedItems.Should().BeEquivalentTo(items, withExactSameItems);
             }
         }
