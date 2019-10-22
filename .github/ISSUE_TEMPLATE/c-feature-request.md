@@ -7,7 +7,7 @@ labels: feature
 <!-- Please give the issue a short, clear title -->
 
 ## ✨ Feature Request
-<!-- Summarise the feature you would like to see here as clearly and concisely as you can -->
+<!-- Summarise the feature you would like to see as clearly and concisely as you can -->
 
 ## Context
 <!-- Tell us what this feature would be useful for; who would use it, for what purpose? -->
