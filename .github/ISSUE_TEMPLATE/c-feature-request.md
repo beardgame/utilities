@@ -14,3 +14,4 @@ labels: feature
 
 ## Scope
 <!-- List various pieces of functionality you would like this feature to have. This could be a list of concrete functions, or just some bullet points explaining the various things that can be done with it -->
+<!-- Also consider telling us what might be too much: what functionality comes to mind that is not needed? -->
