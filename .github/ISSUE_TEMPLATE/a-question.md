@@ -7,5 +7,4 @@ labels: question
 <!-- Please give the issue a short, clear title - it should probably be in the form of a question ;) -->
 
 ## ❓ Question
-
 <!-- Please explain your question here in as much detail as possible. The more you tell us, the faster we can help! -->
