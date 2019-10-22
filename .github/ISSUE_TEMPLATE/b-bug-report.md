@@ -9,6 +9,7 @@ labels: bug
 ## 🐛 Bug Report
 <!-- Summarise the bug here as clearly and concisely as you can -->
 <!-- If you know where the bug is located, include links to the respective files or even lines of code -->
+<!-- Also include a stack trace or similar information if you have it -->
 
 ## Context
 <!-- Give any relevant context, like what platform or version of the library you are using -->
