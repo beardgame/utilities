@@ -24,6 +24,8 @@ In principle this as easy as forking the repository, making some changes and [op
 
 If you want to know ahead of time if we'd welcome a certain feature or change, you could always create an issue where you propose that change and mention that you'd like to implement it yourself. We'll let you know what we think as soon as we can. The main reason we might decline code is if we feel it doesn't fit with the purpose of our libraries, but we're very open to suggestions and good arguments.
 
+You can also browse the existing issues for inspiration. You can pick up anything, but we also have the [`good-first-issue` label](https://github.com/beardgame/utilities/labels/good-first-issue) to indicate which issues are easy to pick up for someone new to the code base.
+
 When writing code for Bearded.Utilities, keep the following things in mind:
 
 - We like pull requests to be as small as possible, but as large as necessary, to make them as easy to review as possible
@@ -31,6 +33,7 @@ When writing code for Bearded.Utilities, keep the following things in mind:
 - We like modern C# features, type-safety and care about performance
 - We like tests
 
+Also remember to assign yourself to an issue if you start working on it.
 
 ## General tips and tricks
 
