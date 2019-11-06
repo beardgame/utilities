@@ -161,6 +161,20 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
+        #region add two dimensions
+
+        /// <summary>
+        /// Multiplies a unit value with an untyped vector, returning a typed vector.
+        /// </summary>
+        public static Difference3 operator *(Unit u, Vector3 v) => new Difference3(v * u.value);
+
+        /// <summary>
+        /// Multiplies a unit value with an untyped vector, returning a typed vector.
+        /// </summary>
+        public static Difference3 operator *(Vector3 v, Unit u) => new Difference3(v * u.value);
+
+        #endregion
+
         #region comparision
 
         /// <summary>

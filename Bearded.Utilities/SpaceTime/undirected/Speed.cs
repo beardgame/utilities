@@ -177,6 +177,20 @@ namespace Bearded.Utilities.SpaceTime
 
         #endregion
 
+        #region add two dimensions
+
+        /// <summary>
+        /// Multiplies a speed value with an untyped vector, returning a typed speed vector.
+        /// </summary>
+        public static Velocity3 operator *(Speed u, Vector3 v) => new Velocity3(v * u.value);
+
+        /// <summary>
+        /// Multiplies a speed value with an untyped vector, returning a typed speed vector.
+        /// </summary>
+        public static Velocity3 operator *(Vector3 v, Speed u) => new Velocity3(v * u.value);
+
+        #endregion
+
         #region comparision
 
         /// <summary>
