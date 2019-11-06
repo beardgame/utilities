@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Bearded.Utilities.Collections
@@ -106,8 +107,18 @@ namespace Bearded.Utilities.Collections
 
         #region Enumeration
 
+        private IEnumerable<T> reversed;
+
+        /// <summary>
+        /// Returns an enumerable that allows for enumerating the collection backwards.
+        /// Items added during backwards enumeration will not be enumerated.
+        /// Unlike a call to Reverse(), this property works in constant time and upcoming items deleted
+        /// during backwards enumeration will be skipped.
+        /// </summary>
+        public IEnumerable<T> Reversed => reversed ?? (reversed = new ReverseEnumerable(this));
+
         /// <inheritdoc />
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <inheritdoc />
         public IEnumerator<T> GetEnumerator() => new DeletableObjectListEnumerator<T>(this, list);
@@ -176,5 +187,18 @@ namespace Bearded.Utilities.Collections
 
         #endregion
 
+        sealed class ReverseEnumerable : IEnumerable<T>
+        {
+            private readonly DeletableObjectList<T> list;
+
+            public ReverseEnumerable(DeletableObjectList<T> list)
+            {
+                this.list = list;
+            }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+            public IEnumerator<T> GetEnumerator() => new ReversedDeletableObjectListEnumerator<T>(list, list.list);
+        }
     }
 }

@@ -25,7 +25,7 @@ namespace Bearded.Utilities.Tests.Collections
         private static List<TestDeletable> getDeletables(int itemsToAdd)
             => Enumerable.Range(0, itemsToAdd).Select(i => new TestDeletable()).ToList();
         
-        private static (DeletableObjectList<TestDeletable> List, List<TestDeletable> Items)
+        private static (DeletableObjectList<TestDeletable> List, IList<TestDeletable> Items)
             createPopulatedList(int itemsToAdd)
         {
             var list = new DeletableObjectList<TestDeletable>();
@@ -471,6 +471,106 @@ namespace Bearded.Utilities.Tests.Collections
                 var enumeratedItems = nonGenericList.Cast<TestDeletable>().ToList();
 
                 enumeratedItems.Should().BeEquivalentTo(items, withExactSameItems);
+            }
+        }
+        
+        public class ReverseEnumeration
+        {
+            [Property]
+            public void SkipsDeletedItems(NonEmptyArray<bool> someBools)
+            {
+                var boolQueue = someBools.Get.Looping();
+                var (list, items) = createPopulatedList(20);
+
+                foreach (var item in list)
+                {
+                    if (boolQueue.Next())
+                        item.Deleted = true;
+                }
+
+                list.Reversed.Should().BeEquivalentTo(items.Reverse().Where(i => !i.Deleted), withExactSameItems);
+            }
+
+            [Fact]
+            public void SkipsItemsDeletedAheadOfEnumeration()
+            {
+                var (list, items) = createPopulatedList(20);
+                var enumeratedItems = new List<TestDeletable>();
+
+                foreach (var item in list.Reversed)
+                {
+                    enumeratedItems.Add(item);
+                    list.First().Deleted = true;
+                }
+
+                enumeratedItems.Should().BeEquivalentTo(items.Reverse().Take(10), withExactSameItems);
+            }
+            
+            [Fact]
+            public void SkipsItemsAddedDuringEnumeration()
+            {
+                var (list, items) = createPopulatedList(20);
+                var enumeratedItems = new List<TestDeletable>();
+
+                foreach (var item in list.Reversed)
+                {
+                    enumeratedItems.Add(item);
+                    list.Add(new TestDeletable());
+                }
+
+                enumeratedItems.Should().BeEquivalentTo(items.Reverse(), withExactSameItems);
+            }
+
+            [Fact]
+            public void IsNotAffectedByItemsBeingDeletedAfterEnumeratingThem()
+            {
+                var (list, items) = createPopulatedList(20);
+                var enumeratedItems = new List<TestDeletable>();
+                
+                foreach (var item in list.Reversed)
+                {
+                    enumeratedItems.Add(item);
+                    list.Last().Deleted = true;
+                }
+                
+                enumeratedItems.Should().BeEquivalentTo(items.Reverse(), withExactSameItems);
+                list.Should().BeEmpty();
+            }
+
+            [Fact]
+            public void CanBeResetTakingIntoAccountDeletedAndRemovedItems()
+            {
+                var (list, items) = createPopulatedList(20);
+                var enumeratedItems = new List<TestDeletable>();
+
+                // ReSharper disable once GenericEnumeratorNotDisposed
+                var enumerator = list.Reversed.GetEnumerator();
+                enumerator.MoveNext();
+                enumerator.MoveNext();
+                enumerator.MoveNext();
+                
+                list.Remove(items[19]);
+                items[18].Deleted = true;
+                
+                enumerator.Reset();
+
+                while (enumerator.MoveNext())
+                {
+                    enumeratedItems.Add(enumerator.Current);
+                }
+
+                enumeratedItems.Should().BeEquivalentTo(items.Reverse().Skip(2), withExactSameItems);
+            }
+
+            [Fact]
+            public void WorksNonGenerically()
+            {
+                var (list, items) = createPopulatedList(20);
+                var nonGenericList = (IEnumerable) list.Reversed;
+
+                var enumeratedItems = nonGenericList.Cast<TestDeletable>().ToList();
+
+                enumeratedItems.Should().BeEquivalentTo(items.Reverse(), withExactSameItems);
             }
         }
 
