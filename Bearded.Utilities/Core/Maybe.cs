@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace Bearded.Utilities
 {
-    public struct Maybe<T> : IEquatable<Maybe<T>>
+    public readonly struct Maybe<T> : IEquatable<Maybe<T>>
     {
         private readonly bool hasValue;
         private readonly T value;
@@ -15,7 +15,7 @@ namespace Bearded.Utilities
             this.value = value;
         }
 
-        public static Maybe<T> Nothing => default(Maybe<T>);
+        public static Maybe<T> Nothing => default;
 
         internal static Maybe<T> Just(T value) => new Maybe<T>(value);
 
@@ -75,10 +75,10 @@ namespace Bearded.Utilities
 
         public static Maybe<T> Just<T>(T value) => Maybe<T>.Just(value);
 
-        public static NothingMaybe Nothing => default(NothingMaybe);
+        public static NothingMaybe Nothing => default;
     }
 
-    public struct NothingMaybe
+    public readonly struct NothingMaybe
     {
     }
 }

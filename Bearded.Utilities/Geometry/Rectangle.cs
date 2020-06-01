@@ -9,7 +9,7 @@ namespace Bearded.Utilities.Geometry
     /// All properties assume the x axis pointing right and the y axis pointing down.
     /// Negative width or height rectangles are not allowed, and the constructor will throw with those values.
     /// </summary>
-    public struct Rectangle : IEquatable<Rectangle>, IFormattable
+    public readonly struct Rectangle : IEquatable<Rectangle>, IFormattable
     {
         public float Left { get; }
         public float Top { get; }

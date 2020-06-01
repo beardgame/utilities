@@ -76,7 +76,7 @@ namespace Bearded.Utilities.IO
             Trace = 5,
         }
 
-        public struct Entry : IEquatable<Entry>
+        public readonly struct Entry : IEquatable<Entry>
         {
             public string Text { get; }
 

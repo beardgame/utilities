@@ -8,12 +8,12 @@ namespace Bearded.Utilities.Input
 {
     partial class InputManager
     {
-        public partial struct ActionConstructor
+        public readonly partial struct ActionConstructor
         {
             public MouseActions Mouse => new MouseActions(manager);
         }
 
-        public struct MouseActions
+        public readonly struct MouseActions
         {
             private readonly InputManager manager;
 

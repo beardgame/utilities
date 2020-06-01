@@ -7,7 +7,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of a signed frequency.
     /// </summary>
-    public struct Frequency : IEquatable<Frequency>, IComparable<Frequency>, IFormattable
+    public readonly struct Frequency : IEquatable<Frequency>, IComparable<Frequency>, IFormattable
     {
         private readonly double value;
 

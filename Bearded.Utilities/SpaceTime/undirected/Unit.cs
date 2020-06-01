@@ -8,7 +8,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of an undirected signed distance or length.
     /// </summary>
-    public struct Unit : IEquatable<Unit>, IComparable<Unit>, IFormattable
+    public readonly struct Unit : IEquatable<Unit>, IComparable<Unit>, IFormattable
     {
         private readonly float value;
 

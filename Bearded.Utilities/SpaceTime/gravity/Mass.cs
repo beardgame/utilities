@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Bearded.Utilities.SpaceTime
 {
-    public struct Mass : IEquatable<Mass>, IComparable<Mass>, IFormattable
+    public readonly struct Mass : IEquatable<Mass>, IComparable<Mass>, IFormattable
     {
         private readonly float value;
 

@@ -8,7 +8,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of an undirected signed speed.
     /// </summary>
-    public struct Speed : IEquatable<Speed>, IComparable<Speed>, IFormattable
+    public readonly struct Speed : IEquatable<Speed>, IComparable<Speed>, IFormattable
     {
         private readonly float value;
 

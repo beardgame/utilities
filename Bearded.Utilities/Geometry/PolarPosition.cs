@@ -7,7 +7,7 @@ namespace Bearded.Utilities.Geometry
     /// <summary>
     /// Represents a position in two-dimensional space using polar coordinates.
     /// </summary>
-    public struct PolarPosition : IEquatable<PolarPosition>, IFormattable
+    public readonly struct PolarPosition : IEquatable<PolarPosition>, IFormattable
     {
         #region Properties
         /// <summary>

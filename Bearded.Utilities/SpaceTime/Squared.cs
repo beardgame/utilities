@@ -7,7 +7,7 @@ namespace Bearded.Utilities.SpaceTime
     /// Represents a type-safe squared value, backed by a float.
     /// </summary>
     /// <typeparam name="T">The squared type.</typeparam>
-    public struct Squared<T> : IEquatable<Squared<T>>, IComparable<Squared<T>>, IFormattable
+    public readonly struct Squared<T> : IEquatable<Squared<T>>, IComparable<Squared<T>>, IFormattable
         where T : struct
     {
         private readonly float value;
@@ -20,7 +20,7 @@ namespace Bearded.Utilities.SpaceTime
         }
 
         /// <summary>
-        /// Creteas a new instance of the Squared type, from a given root value.
+        /// Creates a new instance of the Squared type, from a given root value.
         /// </summary>
         public static Squared<T> FromRoot(float root)
         {
@@ -28,7 +28,7 @@ namespace Bearded.Utilities.SpaceTime
         }
 
         /// <summary>
-        /// Creteas a new instance of the Squared type, from a given value.
+        /// Creates a new instance of the Squared type, from a given value.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">If value is negative.</exception>
         public static Squared<T> FromValue(float value)

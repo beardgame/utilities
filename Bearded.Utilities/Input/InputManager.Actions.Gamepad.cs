@@ -11,12 +11,12 @@ namespace Bearded.Utilities.Input
 
     partial class InputManager
     {
-        public partial struct ActionConstructor
+        public readonly partial struct ActionConstructor
         {
             public GamepadsActions Gamepad => new GamepadsActions(manager);
         }
 
-        public struct GamepadsActions
+        public readonly struct GamepadsActions
         {
             private readonly InputManager manager;
 
@@ -60,7 +60,7 @@ namespace Bearded.Utilities.Input
             }
         }
 
-        public struct GamepadActions
+        public readonly struct GamepadActions
         {
             private readonly InputManager manager;
             private readonly int padId;
@@ -100,7 +100,7 @@ namespace Bearded.Utilities.Input
             }
         }
 
-        public struct GamepadButtonActions
+        public readonly struct GamepadButtonActions
         {
             private readonly InputManager manager;
             private readonly int padId;
@@ -188,7 +188,7 @@ namespace Bearded.Utilities.Input
                 };
         }
 
-        public struct GamepadAxisActions
+        public readonly struct GamepadAxisActions
         {
             private readonly InputManager manager;
             private readonly int padId;

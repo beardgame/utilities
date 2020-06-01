@@ -6,7 +6,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of an absolute instant in time.
     /// </summary>
-    public struct Instant : IEquatable<Instant>, IComparable<Instant>, IFormattable
+    public readonly struct Instant : IEquatable<Instant>, IComparable<Instant>, IFormattable
     {
         private readonly double value;
 

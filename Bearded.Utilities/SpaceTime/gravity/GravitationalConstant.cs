@@ -2,7 +2,7 @@
 
 namespace Bearded.Utilities.SpaceTime
 {
-    public struct GravitationalConstant
+    public readonly struct GravitationalConstant
     {
         private readonly float value;
 

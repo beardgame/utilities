@@ -7,7 +7,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of an absolute 2d position vector.
     /// </summary>
-    public struct Position2 : IEquatable<Position2>, IFormattable
+    public readonly struct Position2 : IEquatable<Position2>, IFormattable
     {
         private readonly Vector2 value;
 

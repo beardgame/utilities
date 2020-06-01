@@ -2,7 +2,7 @@
 
 namespace Bearded.Utilities
 {
-    public struct Void : IComparable<Void>, IEquatable<Void>
+    public readonly struct Void : IComparable<Void>, IEquatable<Void>
     {
         // Behold its power http://xkcd.com/1486/
 
