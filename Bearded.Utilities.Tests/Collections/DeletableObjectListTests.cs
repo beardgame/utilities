@@ -18,13 +18,11 @@ namespace Bearded.Utilities.Tests.Collections
         private static readonly Func<EquivalencyAssertionOptions<TestDeletable>, EquivalencyAssertionOptions<TestDeletable>>
             withExactSameItems = o => o.WithStrictOrdering().ComparingByValue<TestDeletable>();
 
-        public static IEnumerable<object[]> PositiveCounts =>
-            new [] {1, 2, 3, 4, 5, 7, 10, 13, 37, 42, 1337}
-                .Select(i => new object[] { i });
-        
+        public static TheoryData<int> PositiveCounts => new TheoryData<int> {1, 2, 3, 4, 5, 7, 10, 13, 37, 42, 1337};
+
         private static List<TestDeletable> getDeletables(int itemsToAdd)
             => Enumerable.Range(0, itemsToAdd).Select(i => new TestDeletable()).ToList();
-        
+
         private static (DeletableObjectList<TestDeletable> List, List<TestDeletable> Items)
             createPopulatedList(int itemsToAdd)
         {
@@ -34,12 +32,12 @@ namespace Bearded.Utilities.Tests.Collections
                 list.Add(item);
             return (list, items);
         }
-        
+
         public class TestDeletable : IDeletable
         {
             public bool Deleted { get; set; }
         }
-        
+
         public class TheParameterlessConstructor
         {
             [Fact]
@@ -50,26 +48,26 @@ namespace Bearded.Utilities.Tests.Collections
                 list.Should().BeEmpty();
             }
         }
-        
+
         public class TheIntParameterConstructor
         {
             [Fact]
             public void CreatesEmptyListForZeroValue()
             {
                 var list = new DeletableObjectList<IDeletable>(0);
-                
+
                 list.Should().BeEmpty();
             }
-            
+
             [Theory]
             [MemberData(nameof(PositiveCounts), MemberType = typeof(DeletableObjectListTests))]
             public void CreatesEmptyListForPositiveValues(int count)
             {
                 var list = new DeletableObjectList<IDeletable>(count);
-                
+
                 list.Should().BeEmpty();
             }
-            
+
             [Theory]
             [MemberData(nameof(PositiveCounts), MemberType = typeof(DeletableObjectListTests))]
             public void ThrowsForNegativeValues(int count)
@@ -79,13 +77,20 @@ namespace Bearded.Utilities.Tests.Collections
                 createListWithNegativeValue.Should().Throw<ArgumentOutOfRangeException>();
             }
         }
-        
+
         public abstract class MethodThatDoesNotThrowsWhenEnumeratingTests
         {
             protected abstract void CallMethod(DeletableObjectList<TestDeletable> list);
 
-            public static IEnumerable<object[]> IndicesFromZeroToNineteen =
-                Enumerable.Range(0, 20).Select(i => new object[] {i});
+            public static TheoryData<int> IndicesFromZeroToNineteen = new TheoryData<int>();
+
+            static MethodThatDoesNotThrowsWhenEnumeratingTests()
+            {
+                foreach (var i in Enumerable.Range(0, 20))
+                {
+                    IndicesFromZeroToNineteen.Add(i);
+                }
+            }
 
             [Theory]
             [MemberData(nameof(IndicesFromZeroToNineteen))]
@@ -105,13 +110,13 @@ namespace Bearded.Utilities.Tests.Collections
         {
             protected override void CallMethod(DeletableObjectList<TestDeletable> list)
                 => list.Add(new TestDeletable());
-            
+
             [Fact]
             public void AddsObjectToList()
             {
                 var list = new DeletableObjectList<TestDeletable>();
                 var deletable = new TestDeletable();
-                
+
                 list.Add(deletable);
 
                 list.Should().ContainSingle().Which.Should().Be(deletable);
@@ -136,7 +141,7 @@ namespace Bearded.Utilities.Tests.Collections
 
                 foreach (var item in items)
                     list.Add(item);
-                
+
                 list.Should().BeEquivalentTo(items, withExactSameItems);
             }
 
@@ -167,7 +172,7 @@ namespace Bearded.Utilities.Tests.Collections
 
             protected override void CallMethod(DeletableObjectList<TestDeletable> list)
                 => list.Remove(list.RandomElement(random));
-            
+
             [Fact]
             public void ReturnsFalseOnANewList()
             {
@@ -177,59 +182,59 @@ namespace Bearded.Utilities.Tests.Collections
 
                 returnValue.Should().BeFalse();
             }
-            
+
             [Fact]
             public void ReturnsFalseForUnknownElement()
             {
                 var (list, _) = createPopulatedList(1);
 
                 var returnValue = list.Remove(new TestDeletable());
-                
+
                 returnValue.Should().BeFalse();
             }
-            
+
             [Fact]
             public void ReturnsFalseForNull()
             {
                 var (list, _) = createPopulatedList(1);
 
                 var returnValue = list.Remove(null);
-                
+
                 returnValue.Should().BeFalse();
             }
-            
+
             [Fact]
             public void ReturnsTrueForKnownItem()
             {
                 var (list, items) = createPopulatedList(1);
 
                 var returnValue = list.Remove(items[0]);
-                
+
                 returnValue.Should().BeTrue();
             }
-            
+
             [Fact]
             public void ReturnsFalseForRepeatedCall()
             {
                 var (list, items) = createPopulatedList(1);
-               
+
                 list.Remove(items[0]);
                 var returnValue = list.Remove(items[0]);
-                
+
                 returnValue.Should().BeFalse();
             }
-            
+
             [Fact]
             public void ReturnsFalseForClearedList()
             {
                 var (list, items) = createPopulatedList(1);
                 list.Clear();
-               
+
                 var returnValue = list.Remove(items[0]);
-                
+
                 returnValue.Should().BeFalse();
             }
-            
+
             [Theory]
             [MemberData(nameof(PositiveCounts), MemberType = typeof(DeletableObjectListTests))]
             public void CanRemoveMultipleItems(int itemsToAdd)
@@ -272,7 +277,7 @@ namespace Bearded.Utilities.Tests.Collections
                     enumeratedItems.Add(item);
                     list.Remove(toRemove);
                 }
-                
+
                 enumeratedItems.Should().BeEquivalentTo(items.Take(10), withExactSameItems);
             }
         }
@@ -281,31 +286,31 @@ namespace Bearded.Utilities.Tests.Collections
         {
             protected override void CallMethod(DeletableObjectList<TestDeletable> list)
                 => list.Clear();
-            
+
             [Fact]
             public void DoesNotThrowForEmptyList()
             {
                 var list = new DeletableObjectList<TestDeletable>();
-                
+
                 list.Clear();
             }
-            
+
             [Theory]
             [MemberData(nameof(PositiveCounts), MemberType = typeof(DeletableObjectListTests))]
             public void ClearsAllItems(int itemsToAdd)
             {
                 var (list, _) = createPopulatedList(itemsToAdd);
-                
+
                 list.Clear();
 
                 list.Should().BeEmpty();
             }
         }
-        
+
         public abstract class NonMutatingMethodThatThrowsWhenEnumeratingTests
         {
             protected abstract void CallMethod(DeletableObjectList<TestDeletable> list);
-            
+
             [Fact]
             public void DoesNotThrowForEmptyList()
             {
@@ -313,13 +318,13 @@ namespace Bearded.Utilities.Tests.Collections
 
                 CallMethod(list);
             }
-            
+
             [Theory]
             [MemberData(nameof(PositiveCounts), MemberType = typeof(DeletableObjectListTests))]
             public void DoesNotRemoveItems(int itemsToAdd)
             {
                 var (list, items) = createPopulatedList(itemsToAdd);
-                
+
                 CallMethod(list);
 
                 list.Should().BeEquivalentTo(items, withExactSameItems);
@@ -330,22 +335,22 @@ namespace Bearded.Utilities.Tests.Collections
             {
                 var list = new DeletableObjectList<TestDeletable>();
                 _ = list.GetEnumerator();
-                
+
                 Action callingWhileEnumerating = () => CallMethod(list);
 
                 callingWhileEnumerating.Should().Throw<InvalidOperationException>();
             }
-            
+
             [Fact]
             public void DoesNotThrowAfterDisposingEnumerator()
             {
                 var list = new DeletableObjectList<TestDeletable>();
                 var enumerator = list.GetEnumerator();
                 enumerator.Dispose();
-                
+
                 CallMethod(list);
             }
-            
+
             [Fact]
             public void ThrowsIfAtLeastOneEnumeratorIsNotDisposed()
             {
@@ -357,12 +362,12 @@ namespace Bearded.Utilities.Tests.Collections
                 {
                     enumerator.Dispose();
                 }
-                
+
                 Action callingWhileEnumerating = () => CallMethod(list);
 
                 callingWhileEnumerating.Should().Throw<InvalidOperationException>();
             }
-            
+
             [Fact]
             public void DoesNotThrowIfAllEnumeratorsAreDisposed()
             {
@@ -373,7 +378,7 @@ namespace Bearded.Utilities.Tests.Collections
                 {
                     enumerator.Dispose();
                 }
-                
+
                 CallMethod(list);
             }
         }
@@ -382,7 +387,7 @@ namespace Bearded.Utilities.Tests.Collections
         {
             protected override void CallMethod(DeletableObjectList<TestDeletable> list) => list.TrimExcess();
         }
-        
+
         public class TheForceCompactMethod : NonMutatingMethodThatThrowsWhenEnumeratingTests
         {
             protected override void CallMethod(DeletableObjectList<TestDeletable> list) => list.ForceCompact();
@@ -426,13 +431,13 @@ namespace Bearded.Utilities.Tests.Collections
             {
                 var (list, items) = createPopulatedList(20);
                 var enumeratedItems = new List<TestDeletable>();
-                
+
                 foreach (var item in list)
                 {
                     enumeratedItems.Add(item);
                     list.First().Deleted = true;
                 }
-                
+
                 enumeratedItems.Should().BeEquivalentTo(items, withExactSameItems);
                 list.Should().BeEmpty();
             }
@@ -448,10 +453,10 @@ namespace Bearded.Utilities.Tests.Collections
                 enumerator.MoveNext();
                 enumerator.MoveNext();
                 enumerator.MoveNext();
-                
+
                 list.Remove(items[0]);
                 items[1].Deleted = true;
-                
+
                 enumerator.Reset();
 
                 while (enumerator.MoveNext())
@@ -483,17 +488,17 @@ namespace Bearded.Utilities.Tests.Collections
 
                 list.ApproximateCount.Should().Be(0);
             }
-            
+
             [Fact]
             public void IsZeroForClearedList()
             {
                 var (list, _) = createPopulatedList(10);
-                
+
                 list.Clear();
-                
+
                 list.ApproximateCount.Should().Be(0);
             }
-            
+
             [Property]
             public void IsAccurateWhenAddingAndRemoving(PositiveInt itemsToAdd, int randomSeed)
             {
@@ -506,14 +511,14 @@ namespace Bearded.Utilities.Tests.Collections
                     list.Add(new TestDeletable());
                     list.ApproximateCount.Should().Be(i);
                 }
-                
+
                 foreach (var i in Enumerable.Range(1, itemCount))
                 {
                     list.Remove(list.RandomElement(random));
                     list.ApproximateCount.Should().Be(itemCount - i);
                 }
             }
-            
+
             [Property]
             public void IsAccurateAfterEnumerating(PositiveInt itemsToAdd, int randomSeed)
             {
@@ -523,7 +528,7 @@ namespace Bearded.Utilities.Tests.Collections
                 items.RandomElement(random).Deleted = true;
 
                 _ = list.Count();
-                
+
                 list.ApproximateCount.Should().Be(itemCount - 1);
             }
         }
