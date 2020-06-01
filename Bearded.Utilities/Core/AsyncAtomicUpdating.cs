@@ -25,7 +25,7 @@
             }
         }
 
-        public void UpdateToDefault() => UpdateTo(default(T));
+        public void UpdateToDefault() => UpdateTo(default);
         
         public void UpdateTo(T state)
         {

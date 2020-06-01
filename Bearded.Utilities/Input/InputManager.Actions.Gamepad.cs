@@ -78,7 +78,7 @@ namespace Bearded.Utilities.Input
                 => padId >= 0 && padId < manager.GamePads.Count
                    && manager.GamePads[padId].State.Current.IsConnected;
 
-            public IEnumerable<IAction> All => Buttons.All.Concat<IAction>(Axes.All);
+            public IEnumerable<IAction> All => Buttons.All.Concat(Axes.All);
 
             public IAction FromButtonName(string value)
                 => TryParseButtonName(value, out var action)

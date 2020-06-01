@@ -161,7 +161,7 @@ namespace Bearded.Utilities.Linq
                 return true;
             }
 
-            result = default(TNewValue);
+            result = default;
             return false;
         }
 
