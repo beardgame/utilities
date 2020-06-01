@@ -7,7 +7,7 @@ namespace Bearded.Utilities.Geometry
     /// <summary>
     /// A typesafe representation of a direction in two dimensional space.
     /// </summary>
-    public struct Direction2 : IEquatable<Direction2>, IFormattable
+    public readonly struct Direction2 : IEquatable<Direction2>, IFormattable
     {
         private const float fromRadians = uint.MaxValue / Mathf.TwoPi;
         private const float toRadians = Mathf.TwoPi / uint.MaxValue;

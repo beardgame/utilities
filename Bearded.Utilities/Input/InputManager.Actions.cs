@@ -4,7 +4,7 @@
     {
         public ActionConstructor Actions => new ActionConstructor(this);
 
-        public partial struct ActionConstructor
+        public readonly partial struct ActionConstructor
         {
             private readonly InputManager manager;
             

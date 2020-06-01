@@ -183,7 +183,7 @@ namespace Bearded.Utilities.Collections
         /// <param name="i">The index of the element to be removed.</param>
         protected virtual void reset(int i)
         {
-            this.data[i] = default(KeyValuePair<TPriority, TValue>);
+            this.data[i] = default;
         }
         #endregion
 

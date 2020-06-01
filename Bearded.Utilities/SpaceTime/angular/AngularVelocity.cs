@@ -5,9 +5,9 @@ using Bearded.Utilities.Geometry;
 namespace Bearded.Utilities.SpaceTime
 {
     /// <summary>
-    /// A type-safe representation of a signed ancular velocity.
+    /// A type-safe representation of a signed angular velocity.
     /// </summary>
-    public struct AngularVelocity : IEquatable<AngularVelocity>, IComparable<AngularVelocity>, IFormattable
+    public readonly struct AngularVelocity : IEquatable<AngularVelocity>, IComparable<AngularVelocity>, IFormattable
     {
         private readonly float value;
 

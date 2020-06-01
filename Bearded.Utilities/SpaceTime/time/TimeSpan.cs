@@ -7,7 +7,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of a signed timespan.
     /// </summary>
-    public struct TimeSpan : IEquatable<TimeSpan>, IComparable<TimeSpan>, IFormattable
+    public readonly struct TimeSpan : IEquatable<TimeSpan>, IComparable<TimeSpan>, IFormattable
     {
         private readonly double value;
 

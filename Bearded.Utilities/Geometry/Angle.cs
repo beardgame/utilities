@@ -7,7 +7,7 @@ namespace Bearded.Utilities.Geometry
     /// <summary>
     /// A typesafe representation of a signed angle.
     /// </summary>
-    public struct Angle : IEquatable<Angle>, IFormattable
+    public readonly struct Angle : IEquatable<Angle>, IFormattable
     {
         private readonly float radians;
 

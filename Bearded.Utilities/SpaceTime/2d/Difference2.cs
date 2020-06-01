@@ -8,7 +8,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of a 2d directed difference vector.
     /// </summary>
-    public struct Difference2 : IEquatable<Difference2>, IFormattable
+    public readonly struct Difference2 : IEquatable<Difference2>, IFormattable
     {
         private readonly Vector2 value;
 

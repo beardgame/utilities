@@ -8,7 +8,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of an undirected signed acceleration.
     /// </summary>
-    public struct Acceleration : IEquatable<Acceleration>, IComparable<Acceleration>, IFormattable
+    public readonly struct Acceleration : IEquatable<Acceleration>, IComparable<Acceleration>, IFormattable
     {
         private readonly float value;
 

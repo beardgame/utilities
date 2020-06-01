@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace Bearded.Utilities
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct Id<T> : IEquatable<Id<T>>
+    public readonly struct Id<T> : IEquatable<Id<T>>
     {
         public int Value { get; }
 

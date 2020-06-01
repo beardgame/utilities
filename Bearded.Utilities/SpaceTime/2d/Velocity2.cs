@@ -8,7 +8,7 @@ namespace Bearded.Utilities.SpaceTime
     /// <summary>
     /// A type-safe representation of a 2d directed velocity vector.
     /// </summary>
-    public struct Velocity2 : IEquatable<Velocity2>, IFormattable
+    public readonly struct Velocity2 : IEquatable<Velocity2>, IFormattable
     {
         private readonly Vector2 value;
 

@@ -124,7 +124,7 @@ namespace Bearded.Utilities.Threading
         /// <param name="action">The function to run.</param>
         public T RunAndReturn<T>(Func<T> action)
         {
-            T ret = default(T);
+            T ret = default;
             this.RunAndAwait(() => ret = action());
             return ret;
         }

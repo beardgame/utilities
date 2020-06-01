@@ -7,7 +7,7 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
     /// Represents a reference to a specific tile of a rectangular tilemap.
     /// </summary>
     /// <typeparam name="TTileValue">The kind of data contained in the tilemap.</typeparam>
-    public struct Tile<TTileValue>
+    public readonly struct Tile<TTileValue>
         : IEquatable<Tile<TTileValue>>
     {
         private readonly Tilemap<TTileValue> tilemap;
