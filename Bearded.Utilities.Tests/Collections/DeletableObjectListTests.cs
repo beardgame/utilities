@@ -82,13 +82,16 @@ namespace Bearded.Utilities.Tests.Collections
         {
             protected abstract void CallMethod(DeletableObjectList<TestDeletable> list);
 
-            public static TheoryData<int> IndicesFromZeroToNineteen = new TheoryData<int>();
-
-            static MethodThatDoesNotThrowsWhenEnumeratingTests()
+            public static TheoryData<int> IndicesFromZeroToNineteen
             {
-                foreach (var i in Enumerable.Range(0, 20))
+                get
                 {
-                    IndicesFromZeroToNineteen.Add(i);
+                    var data = new TheoryData<int>();
+                    foreach (var i in Enumerable.Range(0, 20))
+                    {
+                        data.Add(i);
+                    }
+                    return data;
                 }
             }
 
