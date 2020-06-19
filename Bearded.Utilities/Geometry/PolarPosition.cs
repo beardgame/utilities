@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Bearded.Utilities.Geometry
 {

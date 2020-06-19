@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using OpenTK;
-using OpenTK.Input;
+using OpenToolkit.Windowing.Common;
 
 namespace Bearded.Utilities.Input
 {
@@ -13,7 +12,7 @@ namespace Bearded.Utilities.Input
 
         private readonly List<(KeyboardKeyEventArgs, bool)> keyEvents = new List<(KeyboardKeyEventArgs, bool)>();
         private readonly List<char> pressedCharacters = new List<char>();
-        
+
         internal IReadOnlyList<(KeyboardKeyEventArgs, bool)> KeyEvents { get; }
         internal IReadOnlyList<char> PressedCharacters { get; }
 
@@ -21,25 +20,26 @@ namespace Bearded.Utilities.Input
         {
             nativeWindow.KeyDown += onKeyDown;
             nativeWindow.KeyUp += onKeyUp;
-            nativeWindow.KeyPress += onKeyPress;
+            nativeWindow.TextInput += onTextInput;
 
             KeyEvents = keyEvents.AsReadOnly();
             PressedCharacters = pressedCharacters.AsReadOnly();
         }
 
-        private void onKeyDown(object sender, KeyboardKeyEventArgs e)
+        private void onKeyDown(KeyboardKeyEventArgs e)
         {
-            keyEventsQueue.Enqueue((new KeyboardKeyEventArgs(e), true));
+            keyEventsQueue.Enqueue((e, true));
         }
 
-        private void onKeyUp(object sender, KeyboardKeyEventArgs e)
+        private void onKeyUp(KeyboardKeyEventArgs e)
         {
-            keyEventsQueue.Enqueue((new KeyboardKeyEventArgs(e), false));
+            keyEventsQueue.Enqueue((e, false));
         }
 
-        private void onKeyPress(object sender, KeyPressEventArgs e)
+        private void onTextInput(TextInputEventArgs e)
         {
-            pressedCharactersQueue.Enqueue(e.KeyChar);
+            // FIXME: unicode may be represented by a string of more than one character
+            pressedCharacters.Add((char) e.Unicode);
         }
 
         internal void Update()

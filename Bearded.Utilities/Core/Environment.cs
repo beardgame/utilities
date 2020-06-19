@@ -9,7 +9,7 @@ namespace Bearded.Utilities
         Linux,
         OSX
     }
-    
+
     public static class Environment
     {
         #region Current platform
@@ -37,7 +37,7 @@ namespace Bearded.Utilities
                     return Platform.Windows;
             }
         }
-        
+
         public static Platform CurrentPlatform => currentPlatform ?? (currentPlatform = detectPlatform()).Value;
 
         #endregion
@@ -65,7 +65,7 @@ namespace Bearded.Utilities
 
                     if (!string.IsNullOrEmpty(linuxConfigDir))
                         return linuxConfigDir;
-                    
+
                     var linuxHomeDir = System.Environment.GetEnvironmentVariable("HOME");
                     // ReSharper disable once AssignNullToNotNullAttribute
                     return string.IsNullOrEmpty(linuxConfigDir) ? "." : Path.Combine(linuxHomeDir, ".config");

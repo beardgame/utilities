@@ -11,7 +11,7 @@ namespace Bearded.Utilities.SpaceTime
         private readonly double value;
 
         #region construction
-        
+
         public Instant(double value)
         {
             this.value = value;

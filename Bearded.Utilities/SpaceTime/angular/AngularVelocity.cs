@@ -12,7 +12,7 @@ namespace Bearded.Utilities.SpaceTime
         private readonly float value;
 
         #region constructing
-        
+
         public AngularVelocity(Angle value)
             : this(value.Radians)
         {

@@ -120,7 +120,7 @@ namespace Bearded.Utilities.Collections
         private readonly Node root;
 
         public int Count { get; }
-        
+
         public bool IsReadOnly => true;
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace Bearded.Utilities.Collections
             }
             return node;
         }
-        
+
         public bool Contains(string s)
         {
             if (s == null)
@@ -180,7 +180,7 @@ namespace Bearded.Utilities.Collections
         {
             if (prefix == null)
                 throw new ArgumentNullException(nameof(prefix));
-            
+
             return getNode(prefix)?.AllKeys ?? Enumerable.Empty<string>();
         }
 
@@ -197,7 +197,7 @@ namespace Bearded.Utilities.Collections
             var node = getNode(prefix);
             return node.HasValue ? prefix + node.Value.LongestPrefixAddition : null;
         }
-        
+
         public IEnumerator<string> GetEnumerator()
         {
             if (Count == 0)
@@ -208,7 +208,7 @@ namespace Bearded.Utilities.Collections
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        
+
         public void CopyTo(string[] array, int arrayIndex)
         {
             if (array == null)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Bearded.Utilities.Input.Actions;
-using OpenTK.Input;
+using OpenToolkit.Windowing.Common.Input;
 
 namespace Bearded.Utilities.Input
 {
@@ -21,7 +21,7 @@ namespace Bearded.Utilities.Input
             {
                 manager = inputManager;
             }
-            
+
             public IEnumerable<IAction> All
             {
                 get
@@ -49,7 +49,7 @@ namespace Bearded.Utilities.Input
                     return false;
 
                 var keyName = value.Substring(9).Trim();
-                
+
                 if (!Enum.TryParse(keyName, false, out Key key))
                     return false;
 
