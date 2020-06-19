@@ -1,4 +1,4 @@
-﻿using OpenTK.Input;
+﻿using OpenToolkit.Windowing.Common.Input;
 
 namespace Bearded.Utilities.Input.Actions
 {

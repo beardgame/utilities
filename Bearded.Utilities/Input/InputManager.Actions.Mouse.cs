@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Bearded.Utilities.Input.Actions;
-using OpenTK.Input;
+using OpenToolkit.Windowing.Common.Input;
 
 namespace Bearded.Utilities.Input
 {

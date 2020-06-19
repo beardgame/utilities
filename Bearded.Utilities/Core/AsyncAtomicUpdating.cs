@@ -26,7 +26,7 @@
         }
 
         public void UpdateToDefault() => UpdateTo(default);
-        
+
         public void UpdateTo(T state)
         {
             Previous = Current;

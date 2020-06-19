@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Bearded.Utilities.Algorithms
 {
@@ -172,7 +172,7 @@ namespace Bearded.Utilities.Algorithms
                 costMatrix[s, t] -= value;
             }
         }
-        
+
         private void reduceColumns()
         {
             var mins = findColumnMinimums();

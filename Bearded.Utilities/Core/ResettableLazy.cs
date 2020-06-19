@@ -20,9 +20,9 @@ namespace Bearded.Utilities
 
         private bool hasValue;
         private T value;
-        
+
         public T Value => ensureValue();
-        
+
         public ResettableLazy(Func<T> factory)
         {
             this.factory = factory;

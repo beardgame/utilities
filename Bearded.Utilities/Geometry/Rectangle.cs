@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Bearded.Utilities.Geometry
 {
@@ -15,7 +15,7 @@ namespace Bearded.Utilities.Geometry
         public float Top { get; }
         public float Width { get; }
         public float Height { get; }
-        
+
         public float Right => Left + Width;
         public float Bottom => Top + Height;
 
@@ -41,7 +41,7 @@ namespace Bearded.Utilities.Geometry
 
         public Rectangle(Vector2 xy, float width, float height)
             : this(xy.X, xy.Y, width, height) { }
-        
+
         public bool Contains(float x, float y)
             => Left <= x && x <= Right && Top <= y && y <= Bottom;
 
@@ -54,7 +54,7 @@ namespace Bearded.Utilities.Geometry
         public bool Intersects(Rectangle other)
             => !(other.Left > Right || other.Right < Left
                 || other.Top > Bottom || other.Bottom < Top);
-        
+
         public static Rectangle WithCorners(Vector2 upperLeft, Vector2 bottomRight)
             => new Rectangle(upperLeft.X, upperLeft.Y, bottomRight.X - upperLeft.X, bottomRight.Y - upperLeft.Y);
 
@@ -79,7 +79,7 @@ namespace Bearded.Utilities.Geometry
                 return hashCode;
             }
         }
-        
+
         public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
 
         public string ToString(string format, IFormatProvider formatProvider)

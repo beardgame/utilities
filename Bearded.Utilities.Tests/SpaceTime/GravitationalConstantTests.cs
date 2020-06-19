@@ -3,7 +3,7 @@ using Bearded.Utilities.SpaceTime;
 using Bearded.Utilities.Tests.Helpers;
 using FluentAssertions;
 using FsCheck.Xunit;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Xunit;
 
 namespace Bearded.Utilities.Tests.SpaceTime
