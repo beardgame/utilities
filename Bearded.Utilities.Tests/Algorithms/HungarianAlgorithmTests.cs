@@ -2,7 +2,7 @@
 using Bearded.Utilities.Algorithms;
 using Bearded.Utilities.Tests.Generators;
 using FsCheck.Xunit;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Xunit;
 using static System.Math;
 

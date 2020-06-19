@@ -7,14 +7,14 @@
         public readonly partial struct ActionConstructor
         {
             private readonly InputManager manager;
-            
+
             public ActionConstructor(InputManager inputManager)
             {
                 manager = inputManager;
             }
 
             public IAction None => InputAction.None;
-            
+
             public IAction FromString(string value)
                 => fromLowerCaseTrimmedString(value.ToLowerInvariant().Trim());
 
@@ -27,8 +27,10 @@
                         return None;
                     default:
                     {
-                        if (Keyboard.TryParseLowerTrimmedString(value, out var action)
-                            || Gamepad.TryParseLowerTrimmedString(value, out action))
+                        // if (Keyboard.TryParseLowerTrimmedString(value, out var action)
+                        //     || Gamepad.TryParseLowerTrimmedString(value, out action))
+                        //     return action;
+                        if (Keyboard.TryParseLowerTrimmedString(value, out var action))
                             return action;
 
                         return None;

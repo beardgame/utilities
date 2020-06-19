@@ -1,6 +1,6 @@
 using System;
 using System.Globalization;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Bearded.Utilities.Geometry
 {
@@ -88,7 +88,7 @@ namespace Bearded.Utilities.Geometry
         public static readonly Angle Zero = new Angle(0);
 
         #endregion
-        
+
         #region Properties
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace Bearded.Utilities.Geometry
         public float MagnitudeInDegrees => System.Math.Abs(this.Degrees);
 
         #endregion
-        
+
         #region Methods
 
         #region Arithmetic
@@ -204,7 +204,7 @@ namespace Bearded.Utilities.Geometry
         #endregion
 
         #endregion
-        
+
         #region Operators
 
         #region Arithmetic
@@ -297,7 +297,7 @@ namespace Bearded.Utilities.Geometry
         /// Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public override int GetHashCode()
         {

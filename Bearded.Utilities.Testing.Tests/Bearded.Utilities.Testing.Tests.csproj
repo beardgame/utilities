@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net462;netcoreapp2.2</TargetFrameworks>
+    <TargetFrameworks>net472;netcoreapp2.2</TargetFrameworks>
     <LangVersion>8</LangVersion>
     <Nullable>warnings</Nullable>
   </PropertyGroup>

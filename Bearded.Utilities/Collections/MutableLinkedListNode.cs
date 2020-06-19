@@ -48,7 +48,7 @@ namespace Bearded.Utilities.Collections
         #endregion
 
         #region Constructors
-        
+
         internal MutableLinkedListNode(T value)
         {
             this.value = value;

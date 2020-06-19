@@ -1,5 +1,5 @@
 using System;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Bearded.Utilities
 {
@@ -178,7 +178,7 @@ namespace Bearded.Utilities
         #endregion
 
         #region Rounding
-        
+
         /// <summary>
         /// Returns the lowest integral number higher than or equal to the specified number.
         /// </summary>
@@ -205,7 +205,7 @@ namespace Bearded.Utilities
         /// Returns the integral number closest to the specified number.
         /// </summary>
         public static int RoundedToInt(float f) => (int)System.Math.Round(f);
-        
+
         /// <summary>
         /// Returns the integral number closest to the specified number.
         /// </summary>
@@ -226,25 +226,25 @@ namespace Bearded.Utilities
             if (double.IsNaN(d))
                 throw new ArithmeticException(exceptionString);
         }
-        
+
         public static void ThrowIfNaN(this float f, string exceptionString)
         {
             if (float.IsNaN(f))
                 throw new ArithmeticException(exceptionString);
         }
-        
+
         public static void ThrowIfNaN(this Vector2 vector, string exceptionString)
         {
             if (vector.IsNaN())
                 throw new ArithmeticException(exceptionString);
         }
-        
+
         public static void ThrowIfNaN(this Vector3 vector, string exceptionString)
         {
             if (vector.IsNaN())
                 throw new ArithmeticException(exceptionString);
         }
-        
+
         public static void ThrowIfNaN(this Vector4 vector, string exceptionString)
         {
             if (vector.IsNaN())

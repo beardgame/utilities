@@ -166,7 +166,7 @@ namespace Bearded.Utilities.Algorithms
         {
             return new Tree<T>().Fit(blocks);
         }
-        
+
         // See http://codeincomplete.com/posts/2011/5/7/bin_packing/
         private class Tree<T>
         {

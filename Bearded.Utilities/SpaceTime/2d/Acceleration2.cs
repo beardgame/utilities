@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Bearded.Utilities.Geometry;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Bearded.Utilities.SpaceTime
 {
@@ -18,12 +18,12 @@ namespace Bearded.Utilities.SpaceTime
         {
             this.value = value;
         }
-        
+
         public Acceleration2(float x, float y)
             : this(new Vector2(x, y))
         {
         }
-        
+
         public Acceleration2(Acceleration x, Acceleration y)
             : this(new Vector2(x.NumericValue, y.NumericValue))
         {

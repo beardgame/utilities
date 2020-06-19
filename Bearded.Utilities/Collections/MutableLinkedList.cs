@@ -15,15 +15,15 @@ namespace Bearded.Utilities.Collections
 
         private readonly LinkedList<MutableLinkedListEnumerator<T>> enumerators =
             new LinkedList<MutableLinkedListEnumerator<T>>();
-        
+
         public MutableLinkedListNode<T> First { get; private set; }
-        
+
         public MutableLinkedListNode<T> Last { get; private set; }
-        
+
         public int Count { get; private set; }
 
         #endregion
-        
+
         #region Methods
 
         #region Add()
@@ -168,7 +168,7 @@ namespace Bearded.Utilities.Collections
         #endregion
 
         #region Enumerating
-        
+
         public IEnumerator<T> GetEnumerator()
         {
             var e = new MutableLinkedListEnumerator<T>(this);

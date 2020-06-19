@@ -10,7 +10,7 @@ namespace Bearded.Utilities
         public bool Equals(Void _) => true;
         public override bool Equals(object obj) => obj is Void;
         public override int GetHashCode() => 0;
-        
+
         // ReSharper disable UnusedParameter.Global
         public static bool operator ==(Void _, Void __) => true;
         public static bool operator !=(Void _, Void __) => false;

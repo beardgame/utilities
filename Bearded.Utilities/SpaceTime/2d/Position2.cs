@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Bearded.Utilities.SpaceTime
 {
@@ -12,17 +12,17 @@ namespace Bearded.Utilities.SpaceTime
         private readonly Vector2 value;
 
         #region construction
-        
+
         public Position2(Vector2 value)
         {
             this.value = value;
         }
-        
+
         public Position2(float x, float y)
             : this(new Vector2(x, y))
         {
         }
-        
+
         public Position2(Unit x, Unit y)
             : this(new Vector2(x.NumericValue, y.NumericValue))
         {

@@ -1,6 +1,6 @@
 using System;
 using System.Globalization;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Bearded.Utilities.Geometry
 {
@@ -70,7 +70,7 @@ namespace Bearded.Utilities.Geometry
 
         #endregion
 
-        
+
         #region Properties
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Bearded.Utilities.Geometry
 
             if (step > thisToGoal.Abs())
                 return goal;
-            
+
             step *= thisToGoal.Sign();
 
             return this + step;
@@ -221,7 +221,7 @@ namespace Bearded.Utilities.Geometry
         /// Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public override int GetHashCode()
         {

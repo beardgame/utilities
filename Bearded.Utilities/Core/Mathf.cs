@@ -40,10 +40,10 @@ namespace Bearded.Utilities
         /// Represents the value of tau (6.28318548).
         /// </summary>
         public const float Tau = 2 * Pi;
-        
+
         private const float degreesToRadians = TwoPi / 360f;
         private const float radiansToDegrees = 360f / TwoPi;
-        
+
         /// <summary>
         /// Returns the cosine of the specified angle.
         /// </summary>
