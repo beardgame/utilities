@@ -38,8 +38,7 @@ namespace Bearded.Utilities.Input
 
         private void onTextInput(TextInputEventArgs e)
         {
-            // FIXME: unicode may be represented by a string of more than one character
-            pressedCharacters.Add((char) e.Unicode);
+            pressedCharactersQueue.Enqueue((char) e.Unicode);
         }
 
         internal void Update()
