@@ -50,8 +50,7 @@ namespace Bearded.Utilities.Input
                 mouseEvents.Update();
                 keyboardState.Update();
                 mouseState.Update();
-                MousePosition = nativeWindow.PointToClient(
-                    new Vector2i((int) mouseState.Current.X, (int) mouseState.Current.Y)).ToVector2();
+                MousePosition = mouseState.Current.Position;
             }
             else
             {
