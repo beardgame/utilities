@@ -9,13 +9,13 @@ namespace Bearded.Utilities.Geometry
     /// </summary>
     public readonly struct Direction2 : IEquatable<Direction2>, IFormattable
     {
-        private const long numSteps = (1l << 32);
+        private const long numSteps = (1L << 32);
 
         private const float fromRadians = numSteps / Mathf.TwoPi;
         private const float toRadians = Mathf.TwoPi / numSteps;
 
         private const float fromDegrees = numSteps / 360f;
-        private const float toDegrees = 360f / numStepse;
+        private const float toDegrees = 360f / numSteps;
 
         private readonly uint data;
 
