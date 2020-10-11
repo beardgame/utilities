@@ -23,8 +23,8 @@ namespace Bearded.Utilities.Geometry
         {
             get
             {
-                this.ensureInitialized();
-                return this.length;
+                ensureInitialized();
+                return length;
             }
         }
         #endregion
@@ -36,7 +36,7 @@ namespace Bearded.Utilities.Geometry
         /// <param name="segments">The amount of linear segments the arc is split in. A larger amount of segments results in higher precision for length and remapping.</param>
         protected Arc(int segments = 100)
         {
-            this.segmentLengths = new float[segments + 1];
+            segmentLengths = new float[segments + 1];
         }
 
         // This class is lazy as our children might need to set fields
@@ -44,26 +44,26 @@ namespace Bearded.Utilities.Geometry
         // getPointAt and getDistanceBetween methods correctly.
         private void ensureInitialized()
         {
-            if (this.initialized)
+            if (initialized)
                 return;
 
-            this.segmentLengths[0] = 0;
-            T prev = this.getPointAt(0);
+            segmentLengths[0] = 0;
+            T prev = getPointAt(0);
 
             float totalLength = 0;
-            float step = 1.0f / (this.segmentLengths.Length - 1);
+            float step = 1.0f / (segmentLengths.Length - 1);
 
-            for (int i = 1; i < this.segmentLengths.Length; i++)
+            for (int i = 1; i < segmentLengths.Length; i++)
             {
                 float t = i * step;
-                T curr = this.getPointAt(t);
-                totalLength += this.getDistanceBetween(prev, curr);
-                this.segmentLengths[i] = totalLength;
+                T curr = getPointAt(t);
+                totalLength += getDistanceBetween(prev, curr);
+                segmentLengths[i] = totalLength;
                 prev = curr;
             }
 
-            this.length = totalLength;
-            this.initialized = true;
+            length = totalLength;
+            initialized = true;
         }
         #endregion
 
@@ -90,7 +90,7 @@ namespace Bearded.Utilities.Geometry
         /// <returns>The coordinates of the point on the arc at the specified parameter.</returns>
         public T GetPointAt(float t)
         {
-            return this.getPointAt(t);
+            return getPointAt(t);
         }
 
         /// <summary>
@@ -100,8 +100,8 @@ namespace Bearded.Utilities.Geometry
         /// <returns>The coordinates of the point on the arc at the specified parameter.</returns>
         public T GetPointAtNormalised(float t)
         {
-            this.ensureInitialized();
-            return this.getPointAt(this.mapDistance(t.Clamped(0, 1) * this.Length));
+            ensureInitialized();
+            return getPointAt(mapDistance(t.Clamped(0, 1) * Length));
         }
         #endregion
 
@@ -110,24 +110,24 @@ namespace Bearded.Utilities.Geometry
         {
             if (distance <= 0)
                 return 0;
-            if (distance >= this.Length)
+            if (distance >= Length)
                 return 1;
 
-            int i = this.findSegmentLengthIndex(distance);
-            float step = 1.0f / this.segmentLengths.Length;
-            if (this.segmentLengths[i] == distance)
+            int i = findSegmentLengthIndex(distance);
+            float step = 1.0f / segmentLengths.Length;
+            if (segmentLengths[i] == distance)
                 return i * step;
             if (i == 0)
                 return 0;
 
-            float over = distance - this.segmentLengths[i - 1];
-            float ratio = over / (this.segmentLengths[i] - this.segmentLengths[i - 1]);
+            float over = distance - segmentLengths[i - 1];
+            float ratio = over / (segmentLengths[i] - segmentLengths[i - 1]);
             return (i + ratio) * step;
         }
 
         private int findSegmentLengthIndex(float distance)
         {
-            int index = Array.BinarySearch(this.segmentLengths, distance);
+            int index = Array.BinarySearch(segmentLengths, distance);
             return index < 0 ? ~index : 0;
         }
         #endregion
