@@ -23,7 +23,7 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         {
             this.width = width;
             this.height = height;
-            this.tiles = new TTileValue[width, height];
+            tiles = new TTileValue[width, height];
         }
 
         #region properties
@@ -33,7 +33,7 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         /// </summary>
         public int Width
         {
-            get { return this.width; }
+            get { return width; }
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         /// </summary>
         public int Height
         {
-            get { return this.height; }
+            get { return height; }
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         /// </summary>
         public int Count
         {
-            get { return this.width * this.height; }
+            get { return width * height; }
         }
 
         #endregion
@@ -63,8 +63,8 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         /// <param name="y">The Y location of the tile.</param>
         public TTileValue this[int x, int y]
         {
-            get { return this.tiles[x, y]; }
-            set { this.tiles[x, y] = value; }
+            get { return tiles[x, y]; }
+            set { tiles[x, y] = value; }
         }
 
         /// <summary>
@@ -88,8 +88,8 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         /// <param name="y">The Y location of the tile.</param>
         public bool IsValidTile(int x, int y)
         {
-            return x >= 0 && x < this.width
-                && y >= 0 && y < this.height;
+            return x >= 0 && x < width
+                && y >= 0 && y < height;
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         /// </summary>
         public bool IsValidTile(Tile<TTileValue> tile)
         {
-            return this.IsValidTile(tile.X, tile.Y);
+            return IsValidTile(tile.X, tile.Y);
         }
 
         #endregion
@@ -109,8 +109,8 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         /// </summary>
         public IEnumerator<Tile<TTileValue>> GetEnumerator()
         {
-            for (int y = 0; y < this.height; y++)
-                for (int x = 0; x < this.width; x++)
+            for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
                 {
                     yield return new Tile<TTileValue>(this, x, y);
                 }
@@ -121,7 +121,7 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
         #endregion

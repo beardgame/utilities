@@ -36,7 +36,7 @@ namespace Bearded.Utilities
             random.NextBytes(buf);
             var longRand = BitConverter.ToInt64(buf, 0);
 
-            return System.Math.Abs(longRand % (max - min)) + min;
+            return Math.Abs(longRand % (max - min)) + min;
         }
 
         #endregion
@@ -66,7 +66,7 @@ namespace Bearded.Utilities
             // Box-Muller
             var u1 = random.NextDouble();
             var u2 = random.NextDouble();
-            return System.Math.Sqrt(-2 * System.Math.Log(u1)) * System.Math.Cos(2 * System.Math.PI * u2);
+            return Math.Sqrt(-2 * Math.Log(u1)) * Math.Cos(2 * Math.PI * u2);
         }
 
         /// <summary>

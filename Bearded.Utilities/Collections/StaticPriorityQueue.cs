@@ -35,7 +35,7 @@ namespace Bearded.Utilities.Collections
         /// <param name="capacity">Initial capacity of the priority queue.</param>
         public StaticPriorityQueue(int capacity)
         {
-            this.data = new KeyValuePair<TPriority, TValue>[capacity];
+            data = new KeyValuePair<TPriority, TValue>[capacity];
         }
 
         /// <summary>
@@ -45,9 +45,9 @@ namespace Bearded.Utilities.Collections
         public StaticPriorityQueue(IEnumerable<KeyValuePair<TPriority, TValue>> data)
         {
             this.data = data.ToArray();
-            this.Count = this.data.Length;
+            Count = this.data.Length;
             for (int i = this.data.Length / 2 - 1; i >= 0; i--)
-                this.cascadeDown(i);
+                cascadeDown(i);
         }
 
         /// <summary>
@@ -57,12 +57,12 @@ namespace Bearded.Utilities.Collections
         /// <param name="value">The element itself.</param>
         public void Enqueue(TPriority priority, TValue value)
         {
-            if (this.Count == this.data.Length)
-                this.increaseCapacity();
+            if (Count == data.Length)
+                increaseCapacity();
 
-            this.add(priority, value);
-            this.cascadeUp(this.Count);
-            this.Count++;
+            add(priority, value);
+            cascadeUp(Count);
+            Count++;
         }
 
         /// <summary>
@@ -71,10 +71,10 @@ namespace Bearded.Utilities.Collections
         /// <returns>The element with the lowest priority.</returns>
         public KeyValuePair<TPriority, TValue> Peek()
         {
-            if (this.Count == 0)
+            if (Count == 0)
                 throw new InvalidOperationException();
 
-            return this.data[0];
+            return data[0];
         }
 
         /// <summary>
@@ -83,14 +83,14 @@ namespace Bearded.Utilities.Collections
         /// <returns>The element with the lowest priority.</returns>
         public KeyValuePair<TPriority, TValue> Dequeue()
         {
-            if (this.Count == 0)
+            if (Count == 0)
                 throw new InvalidOperationException();
 
-            var oldRoot = this.data[0];
-            this.swap(0, this.Count - 1);
-            this.reset(this.Count - 1);
-            this.Count--;
-            this.cascadeDown(0);
+            var oldRoot = data[0];
+            swap(0, Count - 1);
+            reset(Count - 1);
+            Count--;
+            cascadeDown(0);
 
             return oldRoot;
         }
@@ -100,15 +100,15 @@ namespace Bearded.Utilities.Collections
         /// </summary>
         public virtual void Clear()
         {
-            this.data = new KeyValuePair<TPriority, TValue>[this.data.Length];
-            this.Count = 0;
+            data = new KeyValuePair<TPriority, TValue>[data.Length];
+            Count = 0;
         }
 
         private void increaseCapacity()
         {
-            var newData = new KeyValuePair<TPriority, TValue>[2 * this.data.Length + 1];
+            var newData = new KeyValuePair<TPriority, TValue>[2 * data.Length + 1];
             Array.Copy(data, newData, data.Length);
-            this.data = newData;
+            data = newData;
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace Bearded.Utilities.Collections
                 var parent = getParent(i);
 
                 if (data[i].Key.CompareTo(data[parent].Key) < 0)
-                    this.swap(i, parent);
+                    swap(i, parent);
                 else return;
 
                 i = parent;
@@ -141,15 +141,15 @@ namespace Bearded.Utilities.Collections
                 var right = getRightChild(i);
                 var smallest = i;
 
-                if (left < this.Count && this.data[left].Key.CompareTo(this.data[smallest].Key) < 0)
+                if (left < Count && data[left].Key.CompareTo(data[smallest].Key) < 0)
                     smallest = left;
-                if (right < this.Count && this.data[right].Key.CompareTo(this.data[smallest].Key) < 0)
+                if (right < Count && data[right].Key.CompareTo(data[smallest].Key) < 0)
                     smallest = right;
 
                 if (smallest == i)
                     return;
 
-                this.swap(i, smallest);
+                swap(i, smallest);
                 i = smallest;
             }
         }
@@ -162,7 +162,7 @@ namespace Bearded.Utilities.Collections
         /// <param name="value">The element itself.</param>
         protected virtual void add(TPriority priority, TValue value)
         {
-            this.data[this.Count] = new KeyValuePair<TPriority, TValue>(priority, value);
+            data[Count] = new KeyValuePair<TPriority, TValue>(priority, value);
         }
 
         /// <summary>
@@ -172,9 +172,9 @@ namespace Bearded.Utilities.Collections
         /// <param name="i2">The index of the second element.</param>
         protected virtual void swap(int i1, int i2)
         {
-            var oldFirst = this.data[i1];
-            this.data[i1] = this.data[i2];
-            this.data[i2] = oldFirst;
+            var oldFirst = data[i1];
+            data[i1] = data[i2];
+            data[i2] = oldFirst;
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Bearded.Utilities.Collections
         /// <param name="i">The index of the element to be removed.</param>
         protected virtual void reset(int i)
         {
-            this.data[i] = default;
+            data[i] = default;
         }
         #endregion
 

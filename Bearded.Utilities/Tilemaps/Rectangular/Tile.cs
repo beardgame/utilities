@@ -36,24 +36,24 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         /// <summary>
         /// X location of the tile.
         /// </summary>
-        public int X { get { return this.x; } }
+        public int X { get { return x; } }
 
         /// <summary>
         /// Y location of the tile.
         /// </summary>
-        public int Y { get { return this.y; } }
+        public int Y { get { return y; } }
 
         /// <summary>
         /// The data contained in the tile. Will throw if <see cref="IsValid"/> is false.
         /// </summary>
-        public TTileValue Value { get { return this.tilemap[this.X, this.Y]; } }
+        public TTileValue Value { get { return tilemap[X, Y]; } }
 
         /// <summary>
         /// True if the tile is located within its tilemap. False otherwise.
         /// </summary>
         public bool IsValid
         {
-            get { return this.tilemap != null && this.tilemap.IsValidTile(this); }
+            get { return tilemap != null && tilemap.IsValidTile(this); }
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
             {
                 for (int i = 1; i < 9; i++)
                 {
-                    var tile = this.Neighbour(Extensions.DirectionDeltas[i]);
+                    var tile = Neighbour(Extensions.DirectionDeltas[i]);
                     if (tile.IsValid)
                         yield return tile;
                 }
@@ -81,7 +81,7 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
             {
                 for (int i = 1; i < 9; i++)
                 {
-                    yield return this.Neighbour(Extensions.DirectionDeltas[i]);
+                    yield return Neighbour(Extensions.DirectionDeltas[i]);
                 }
             }
         }
@@ -95,15 +95,15 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         /// </summary>
         public Tile<TTileValue> Neighbour(Direction direction)
         {
-            return this.Neighbour(direction.Step());
+            return Neighbour(direction.Step());
         }
 
         internal Tile<TTileValue> Neighbour(Step step)
         {
             return new Tile<TTileValue>(
-                this.tilemap,
-                this.x + step.X,
-                this.y + step.Y
+                tilemap,
+                x + step.X,
+                y + step.Y
                 );
         }
 
@@ -116,7 +116,7 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         /// </summary>
         public bool Equals(Tile<TTileValue> other)
         {
-            return this.x == other.x && this.y == other.y && this.tilemap == other.tilemap;
+            return x == other.x && y == other.y && tilemap == other.tilemap;
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         {
             if (ReferenceEquals(null, obj))
                 return false;
-            return obj is Tile<TTileValue> && this.Equals((Tile<TTileValue>)obj);
+            return obj is Tile<TTileValue> && Equals((Tile<TTileValue>)obj);
         }
 
         /// <summary>
@@ -136,9 +136,9 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         {
             unchecked
             {
-                var hashCode = (this.tilemap != null ? this.tilemap.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ this.x;
-                hashCode = (hashCode * 397) ^ this.y;
+                var hashCode = (tilemap != null ? tilemap.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ x;
+                hashCode = (hashCode * 397) ^ y;
                 return hashCode;
             }
         }
