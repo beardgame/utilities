@@ -83,7 +83,7 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         /// </summary>
         public static Direction Octagonal(this Direction2 direction)
         {
-            return (Direction)((int)System.Math.Floor(direction.Degrees * (1 / 45f) + 0.5f) % 8 + 1);
+            return (Direction)((int)Math.Floor(direction.Degrees * (1 / 45f) + 0.5f) % 8 + 1);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         public static Direction Quadrogonal(this Direction2 direction)
         {
             return (Direction)((
-                (int)System.Math.Floor(direction.Degrees * (1 / 90f) + 0.5f) % 4
+                (int)Math.Floor(direction.Degrees * (1 / 90f) + 0.5f) % 4
                 ) * 2 + 1);
         }
 

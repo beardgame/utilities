@@ -15,77 +15,77 @@ namespace Bearded.Utilities.Testing.Tests
                 var maybe = Maybe.Just(100);
 
                 Action assertion = () => maybe.Should().BeJust();
-            
+
                 assertion.Should().NotThrow();
             }
-        
+
             [Fact]
             public void FailsWhenNothing()
             {
                 var maybe = Maybe<int>.Nothing;
 
                 Action assertion = () => maybe.Should().BeJust();
-            
+
                 assertion.Should().Throw<XunitException>();
             }
-            
+
             [Fact]
             public void ReturnsAndConstraintThatSucceedsAsExpected()
             {
                 var maybe = Maybe.Just(100);
 
                 Action assertion = () => maybe.Should().BeJust().And.Should().NotBeNull();
-            
+
                 assertion.Should().NotThrow();
             }
-        
+
             [Fact]
             public void ReturnsAndConstraintThatFailsAsExpected()
             {
                 var maybe = Maybe.Just(100);
 
                 Action assertion = () => maybe.Should().BeJust().And.Should().BeNull();
-            
+
                 assertion.Should().Throw<XunitException>();
             }
-            
+
             [Fact]
             public void FailsWhenNothingEvenIfAndConstraintSucceeds()
             {
                 var maybe = Maybe.Just(100);
 
                 Action assertion = () => maybe.Should().BeJust().And.Should().NotBeNull();
-            
+
                 assertion.Should().NotThrow();
             }
-            
+
             [Fact]
             public void ReturnsWhichConstraintThatSucceedsAsExpected()
             {
                 var maybe = Maybe.Just(100);
 
                 Action assertion = () => maybe.Should().BeJust().Which.Should().Be(100);
-            
+
                 assertion.Should().NotThrow();
             }
-        
+
             [Fact]
             public void ReturnsWhichConstraintThatFailsAsExpected()
             {
                 var maybe = Maybe.Just(100);
 
                 Action assertion = () => maybe.Should().BeJust().Which.Should().Be(200);
-            
+
                 assertion.Should().Throw<XunitException>();
             }
-            
+
             [Fact]
             public void FailsWhenNothingEvenIfWhichConstraintSucceeds()
             {
                 var maybe = Maybe.Just(100);
 
                 Action assertion = () => maybe.Should().BeJust().Which.Should().Be(100);
-            
+
                 assertion.Should().NotThrow();
             }
         }
@@ -98,7 +98,7 @@ namespace Bearded.Utilities.Testing.Tests
                 var maybe = Maybe.Just(100);
 
                 Action assertion = () => maybe.Should().BeJust(100);
-            
+
                 assertion.Should().NotThrow();
             }
 
@@ -108,7 +108,7 @@ namespace Bearded.Utilities.Testing.Tests
                 var maybe = Maybe.Just(100);
 
                 Action assertion = () => maybe.Should().BeJust(200);
-            
+
                 assertion.Should().Throw<XunitException>();
             }
 
@@ -118,7 +118,7 @@ namespace Bearded.Utilities.Testing.Tests
                 var maybe = Maybe<int>.Nothing;
 
                 Action assertion = () => maybe.Should().BeJust(200);
-            
+
                 assertion.Should().Throw<XunitException>();
             }
         }
@@ -131,7 +131,7 @@ namespace Bearded.Utilities.Testing.Tests
                 var maybe = Maybe<int>.Nothing;
 
                 Action assertion = () => maybe.Should().BeNothing();
-            
+
                 assertion.Should().NotThrow();
             }
 
@@ -141,7 +141,7 @@ namespace Bearded.Utilities.Testing.Tests
                 var maybe = Maybe.Just(100);
 
                 Action assertion = () => maybe.Should().BeNothing();
-            
+
                 assertion.Should().Throw<XunitException>();
             }
         }

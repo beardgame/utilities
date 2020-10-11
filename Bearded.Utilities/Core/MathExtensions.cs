@@ -87,23 +87,23 @@ namespace Bearded.Utilities
         /// <summary>
         /// Returns the square root of the specified number.
         /// </summary>
-        public static float Sqrted(this float f) => (float)System.Math.Sqrt(f);
+        public static float Sqrted(this float f) => (float)Math.Sqrt(f);
 
         /// <summary>
         /// Returns the square root of the specified number.
         /// </summary>
-        public static double Sqrted(this double d) => System.Math.Sqrt(d);
+        public static double Sqrted(this double d) => Math.Sqrt(d);
 
 
         /// <summary>
         /// Returns a specified number raised to the specified power.
         /// </summary>
-        public static float Powed(this float b, float power) => (float)System.Math.Pow(b, power);
+        public static float Powed(this float b, float power) => (float)Math.Pow(b, power);
 
         /// <summary>
         /// Returns a specified number raised to the specified power.
         /// </summary>
-        public static double Powed(this double b, double power) => System.Math.Pow(b, power);
+        public static double Powed(this double b, double power) => Math.Pow(b, power);
 
         #endregion
 
@@ -113,32 +113,32 @@ namespace Bearded.Utilities
         /// <summary>
         /// Returns the cosine of the specified angle.
         /// </summary>
-        public static float Cos(this float f) => (float)System.Math.Cos(f);
+        public static float Cos(this float f) => (float)Math.Cos(f);
 
         /// <summary>
         /// Returns the sine of the specified angle.
         /// </summary>
-        public static float Sin(this float f) => (float)System.Math.Sin(f);
+        public static float Sin(this float f) => (float)Math.Sin(f);
 
         /// <summary>
         /// Returns the tangent of the specified angle.
         /// </summary>
-        public static float Tan(this float f) => (float)System.Math.Tan(f);
+        public static float Tan(this float f) => (float)Math.Tan(f);
 
         /// <summary>
         /// Returns the angle whose cosine is the specified number.
         /// </summary>
-        public static float Acos(this float f) => (float)System.Math.Acos(f);
+        public static float Acos(this float f) => (float)Math.Acos(f);
 
         /// <summary>
         /// Returns the angle whose sine is the specified number.
         /// </summary>
-        public static float Asin(this float f) => (float)System.Math.Asin(f);
+        public static float Asin(this float f) => (float)Math.Asin(f);
 
         /// <summary>
         /// Returns the angle whose tangent is the specified number.
         /// </summary>
-        public static float Atan(this float f) => (float)System.Math.Atan(f);
+        public static float Atan(this float f) => (float)Math.Atan(f);
 
         #endregion
 
@@ -146,32 +146,32 @@ namespace Bearded.Utilities
         /// <summary>
         /// Returns the cosine of the specified angle.
         /// </summary>
-        public static double Cos(this double d) => System.Math.Cos(d);
+        public static double Cos(this double d) => Math.Cos(d);
 
         /// <summary>
         /// Returns the sine of the specified angle.
         /// </summary>
-        public static double Sin(this double d) => System.Math.Sin(d);
+        public static double Sin(this double d) => Math.Sin(d);
 
         /// <summary>
         /// Returns the tangent of the specified angle.
         /// </summary>
-        public static double Tan(this double d) => System.Math.Tan(d);
+        public static double Tan(this double d) => Math.Tan(d);
 
         /// <summary>
         /// Returns the angle whose cosine is the specified number.
         /// </summary>
-        public static double Acos(this double d) => System.Math.Acos(d);
+        public static double Acos(this double d) => Math.Acos(d);
 
         /// <summary>
         /// Returns the angle whose sine is the specified number.
         /// </summary>
-        public static double Asin(this double d) => System.Math.Asin(d);
+        public static double Asin(this double d) => Math.Asin(d);
 
         /// <summary>
         /// Returns the angle whose tangent is the specified number.
         /// </summary>
-        public static double Atan(this double d) => System.Math.Atan(d);
+        public static double Atan(this double d) => Math.Atan(d);
 
         #endregion
 
@@ -182,34 +182,34 @@ namespace Bearded.Utilities
         /// <summary>
         /// Returns the lowest integral number higher than or equal to the specified number.
         /// </summary>
-        public static int CeiledToInt(float f) => (int)System.Math.Ceiling(f);
+        public static int CeiledToInt(float f) => (int)Math.Ceiling(f);
 
         /// <summary>
         /// Returns the lowest integral number higher than or equal to the specified number.
         /// </summary>
-        public static int CeiledToInt(double d) => (int)System.Math.Ceiling(d);
+        public static int CeiledToInt(double d) => (int)Math.Ceiling(d);
 
 
         /// <summary>
         /// Returns the highest integral number lower than or equal to the specified number.
         /// </summary>
-        public static int FlooredToInt(float f) => (int)System.Math.Floor(f);
+        public static int FlooredToInt(float f) => (int)Math.Floor(f);
 
         /// <summary>
         /// Returns the highest integral number lower than or equal to the specified number.
         /// </summary>
-        public static int FlooredToInt(double d) => (int)System.Math.Floor(d);
+        public static int FlooredToInt(double d) => (int)Math.Floor(d);
 
 
         /// <summary>
         /// Returns the integral number closest to the specified number.
         /// </summary>
-        public static int RoundedToInt(float f) => (int)System.Math.Round(f);
+        public static int RoundedToInt(float f) => (int)Math.Round(f);
 
         /// <summary>
         /// Returns the integral number closest to the specified number.
         /// </summary>
-        public static int RoundedToInt(double d) => (int)System.Math.Round(d);
+        public static int RoundedToInt(double d) => (int)Math.Round(d);
 
         #endregion
 
