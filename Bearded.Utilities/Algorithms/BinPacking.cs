@@ -310,11 +310,9 @@ namespace Bearded.Utilities.Algorithms
 
                 var r = root;
                 var extension = new Node(r.W, 0, w, r.H);
+                extension.Split(w, h);
                 root = new Node(0, 0, r.W + w, r.H, (r, extension));
-                //var node = root.FindNodeWithSpaceFor(w, h);
-                var node = extension;
-                node.Split(w, h);
-                return node;
+                return extension;
             }
 
             private Node growDown(int w, int h)
@@ -338,11 +336,9 @@ namespace Bearded.Utilities.Algorithms
 
                 var r = root;
                 var extension = new Node(0, r.H, r.W, h);
+                extension.Split(w, h);
                 root = new Node(0, 0, r.W, r.H + h, (extension, r));
-                //var node = root.FindNodeWithSpaceFor(w, h);
-                var node = extension;
-                node.Split(w, h);
-                return node;
+                return extension;
             }
         }
     }
