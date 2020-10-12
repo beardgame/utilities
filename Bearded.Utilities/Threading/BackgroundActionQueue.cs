@@ -129,7 +129,7 @@ namespace Bearded.Utilities.Threading
         {
             var ret = default(T);
             RunAndAwait(() => ret = action());
-            return ret;
+            return ret!;
         }
 
         /// <summary>

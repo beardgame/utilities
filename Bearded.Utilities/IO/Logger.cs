@@ -30,7 +30,7 @@ namespace Bearded.Utilities.IO
             }
 
             public void Log<T>(T obj) {
-                logger.AddEntry(new Entry(obj.ToString(), severity));
+                logger.AddEntry(new Entry(obj?.ToString() ?? "null", severity));
             }
 
             public void Log(string text, params object[] parameters) {
@@ -38,12 +38,12 @@ namespace Bearded.Utilities.IO
             }
         }
 
-        public Writer Fatal { get; }
-        public Writer Error { get; }
-        public Writer Warning { get; }
-        public Writer Info { get; }
-        public Writer Debug { get; }
-        public Writer Trace { get; }
+        public Writer? Fatal { get; }
+        public Writer? Error { get; }
+        public Writer? Warning { get; }
+        public Writer? Info { get; }
+        public Writer? Debug { get; }
+        public Writer? Trace { get; }
         #endregion
 
         #region types
@@ -272,17 +272,17 @@ namespace Bearded.Utilities.IO
 
         public Logger(ICollection<Severity> enabledSeverities)
         {
-            Fatal = getWriterIfSeverityEnabled(enabledSeverities, Severity.Fatal);
-            Error = getWriterIfSeverityEnabled(enabledSeverities, Severity.Error);
-            Warning = getWriterIfSeverityEnabled(enabledSeverities, Severity.Warning);
-            Info = getWriterIfSeverityEnabled(enabledSeverities, Severity.Info);
-            Debug = getWriterIfSeverityEnabled(enabledSeverities, Severity.Debug);
-            Trace = getWriterIfSeverityEnabled(enabledSeverities, Severity.Trace);
+            Fatal = createWriterIfSeverityEnabled(enabledSeverities, Severity.Fatal);
+            Error = createWriterIfSeverityEnabled(enabledSeverities, Severity.Error);
+            Warning = createWriterIfSeverityEnabled(enabledSeverities, Severity.Warning);
+            Info = createWriterIfSeverityEnabled(enabledSeverities, Severity.Info);
+            Debug = createWriterIfSeverityEnabled(enabledSeverities, Severity.Debug);
+            Trace = createWriterIfSeverityEnabled(enabledSeverities, Severity.Trace);
 
             RecentEntries = lines.AsReadOnly();
         }
 
-        private Writer getWriterIfSeverityEnabled(ICollection<Severity> enabledSeverities, Severity severity)
+        private Writer? createWriterIfSeverityEnabled(ICollection<Severity> enabledSeverities, Severity severity)
             => enabledSeverities.Contains(severity) ? new Writer(this, severity) : null;
 
         #endregion

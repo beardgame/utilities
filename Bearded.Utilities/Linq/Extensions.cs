@@ -234,7 +234,7 @@ namespace Bearded.Utilities.Linq
             {
                 throw new InvalidOperationException("Sequence was empty.");
             }
-            return current;
+            return current!;
         }
 
         /// <summary>

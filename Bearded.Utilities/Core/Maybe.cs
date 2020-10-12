@@ -67,7 +67,7 @@ namespace Bearded.Utilities
 
     public static class Maybe
     {
-        public static Maybe<T> FromNullable<T>(T value) where T : class =>
+        public static Maybe<T> FromNullable<T>(T? value) where T : class =>
             value == null ? Nothing : Maybe<T>.Just(value);
 
         public static Maybe<T> FromNullable<T>(T? value) where T : struct =>

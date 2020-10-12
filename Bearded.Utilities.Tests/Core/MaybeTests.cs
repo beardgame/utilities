@@ -82,7 +82,7 @@ namespace Bearded.Utilities.Tests
 
                 maybe.Where(_ => false).Should().Be(Maybe<int>.Nothing);
             }
-            
+
             [Fact]
             public void MapsNothingToNothingIfPredicateReturnsTrue()
             {
@@ -90,7 +90,7 @@ namespace Bearded.Utilities.Tests
 
                 maybe.Where(_ => true).Should().Be(Maybe<int>.Nothing);
             }
-            
+
             [Fact]
             public void MapsJustToNothingIfPredicateReturnsFalse()
             {
@@ -98,7 +98,7 @@ namespace Bearded.Utilities.Tests
 
                 maybe.Where(_ => false).Should().Be(Maybe<int>.Nothing);
             }
-            
+
             [Fact]
             public void MapsJustToJustIfPredicateReturnsTrue()
             {
@@ -117,7 +117,7 @@ namespace Bearded.Utilities.Tests
 
                 maybe.Match(onValue: (val) => throw new XunitException("Wrong method called"));
             }
-        
+
             [Fact]
             public void CallsOnValueWithValueOnJust()
             {
@@ -130,7 +130,7 @@ namespace Bearded.Utilities.Tests
                         val.Should().Be(100);
                         isCalled = true;
                     });
-            
+
                 isCalled.Should().BeTrue("onValue should have been called");
             }
         }
@@ -149,7 +149,7 @@ namespace Bearded.Utilities.Tests
 
                 isCalled.Should().BeTrue("onNothing should have been called");
             }
-        
+
             [Fact]
             public void CallsOnValueWithValueOnJust()
             {
@@ -163,11 +163,11 @@ namespace Bearded.Utilities.Tests
                         isCalled = true;
                     },
                     onNothing: () => throw new XunitException("Wrong method called"));
-            
+
                 isCalled.Should().BeTrue("onValue should have been called");
             }
         }
-        
+
         public sealed class ReturningMatch
         {
             [Fact]
@@ -182,7 +182,7 @@ namespace Bearded.Utilities.Tests
 
                 actualResult.Should().Be(expectedResult, "onNothing should have been called");
             }
-        
+
             [Fact]
             public void CallsOnValueWithValueOnJustAndReturnsItsValue()
             {
@@ -199,13 +199,13 @@ namespace Bearded.Utilities.Tests
                 actualResult.Should().Be(expectedResult, "onValue should have been called");
             }
         }
-        
+
         public sealed class FromNullable
         {
             [Fact]
             public void ReturnsNothingOnReferenceTypeNull()
             {
-                Maybe.FromNullable((string) null).Should().Be(Maybe<string>.Nothing);
+                Maybe.FromNullable((string?) null).Should().Be(Maybe<string>.Nothing);
             }
 
             [Fact]
@@ -213,13 +213,13 @@ namespace Bearded.Utilities.Tests
             {
                 Maybe.FromNullable("the game").Should().Be(Maybe.Just("the game"));
             }
-        
+
             [Fact]
             public void ReturnsNothingOnNullableNoValue()
             {
                 Maybe.FromNullable((int?) null).Should().Be(Maybe<int>.Nothing);
             }
-        
+
             [Fact]
             public void ReturnsJustOnNullableWithValue()
             {
