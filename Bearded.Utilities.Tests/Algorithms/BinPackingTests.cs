@@ -18,7 +18,8 @@ namespace Bearded.Utilities.Tests.Algorithms
 
             var result = BinPacking.Pack(input);
 
-            Assert.Equal(100, result.Rectangles.Count);
+            Assert.NotNull(result);
+            Assert.Equal(100, result!.Rectangles.Count);
 
             var checkedIds = new HashSet<int>();
 
@@ -43,7 +44,9 @@ namespace Bearded.Utilities.Tests.Algorithms
 
             var result = BinPacking.Pack(input);
 
-            foreach (var r1 in result.Rectangles)
+            Assert.NotNull(result);
+
+            foreach (var r1 in result!.Rectangles)
             {
                 foreach (var r2 in result.Rectangles)
                 {
@@ -70,7 +73,9 @@ namespace Bearded.Utilities.Tests.Algorithms
 
             var result = BinPacking.Pack(input);
 
-            var totalArea = result.Width * result.Height;
+            Assert.NotNull(result);
+
+            var totalArea = result!.Width * result.Height;
 
             Assert.Equal(totalArea, result.Area);
 
@@ -78,7 +83,7 @@ namespace Bearded.Utilities.Tests.Algorithms
 
             var maxX = 0;
             var maxY = 0;
-            
+
             foreach (var r in result.Rectangles)
             {
                 var area = r.Width * r.Height;
@@ -107,14 +112,16 @@ namespace Bearded.Utilities.Tests.Algorithms
             var resultSingle = BinPacking.Pack(input, false);
             var resultMultiple = BinPacking.Pack(input, true);
 
-            Assert.True(resultSingle.Filled <= resultMultiple.Filled);
+            Assert.NotNull(resultSingle);
+            Assert.NotNull(resultMultiple);
+            Assert.True(resultSingle!.Filled <= resultMultiple!.Filled);
         }
 
         [Fact]
         public void TestPackedRectangles_EmptyInputReturnsNull()
         {
             var result = BinPacking.Pack(new List<BinPacking.Rectangle<int>>());
-            
+
             Assert.Null(result);
         }
     }

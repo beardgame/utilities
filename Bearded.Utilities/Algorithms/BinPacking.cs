@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Bearded.Utilities.Algorithms
@@ -9,7 +10,7 @@ namespace Bearded.Utilities.Algorithms
     /// This class contains the functionality to efficiently pack a list of rectangles into one larger rectangle.
     /// It tries to pack them tightly and minimizes wasted space in the containing rectangle.
     /// The result is not guaranteed to be optimal.
-    /// 
+    ///
     /// The algorithm implemented is an almost 1:1 translation of the Binary Tree Bin Packing Algorithm by
     /// Jake Gordon: http://codeincomplete.com/posts/2011/5/7/bin_packing/
     /// </summary>
@@ -107,11 +108,10 @@ namespace Bearded.Utilities.Algorithms
         /// <typeparam name="T">Type of custom user data associated with the rectangle.</typeparam>
         /// <param name="rectangles">The rectangles to pack.</param>
         /// <returns>
-        /// Null, if the given list of rectangles is empty.
-        /// Otherwise, an object containing the packed rectangles and some additional information.
+        /// A result object containing the packed rectangles and some additional information.
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="rectangles"/> is null.</exception>
-        public static Result<T> Pack<T>(IEnumerable<Rectangle<T>> rectangles)
+        public static Result<T>? Pack<T>(IEnumerable<Rectangle<T>> rectangles)
             => Pack(rectangles, true);
 
         /// <summary>
@@ -123,11 +123,10 @@ namespace Bearded.Utilities.Algorithms
         /// If true, the algorithm is run for multiple heuristics and returns the best result.
         /// If false, it is only run for one heuristic, packing rectangles in order of decreasing area, which empirically works well.</param>
         /// <returns>
-        /// Null, if the given list of rectangles is empty.
-        /// Otherwise, an object containing the packed rectangles and some additional information.
+        /// A result object containing the packed rectangles and some additional information.
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="rectangles"/> is null.</exception>
-        public static Result<T> Pack<T>(IEnumerable<Rectangle<T>> rectangles, bool tryMultipleHeuristics)
+        public static Result<T>? Pack<T>(IEnumerable<Rectangle<T>> rectangles, bool tryMultipleHeuristics)
         {
             if (rectangles == null)
                 throw new ArgumentNullException(nameof(rectangles));
@@ -144,19 +143,19 @@ namespace Bearded.Utilities.Algorithms
             if (!tryMultipleHeuristics)
                 return result;
 
-            var heuristics = new List<Comparison<Rectangle<T>>>
+            var otherHeuristics = new List<Comparison<Rectangle<T>>>
             {
                 (r1, r2) => r2.Width.CompareTo(r1.Width),
                 (r1, r2) => r2.Height.CompareTo(r1.Height)
             };
 
-            foreach (var h in heuristics)
+            foreach (var h in otherHeuristics)
             {
                 asList.Sort(h);
 
                 var r = fit(asList);
 
-                if (result == null || result.Filled < r.Filled)
+                if (result.Filled < r.Filled)
                     result = r;
             }
             return result;
@@ -173,36 +172,26 @@ namespace Bearded.Utilities.Algorithms
 
             private class Node
             {
-                private Node down;
-                private Node right;
+                private (Node Child1, Node Child2)? split;
 
                 public int X { get; }
                 public int Y { get; }
                 public int W { get; }
                 public int H { get; }
 
-                public Node(int x, int y, int w, int h, Node down, Node right)
+                public Node(int x, int y, int w, int h, (Node, Node)? split = null)
                 {
-                    this.down = down;
-                    this.right = right;
+                    this.split = split;
                     X = x;
                     Y = y;
                     W = w;
                     H = h;
                 }
 
-                public Node(int x, int y, int w, int h)
+                public Node? FindNodeWithSpaceFor(int w, int h)
                 {
-                    X = x;
-                    Y = y;
-                    W = w;
-                    H = h;
-                }
-
-                public Node Find(int w, int h)
-                {
-                    if (right != null)
-                        return right.Find(w, h) ?? down.Find(w, h);
+                    if (split is var (c1, c2))
+                        return c1.FindNodeWithSpaceFor(w, h) ?? c2.FindNodeWithSpaceFor(w, h);
                     if (w <= W && h <= H)
                         return this;
                     return null;
@@ -210,19 +199,33 @@ namespace Bearded.Utilities.Algorithms
 
                 public void Split(int w, int h)
                 {
-                    down = new Node(X, Y + h, W, H - h);
-                    right = new Node(X + w, Y, W - w, h);
+                    /*
+                     Splitting a node semantically means reserving a (w, h) area and
+                     divvying up the remaining space as empty nodes as indicated in this diagram.
+
+                    X,Y-----+------+
+                     |   w  |      |
+                     |h     |child2|
+                     |      |      |
+                     +------+------+
+                     |    child1   |
+                     +------+------+
+                     */
+                    split = (
+                        new Node(X, Y + h, W, H - h),
+                        new Node(X + w, Y, W - w, h)
+                        );
                 }
 
-                public int GetEmptyPixels()
+                public int CountEmptyPixels()
                 {
-                    if (right == null)
-                        return W * H;
-                    return down.GetEmptyPixels() + right.GetEmptyPixels();
+                    if (split is var (down, right))
+                        return down.CountEmptyPixels() + right.CountEmptyPixels();
+                    return W * H;
                 }
             }
 
-            private Node root;
+            private Node root = null!;
 
             public Result<T> Fit(IList<Rectangle<T>> blocks)
             {
@@ -234,23 +237,28 @@ namespace Bearded.Utilities.Algorithms
 
                 foreach (var block in blocks)
                 {
-                    var node = root.Find(block.Width, block.Height);
-                    if (node != null)
-                    {
-                        node.Split(block.Width, block.Height);
-                    }
-                    else
-                    {
-                        node = growNode(block.Width, block.Height);
-                    }
-                    if (node == null)
-                        throw new InvalidOperationException("Encountered unexpected null node.");
-                    results.Add(new PositionedRectangle<T>(block, node.X, node.Y));
+                    var (x, y) = fitRectangleIntoTree(block.Width, block.Height);
+                    results.Add(new PositionedRectangle<T>(block, x, y));
                 }
 
-                var emptyPixels = root.GetEmptyPixels();
+                var emptyPixels = root.CountEmptyPixels();
 
                 return new Result<T>(results.AsReadOnly(), root.W, root.H, emptyPixels);
+            }
+
+            private (int x, int y) fitRectangleIntoTree(int width, int height)
+            {
+                var node = root.FindNodeWithSpaceFor(width, height);
+                if (node != null)
+                {
+                    node.Split(width, height);
+                }
+                else
+                {
+                    node = growNode(width, height);
+                }
+
+                return (node.X, node.Y);
             }
 
             private Node growNode(int w, int h)
@@ -258,6 +266,8 @@ namespace Bearded.Utilities.Algorithms
                 var canGrowDown = w <= root.W;
                 var canGrowRight = h <= root.H;
 
+                // We try to approximate a square which helps keep the tree relatively balanced
+                // instead of growing linearly into only onw direction.
                 var shouldGrowRight = canGrowRight && root.H >= root.W + w;
                 var shouldGrowDown = canGrowDown && root.W >= root.H + h;
 
@@ -269,24 +279,69 @@ namespace Bearded.Utilities.Algorithms
                     return growRight(w, h);
                 if (canGrowDown)
                     return growDown(w, h);
-                return null;
+
+                // Our own heuristics above never violate the following constraint
+                // so this exception should never be thrown.
+                throw new InvalidOperationException(
+                    "Was not able to grow bin packing node because we tried inserting a rectangle " +
+                    "that was both wider and taller than the current packing. " +
+                    "Blocks should never be supplied in such an order. " +
+                    "To guarantee this constraint, rectangles should be ordered so that each of them is larger " +
+                    "in either width or height than all following ones."
+                );
             }
 
             private Node growRight(int w, int h)
             {
+                /*
+                 Growing right creates a new node to the right of the current root
+                 as well as a new root containing both.
+
+                0,0-----+-----------+
+                 | old  | extension |
+                 | root | (width w) |
+                 +------+-----------+
+
+                 We then split that extension which inserts the (w, h) rectangle and
+                 free up the remaining height.
+                 */
+
+                Debug.Assert(h <= root.H);
+
                 var r = root;
-                root = new Node(0, 0, r.W + w, r.H, r, new Node(r.W, 0, w, r.H));
-                var node = root.Find(w, h);
-                node?.Split(w, h);
+                var extension = new Node(r.W, 0, w, r.H);
+                root = new Node(0, 0, r.W + w, r.H, (r, extension));
+                //var node = root.FindNodeWithSpaceFor(w, h);
+                var node = extension;
+                node.Split(w, h);
                 return node;
             }
 
             private Node growDown(int w, int h)
             {
+                /*
+                 Growing right creates a new node to the bottom of the current root
+                 as well as a new root containing both.
+
+                0,0-----------+
+                 |  old root  |
+                 +------------+
+                 | extension  |
+                 | (height h) |
+                 +------------+
+
+                 We then split that extension which inserts the (w, h) rectangle and
+                 free up the remaining width.
+                 */
+
+                Debug.Assert(w <= root.W);
+
                 var r = root;
-                root = new Node(0, 0, r.W, r.H + h, new Node(0, r.H, r.W, h), r);
-                var node = root.Find(w, h);
-                node?.Split(w, h);
+                var extension = new Node(0, r.H, r.W, h);
+                root = new Node(0, 0, r.W, r.H + h, (extension, r));
+                //var node = root.FindNodeWithSpaceFor(w, h);
+                var node = extension;
+                node.Split(w, h);
                 return node;
             }
         }
