@@ -16,6 +16,7 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Bearded.Utilities.Testing\Bearded.Utilities.Testing.csproj" />
     <ProjectReference Include="..\Bearded.Utilities\Bearded.Utilities.csproj" />
   </ItemGroup>
 </Project>

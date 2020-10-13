@@ -1,5 +1,6 @@
 using System;
 using Bearded.Utilities.Monads;
+using Bearded.Utilities.Testing;
 using FluentAssertions;
 using Xunit;
 using Xunit.Sdk;
@@ -67,6 +68,25 @@ namespace Bearded.Utilities.Tests.Monads
                 var result = Result.Success<int, string>(200);
 
                 result.ResultOrThrow(_ => new ApplicationException()).Should().Be(200);
+            }
+        }
+
+        public sealed class ResultMaybe
+        {
+            [Fact]
+            public void ReturnsNothingOnFailure()
+            {
+                var result = Result.Failure<int, string>("something went wrong");
+
+                result.ResultMaybe().Should().BeNothing();
+            }
+
+            [Fact]
+            public void ReturnsJustResultOnSuccess()
+            {
+                var result = Result.Success<int, string>(200);
+
+                result.ResultMaybe().Should().BeJust(200);
             }
         }
 

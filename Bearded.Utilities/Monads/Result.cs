@@ -24,6 +24,8 @@ namespace Bearded.Utilities.Monads
         public TResult ResultOrThrow(Func<TError, Exception> exceptionProvider) =>
             isSuccess ? result : throw exceptionProvider(error);
 
+        public Maybe<TResult> ResultMaybe() => isSuccess ? Maybe.Just(result) : Maybe.Nothing;
+
         public Result<TOut, TError> Select<TOut>(Func<TResult, TOut> selector) =>
             isSuccess ? (Result<TOut, TError>) Result.Success(selector(result)) : Result.Failure(error);
 
