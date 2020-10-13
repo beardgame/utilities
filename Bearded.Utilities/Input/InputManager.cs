@@ -64,7 +64,7 @@ namespace Bearded.Utilities.Input
         public int DeltaScroll => Mathf.RoundToInt(DeltaScrollF);
         public float DeltaScrollF => mouseEvents.DeltaScrollF;
 
-        public bool MouseMoved => mouseState.Delta.LengthSquared > 0;
+        public bool MouseMoved => mouseState.Delta.LengthSquared != 0;
 
         public bool LeftMousePressed => IsMouseButtonPressed(MouseButton.Left);
         public bool LeftMouseHit => IsMouseButtonHit(MouseButton.Left);
