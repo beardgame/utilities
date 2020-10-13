@@ -110,7 +110,7 @@ namespace Bearded.Utilities.Monads
 
     public readonly struct Success<T>
     {
-        internal readonly T Result;
+        public readonly T Result;
 
         internal Success(T result)
         {
@@ -120,7 +120,7 @@ namespace Bearded.Utilities.Monads
 
     public readonly struct Failure<T>
     {
-        internal readonly T Error;
+        public readonly T Error;
 
         internal Failure(T error)
         {
