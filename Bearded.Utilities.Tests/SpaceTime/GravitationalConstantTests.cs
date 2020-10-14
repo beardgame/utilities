@@ -3,7 +3,7 @@ using Bearded.Utilities.SpaceTime;
 using Bearded.Utilities.Tests.Helpers;
 using FluentAssertions;
 using FsCheck.Xunit;
-using OpenToolkit.Mathematics;
+using OpenTK.Mathematics;
 using Xunit;
 
 namespace Bearded.Utilities.Tests.SpaceTime
@@ -64,7 +64,7 @@ namespace Bearded.Utilities.Tests.SpaceTime
                     .BeApproximatelyOrBothNaNOrInfinity(expectedAcceleration.Y);
             }
         }
-        
+
         public class TheAccelerationTowardsWithUnitMethod
         {
             [Property(Arbitrary = new []{typeof(LimitedRangeFloatGenerator)})]
@@ -116,7 +116,7 @@ namespace Bearded.Utilities.Tests.SpaceTime
                 var expectedAcceleration = gValue * massValue / distanceValue.Squared();
 
                 var acceleration = g.AccelerationAtDistance(mass, distance);
-                
+
                 acceleration.NumericValue.Should()
                     .BeApproximatelyOrBothNaNOrInfinity(expectedAcceleration);
             }

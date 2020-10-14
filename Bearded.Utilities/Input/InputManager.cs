@@ -1,26 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Common.Input;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace Bearded.Utilities.Input
 {
     public sealed partial class InputManager
     {
-        private readonly INativeWindow nativeWindow;
         private readonly KeyboardEvents keyboardEvents;
         private readonly MouseEvents mouseEvents;
 
-        private readonly AsyncAtomicUpdating<KeyboardState> keyboardState = new AsyncAtomicUpdating<KeyboardState>();
-        private readonly AsyncAtomicUpdating<MouseState> mouseState = new AsyncAtomicUpdating<MouseState>();
+        private readonly KeyboardState keyboardState;
+        private readonly MouseState mouseState;
 
         public ReadOnlyCollection<GamePadStateManager> GamePads { get; }
 
-        public InputManager(INativeWindow nativeWindow)
+        public InputManager(NativeWindow nativeWindow)
         {
-            this.nativeWindow = nativeWindow;
+            keyboardState = nativeWindow.KeyboardState;
+            mouseState = nativeWindow.MouseState;
+
             keyboardEvents = new KeyboardEvents(nativeWindow);
             mouseEvents = new MouseEvents(nativeWindow);
 
@@ -33,9 +35,6 @@ namespace Bearded.Utilities.Input
 
         public void ProcessEventsAsync()
         {
-            keyboardState.SetLastKnownState(nativeWindow.KeyboardState);
-            mouseState.SetLastKnownState(nativeWindow.MouseState);
-
             foreach (var gamePad in GamePads)
             {
                 gamePad.ProcessEventsAsync();
@@ -48,13 +47,11 @@ namespace Bearded.Utilities.Input
             {
                 keyboardEvents.Update();
                 mouseEvents.Update();
-                keyboardState.Update();
-                mouseState.Update();
-                MousePosition = mouseState.Current.Position;
+                MousePosition = mouseState.Position;
             }
             else
             {
-                keyboardState.UpdateToDefault();
+                //keyboardState.UpdateToDefault();
             }
 
             foreach (var gamePad in GamePads)
@@ -67,8 +64,7 @@ namespace Bearded.Utilities.Input
         public int DeltaScroll => Mathf.RoundToInt(DeltaScrollF);
         public float DeltaScrollF => mouseEvents.DeltaScrollF;
 
-        public bool MouseMoved => mouseState.Current.X != mouseState.Previous.X
-                                  || mouseState.Current.Y != mouseState.Previous.Y;
+        public bool MouseMoved => mouseState.Delta.LengthSquared != 0;
 
         public bool LeftMousePressed => IsMouseButtonPressed(MouseButton.Left);
         public bool LeftMouseHit => IsMouseButtonHit(MouseButton.Left);
@@ -82,15 +78,18 @@ namespace Bearded.Utilities.Input
         public bool MiddleMouseHit => IsMouseButtonHit(MouseButton.Middle);
         public bool MiddleMouseReleased => IsMouseButtonReleased(MouseButton.Middle);
 
-        public bool IsMouseButtonPressed(MouseButton button) => mouseState.Current[button];
-        public bool IsMouseButtonHit(MouseButton button) => mouseState.Current[button] && !mouseState.Previous[button];
-        public bool IsMouseButtonReleased(MouseButton button) => !mouseState.Current[button] && mouseState.Previous[button];
+        public bool IsMouseButtonPressed(MouseButton button) => mouseState.IsButtonDown(button);
+        public bool IsMouseButtonHit(MouseButton button) =>
+            IsMouseButtonPressed(button) && !mouseState.WasButtonDown(button);
+        public bool IsMouseButtonReleased(MouseButton button) =>
+            !IsMouseButtonPressed(button) && mouseState.WasButtonDown(button);
 
-        public bool IsKeyPressed(Key k) => keyboardState.Current.IsKeyDown(k);
-        public bool IsKeyHit(Key k) => IsKeyPressed(k) && keyboardState.Previous.IsKeyUp(k);
-        public bool IsKeyReleased(Key k) => !IsKeyPressed(k) && keyboardState.Previous.IsKeyDown(k);
+        public bool IsKeyPressed(Keys k) => keyboardState.IsKeyDown(k);
+        public bool IsKeyHit(Keys k) => IsKeyPressed(k) && !keyboardState.WasKeyDown(k);
+        public bool IsKeyReleased(Keys k) => !IsKeyPressed(k) && keyboardState.WasKeyDown(k);
 
-        public bool IsMouseInRectangle(System.Drawing.Rectangle rect) => rect.Contains((int) MousePosition.X, (int) MousePosition.Y);
+        public bool IsMouseInRectangle(System.Drawing.Rectangle rect) =>
+            rect.Contains((int) MousePosition.X, (int) MousePosition.Y);
 
         public IReadOnlyList<(KeyboardKeyEventArgs args, bool isPressed)> KeyEvents => keyboardEvents.KeyEvents;
         public IReadOnlyList<char> PressedCharacters => keyboardEvents.PressedCharacters;

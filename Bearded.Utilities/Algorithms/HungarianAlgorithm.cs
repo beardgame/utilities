@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using OpenToolkit.Mathematics;
+using OpenTK.Mathematics;
 
 namespace Bearded.Utilities.Algorithms
 {

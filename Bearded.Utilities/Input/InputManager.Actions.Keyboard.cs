@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Bearded.Utilities.Input.Actions;
-using OpenToolkit.Windowing.Common.Input;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace Bearded.Utilities.Input
 {
@@ -27,11 +27,11 @@ namespace Bearded.Utilities.Input
                 get
                 {
                     var m = manager;
-                    return ((Key[])Enum.GetValues(typeof(Key))).Select(k => new KeyboardAction(m, k));
+                    return ((Keys[])Enum.GetValues(typeof(Keys))).Select(k => new KeyboardAction(m, k));
                 }
             }
 
-            public IAction FromKey(Key key) => new KeyboardAction(manager, key);
+            public IAction FromKey(Keys key) => new KeyboardAction(manager, key);
 
             public IAction FromString(string value)
                 => TryParse(value, out var action)
@@ -50,10 +50,10 @@ namespace Bearded.Utilities.Input
 
                 var keyName = value.Substring(9).Trim();
 
-                if (!Enum.TryParse(keyName, false, out Key key))
+                if (!Enum.TryParse(keyName, false, out Keys key))
                     return false;
 
-                if (key == Key.Unknown)
+                if (key == Keys.Unknown)
                     return false;
 
                 action = new KeyboardAction(manager, key);
