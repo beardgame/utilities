@@ -74,13 +74,7 @@ namespace Bearded.Utilities.Monads
         public static bool operator !=(Result<TResult, TError> left, Result<TResult, TError> right) =>
             !left.Equals(right);
 
-        public override int GetHashCode()
-        {
-            var hashCode = isSuccess.GetHashCode();
-            hashCode = (hashCode * 397) ^ EqualityComparer<TResult>.Default.GetHashCode(result);
-            hashCode = (hashCode * 397) ^ EqualityComparer<TError>.Default.GetHashCode(error);
-            return hashCode;
-        }
+        public override int GetHashCode() => HashCode.Combine(isSuccess, result, error);
 
         public override string ToString() => isSuccess ? $"success {result}" : $"error {error}";
 
