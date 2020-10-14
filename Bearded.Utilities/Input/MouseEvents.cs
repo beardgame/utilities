@@ -5,7 +5,7 @@ namespace Bearded.Utilities.Input
 {
     sealed class MouseEvents
     {
-        private float scrollSinceLastFrame = 0;
+        private float scrollSinceLastFrame;
 
         internal float DeltaScrollF { get; private set; }
 

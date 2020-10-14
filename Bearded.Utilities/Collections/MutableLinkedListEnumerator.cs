@@ -30,49 +30,49 @@ namespace Bearded.Utilities.Collections
 
         public T Current
         {
-            get { return this.current.Value; }
+            get { return current.Value; }
         }
 
         private MutableLinkedListNode<T> current;
 
         public void OnObjectRemove(MutableLinkedListNode<T> obj)
         {
-            if (obj != this.current)
+            if (obj != current)
                 return;
 
-            this.currentWasDeleted = true;
-            this.current = obj.Next;
-            if (this.current == null)
-                this.done = true;
+            currentWasDeleted = true;
+            current = obj.Next;
+            if (current == null)
+                done = true;
         }
 
         public void Dispose()
         {
-            this.list.ForgetEnumerator(this.node);
+            list.ForgetEnumerator(node);
         }
 
         public bool MoveNext()
         {
-            if (this.done)
+            if (done)
                 return false;
-            if (!this.initialised)
+            if (!initialised)
             {
-                if (this.list.Count == 0)
+                if (list.Count == 0)
                     return false;
-                this.initialised = true;
-                this.current = this.list.First;
+                initialised = true;
+                current = list.First;
             }
             else
             {
-                if (this.currentWasDeleted)
+                if (currentWasDeleted)
                 {
-                    this.currentWasDeleted = false;
+                    currentWasDeleted = false;
                     return true;
                 }
-                this.current = this.current.Next;
-                if (this.current == null)
+                current = current.Next;
+                if (current == null)
                 {
-                    this.done = true;
+                    done = true;
                     return false;
                 }
             }
@@ -81,15 +81,15 @@ namespace Bearded.Utilities.Collections
 
         public void Reset()
         {
-            this.current = null;
-            this.done = false;
-            this.initialised = false;
-            this.currentWasDeleted = false;
+            current = null;
+            done = false;
+            initialised = false;
+            currentWasDeleted = false;
         }
 
         object System.Collections.IEnumerator.Current
         {
-            get { return this.Current; }
+            get { return Current; }
         }
 
     }
