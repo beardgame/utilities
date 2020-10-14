@@ -225,6 +225,7 @@ namespace Bearded.Utilities.Linq
             foreach (var element in source)
             {
                 count++;
+                // this condition is guaranteed to be true on the first iteration
                 if (random.Next(count) == 0)
                 {
                     current = element;
@@ -234,6 +235,7 @@ namespace Bearded.Utilities.Linq
             {
                 throw new InvalidOperationException("Sequence was empty.");
             }
+            // because of the count check, we are guaranteed to have assigned a value from the collection here
             return current!;
         }
 
