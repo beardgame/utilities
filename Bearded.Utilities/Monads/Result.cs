@@ -17,6 +17,12 @@ namespace Bearded.Utilities.Monads
             this.error = error;
         }
 
+        public static Result<TResult, TError> Success(TResult result) =>
+            new Result<TResult, TError>(true, result, default);
+
+        public static Result<TResult, TError> Failure(TError error) =>
+            new Result<TResult, TError>(false, default, error);
+
         public TResult ResultOrDefault(TResult @default) => isSuccess ? result : @default;
 
         public TResult ResultOrDefault(Func<TResult> defaultProvider) => isSuccess ? result : defaultProvider();
@@ -79,25 +85,21 @@ namespace Bearded.Utilities.Monads
         public override string ToString() => isSuccess ? $"success {result}" : $"error {error}";
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Result<TResult, TError>(Success<TResult> success)
-        {
-            return new Result<TResult, TError>(true, success.Result, default);
-        }
+        public static implicit operator Result<TResult, TError>(Success<TResult> success) => Success(success.Result);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Result<TResult, TError>(Failure<TError> failure)
-        {
-            return new Result<TResult, TError>(false, default, failure.Error);
-        }
+        public static implicit operator Result<TResult, TError>(Failure<TError> failure) => Failure(failure.Error);
     }
 
     public static class Result
     {
-        public static Result<TResult, TError> Success<TResult, TError>(TResult result) => Success(result);
+        public static Result<TResult, TError> Success<TResult, TError>(TResult result) =>
+            Result<TResult, TError>.Success(result);
 
         public static Success<T> Success<T>(T result) => new Success<T>(result);
 
-        public static Result<TResult, TError> Failure<TResult, TError>(TError error) => Failure(error);
+        public static Result<TResult, TError> Failure<TResult, TError>(TError error) =>
+            Result<TResult, TError>.Failure(error);
 
         public static Failure<T> Failure<T>(T error) => new Failure<T>(error);
 
