@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Bearded.Utilities.Geometry;
-using OpenToolkit.Mathematics;
+using OpenTK.Mathematics;
 
 namespace Bearded.Utilities.SpaceTime
 {
@@ -214,10 +214,10 @@ namespace Bearded.Utilities.SpaceTime
         #region static methods
 
         public static Unit Min(Unit u1, Unit u2)
-            => new Unit(System.Math.Min(u1.NumericValue, u2.NumericValue));
+            => new Unit(Math.Min(u1.NumericValue, u2.NumericValue));
 
         public static Unit Max(Unit u1, Unit u2)
-            => new Unit(System.Math.Max(u1.NumericValue, u2.NumericValue));
+            => new Unit(Math.Max(u1.NumericValue, u2.NumericValue));
 
         #endregion
 

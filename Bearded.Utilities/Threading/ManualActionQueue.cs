@@ -26,7 +26,7 @@ namespace Bearded.Utilities.Threading
         /// </summary>
         public void ExecuteOne()
         {
-            var action = this.actions.Take();
+            var action = actions.Take();
             action();
         }
 
@@ -38,7 +38,7 @@ namespace Bearded.Utilities.Threading
         public bool TryExecuteOne()
         {
             Action action;
-            if (this.actions.TryTake(out action))
+            if (actions.TryTake(out action))
             {
                 action();
                 return true;
@@ -55,7 +55,7 @@ namespace Bearded.Utilities.Threading
         public bool TryExecuteOne(TimeSpan timeout)
         {
             Action action;
-            if (this.actions.TryTake(out action, timeout))
+            if (actions.TryTake(out action, timeout))
             {
                 action();
                 return true;
@@ -80,7 +80,7 @@ namespace Bearded.Utilities.Threading
                 Action action;
                 if (timeLeft < new TimeSpan(0))
                     break;
-                if (!this.actions.TryTake(out action, timeLeft))
+                if (!actions.TryTake(out action, timeLeft))
                     break;
                 executed++;
                 action();
@@ -98,7 +98,7 @@ namespace Bearded.Utilities.Threading
         /// <param name="action">The action to run.</param>
         public void RunAndForget(Action action)
         {
-            this.actions.Add(action);
+            actions.Add(action);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace Bearded.Utilities.Threading
         {
             var reset = new ManualResetEvent(false);
 
-            this.actions.Add(() =>
+            actions.Add(() =>
             {
                 action();
                 reset.Set();
@@ -125,7 +125,7 @@ namespace Bearded.Utilities.Threading
         public T RunAndReturn<T>(Func<T> action)
         {
             T ret = default;
-            this.RunAndAwait(() => ret = action());
+            RunAndAwait(() => ret = action());
             return ret;
         }
 
@@ -136,7 +136,7 @@ namespace Bearded.Utilities.Threading
         /// <param name="p0">The argument for calling the function.</param>
         public T RunAndReturn<TP0, T>(Func<TP0, T> action, TP0 p0)
         {
-            return this.RunAndReturn(() => action(p0));
+            return RunAndReturn(() => action(p0));
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace Bearded.Utilities.Threading
         /// <param name="p1">The second argument for calling the function.</param>
         public T RunAndReturn<TP0, TP1, T>(Func<TP0, TP1, T> action, TP0 p0, TP1 p1)
         {
-            return this.RunAndReturn(() => action(p0, p1));
+            return RunAndReturn(() => action(p0, p1));
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace Bearded.Utilities.Threading
         /// <param name="p2">The third argument for calling the function.</param>
         public T RunAndReturn<TP0, TP1, TP2, T>(Func<TP0, TP1, TP2, T> action, TP0 p0, TP1 p1, TP2 p2)
         {
-            return this.RunAndReturn(() => action(p0, p1, p2));
+            return RunAndReturn(() => action(p0, p1, p2));
         }
 
         /// <summary>
@@ -172,7 +172,7 @@ namespace Bearded.Utilities.Threading
         /// <param name="p3">The fourth argument for calling the function.</param>
         public T RunAndReturn<TP0, TP1, TP2, TP3, T>(Func<TP0, TP1, TP2, TP3, T> action, TP0 p0, TP1 p1, TP2 p2, TP3 p3)
         {
-            return this.RunAndReturn(() => action(p0, p1, p2, p3));
+            return RunAndReturn(() => action(p0, p1, p2, p3));
         }
 
         #endregion

@@ -1,6 +1,6 @@
 using System;
 using System.Globalization;
-using OpenToolkit.Mathematics;
+using OpenTK.Mathematics;
 
 namespace Bearded.Utilities.Geometry
 {
@@ -42,7 +42,7 @@ namespace Bearded.Utilities.Geometry
         {
             float perpDot = from.Y * to.X - from.X * to.Y;
 
-            return Angle.FromRadians(Mathf.Atan2(perpDot, Vector2.Dot(from, to)));
+            return FromRadians(Mathf.Atan2(perpDot, Vector2.Dot(from, to)));
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Bearded.Utilities.Geometry
         /// </summary>
         public static Angle BetweenPositive(Direction2 from, Direction2 to)
         {
-            var a = Angle.Between(from, to);
+            var a = Between(from, to);
             if (a.radians < 0)
                 a += Mathf.TwoPi.Radians();
             return a;
@@ -72,7 +72,7 @@ namespace Bearded.Utilities.Geometry
         /// </summary>
         public static Angle BetweenNegative(Direction2 from, Direction2 to)
         {
-            var a = Angle.Between(from, to);
+            var a = Between(from, to);
             if (a.radians > 0)
                 a -= Mathf.TwoPi.Radians();
             return a;
@@ -94,27 +94,27 @@ namespace Bearded.Utilities.Geometry
         /// <summary>
         /// Gets the value of the angle in radians.
         /// </summary>
-        public float Radians => this.radians;
+        public float Radians => radians;
 
         /// <summary>
         /// Gets the value of the angle in degrees.
         /// </summary>
-        public float Degrees => Mathf.RadiansToDegrees(this.radians);
+        public float Degrees => Mathf.RadiansToDegrees(radians);
 
         /// <summary>
         /// Gets a 2x2 rotation matrix that rotates vectors by this angle.
         /// </summary>
-        public Matrix2 Transformation => Matrix2.CreateRotation(this.radians);
+        public Matrix2 Transformation => Matrix2.CreateRotation(radians);
 
         /// <summary>
         /// Gets the magnitude (absolute value) of the angle in radians.
         /// </summary>
-        public float MagnitudeInRadians => System.Math.Abs(this.radians);
+        public float MagnitudeInRadians => Math.Abs(radians);
 
         /// <summary>
         /// Gets the magnitude (absolute value) of the angle in degrees.
         /// </summary>
-        public float MagnitudeInDegrees => System.Math.Abs(this.Degrees);
+        public float MagnitudeInDegrees => Math.Abs(Degrees);
 
         #endregion
 
@@ -127,35 +127,35 @@ namespace Bearded.Utilities.Geometry
         /// </summary>
         public float Sin()
         {
-            return Mathf.Sin(this.radians);
+            return Mathf.Sin(radians);
         }
         /// <summary>
         /// Returns the Cosine of the angle.
         /// </summary>
         public float Cos()
         {
-            return Mathf.Cos(this.radians);
+            return Mathf.Cos(radians);
         }
         /// <summary>
         /// Returns the Tangent of the angle.
         /// </summary>
         public float Tan()
         {
-            return Mathf.Tan(this.radians);
+            return Mathf.Tan(radians);
         }
         /// <summary>
         /// Returns the Sign of the angle.
         /// </summary>
         public int Sign()
         {
-            return System.Math.Sign(this.radians);
+            return Math.Sign(radians);
         }
         /// <summary>
         /// Returns the absolute value of the angle.
         /// </summary>
         public Angle Abs()
         {
-            return new Angle(System.Math.Abs(this.radians));
+            return new Angle(Math.Abs(radians));
         }
         /// <summary>
         /// Returns a new Angle with |value| == 1 radians and the same sign as this angle.
@@ -163,14 +163,14 @@ namespace Bearded.Utilities.Geometry
         /// </summary>
         public Angle Normalized()
         {
-            return new Angle(System.Math.Sign(this.radians));
+            return new Angle(Math.Sign(radians));
         }
         /// <summary>
         /// Clamps this angle between a minimum and a maximum angle.
         /// </summary>
         public Angle Clamped(Angle min, Angle max)
         {
-            return Angle.Clamp(this, min, max);
+            return Clamp(this, min, max);
         }
 
         #region Statics
@@ -278,7 +278,7 @@ namespace Bearded.Utilities.Geometry
         /// </returns>
         public bool Equals(Angle other)
         {
-            return this.radians == other.radians;
+            return radians == other.radians;
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace Bearded.Utilities.Geometry
         /// </returns>
         public override bool Equals(object obj)
         {
-			return obj is Angle && this.Equals((Angle)obj);
+			return obj is Angle && Equals((Angle)obj);
         }
 
         /// <summary>
@@ -301,7 +301,7 @@ namespace Bearded.Utilities.Geometry
         /// </returns>
         public override int GetHashCode()
         {
-            return this.radians.GetHashCode();
+            return radians.GetHashCode();
         }
 
         /// <summary>

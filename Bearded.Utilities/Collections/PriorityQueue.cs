@@ -32,11 +32,11 @@ namespace Bearded.Utilities.Collections
         public PriorityQueue(IEnumerable<KeyValuePair<TPriority, TValue>> data)
         {
             this.data = data.ToArray();
-            this.Count = this.data.Length;
+            Count = this.data.Length;
             for (int i = 0; i < this.data.Length; i++)
-                this.valueDict.Add(this.data[i].Value, i);
+                valueDict.Add(this.data[i].Value, i);
             for (int i = this.data.Length / 2 - 1; i >= 0; i--)
-                this.cascadeDown(i);
+                cascadeDown(i);
         }
 
         /// <summary>
@@ -46,11 +46,11 @@ namespace Bearded.Utilities.Collections
         /// <param name="newPriority">The new priority of the element.</param>
         public void DecreasePriority(TValue value, TPriority newPriority)
         {
-            int i = this.valueDict[value];
-            if (this.data[i].Key.CompareTo(newPriority) < 0)
+            int i = valueDict[value];
+            if (data[i].Key.CompareTo(newPriority) < 0)
                 throw new InvalidOperationException("Can not increase the priority.");
-            this.data[i] = new KeyValuePair<TPriority, TValue>(newPriority, value);
-            this.cascadeUp(i);
+            data[i] = new KeyValuePair<TPriority, TValue>(newPriority, value);
+            cascadeUp(i);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Bearded.Utilities.Collections
         public override void Clear()
         {
             base.Clear();
-            this.valueDict.Clear();
+            valueDict.Clear();
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Bearded.Utilities.Collections
         /// <param name="value">The element itself.</param>
         protected override void add(TPriority priority, TValue value)
         {
-            this.valueDict.Add(value, this.Count);
+            valueDict.Add(value, Count);
             base.add(priority, value);
         }
 
@@ -80,8 +80,8 @@ namespace Bearded.Utilities.Collections
         /// <param name="i2">The index of the second element.</param>
         protected override void swap(int i1, int i2)
         {
-            this.valueDict[this.data[i1].Value] = i2;
-            this.valueDict[this.data[i2].Value] = i1;
+            valueDict[data[i1].Value] = i2;
+            valueDict[data[i2].Value] = i1;
 
             base.swap(i1, i2);
         }
@@ -92,7 +92,7 @@ namespace Bearded.Utilities.Collections
         /// <param name="i">The index of the element to be removed.</param>
         protected override void reset(int i)
         {
-            this.valueDict.Remove(this.data[i].Value);
+            valueDict.Remove(data[i].Value);
 
             base.reset(i);
         }

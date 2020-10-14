@@ -30,7 +30,7 @@ namespace Bearded.Utilities.Collections
         /// <summary>
         /// The value stored in the node.
         /// </summary>
-        public T Value { get { return this.value; } }
+        public T Value { get { return value; } }
 
         // Next, Prev and List are internally writeable to
         // simplify addition, removal and insertion code.
@@ -56,7 +56,7 @@ namespace Bearded.Utilities.Collections
 
         internal MutableLinkedListNode()
         {
-            this.value = this as T;
+            value = this as T;
         }
 
         #endregion
@@ -89,7 +89,7 @@ namespace Bearded.Utilities.Collections
         /// <param name="beforeThis">The node to add this before.</param>
         public void InsertBefore(MutableLinkedListNode<T> beforeThis)
         {
-            this.List.InsertBefore(this, beforeThis);
+            List.InsertBefore(this, beforeThis);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Bearded.Utilities.Collections
         /// </summary>
         public void RemoveFromList()
         {
-            this.List.Remove(this);
+            List.Remove(this);
         }
 
         #endregion

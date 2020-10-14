@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Bearded.Utilities.Geometry;
-using OpenToolkit.Mathematics;
+using OpenTK.Mathematics;
 
 namespace Bearded.Utilities.SpaceTime
 {
@@ -217,10 +217,10 @@ namespace Bearded.Utilities.SpaceTime
         #region static methods
 
         public static Acceleration Min(Acceleration s1, Acceleration s2)
-            => new Acceleration(System.Math.Min(s1.NumericValue, s2.NumericValue));
+            => new Acceleration(Math.Min(s1.NumericValue, s2.NumericValue));
 
         public static Acceleration Max(Acceleration s1, Acceleration s2)
-            => new Acceleration(System.Math.Max(s1.NumericValue, s2.NumericValue));
+            => new Acceleration(Math.Max(s1.NumericValue, s2.NumericValue));
 
         #endregion
 
