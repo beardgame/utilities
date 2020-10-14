@@ -71,14 +71,14 @@ namespace Bearded.Utilities.Tests.Monads
             }
         }
 
-        public sealed class ResultMaybe
+        public sealed class AsMaybe
         {
             [Fact]
             public void ReturnsNothingOnFailure()
             {
                 var result = Result.Failure<int, string>("something went wrong");
 
-                result.ResultMaybe().Should().BeNothing();
+                result.AsMaybe().Should().BeNothing();
             }
 
             [Fact]
@@ -86,7 +86,7 @@ namespace Bearded.Utilities.Tests.Monads
             {
                 var result = Result.Success<int, string>(200);
 
-                result.ResultMaybe().Should().BeJust(200);
+                result.AsMaybe().Should().BeJust(200);
             }
         }
 
