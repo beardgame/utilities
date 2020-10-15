@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using OpenToolkit.Windowing.Common;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
 
 namespace Bearded.Utilities.Input
 {
@@ -16,7 +17,7 @@ namespace Bearded.Utilities.Input
         internal IReadOnlyList<(KeyboardKeyEventArgs, bool)> KeyEvents { get; }
         internal IReadOnlyList<char> PressedCharacters { get; }
 
-        internal KeyboardEvents(INativeWindow nativeWindow)
+        internal KeyboardEvents(NativeWindow nativeWindow)
         {
             nativeWindow.KeyDown += onKeyDown;
             nativeWindow.KeyUp += onKeyUp;

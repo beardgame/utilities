@@ -1,4 +1,5 @@
-using OpenToolkit.Windowing.Common;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
 
 namespace Bearded.Utilities.Input
 {
@@ -8,7 +9,7 @@ namespace Bearded.Utilities.Input
 
         internal float DeltaScrollF { get; private set; }
 
-        internal MouseEvents(INativeWindow nativeWindow)
+        internal MouseEvents(NativeWindow nativeWindow)
         {
             nativeWindow.MouseWheel += onMouseWheel;
         }
