@@ -118,11 +118,17 @@ namespace Bearded.Utilities.Tests.Algorithms
         }
 
         [Fact]
-        public void TestPackedRectangles_EmptyInputReturnsNull()
+        public void TestPackedRectangles_EmptyInputReturnsEmptyResult()
         {
             var result = BinPacking.Pack(new List<BinPacking.Rectangle<int>>());
 
-            Assert.Null(result);
+            Assert.NotNull(result);
+            Assert.Empty(result.Rectangles);
+            Assert.Equal(0, result.Area);
+            Assert.Equal(0, result.Width);
+            Assert.Equal(0, result.Height);
+            Assert.Equal(0, result.EmptyPixels);
+            Assert.Equal(double.NaN, result.Filled);
         }
     }
 }
