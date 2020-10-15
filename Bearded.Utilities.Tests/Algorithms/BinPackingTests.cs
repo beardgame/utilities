@@ -109,8 +109,8 @@ namespace Bearded.Utilities.Tests.Algorithms
                 .Select(i => new BinPacking.Rectangle<int>(i, random.Next(5, 20), random.Next(5, 20)))
                 .ToList();
 
-            var resultSingle = BinPacking.Pack(input, false);
-            var resultMultiple = BinPacking.Pack(input, true);
+            var resultSingle = BinPacking.Pack(input);
+            var resultMultiple = BinPacking.PackWithMultipleHeuristics(input);
 
             Assert.NotNull(resultSingle);
             Assert.NotNull(resultMultiple);
