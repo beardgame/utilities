@@ -115,7 +115,7 @@ namespace Bearded.Utilities.Algorithms
             foreach (var heuristic in heuristics)
             {
                 rectangles.Sort(heuristic);
-                var result = new Tree<T>().Fit(rectangles);
+                var result = new Tree<T>(rectangles).Fit();
 
                 if (bestResult == null || bestResult.Filled < result.Filled)
                     bestResult = result;

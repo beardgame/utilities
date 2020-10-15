@@ -4,75 +4,22 @@ using System.Diagnostics;
 
 namespace Bearded.Utilities.Algorithms
 {
-
-    // See http://codeincomplete.com/posts/2011/5/7/bin_packing/
     public static partial class BinPacking
     {
         private class Tree<T>
         {
-            private class Node
+            private readonly IList<Rectangle<T>> rectangles;
+            private Node root;
+
+            public Tree(IList<Rectangle<T>> rectangles)
             {
-                private (Node Child1, Node Child2)? split;
-
-                public int X { get; }
-                public int Y { get; }
-                public int W { get; }
-                public int H { get; }
-
-                public Node(int x, int y, int w, int h, (Node, Node)? split = null)
-                {
-                    this.split = split;
-                    X = x;
-                    Y = y;
-                    W = w;
-                    H = h;
-                }
-
-                public Node? FindNodeWithSpaceFor(int w, int h)
-                {
-                    if (split is var (c1, c2))
-                        return c1.FindNodeWithSpaceFor(w, h) ?? c2.FindNodeWithSpaceFor(w, h);
-                    if (w <= W && h <= H)
-                        return this;
-                    return null;
-                }
-
-                public void Split(int w, int h)
-                {
-                    /*
-                     Splitting a node semantically means reserving a (w, h) area and
-                     divvying up the remaining space as empty nodes as indicated in this diagram.
-
-                    X,Y-----+------+
-                     |   w  |      |
-                     |h     |child2|
-                     |      |      |
-                     +------+------+
-                     |    child1   |
-                     +------+------+
-                     */
-                    split = (
-                        new Node(X, Y + h, W, H - h),
-                        new Node(X + w, Y, W - w, h)
-                    );
-                }
-
-                public int CountEmptyPixels()
-                {
-                    if (split is var (down, right))
-                        return down.CountEmptyPixels() + right.CountEmptyPixels();
-                    return W * H;
-                }
+                this.rectangles = rectangles;
+                var first = rectangles[0];
+                root = new Node(0, 0, first.Width, first.Height);
             }
 
-            private Node root = null!;
-
-            public Result<T> Fit(IList<Rectangle<T>> rectangles)
+            public Result<T> Fit()
             {
-                var first = rectangles[0];
-
-                root = new Node(0, 0, first.Width, first.Height);
-
                 var results = new List<PositionedRectangle<T>>(rectangles.Count);
 
                 foreach (var r in rectangles)
@@ -86,6 +33,7 @@ namespace Bearded.Utilities.Algorithms
                 return new Result<T>(results.AsReadOnly(), root.W, root.H, emptyPixels);
             }
 
+            // See http://codeincomplete.com/posts/2011/5/7/bin_packing/ for a full explanation of the algorithm
             private (int x, int y) fitRectangleIntoTree(int width, int height)
             {
                 var node = root.FindNodeWithSpaceFor(width, height);
@@ -107,7 +55,7 @@ namespace Bearded.Utilities.Algorithms
                 var canGrowRight = h <= root.H;
 
                 // We try to approximate a square which helps keep the tree relatively balanced
-                // instead of growing linearly into only onw direction.
+                // instead of growing linearly into only one direction.
                 var shouldGrowRight = canGrowRight && root.H >= root.W + w;
                 var shouldGrowDown = canGrowDown && root.W >= root.H + h;
 
@@ -120,7 +68,7 @@ namespace Bearded.Utilities.Algorithms
                 if (canGrowDown)
                     return growDown(w, h);
 
-                // Our own heuristics above never violate the following constraint
+                // Our own heuristics never violate the following constraint
                 // so this exception should never be thrown.
                 throw new InvalidOperationException(
                     "Was not able to grow bin packing node because we tried inserting a rectangle " +
@@ -179,6 +127,61 @@ namespace Bearded.Utilities.Algorithms
                 extension.Split(w, h);
                 root = new Node(0, 0, r.W, r.H + h, (extension, r));
                 return extension;
+            }
+
+            private class Node
+            {
+                private (Node Child1, Node Child2)? split;
+
+                public int X { get; }
+                public int Y { get; }
+                public int W { get; }
+                public int H { get; }
+
+                public Node(int x, int y, int w, int h, (Node, Node)? split = null)
+                {
+                    this.split = split;
+                    X = x;
+                    Y = y;
+                    W = w;
+                    H = h;
+                }
+
+                public Node? FindNodeWithSpaceFor(int w, int h)
+                {
+                    if (split is var (c1, c2))
+                        return c1.FindNodeWithSpaceFor(w, h) ?? c2.FindNodeWithSpaceFor(w, h);
+                    if (w <= W && h <= H)
+                        return this;
+                    return null;
+                }
+
+                public void Split(int w, int h)
+                {
+                    /*
+                     Splitting a node semantically means reserving a (w, h) area and
+                     divvying up the remaining space as empty nodes as indicated in this diagram.
+
+                    X,Y-----+------+
+                     |   w  |      |
+                     |h     |child2|
+                     |      |      |
+                     +------+------+
+                     |    child1   |
+                     +------+------+
+                     */
+                    split = (
+                        new Node(X, Y + h, W, H - h),
+                        new Node(X + w, Y, W - w, h)
+                    );
+                }
+
+                public int CountEmptyPixels()
+                {
+                    if (split is var (down, right))
+                        return down.CountEmptyPixels() + right.CountEmptyPixels();
+                    return W * H;
+                }
             }
         }
     }
