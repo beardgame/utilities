@@ -37,8 +37,7 @@ namespace Bearded.Utilities.Threading
         /// <returns>Whether an action was executed.</returns>
         public bool TryExecuteOne()
         {
-            Action action;
-            if (actions.TryTake(out action))
+            if (actions.TryTake(out var action))
             {
                 action();
                 return true;
@@ -54,8 +53,7 @@ namespace Bearded.Utilities.Threading
         /// <returns>Whether an action was executed.</returns>
         public bool TryExecuteOne(TimeSpan timeout)
         {
-            Action action;
-            if (actions.TryTake(out action, timeout))
+            if (actions.TryTake(out var action, timeout))
             {
                 action();
                 return true;
@@ -77,10 +75,9 @@ namespace Bearded.Utilities.Threading
             while (true)
             {
                 var timeLeft = time - timer.Elapsed;
-                Action action;
                 if (timeLeft < new TimeSpan(0))
                     break;
-                if (!actions.TryTake(out action, timeLeft))
+                if (!actions.TryTake(out var action, timeLeft))
                     break;
                 executed++;
                 action();

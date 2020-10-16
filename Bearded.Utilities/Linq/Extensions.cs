@@ -179,7 +179,15 @@ namespace Bearded.Utilities.Linq
             }
         }
 
+        public static TValue? ValueOrNull<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key)
+            where TValue : class
+        {
+            dict.TryGetValue(key, out var value);
+            return value;
+        }
+
         public static TValue ValueOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key)
+            where TValue : struct
         {
             dict.TryGetValue(key, out var value);
             return value;
