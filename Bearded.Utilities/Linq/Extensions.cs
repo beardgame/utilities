@@ -179,7 +179,15 @@ namespace Bearded.Utilities.Linq
             }
         }
 
+        public static TValue? ValueOrNull<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key)
+            where TValue : class
+        {
+            dict.TryGetValue(key, out var value);
+            return value;
+        }
+
         public static TValue ValueOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key)
+            where TValue : struct
         {
             dict.TryGetValue(key, out var value);
             return value;
@@ -225,6 +233,7 @@ namespace Bearded.Utilities.Linq
             foreach (var element in source)
             {
                 count++;
+                // this condition is guaranteed to be true on the first iteration
                 if (random.Next(count) == 0)
                 {
                     current = element;
@@ -234,7 +243,8 @@ namespace Bearded.Utilities.Linq
             {
                 throw new InvalidOperationException("Sequence was empty.");
             }
-            return current;
+            // because of the count check, we are guaranteed to have assigned a value from the collection here
+            return current!;
         }
 
         /// <summary>

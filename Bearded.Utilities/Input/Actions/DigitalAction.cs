@@ -11,6 +11,6 @@ namespace Bearded.Utilities.Input.Actions
 
         public override bool Equals(object obj) => Equals(obj as IAction);
         public bool Equals(IAction other) => other is DigitalAction && this.IsSameAs(other);
-        public override int GetHashCode() => ToString().GetHashCode();
+        public override int GetHashCode() => ToString()?.GetHashCode() ?? 0;
     }
 }
