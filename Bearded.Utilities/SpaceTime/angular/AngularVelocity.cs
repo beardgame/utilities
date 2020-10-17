@@ -31,7 +31,8 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Creates a new instance of the AngularVelocity type from an angle in degrees.
         /// </summary>
-        public static AngularVelocity FromDegrees(float degrees) => new AngularVelocity(Mathf.DegreesToRadians(degrees));
+        public static AngularVelocity FromDegrees(float degrees) =>
+            new AngularVelocity(MoreMath.DegreesToRadians(degrees));
 
         #endregion
 
@@ -72,7 +73,7 @@ namespace Bearded.Utilities.SpaceTime
         public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
 
         public string ToString(string format, IFormatProvider formatProvider)
-            => $"{Mathf.RadiansToDegrees(value).ToString(format, formatProvider)} °/t";
+            => $"{MoreMath.RadiansToDegrees(value).ToString(format, formatProvider)} °/t";
 
         #endregion
 
