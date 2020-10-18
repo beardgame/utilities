@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Bearded.Utilities.Monads;
 
 namespace Bearded.Utilities
 {
@@ -20,6 +21,14 @@ namespace Bearded.Utilities
         internal static Maybe<T> Just(T value) => new Maybe<T>(value);
 
         public T ValueOrDefault(T @default) => hasValue ? value : @default;
+
+        public T ValueOrDefault(Func<T> defaultProvider) => hasValue ? value : defaultProvider();
+
+        public Result<T, TError> ValueOrFailure<TError>(TError error) =>
+            hasValue ? (Result<T, TError>) Result.Success(value) : Result.Failure(error);
+
+        public Result<T, TError> ValueOrFailure<TError>(Func<TError> errorProvider) =>
+            hasValue ? (Result<T, TError>) Result.Success(value) : Result.Failure(errorProvider());
 
         public Maybe<TOut> Select<TOut>(Func<T, TOut> selector) =>
             hasValue ? Maybe.Just(selector(value)) : Maybe<TOut>.Nothing;
