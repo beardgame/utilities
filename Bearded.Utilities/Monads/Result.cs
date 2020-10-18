@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Bearded.Utilities.Monads
@@ -7,10 +8,12 @@ namespace Bearded.Utilities.Monads
     public readonly struct Result<TResult, TError> : IEquatable<Result<TResult, TError>>
     {
         private readonly bool isSuccess;
+        [AllowNull]
         private readonly TResult result;
+        [AllowNull]
         private readonly TError error;
 
-        private Result(bool isSuccess, TResult result, TError error)
+        private Result(bool isSuccess, [AllowNull] TResult result, [AllowNull] TError error)
         {
             this.isSuccess = isSuccess;
             this.result = result;
@@ -46,7 +49,7 @@ namespace Bearded.Utilities.Monads
             }
         }
 
-        public void Match(Action<TResult> onSuccess, Action<TError> onFailure)
+        public void Match(Action<TResult> onSuccess, FailureResultCallback<TError> onFailure)
         {
             if (isSuccess)
             {
@@ -58,7 +61,7 @@ namespace Bearded.Utilities.Monads
             }
         }
 
-        public TOut Match<TOut>(Func<TResult, TOut> onSuccess, Func<TError, TOut> onFailure) =>
+        public TOut Match<TOut>(Func<TResult, TOut> onSuccess, FailureResultTransformation<TError, TOut> onFailure) =>
             isSuccess ? onSuccess(result) : onFailure(error);
 
         public bool Equals(Result<TResult, TError> other) =>
@@ -66,7 +69,7 @@ namespace Bearded.Utilities.Monads
             && EqualityComparer<TResult>.Default.Equals(result, other.result)
             && EqualityComparer<TError>.Default.Equals(error, other.error);
 
-        public override bool Equals(object obj) => obj is Result<TResult, TError> other && Equals(other);
+        public override bool Equals(object? obj) => obj is Result<TResult, TError> other && Equals(other);
 
         public static bool operator ==(Result<TResult, TError> left, Result<TResult, TError> right) =>
             left.Equals(right);
@@ -123,4 +126,8 @@ namespace Bearded.Utilities.Monads
             Error = error;
         }
     }
+
+    public delegate void FailureResultCallback<in TError>([MaybeNull] TError error);
+
+    public delegate TOut FailureResultTransformation<in TError, out TOut>([MaybeNull] TError error);
 }
