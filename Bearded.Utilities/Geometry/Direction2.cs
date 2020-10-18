@@ -11,8 +11,8 @@ namespace Bearded.Utilities.Geometry
     {
         private const long numSteps = (1L << 32);
 
-        private const float fromRadians = numSteps / Mathf.TwoPi;
-        private const float toRadians = Mathf.TwoPi / numSteps;
+        private const float fromRadians = numSteps / MathConstants.TwoPi;
+        private const float toRadians = MathConstants.TwoPi / numSteps;
 
         private const float fromDegrees = numSteps / 360f;
         private const float toDegrees = 360f / numSteps;
@@ -47,7 +47,7 @@ namespace Bearded.Utilities.Geometry
         /// </summary>
         public static Direction2 Of(Vector2 vector)
         {
-            return FromRadians(Mathf.Atan2(vector.Y, vector.X));
+            return FromRadians(MathF.Atan2(vector.Y, vector.X));
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace Bearded.Utilities.Geometry
             get
             {
                 var radians = Radians;
-                return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
+                return new Vector2(MathF.Cos(radians), MathF.Sin(radians));
             }
         }
 
