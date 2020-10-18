@@ -11,7 +11,7 @@ namespace Bearded.Utilities.Collections
     {
         private struct Node
         {
-            private readonly Dictionary<char, Node> values;
+            private readonly Dictionary<char, Node>? values;
 
             public string Key { get; }
 
@@ -38,7 +38,7 @@ namespace Bearded.Utilities.Collections
                 this.values = makeChildren(values, index, iMin, iMax);
             }
 
-            private static Dictionary<char, Node> makeChildren(List<string> values, int index, int iMin, int iMax)
+            private static Dictionary<char, Node>? makeChildren(List<string> values, int index, int iMin, int iMax)
             {
                 if (iMin >= iMax)
                     return null;
@@ -92,7 +92,7 @@ namespace Bearded.Utilities.Collections
                 {
                     var builder = new StringBuilder();
                     var n = this;
-                    while (n.Key == null && n.values.Count == 1)
+                    while (n.values?.Count == 1)
                     {
                         var pair = n.values.First();
                         builder.Append(pair.Key);
@@ -189,7 +189,7 @@ namespace Bearded.Utilities.Collections
         /// </summary>
         /// <returns>Null if prefix is not contained in tree.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="prefix"/> is null.</exception>
-        public string ExtendPrefix(string prefix)
+        public string? ExtendPrefix(string prefix)
         {
             if (prefix == null)
                 throw new ArgumentNullException(nameof(prefix));

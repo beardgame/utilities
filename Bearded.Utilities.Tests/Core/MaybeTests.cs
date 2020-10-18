@@ -271,7 +271,7 @@ namespace Bearded.Utilities.Tests
             [Fact]
             public void ReturnsNothingOnReferenceTypeNull()
             {
-                Maybe.FromNullable((string) null).Should().Be(Maybe<string>.Nothing);
+                Maybe.FromNullable((string?) null).Should().Be(Maybe<string>.Nothing);
             }
 
             [Fact]
