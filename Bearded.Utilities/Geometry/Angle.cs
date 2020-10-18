@@ -31,7 +31,7 @@ namespace Bearded.Utilities.Geometry
         /// </summary>
         public static Angle FromDegrees(float degrees)
         {
-            return new Angle(Mathf.DegreesToRadians(degrees));
+            return new Angle(MoreMath.DegreesToRadians(degrees));
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Bearded.Utilities.Geometry
         {
             float perpDot = from.Y * to.X - from.X * to.Y;
 
-            return FromRadians(Mathf.Atan2(perpDot, Vector2.Dot(from, to)));
+            return FromRadians(MathF.Atan2(perpDot, Vector2.Dot(from, to)));
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Bearded.Utilities.Geometry
         {
             var a = Between(from, to);
             if (a.radians < 0)
-                a += Mathf.TwoPi.Radians();
+                a += MathConstants.TwoPi.Radians();
             return a;
         }
 
@@ -74,7 +74,7 @@ namespace Bearded.Utilities.Geometry
         {
             var a = Between(from, to);
             if (a.radians > 0)
-                a -= Mathf.TwoPi.Radians();
+                a -= MathConstants.TwoPi.Radians();
             return a;
         }
 
@@ -99,7 +99,7 @@ namespace Bearded.Utilities.Geometry
         /// <summary>
         /// Gets the value of the angle in degrees.
         /// </summary>
-        public float Degrees => Mathf.RadiansToDegrees(radians);
+        public float Degrees => MoreMath.RadiansToDegrees(radians);
 
         /// <summary>
         /// Gets a 2x2 rotation matrix that rotates vectors by this angle.
@@ -127,21 +127,21 @@ namespace Bearded.Utilities.Geometry
         /// </summary>
         public float Sin()
         {
-            return Mathf.Sin(radians);
+            return MathF.Sin(radians);
         }
         /// <summary>
         /// Returns the Cosine of the angle.
         /// </summary>
         public float Cos()
         {
-            return Mathf.Cos(radians);
+            return MathF.Cos(radians);
         }
         /// <summary>
         /// Returns the Tangent of the angle.
         /// </summary>
         public float Tan()
         {
-            return Mathf.Tan(radians);
+            return MathF.Tan(radians);
         }
         /// <summary>
         /// Returns the Sign of the angle.

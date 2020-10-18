@@ -61,7 +61,7 @@ namespace Bearded.Utilities.Input
         }
 
         public Vector2 MousePosition { get; private set; }
-        public int DeltaScroll => Mathf.RoundToInt(DeltaScrollF);
+        public int DeltaScroll => MoreMath.RoundToInt(DeltaScrollF);
         public float DeltaScrollF => mouseEvents.DeltaScrollF;
 
         public bool MouseMoved => mouseState.Delta.LengthSquared != 0;

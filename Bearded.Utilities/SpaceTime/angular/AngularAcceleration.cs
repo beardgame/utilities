@@ -31,7 +31,8 @@ namespace Bearded.Utilities.SpaceTime
         /// <summary>
         /// Creates a new instance of the AngularAcceleration type from an angle in degrees.
         /// </summary>
-        public static AngularAcceleration FromDegrees(float degrees) => new AngularAcceleration(Mathf.DegreesToRadians(degrees));
+        public static AngularAcceleration FromDegrees(float degrees) =>
+            new AngularAcceleration(MoreMath.DegreesToRadians(degrees));
 
         #endregion
 
@@ -72,7 +73,7 @@ namespace Bearded.Utilities.SpaceTime
         public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
 
         public string ToString(string format, IFormatProvider formatProvider)
-            => $"{Mathf.RadiansToDegrees(value).ToString(format, formatProvider)} °/t²";
+            => $"{MoreMath.RadiansToDegrees(value).ToString(format, formatProvider)} °/t²";
 
         #endregion
 
