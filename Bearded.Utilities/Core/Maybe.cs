@@ -64,7 +64,7 @@ namespace Bearded.Utilities
         public bool Equals(Maybe<T> other) =>
             hasValue == other.hasValue && EqualityComparer<T>.Default.Equals(value, other.value);
 
-        public override bool Equals(object obj) => obj is Maybe<T> other && Equals(other);
+        public override bool Equals(object? obj) => obj is Maybe<T> other && Equals(other);
 
         public override int GetHashCode() => hasValue ? EqualityComparer<T>.Default.GetHashCode(value) : 0;
 

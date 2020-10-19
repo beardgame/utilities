@@ -8,7 +8,7 @@ namespace Bearded.Utilities
 
         public int CompareTo(Void _) => 0;
         public bool Equals(Void _) => true;
-        public override bool Equals(object obj) => obj is Void;
+        public override bool Equals(object? obj) => obj is Void;
         public override int GetHashCode() => 0;
 
         // ReSharper disable UnusedParameter.Global

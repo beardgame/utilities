@@ -17,7 +17,7 @@ namespace Bearded.Utilities.Input.Actions
 
         public override string ToString() => name;
 
-        public override bool Equals(object obj) => Equals(obj as IAction);
+        public override bool Equals(object? obj) => Equals(obj as IAction);
         public bool Equals(IAction other) => other is DummyAction && this.IsSameAs(other);
         public override int GetHashCode() => ToString().GetHashCode();
     }
