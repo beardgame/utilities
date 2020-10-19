@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Bearded.Utilities.Testing.Monads;
 using FluentAssertions;
 using Xunit;
 using Xunit.Sdk;
@@ -10,20 +11,84 @@ namespace Bearded.Utilities.Tests
     {
         public sealed class ValueOrDefault
         {
-            [Fact]
-            public void ReturnsDefaultOnNothing()
+            public sealed class WithEagerDefault
             {
-                var maybe = Maybe<int>.Nothing;
+                [Fact]
+                public void ReturnsDefaultOnNothing()
+                {
+                    var maybe = Maybe<int>.Nothing;
 
-                maybe.ValueOrDefault(100).Should().Be(100);
+                    maybe.ValueOrDefault(100).Should().Be(100);
+                }
+
+                [Fact]
+                public void ReturnsValueOnJust()
+                {
+                    var maybe = Maybe.Just(200);
+
+                    maybe.ValueOrDefault(100).Should().Be(200);
+                }
             }
 
-            [Fact]
-            public void ReturnsValueOnJust()
+            public sealed class WithLazyDefault
             {
-                var maybe = Maybe.Just(200);
+                [Fact]
+                public void ReturnsDefaultOnNothing()
+                {
+                    var maybe = Maybe<int>.Nothing;
 
-                maybe.ValueOrDefault(100).Should().Be(200);
+                    maybe.ValueOrDefault(() => 100).Should().Be(100);
+                }
+
+                [Fact]
+                public void ReturnsValueOnJust()
+                {
+                    var maybe = Maybe.Just(200);
+
+                    maybe.ValueOrDefault(() => 100).Should().Be(200);
+                }
+            }
+        }
+
+        public sealed class ValueOrError
+        {
+            public sealed class WithEagerError
+            {
+                [Fact]
+                public void ReturnsFailureOnNothing()
+                {
+                    var maybe = Maybe<int>.Nothing;
+
+                    maybe.ValueOrFailure("something went wrong").Should().BeFailureWithError("something went wrong");
+                }
+
+                [Fact]
+                public void ReturnsSuccessOnJust()
+                {
+                    var maybe = Maybe.Just(200);
+
+                    maybe.ValueOrFailure("something went wrong").Should().BeSuccessWithResult(200);
+                }
+            }
+
+            public sealed class WithLazyError
+            {
+                [Fact]
+                public void ReturnsFailureOnNothing()
+                {
+                    var maybe = Maybe<int>.Nothing;
+
+                    maybe.ValueOrFailure(() => "something went wrong").Should()
+                        .BeFailureWithError("something went wrong");
+                }
+
+                [Fact]
+                public void ReturnsSuccessOnJust()
+                {
+                    var maybe = Maybe.Just(200);
+
+                    maybe.ValueOrFailure(() => "something went wrong").Should().BeSuccessWithResult(200);
+                }
             }
         }
 
@@ -190,7 +255,8 @@ namespace Bearded.Utilities.Tests
                 var expectedResult = "expected result";
 
                 var actualResult = maybe.Match(
-                    onValue: (val) => {
+                    onValue: (val) =>
+                    {
                         val.Should().Be(100);
                         return expectedResult;
                     },
