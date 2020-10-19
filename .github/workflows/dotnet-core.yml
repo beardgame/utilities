@@ -25,7 +25,7 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: Test
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test --no-restore --verbosity normal
   
   release:
     
@@ -38,7 +38,7 @@ jobs:
       - name: Extract version number
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Pack binary
-        run: dotnet pack --no-build -p:PackageVersion=${{ env.RELEASE_VERSION }}
+        run: dotnet pack --no-restore -p:PackageVersion=${{ env.RELEASE_VERSION }}
       - name: Create a Release
         id: create_release
         uses: actions/create-release@v1
