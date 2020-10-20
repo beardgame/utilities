@@ -110,7 +110,7 @@ namespace Bearded.Utilities.SpaceTime
 
         public bool Equals(Velocity3 other) => value == other.value;
 
-        public override bool Equals(object obj) => obj is Velocity3 v && Equals(v);
+        public override bool Equals(object? obj) => obj is Velocity3 v && Equals(v);
 
         public override int GetHashCode() => value.GetHashCode();
 
@@ -120,7 +120,7 @@ namespace Bearded.Utilities.SpaceTime
 
         public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
 
-        public string ToString(string format, IFormatProvider formatProvider) => "(" +
+        public string ToString(string? format, IFormatProvider? formatProvider) => "(" +
                $"{value.X.ToString(format, formatProvider)}, " +
                $"{value.Y.ToString(format, formatProvider)}, " +
                $"{value.Z.ToString(format, formatProvider)}) u/t";

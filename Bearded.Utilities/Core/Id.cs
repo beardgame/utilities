@@ -19,7 +19,7 @@ namespace Bearded.Utilities
         public override string ToString() => $"{typeof(T).Name}:{Value}";
         public override int GetHashCode() => Value.GetHashCode();
         public bool Equals(Id<T> other) => Value.Equals(other.Value);
-        public override bool Equals(object obj) => obj is Id<T> id && Equals(id);
+        public override bool Equals(object? obj) => obj is Id<T> id && Equals(id);
         public static bool operator ==(Id<T> left, Id<T> right) => left.Equals(right);
         public static bool operator !=(Id<T> left, Id<T> right) => !(left == right);
     }

@@ -122,7 +122,7 @@ namespace Bearded.Utilities.Tilemaps.Rectangular
         /// <summary>
         /// Indicates whether this instance and a specified object are equal.
         /// </summary>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj))
                 return false;

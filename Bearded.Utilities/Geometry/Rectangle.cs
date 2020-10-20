@@ -66,7 +66,7 @@ namespace Bearded.Utilities.Geometry
             => Left == other.Left && Right == other.Right && Width == other.Width && Height == other.Height;
             // ReSharper restore CompareOfFloatsByEqualityOperator
 
-        public override bool Equals(object obj) => obj is Rectangle && Equals((Rectangle) obj);
+        public override bool Equals(object? obj) => obj is Rectangle && Equals((Rectangle) obj);
 
         public override int GetHashCode()
         {
@@ -82,7 +82,7 @@ namespace Bearded.Utilities.Geometry
 
         public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
 
-        public string ToString(string format, IFormatProvider formatProvider)
+        public string ToString(string? format, IFormatProvider? formatProvider)
             => $"[{Left.ToString(format, formatProvider)}, {Top.ToString(format, formatProvider)} x " +
                $"[{Right.ToString(format, formatProvider)}, {Bottom.ToString(format, formatProvider)}";
 

@@ -288,7 +288,7 @@ namespace Bearded.Utilities.Geometry
         /// <returns>
         ///   <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
 			return obj is Angle && Equals((Angle)obj);
         }
@@ -355,7 +355,7 @@ namespace Bearded.Utilities.Geometry
 
         public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
 
-        public string ToString(string format, IFormatProvider formatProvider)
+        public string ToString(string? format, IFormatProvider? formatProvider)
             => $"{Degrees.ToString(format, formatProvider)}°";
 
         #endregion
