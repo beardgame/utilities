@@ -52,7 +52,7 @@ namespace Bearded.Utilities.SpaceTime
         // ReSharper disable once CompareOfFloatsByEqualityOperator
         public bool Equals(Acceleration other) => value == other.value;
 
-        public override bool Equals(object obj) => obj is Acceleration && Equals((Acceleration)obj);
+        public override bool Equals(object? obj) => obj is Acceleration && Equals((Acceleration)obj);
 
         public override int GetHashCode() => value.GetHashCode();
 
@@ -62,7 +62,7 @@ namespace Bearded.Utilities.SpaceTime
 
         public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
 
-        public string ToString(string format, IFormatProvider formatProvider)
+        public string ToString(string? format, IFormatProvider? formatProvider)
             => $"{value.ToString(format, formatProvider)} u/t²";
 
         #endregion

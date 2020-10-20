@@ -83,7 +83,7 @@ namespace Bearded.Utilities.Geometry
         /// true if <paramref name="obj"/> and this instance are the same type and represent the same value; otherwise, false.
         /// </returns>
         /// <param name="obj">Another object to compare to. </param><filterpriority>2</filterpriority>
-        public override bool Equals(object obj) => base.Equals(obj);
+        public override bool Equals(object? obj) => base.Equals(obj);
 
         /// <summary>
         /// Returns the hash code for this instance.
@@ -106,7 +106,7 @@ namespace Bearded.Utilities.Geometry
 
         public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
 
-        public string ToString(string format, IFormatProvider formatProvider)
+        public string ToString(string? format, IFormatProvider? formatProvider)
             => $"{R.ToString(format, formatProvider)} ∠{Angle.ToString(format, formatProvider)}";
 
         #endregion

@@ -135,7 +135,7 @@ namespace Bearded.Utilities.IO
             public bool Equals(Entry other)
                 => string.Equals(Text, other.Text) && Severity == other.Severity && Time.Equals(other.Time);
 
-            public override bool Equals(object obj) => obj is Entry entry && Equals(entry);
+            public override bool Equals(object? obj) => obj is Entry entry && Equals(entry);
 
             public override int GetHashCode()
             {
