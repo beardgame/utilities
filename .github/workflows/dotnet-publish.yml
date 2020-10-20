@@ -53,6 +53,6 @@ jobs:
       - name: Push release to NuGet
         run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }} --skip-duplicate
       - name: Push release to GitHub
-        run: dotnet nuget push **/*.nupkg --skip-duplicate
+        run: dotnet nuget push **/*.nupkg --source https://nuget.pkg.github.com/beardgame/index.json --skip-duplicate
         env:
           NUGET_AUTH_TOKEN: ${{ github.token }}
