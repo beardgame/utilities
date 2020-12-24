@@ -9,7 +9,7 @@
     <PackageReference Include="FluentAssertions" Version="5.6.0" />
     <PackageReference Include="FsCheck.Xunit" Version="2.12.1" />
     <PackageReference Include="FSharp.Core" Version="4.5.2" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.abstractions" Version="2.0.3" />
