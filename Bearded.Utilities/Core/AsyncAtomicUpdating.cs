@@ -1,13 +1,19 @@
 ﻿namespace Bearded.Utilities
 {
-    public class AsyncAtomicUpdating<T>
-        where T : struct
+    public sealed class AsyncAtomicUpdating<T>
     {
         private readonly object mutex = new object();
 
         public T Current { get; private set; }
         public T Previous { get; private set; }
         private T lastRecorded;
+
+        public AsyncAtomicUpdating(T initialState)
+        {
+            Current = initialState;
+            Previous = initialState;
+            lastRecorded = initialState;
+        }
 
         public void SetLastKnownState(T state)
         {
@@ -24,8 +30,6 @@
                 UpdateTo(lastRecorded);
             }
         }
-
-        public void UpdateToDefault() => UpdateTo(default);
 
         public void UpdateTo(T state)
         {

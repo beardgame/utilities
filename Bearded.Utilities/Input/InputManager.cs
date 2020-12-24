@@ -15,6 +15,8 @@ namespace Bearded.Utilities.Input
 
         private readonly KeyboardState keyboardState;
         private readonly MouseState mouseState;
+        private readonly AsyncAtomicUpdating<KeyboardState?> keyboardStateSnapshot;
+        private readonly AsyncAtomicUpdating<MouseState> mouseStateSnapshot;
 
         public ReadOnlyCollection<GamePadStateManager> GamePads { get; }
 
@@ -22,6 +24,9 @@ namespace Bearded.Utilities.Input
         {
             keyboardState = nativeWindow.KeyboardState;
             mouseState = nativeWindow.MouseState;
+
+            keyboardStateSnapshot = new AsyncAtomicUpdating<KeyboardState?>(keyboardState);
+            mouseStateSnapshot = new AsyncAtomicUpdating<MouseState>(mouseState);
 
             keyboardEvents = new KeyboardEvents(nativeWindow);
             mouseEvents = new MouseEvents(nativeWindow);
@@ -35,6 +40,9 @@ namespace Bearded.Utilities.Input
 
         public void ProcessEventsAsync()
         {
+            keyboardStateSnapshot.SetLastKnownState(keyboardState.GetSnapshot());
+            mouseStateSnapshot.SetLastKnownState(mouseState.GetSnapshot());
+
             foreach (var gamePad in GamePads)
             {
                 gamePad.ProcessEventsAsync();
@@ -47,11 +55,14 @@ namespace Bearded.Utilities.Input
             {
                 keyboardEvents.Update();
                 mouseEvents.Update();
-                MousePosition = mouseState.Position;
+                keyboardStateSnapshot.Update();
+                mouseStateSnapshot.Update();
+
+                MousePosition = mouseStateSnapshot.Current.Position;
             }
             else
             {
-                //keyboardState.UpdateToDefault();
+                keyboardStateSnapshot.UpdateTo(null);
             }
 
             foreach (var gamePad in GamePads)
@@ -64,7 +75,8 @@ namespace Bearded.Utilities.Input
         public int DeltaScroll => MoreMath.RoundToInt(DeltaScrollF);
         public float DeltaScrollF => mouseEvents.DeltaScrollF;
 
-        public bool MouseMoved => mouseState.Delta.LengthSquared != 0;
+        public bool MouseMoved =>
+            mouseStateSnapshot.Current.Position != mouseStateSnapshot.Previous.Position;
 
         public bool LeftMousePressed => IsMouseButtonPressed(MouseButton.Left);
         public bool LeftMouseHit => IsMouseButtonHit(MouseButton.Left);
@@ -78,15 +90,17 @@ namespace Bearded.Utilities.Input
         public bool MiddleMouseHit => IsMouseButtonHit(MouseButton.Middle);
         public bool MiddleMouseReleased => IsMouseButtonReleased(MouseButton.Middle);
 
-        public bool IsMouseButtonPressed(MouseButton button) => mouseState.IsButtonDown(button);
+        public bool IsMouseButtonPressed(MouseButton button) => mouseStateSnapshot.Current.IsButtonDown(button);
+        private bool wasMouseButtonPressed(MouseButton button) => mouseStateSnapshot.Previous.IsButtonDown(button);
         public bool IsMouseButtonHit(MouseButton button) =>
-            IsMouseButtonPressed(button) && !mouseState.WasButtonDown(button);
+            IsMouseButtonPressed(button) && !wasMouseButtonPressed(button);
         public bool IsMouseButtonReleased(MouseButton button) =>
-            !IsMouseButtonPressed(button) && mouseState.WasButtonDown(button);
+            !IsMouseButtonPressed(button) && wasMouseButtonPressed(button);
 
-        public bool IsKeyPressed(Keys k) => keyboardState.IsKeyDown(k);
-        public bool IsKeyHit(Keys k) => IsKeyPressed(k) && !keyboardState.WasKeyDown(k);
-        public bool IsKeyReleased(Keys k) => !IsKeyPressed(k) && keyboardState.WasKeyDown(k);
+        public bool IsKeyPressed(Keys k) => keyboardStateSnapshot.Current?.IsKeyDown(k) ?? false;
+        private bool wasKeyPressed(Keys k) => keyboardStateSnapshot.Previous?.IsKeyDown(k) ?? false;
+        public bool IsKeyHit(Keys k) => IsKeyPressed(k) && !wasKeyPressed(k);
+        public bool IsKeyReleased(Keys k) => !IsKeyPressed(k) && wasKeyPressed(k);
 
         public bool IsMouseInRectangle(System.Drawing.Rectangle rect) =>
             rect.Contains((int) MousePosition.X, (int) MousePosition.Y);
