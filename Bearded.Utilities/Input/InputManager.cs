@@ -11,7 +11,6 @@ namespace Bearded.Utilities.Input
     public sealed partial class InputManager
     {
         private readonly KeyboardEvents keyboardEvents;
-        private readonly MouseEvents mouseEvents;
 
         private readonly KeyboardState keyboardState;
         private readonly MouseState mouseState;
@@ -29,7 +28,6 @@ namespace Bearded.Utilities.Input
             mouseStateSnapshot = new AsyncAtomicUpdating<MouseState>(mouseState);
 
             keyboardEvents = new KeyboardEvents(nativeWindow);
-            mouseEvents = new MouseEvents(nativeWindow);
 
             GamePads = Enumerable.Empty<GamePadStateManager>().ToList().AsReadOnly();
             // GamePads = Enumerable.Range(0, int.MaxValue - 1)
@@ -54,7 +52,6 @@ namespace Bearded.Utilities.Input
             if (windowIsActive)
             {
                 keyboardEvents.Update();
-                mouseEvents.Update();
                 keyboardStateSnapshot.Update();
                 mouseStateSnapshot.Update();
 
@@ -73,7 +70,7 @@ namespace Bearded.Utilities.Input
 
         public Vector2 MousePosition { get; private set; }
         public int DeltaScroll => MoreMath.RoundToInt(DeltaScrollF);
-        public float DeltaScrollF => mouseEvents.DeltaScrollF;
+        public float DeltaScrollF => mouseStateSnapshot.Current.Scroll.Y - mouseStateSnapshot.Previous.Scroll.Y;
 
         public bool MouseMoved =>
             mouseStateSnapshot.Current.Position != mouseStateSnapshot.Previous.Position;
