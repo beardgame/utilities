@@ -15,8 +15,8 @@ namespace Bearded.Utilities.Input
 
         private readonly KeyboardState keyboardState;
         private readonly MouseState mouseState;
-        private readonly AsyncAtomicUpdating<KeyboardStateSnapshot> keyboardStateSnapshot;
-        private readonly AsyncAtomicUpdating<MouseStateSnapshot> mouseStateSnapshot;
+        private readonly AsyncAtomicUpdating<KeyboardState?> keyboardStateSnapshot;
+        private readonly AsyncAtomicUpdating<MouseState> mouseStateSnapshot;
 
         public ReadOnlyCollection<GamePadStateManager> GamePads { get; }
 
@@ -25,8 +25,8 @@ namespace Bearded.Utilities.Input
             keyboardState = nativeWindow.KeyboardState;
             mouseState = nativeWindow.MouseState;
 
-            keyboardStateSnapshot = new AsyncAtomicUpdating<KeyboardStateSnapshot>();
-            mouseStateSnapshot = new AsyncAtomicUpdating<MouseStateSnapshot>();
+            keyboardStateSnapshot = new AsyncAtomicUpdating<KeyboardState?>(keyboardState);
+            mouseStateSnapshot = new AsyncAtomicUpdating<MouseState>(mouseState);
 
             keyboardEvents = new KeyboardEvents(nativeWindow);
             mouseEvents = new MouseEvents(nativeWindow);
@@ -40,8 +40,8 @@ namespace Bearded.Utilities.Input
 
         public void ProcessEventsAsync()
         {
-            keyboardStateSnapshot.SetLastKnownState(new KeyboardStateSnapshot(keyboardState));
-            mouseStateSnapshot.SetLastKnownState(new MouseStateSnapshot(mouseState));
+            keyboardStateSnapshot.SetLastKnownState(keyboardState.GetSnapshot());
+            mouseStateSnapshot.SetLastKnownState(mouseState.GetSnapshot());
 
             foreach (var gamePad in GamePads)
             {
@@ -58,11 +58,11 @@ namespace Bearded.Utilities.Input
                 keyboardStateSnapshot.Update();
                 mouseStateSnapshot.Update();
 
-                MousePosition = mouseStateSnapshot.Current.State?.Position ?? MousePosition;
+                MousePosition = mouseStateSnapshot.Current.Position;
             }
             else
             {
-                keyboardStateSnapshot.UpdateToDefault();
+                keyboardStateSnapshot.UpdateTo(null);
             }
 
             foreach (var gamePad in GamePads)
@@ -76,7 +76,7 @@ namespace Bearded.Utilities.Input
         public float DeltaScrollF => mouseEvents.DeltaScrollF;
 
         public bool MouseMoved =>
-            mouseStateSnapshot.Current.State?.Position != mouseStateSnapshot.Previous.State?.Position;
+            mouseStateSnapshot.Current.Position != mouseStateSnapshot.Previous.Position;
 
         public bool LeftMousePressed => IsMouseButtonPressed(MouseButton.Left);
         public bool LeftMouseHit => IsMouseButtonHit(MouseButton.Left);
@@ -90,17 +90,15 @@ namespace Bearded.Utilities.Input
         public bool MiddleMouseHit => IsMouseButtonHit(MouseButton.Middle);
         public bool MiddleMouseReleased => IsMouseButtonReleased(MouseButton.Middle);
 
-        public bool IsMouseButtonPressed(MouseButton button) =>
-            mouseStateSnapshot.Current.State?.IsButtonDown(button) ?? false;
-        private bool wasMouseButtonPressed(MouseButton button) =>
-            mouseStateSnapshot.Previous.State?.IsButtonDown(button) ?? false;
+        public bool IsMouseButtonPressed(MouseButton button) => mouseStateSnapshot.Current.IsButtonDown(button);
+        private bool wasMouseButtonPressed(MouseButton button) => mouseStateSnapshot.Previous.IsButtonDown(button);
         public bool IsMouseButtonHit(MouseButton button) =>
             IsMouseButtonPressed(button) && !wasMouseButtonPressed(button);
         public bool IsMouseButtonReleased(MouseButton button) =>
             !IsMouseButtonPressed(button) && wasMouseButtonPressed(button);
 
-        public bool IsKeyPressed(Keys k) => keyboardStateSnapshot.Current.State?.IsKeyDown(k) ?? false;
-        private bool wasKeyPressed(Keys k) => keyboardStateSnapshot.Previous.State?.IsKeyDown(k) ?? false;
+        public bool IsKeyPressed(Keys k) => keyboardStateSnapshot.Current?.IsKeyDown(k) ?? false;
+        private bool wasKeyPressed(Keys k) => keyboardStateSnapshot.Previous?.IsKeyDown(k) ?? false;
         public bool IsKeyHit(Keys k) => IsKeyPressed(k) && !wasKeyPressed(k);
         public bool IsKeyReleased(Keys k) => !IsKeyPressed(k) && wasKeyPressed(k);
 
@@ -109,25 +107,5 @@ namespace Bearded.Utilities.Input
 
         public IReadOnlyList<(KeyboardKeyEventArgs args, bool isPressed)> KeyEvents => keyboardEvents.KeyEvents;
         public IReadOnlyList<char> PressedCharacters => keyboardEvents.PressedCharacters;
-
-        private readonly struct MouseStateSnapshot
-        {
-            public MouseState? State { get; }
-
-            public MouseStateSnapshot(MouseState original)
-            {
-                State = original.GetSnapshot();
-            }
-        }
-
-        private readonly struct KeyboardStateSnapshot
-        {
-            public KeyboardState? State { get; }
-
-            public KeyboardStateSnapshot(KeyboardState original)
-            {
-                State = original.GetSnapshot();
-            }
-        }
     }
 }
