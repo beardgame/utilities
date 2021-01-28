@@ -52,7 +52,7 @@ namespace Bearded.Utilities.SpaceTime
         // ReSharper disable once CompareOfFloatsByEqualityOperator
         public bool Equals(Unit other) => value == other.value;
 
-        public override bool Equals(object? obj) => obj is Unit && Equals((Unit)obj);
+        public override bool Equals(object? obj) => obj is Unit unit && Equals(unit);
 
         public override int GetHashCode() => value.GetHashCode();
 

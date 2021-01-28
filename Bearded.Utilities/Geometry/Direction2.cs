@@ -216,7 +216,7 @@ namespace Bearded.Utilities.Geometry
         /// </returns>
         public override bool Equals(object? obj)
         {
-            return obj is Direction2 && Equals((Direction2)obj);
+            return obj is Direction2 direction2 && Equals(direction2);
         }
 
         /// <summary>

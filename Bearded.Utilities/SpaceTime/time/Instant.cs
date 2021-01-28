@@ -40,7 +40,7 @@ namespace Bearded.Utilities.SpaceTime
         // ReSharper disable once CompareOfFloatsByEqualityOperator
         public bool Equals(Instant other) => value == other.value;
 
-        public override bool Equals(object? obj) => obj is Instant && Equals((Instant)obj);
+        public override bool Equals(object? obj) => obj is Instant instant && Equals(instant);
 
         public override int GetHashCode() => value.GetHashCode();
 
