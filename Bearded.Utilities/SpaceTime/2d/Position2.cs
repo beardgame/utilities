@@ -75,7 +75,7 @@ namespace Bearded.Utilities.SpaceTime
 
         public bool Equals(Position2 other) => value == other.value;
 
-        public override bool Equals(object? obj) => obj is Position2 && Equals((Position2)obj);
+        public override bool Equals(object? obj) => obj is Position2 position2 && Equals(position2);
 
         public override int GetHashCode() => value.GetHashCode();
 

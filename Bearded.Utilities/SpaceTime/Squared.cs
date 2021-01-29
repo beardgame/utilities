@@ -67,7 +67,7 @@ namespace Bearded.Utilities.SpaceTime
         // ReSharper disable once CompareOfFloatsByEqualityOperator
         public bool Equals(Squared<T> other) => value == other.value;
 
-        public override bool Equals(object? obj) => obj is Squared<T> && Equals((Squared<T>)obj);
+        public override bool Equals(object? obj) => obj is Squared<T> squared && Equals(squared);
 
         public override int GetHashCode() => value.GetHashCode();
 
