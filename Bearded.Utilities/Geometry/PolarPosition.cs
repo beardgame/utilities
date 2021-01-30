@@ -109,6 +109,9 @@ namespace Bearded.Utilities.Geometry
         public string ToString(string? format, IFormatProvider? formatProvider)
             => $"{R.ToString(format, formatProvider)} ∠{Angle.ToString(format, formatProvider)}";
 
+        public string ToString(string? format)
+            => $"{R.ToString(format)} ∠{Angle.ToString(format)}";
+
         #endregion
 
         #region Operator

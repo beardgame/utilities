@@ -86,6 +86,10 @@ namespace Bearded.Utilities.Geometry
             => $"[{Left.ToString(format, formatProvider)}, {Top.ToString(format, formatProvider)} x " +
                $"[{Right.ToString(format, formatProvider)}, {Bottom.ToString(format, formatProvider)}";
 
+        public string ToString(string? format)
+            => $"[{Left.ToString(format)}, {Top.ToString(format)} x " +
+               $"[{Right.ToString(format)}, {Bottom.ToString(format)}";
+
         public static bool operator ==(Rectangle left, Rectangle right) => left.Equals(right);
         public static bool operator !=(Rectangle left, Rectangle right) => !left.Equals(right);
     }

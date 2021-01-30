@@ -121,9 +121,14 @@ namespace Bearded.Utilities.SpaceTime
         public override string ToString() => ToString(null, CultureInfo.CurrentCulture);
 
         public string ToString(string? format, IFormatProvider? formatProvider) => "(" +
-            $"{value.X.ToString(format, formatProvider)}, " +
-            $"{value.Y.ToString(format, formatProvider)}, " +
-            $"{value.Z.ToString(format, formatProvider)}) u";
+               $"{value.X.ToString(format, formatProvider)}, " +
+               $"{value.Y.ToString(format, formatProvider)}, " +
+               $"{value.Z.ToString(format, formatProvider)}) u";
+
+        public string ToString(string? format) => "(" +
+               $"{value.X.ToString(format)}, " +
+               $"{value.Y.ToString(format)}, " +
+               $"{value.Z.ToString(format)}) u";
 
         #endregion
 

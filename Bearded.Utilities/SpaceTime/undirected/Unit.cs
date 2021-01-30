@@ -71,6 +71,9 @@ namespace Bearded.Utilities.SpaceTime
         public string ToString(string? format, IFormatProvider? formatProvider)
             => $"{value.ToString(format, formatProvider)} u";
 
+        public string ToString(string? format)
+            => $"{value.ToString(format)} u";
+
         #endregion
 
         #endregion

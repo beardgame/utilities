@@ -42,6 +42,9 @@ namespace Bearded.Utilities.SpaceTime
         public string ToString(string? format, IFormatProvider? formatProvider)
             => $"{value.ToString(format, formatProvider)} m";
 
+        public string ToString(string? format)
+            => $"{value.ToString(format)} m";
+
         #endregion
 
         #region compare

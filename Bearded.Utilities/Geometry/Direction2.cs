@@ -255,6 +255,9 @@ namespace Bearded.Utilities.Geometry
         public string ToString(string? format, IFormatProvider? formatProvider)
             => $"{Radians.ToString(format, formatProvider)} rad";
 
+        public string ToString(string? format)
+            => $"{Radians.ToString(format)} rad";
+
         #endregion
 
         #region Casts

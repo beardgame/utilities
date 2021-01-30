@@ -75,6 +75,9 @@ namespace Bearded.Utilities.SpaceTime
         public string ToString(string? format, IFormatProvider? formatProvider)
             => $"{MoreMath.RadiansToDegrees(value).ToString(format, formatProvider)} °/t";
 
+        public string ToString(string? format)
+            => $"{MoreMath.RadiansToDegrees(value).ToString(format)} °/t";
+
         #endregion
 
         #region compare
