@@ -43,7 +43,7 @@ namespace Bearded.Utilities.SpaceTime
             => $"{value.ToString(format, formatProvider)} m";
 
         public string ToString(string? format)
-            => $"{value.ToString(format)} m";
+            => ToString(format, CultureInfo.CurrentCulture);
 
         #endregion
 

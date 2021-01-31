@@ -110,7 +110,7 @@ namespace Bearded.Utilities.Geometry
             => $"{R.ToString(format, formatProvider)} ∠{Angle.ToString(format, formatProvider)}";
 
         public string ToString(string? format)
-            => $"{R.ToString(format)} ∠{Angle.ToString(format)}";
+            => ToString(format, CultureInfo.CurrentCulture);
 
         #endregion
 
