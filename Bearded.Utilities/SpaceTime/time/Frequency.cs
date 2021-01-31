@@ -50,6 +50,9 @@ namespace Bearded.Utilities.SpaceTime
         public string ToString(string? format, IFormatProvider? formatProvider)
             => $"{value.ToString(format, formatProvider)} 1/t";
 
+        public string ToString(string? format)
+            => ToString(format, CultureInfo.CurrentCulture);
+
         #endregion
 
         #region compare

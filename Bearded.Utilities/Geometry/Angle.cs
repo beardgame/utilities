@@ -358,6 +358,9 @@ namespace Bearded.Utilities.Geometry
         public string ToString(string? format, IFormatProvider? formatProvider)
             => $"{Degrees.ToString(format, formatProvider)}°";
 
+        public string ToString(string? format)
+            => ToString(format, CultureInfo.CurrentCulture);
+
         #endregion
 
         #region Casts
