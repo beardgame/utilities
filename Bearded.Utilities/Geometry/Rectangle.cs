@@ -66,7 +66,7 @@ namespace Bearded.Utilities.Geometry
             => Left == other.Left && Right == other.Right && Width == other.Width && Height == other.Height;
             // ReSharper restore CompareOfFloatsByEqualityOperator
 
-        public override bool Equals(object? obj) => obj is Rectangle && Equals((Rectangle) obj);
+        public override bool Equals(object? obj) => obj is Rectangle rectangle && Equals(rectangle);
 
         public override int GetHashCode()
         {

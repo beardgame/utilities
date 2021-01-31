@@ -62,7 +62,7 @@ namespace Bearded.Utilities.SpaceTime
         // ReSharper disable once CompareOfFloatsByEqualityOperator
         public bool Equals(AngularAcceleration other) => value == other.value;
 
-        public override bool Equals(object? obj) => obj is AngularAcceleration && Equals((AngularAcceleration)obj);
+        public override bool Equals(object? obj) => obj is AngularAcceleration angularAcceleration && Equals(angularAcceleration);
 
         public override int GetHashCode() => value.GetHashCode();
 
