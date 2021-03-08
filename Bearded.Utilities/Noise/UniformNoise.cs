@@ -1,4 +1,5 @@
 using System;
+using static Bearded.Utilities.Noise.NoiseUtils;
 
 namespace Bearded.Utilities.Noise
 {
@@ -7,24 +8,18 @@ namespace Bearded.Utilities.Noise
         public static INoiseMap Generate(int width, int height, int? seed) =>
             Generate(width, height, Interpolation2.Nearest, seed);
 
-        public static INoiseMap Generate(int width, int height, IInterpolationMethod2 interpolation, int? seed) =>
-            NoiseMap.FromArray(generateNoiseArray(width, height, seed), interpolation);
-
-        private static double[,] generateNoiseArray(int width, int height, int? seed)
+        public static INoiseMap Generate(int width, int height, IInterpolationMethod2 interpolation, int? seed)
         {
-            var r = seed == null ? new Random() : new Random(seed.Value);
-
-            var array = new double[width, height];
-
-            for (var y = 0; y < height; y++)
+            if (width == 0)
             {
-                for (var x = 0; x < width; x++)
-                {
-                    array[x, y] = r.NextDouble();
-                }
+                throw new ArgumentOutOfRangeException(nameof(width));
+            }
+            if (height == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(height));
             }
 
-            return array;
+            return NoiseMap.FromArray(GenerateRandomArray(width, height, r => r.NextDouble(), seed), interpolation);
         }
     }
 }
