@@ -12,10 +12,7 @@ namespace Bearded.Utilities.Tests.Generators
                     // Make "0" return more often to ensure it's likely to be covered by each test run.
                     new WeightAndValue<Gen<double>>(1, Gen.Constant(0.0)),
                     new WeightAndValue<Gen<double>>(9,
-                        Arb.Generate<uint>()
-                            .Where(u => u > 0 && u < uint.MaxValue)
-                            // We can't precalculate 1.0 / uint.MaxValue because the double precision is too small
-                            .Select(i => (double) i / uint.MaxValue)));
+                        Gen.Choose(0, int.MaxValue - 1).Select(i => (double) i / int.MaxValue)));
                 return gen.ToArbitrary();
             }
         }
