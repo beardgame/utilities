@@ -16,20 +16,20 @@ namespace Bearded.Utilities.Noise
 
         public static INoiseMap Generate(int numCellsX, int numCellsY, int? seed)
         {
-            if (numCellsX == 0 || numCellsX == int.MaxValue)
+            if (numCellsX <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(numCellsX));
             }
-            if (numCellsY == 0 || numCellsY == int.MaxValue)
+            if (numCellsY <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(numCellsY));
             }
 
             var gradientArray = NoiseUtils.GenerateRandomArray(
-                // Given the gradients are used as the corners of cells in the noise map, we need to generate one more
-                // gradient in each direction.
-                numCellsX + 1,
-                numCellsY + 1,
+                // We generate the corners, but to make the noise map wrap along both dimensions, we reuse the same
+                // values as the left and top boundaries, so we don't have to generate the right and bottom boundaries.
+                numCellsX,
+                numCellsY,
                 r => vectorSamples[r.Next(vectorSamples.Length)],
                 seed);
             return new PerlinNoiseMap(gradientArray);
@@ -44,8 +44,8 @@ namespace Bearded.Utilities.Noise
             public PerlinNoiseMap(Vector2d[,] gradientArray)
             {
                 this.gradientArray = gradientArray;
-                width = gradientArray.GetLength(0) - 1;
-                height = gradientArray.GetLength(1) - 1;
+                width = gradientArray.GetLength(0);
+                height = gradientArray.GetLength(1);
             }
 
             public double ValueAt(double x, double y)
@@ -64,11 +64,13 @@ namespace Bearded.Utilities.Noise
                 y *= height;
 
                 // We take the floor and ceil to get the corners of the grid cell that surround the current point.
+                // Note that given the wrapping of this map, xUpper and yUpper may be 0 (i.e. smaller than xLower and
+                // yLower respectively). This is why xUpper and yUpper are only used as array access coordinates below.
                 var xLower = (int) x;
-                var xUpper = xLower + 1;
+                var xUpper = (xLower + 1) % width;
 
                 var yLower = (int) y;
-                var yUpper = yLower + 1;
+                var yUpper = (yLower + 1) % height;
 
                 // Calculate dot products between distance and gradient for each of the grid corners
                 var topLeft = dotProductWithGridDirection(xLower, yUpper, x, y);
