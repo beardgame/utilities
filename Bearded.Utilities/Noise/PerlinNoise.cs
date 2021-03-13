@@ -14,22 +14,22 @@ namespace Bearded.Utilities.Noise
             .Select(vector => new Vector2d(vector.X, vector.Y))
             .ToArray();
 
-        public static INoiseMap Generate(int width, int height, int? seed)
+        public static INoiseMap Generate(int numCellsX, int numCellsY, int? seed)
         {
-            if (width == 0 || width == int.MaxValue)
+            if (numCellsX == 0 || numCellsX == int.MaxValue)
             {
-                throw new ArgumentOutOfRangeException(nameof(width));
+                throw new ArgumentOutOfRangeException(nameof(numCellsX));
             }
-            if (height == 0 || height == int.MaxValue)
+            if (numCellsY == 0 || numCellsY == int.MaxValue)
             {
-                throw new ArgumentOutOfRangeException(nameof(height));
+                throw new ArgumentOutOfRangeException(nameof(numCellsY));
             }
 
             var gradientArray = NoiseUtils.GenerateRandomArray(
                 // Given the gradients are used as the corners of cells in the noise map, we need to generate one more
                 // gradient in each direction.
-                width + 1,
-                height + 1,
+                numCellsX + 1,
+                numCellsY + 1,
                 r => vectorSamples[r.Next(vectorSamples.Length)],
                 seed);
             return new PerlinNoiseMap(gradientArray);
@@ -38,29 +38,32 @@ namespace Bearded.Utilities.Noise
         private sealed class PerlinNoiseMap : INoiseMap
         {
             private readonly Vector2d[,] gradientArray;
-
-            public int Width { get; }
-            public int Height { get; }
+            private readonly int width;
+            private readonly int height;
 
             public PerlinNoiseMap(Vector2d[,] gradientArray)
             {
                 this.gradientArray = gradientArray;
-                Width = gradientArray.GetLength(0) - 1;
-                Height = gradientArray.GetLength(1) - 1;
+                width = gradientArray.GetLength(0) - 1;
+                height = gradientArray.GetLength(1) - 1;
             }
 
             public double ValueAt(double x, double y)
             {
-                if (x < 0 || x >= Width)
+                if (x < 0 || x >= 1)
                 {
                     throw new ArgumentOutOfRangeException(nameof(x));
                 }
-                if (y < 0 || y >= Height)
+                if (y < 0 || y >= 1)
                 {
                     throw new ArgumentOutOfRangeException(nameof(y));
                 }
 
-                // Grid coordinates lower and upper
+                // First we transform x and y from [0, 1) x [0, 1) to [0, width) x [0, height) for easier math.
+                x *= width;
+                y *= height;
+
+                // We take the floor and ceil to get the corners of the grid cell that surround the current point.
                 var xLower = (int) x;
                 var xUpper = xLower + 1;
 

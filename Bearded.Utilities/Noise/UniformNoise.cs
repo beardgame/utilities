@@ -5,21 +5,21 @@ namespace Bearded.Utilities.Noise
 {
     public static class UniformNoise
     {
-        public static INoiseMap Generate(int width, int height, int? seed) =>
-            Generate(width, height, Interpolation2.Nearest, seed);
+        public static INoiseMap Generate(int numCellsX, int numCellsY, int? seed) =>
+            Generate(numCellsX, numCellsY, Interpolation2.Nearest, seed);
 
-        public static INoiseMap Generate(int width, int height, IInterpolationMethod2 interpolation, int? seed)
+        public static INoiseMap Generate(int numCellsX, int numCellsY, IInterpolationMethod2 interpolation, int? seed)
         {
-            if (width == 0)
+            if (numCellsX == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(width));
+                throw new ArgumentOutOfRangeException(nameof(numCellsX));
             }
-            if (height == 0)
+            if (numCellsY == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(height));
+                throw new ArgumentOutOfRangeException(nameof(numCellsY));
             }
 
-            return NoiseMap.FromArray(GenerateRandomArray(width, height, r => r.NextDouble(), seed), interpolation);
+            return NoiseMap.FromArray(GenerateRandomArray(numCellsX, numCellsY, r => r.NextDouble(), seed), interpolation);
         }
     }
 }
