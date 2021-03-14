@@ -9,20 +9,38 @@ namespace Bearded.Utilities.Tests.Noise
     public sealed class PerlinNoiseTests
     {
         [Property(Arbitrary = new[] { typeof(DoubleGenerators.UnitIntervalUpperBoundExclusive) })]
-        public void GeneratesMapThatThrowsIfCoordinatesTooSmall(int seed, double x, double y)
+        public void GeneratesMapThatThrowsIfXCoordinateTooSmall(int seed, double x, double y)
         {
             var map = PerlinNoise.Generate(5, 5, seed);
 
-            Func<double> action = () => map.ValueAt(x - 1, y - 1);
+            Func<double> action = () => map.ValueAt(x - 1.0, y);
             action.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Property(Arbitrary = new[] { typeof(DoubleGenerators.UnitIntervalUpperBoundExclusive) })]
-        public void GeneratesMapThatThrowsIfCoordinatesTooBig(int seed, double x, double y)
+        public void GeneratesMapThatThrowsIfXCoordinateTooBig(int seed, double x, double y)
         {
             var map = PerlinNoise.Generate(5, 5, seed);
 
-            Func<double> action = () => map.ValueAt(x + 1, y + 1);
+            Func<double> action = () => map.ValueAt(x + 1.0, y);
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Property(Arbitrary = new[] { typeof(DoubleGenerators.UnitIntervalUpperBoundExclusive) })]
+        public void GeneratesMapThatThrowsIfYCoordinateTooSmall(int seed, double x, double y)
+        {
+            var map = PerlinNoise.Generate(5, 5, seed);
+
+            Func<double> action = () => map.ValueAt(x, y - 1.0);
+            action.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Property(Arbitrary = new[] { typeof(DoubleGenerators.UnitIntervalUpperBoundExclusive) })]
+        public void GeneratesMapThatThrowsIfYCoordinateTooBig(int seed, double x, double y)
+        {
+            var map = PerlinNoise.Generate(5, 5, seed);
+
+            Func<double> action = () => map.ValueAt(x, y + 1.0);
             action.Should().Throw<ArgumentOutOfRangeException>();
         }
 
