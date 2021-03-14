@@ -2,19 +2,19 @@ using System;
 
 namespace Bearded.Utilities.Noise
 {
-    public static class NoiseMap
+    public static class ProceduralTexture
     {
-        public static INoiseMap FromArray(double[,] array, IInterpolationMethod2 interpolation) =>
-            new ArrayNoiseMap(array, interpolation);
+        public static IProceduralTexture FromArray(double[,] array, IInterpolationMethod2 interpolation) =>
+            new ArrayProceduralTexture(array, interpolation);
 
-        private sealed class ArrayNoiseMap : INoiseMap
+        private sealed class ArrayProceduralTexture : IProceduralTexture
         {
             private readonly double[,] array;
             private readonly IInterpolationMethod2 interpolation;
             private readonly int width;
             private readonly int height;
 
-            public ArrayNoiseMap(double[,] array, IInterpolationMethod2 interpolation)
+            public ArrayProceduralTexture(double[,] array, IInterpolationMethod2 interpolation)
             {
                 this.array = array;
                 this.interpolation = interpolation;

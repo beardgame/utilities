@@ -1,6 +1,8 @@
+using OpenTK.Mathematics;
+
 namespace Bearded.Utilities.Noise
 {
-    public interface INoiseMap
+    public interface IProceduralTexture
     {
         /// <summary>
         /// Returns the value of the noise map at the given coordinates in the noise map.

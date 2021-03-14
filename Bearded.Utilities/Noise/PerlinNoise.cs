@@ -14,7 +14,7 @@ namespace Bearded.Utilities.Noise
             .Select(vector => new Vector2d(vector.X, vector.Y))
             .ToArray();
 
-        public static INoiseMap Generate(int numCellsX, int numCellsY, int? seed)
+        public static IProceduralTexture Generate(int numCellsX, int numCellsY, int? seed)
         {
             if (numCellsX <= 0)
             {
@@ -32,16 +32,16 @@ namespace Bearded.Utilities.Noise
                 numCellsY,
                 r => vectorSamples[r.Next(vectorSamples.Length)],
                 seed);
-            return new PerlinNoiseMap(gradientArray);
+            return new PerlinProceduralTexture(gradientArray);
         }
 
-        private sealed class PerlinNoiseMap : INoiseMap
+        private sealed class PerlinProceduralTexture : IProceduralTexture
         {
             private readonly Vector2d[,] gradientArray;
             private readonly int width;
             private readonly int height;
 
-            public PerlinNoiseMap(Vector2d[,] gradientArray)
+            public PerlinProceduralTexture(Vector2d[,] gradientArray)
             {
                 this.gradientArray = gradientArray;
                 width = gradientArray.GetLength(0);
