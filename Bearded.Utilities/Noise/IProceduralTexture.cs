@@ -14,6 +14,18 @@ namespace Bearded.Utilities.Noise
         public double ValueAt(double x, double y);
 
         /// <summary>
+        /// Returns the value of the noise map at the given coordinates in the noise map.
+        /// This method only works for values within the [0, 1) x [0, 1) range only (upper bounds exclusive).
+        /// </summary>
+        /// <param name="xy"></param>
+        /// <returns></returns>
+        public double ValueAt(Vector2d xy)
+        {
+            var (x, y) = xy;
+            return ValueAt(x, y);
+        }
+
+        /// <summary>
         /// Transforms the noise map to a 2D array by dividing the entire noise map in a grid of width by height tiles.
         /// We then sample the center of each of the grid tiles to get the discrete value.
         /// </summary>
