@@ -81,13 +81,11 @@ namespace Bearded.Utilities.Noise
                 y *= height;
 
                 // We take the floor and ceil to get the corners of the grid cell that surround the current point.
-                // Note that given the wrapping of this map, xUpper and yUpper may be 0 (i.e. smaller than xLower and
-                // yLower respectively). This is why xUpper and yUpper are only used as array access coordinates below.
                 var xLower = (int) x;
-                var xUpper = (xLower + 1) % width;
+                var xUpper = xLower + 1;
 
                 var yLower = (int) y;
-                var yUpper = (yLower + 1) % height;
+                var yUpper = yLower + 1;
 
                 // Calculate dot products between distance and gradient for each of the grid corners
                 var topLeft = dotProductWithGridDirection(xLower, yUpper, x, y);
@@ -107,8 +105,8 @@ namespace Bearded.Utilities.Noise
 
             private double dotProductWithGridDirection(int gridX, int gridY, double x, double y)
             {
-                var distance = new Vector2d(x, y) - new Vector2d(gridX, gridY);
-                return Vector2d.Dot(distance, gradientArray[gridX, gridY]);
+                var distance = new Vector2d(x - gridX, y - gridY);
+                return Vector2d.Dot(distance, gradientArray[gridX % width, gridY % height]);
             }
         }
     }
