@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +10,9 @@ namespace Bearded.Utilities.Collections
     /// </summary>
     /// <typeparam name="TPriority"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    public class StaticPriorityQueue<TPriority, TValue> where TPriority : IComparable<TPriority>
+    public class StaticPriorityQueue<TPriority, TValue>
+        : IEnumerable<KeyValuePair<TPriority, TValue>>
+        where TPriority : IComparable<TPriority>
     {
         /// <summary>
         /// Array-representation of the entire heap.
@@ -203,5 +206,15 @@ namespace Bearded.Utilities.Collections
             return 2 * i + 2;
         }
         #endregion
+
+        public IEnumerator<KeyValuePair<TPriority, TValue>> GetEnumerator()
+        {
+            for (var i = 0; i < Count; i++)
+            {
+                yield return data[i];
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
