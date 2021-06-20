@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Bearded.Utilities.Collections;
+using Bearded.Utilities.Linq;
+using FluentAssertions;
+using FsCheck.Xunit;
 using Xunit;
 
 namespace Bearded.Utilities.Tests.Collections
@@ -73,6 +76,36 @@ namespace Bearded.Utilities.Tests.Collections
             var q = new PriorityQueue<double, string>();
             q.Enqueue(2, "item");
             Assert.Throws<InvalidOperationException>(() => q.DecreasePriority("item", 4));
+        }
+
+        [Property]
+        public void TestEnumerationContainsCorrectItems(int seed, byte itemsToEnumerate, byte otherItems)
+        {
+            var random = new System.Random(seed);
+            var totalItems = itemsToEnumerate + otherItems;
+            var q = new PriorityQueue<double, int>();
+            var items = Enumerable
+                .Range(0, totalItems)
+                .Select(i => KeyValuePair.Create(random.NextDouble(), i))
+                .Shuffled();
+            foreach (var (priority, value) in items)
+            {
+                q.Enqueue(priority, value);
+            }
+            for (var i = 0; i < otherItems; i++)
+            {
+                q.Dequeue();
+            }
+
+            // ReSharper disable once RedundantCast to make sure we're not using a ToList() that we may add to the queue
+            var enumerated = ((IEnumerable<KeyValuePair<double, int>>)q).ToList();
+
+            enumerated.Should().HaveCount(itemsToEnumerate).And.BeSubsetOf(items);
+            while (q.Count > 0)
+            {
+                var dequeued = q.Dequeue();
+                enumerated.Should().Contain(dequeued);
+            }
         }
     }
 }

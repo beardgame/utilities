@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Threading;
+using System.Threading.Tasks;
 
 namespace Bearded.Utilities.Threading
 {
     /// <summary>
-    /// A threadsafe queue to run actions from.
+    /// A thread-safe queue to run actions from.
     /// Typical usage is to schedule actions from multiple threads and execute them on one main thread.
     /// However, actions can also be executed by multiple threads.
     /// If only one thread is used to execute, the actions are guaranteed to be executed in the order they were scheduled.
@@ -14,10 +14,6 @@ namespace Bearded.Utilities.Threading
     public sealed class ManualActionQueue : IActionQueue
     {
         private readonly BlockingCollection<Action> actions = new BlockingCollection<Action>();
-
-        #region Methods
-
-        #region Execute
 
         /// <summary>
         /// Executes one scheduled action.
@@ -85,96 +81,35 @@ namespace Bearded.Utilities.Threading
             return executed;
         }
 
-        #endregion
-
-        #region IActionQueue
-
-        /// <summary>
-        /// Queues an action to run. Returns immediately.
-        /// </summary>
-        /// <param name="action">The action to run.</param>
-        public void RunAndForget(Action action)
+        public void Queue(Action action)
         {
             actions.Add(action);
         }
 
-        /// <summary>
-        /// Queues an action to run. Returns only after the action has been executed.
-        /// </summary>
-        /// <param name="action">The action to run.</param>
-        public void RunAndAwait(Action action)
+        public Task Run(Action action)
         {
-            var reset = new ManualResetEvent(false);
+            var task = new TaskCompletionSource<object?>();
 
             actions.Add(() =>
             {
                 action();
-                reset.Set();
+                task.SetResult(null);
             });
 
-            reset.WaitOne();
+            return task.Task;
         }
 
-        /// <summary>
-        /// Queues a parameterless function to run. Returns the return value of the function only after the function has been executed.
-        /// </summary>
-        /// <param name="action">The function to run.</param>
-        public T RunAndReturn<T>(Func<T> action)
+        public Task<T> Run<T>(Func<T> function)
         {
-            T ret = default;
-            RunAndAwait(() => ret = action());
-            return ret!;
+            var task = new TaskCompletionSource<T>();
+
+            actions.Add(() =>
+            {
+                var result = function();
+                task.SetResult(result);
+            });
+
+            return task.Task;
         }
-
-        /// <summary>
-        /// Queues a function with one parameter to run. Returns the return value of the function only after the function has been executed.
-        /// </summary>
-        /// <param name="action">The function to run.</param>
-        /// <param name="p0">The argument for calling the function.</param>
-        public T RunAndReturn<TP0, T>(Func<TP0, T> action, TP0 p0)
-        {
-            return RunAndReturn(() => action(p0));
-        }
-
-        /// <summary>
-        /// Queues a function with two parameters to run. Returns the return value of the function only after the function has been executed.
-        /// </summary>
-        /// <param name="action">The function to run.</param>
-        /// <param name="p0">The first argument for calling the function.</param>
-        /// <param name="p1">The second argument for calling the function.</param>
-        public T RunAndReturn<TP0, TP1, T>(Func<TP0, TP1, T> action, TP0 p0, TP1 p1)
-        {
-            return RunAndReturn(() => action(p0, p1));
-        }
-
-        /// <summary>
-        /// Queues a function with three parameters to run. Returns the return value of the function only after the function has been executed.
-        /// </summary>
-        /// <param name="action">The function to run.</param>
-        /// <param name="p0">The first argument for calling the function.</param>
-        /// <param name="p1">The second argument for calling the function.</param>
-        /// <param name="p2">The third argument for calling the function.</param>
-        public T RunAndReturn<TP0, TP1, TP2, T>(Func<TP0, TP1, TP2, T> action, TP0 p0, TP1 p1, TP2 p2)
-        {
-            return RunAndReturn(() => action(p0, p1, p2));
-        }
-
-        /// <summary>
-        /// Queues a function with four parameters to run. Returns the return value of the function only after the function has been executed.
-        /// </summary>
-        /// <param name="action">The function to run.</param>
-        /// <param name="p0">The first argument for calling the function.</param>
-        /// <param name="p1">The second argument for calling the function.</param>
-        /// <param name="p2">The third argument for calling the function.</param>
-        /// <param name="p3">The fourth argument for calling the function.</param>
-        public T RunAndReturn<TP0, TP1, TP2, TP3, T>(Func<TP0, TP1, TP2, TP3, T> action, TP0 p0, TP1 p1, TP2 p2, TP3 p3)
-        {
-            return RunAndReturn(() => action(p0, p1, p2, p3));
-        }
-
-        #endregion
-
-        #endregion
-
     }
 }
