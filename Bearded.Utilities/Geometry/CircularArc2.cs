@@ -22,8 +22,7 @@ namespace Bearded.Utilities.Geometry
         /// <summary>
         /// Returns the major arc if this arc is the minor arc, and returns the major arc if this is the minor arc.
         /// </summary>
-        public CircularArc2 Opposite =>
-            new CircularArc2(Center, Radius, Start, Angle.Sign() * -(MathConstants.TwoPi.Radians() - Angle.Abs()));
+        public CircularArc2 Opposite => new CircularArc2(Center, Radius, Start, oppositeAngle(Angle));
 
         /// <summary>
         /// Returns the same arc with the start and end directions swapped.
@@ -45,10 +44,7 @@ namespace Bearded.Utilities.Geometry
         public static CircularArc2 LongestArcBetweenDirections(
             Vector2 center, float radius, Direction2 start, Direction2 end)
         {
-            var shortestAngle = end - start;
-            var longestAngle = -(MathConstants.TwoPi.Radians() - shortestAngle);
-
-            return new CircularArc2(center, radius, start, longestAngle);
+            return new CircularArc2(center, radius, start, oppositeAngle(end - start));
         }
 
         /// <summary>
@@ -58,6 +54,11 @@ namespace Bearded.Utilities.Geometry
         public static CircularArc2 FromStartAndAngle(
             Vector2 center, float radius, Direction2 start, Angle angle)
         {
+            if (angle.MagnitudeInRadians > MathConstants.TwoPi)
+            {
+                throw new ArgumentException("Angle must be between -360° and +360° inclusive.", nameof(angle));
+            }
+
             return new CircularArc2(center, radius, start, angle);
         }
 
@@ -85,5 +86,10 @@ namespace Bearded.Utilities.Geometry
         public override string ToString() =>
             string.Join(System.Environment.NewLine,
                 $"Center = {Center}", $"Radius = {Radius}", $"Start = {Start}", $"Angle = {Angle}");
+
+        private static Angle oppositeAngle(Angle original)
+        {
+            return -original.Sign() * (MathConstants.TwoPi.Radians() - original.Abs());
+        }
     }
 }
