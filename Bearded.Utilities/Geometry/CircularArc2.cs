@@ -11,9 +11,11 @@ namespace Bearded.Utilities.Geometry
         public Vector2 Center { get; }
         public float Radius { get; }
         public Direction2 Start { get; }
-        public Angle Angle { get; }
+        public Direction2 End { get; }
+        public bool IsShortArc { get; }
 
-        public Direction2 End => Start + Angle;
+        public bool IsLongArc => !IsShortArc;
+        public Angle Angle => IsShortArc ? End - Start : oppositeAngle(End - Start);
         public Vector2 StartPoint => Center + Radius * Start.Vector;
         public Vector2 EndPoint => Center + Radius * End.Vector;
 
@@ -22,29 +24,29 @@ namespace Bearded.Utilities.Geometry
         /// <summary>
         /// Returns the major arc if this arc is the minor arc, and returns the major arc if this is the minor arc.
         /// </summary>
-        public CircularArc2 Opposite => new CircularArc2(Center, Radius, Start, oppositeAngle(Angle));
+        public CircularArc2 Opposite => new CircularArc2(Center, Radius, Start, End, !IsShortArc);
 
         /// <summary>
         /// Returns the same arc with the start and end directions swapped.
         /// </summary>
-        public CircularArc2 Reversed => new CircularArc2(Center, Radius, End, -Angle);
+        public CircularArc2 Reversed => new CircularArc2(Center, Radius, End, Start, IsShortArc);
 
         /// <summary>
         /// Constructs the minor arc in the circle with specified center and radius between the given directions.
         /// </summary>
-        public static CircularArc2 ShortestArcBetweenDirections(
+        public static CircularArc2 ShortArcBetweenDirections(
             Vector2 center, float radius, Direction2 start, Direction2 end)
         {
-            return new CircularArc2(center, radius, start, end - start);
+            return new CircularArc2(center, radius, start, end, true);
         }
 
         /// <summary>
         /// Constructs the major arc in the circle with specified center and radius between the given directions.
         /// </summary>
-        public static CircularArc2 LongestArcBetweenDirections(
+        public static CircularArc2 LongArcBetweenDirections(
             Vector2 center, float radius, Direction2 start, Direction2 end)
         {
-            return new CircularArc2(center, radius, start, oppositeAngle(end - start));
+            return new CircularArc2(center, radius, start, end, false);
         }
 
         /// <summary>
@@ -59,37 +61,45 @@ namespace Bearded.Utilities.Geometry
                 throw new ArgumentException("Angle must be between -360° and +360° inclusive.", nameof(angle));
             }
 
-            return new CircularArc2(center, radius, start, angle);
+            return new CircularArc2(center, radius, start, start + angle, angle.MagnitudeInRadians > MathConstants.Pi);
         }
 
-        private CircularArc2(Vector2 center, float radius, Direction2 start, Angle angle)
+        private CircularArc2(Vector2 center, float radius, Direction2 start, Direction2 end, bool isShortArc)
         {
             Center = center;
             Radius = radius;
             Start = start;
-            Angle = angle;
+            End = end;
+            IsShortArc = isShortArc;
         }
 
         public bool Equals(CircularArc2 other) =>
             Center.Equals(other.Center)
             && Radius.Equals(other.Radius)
             && Start.Equals(other.Start)
-            && Angle.Equals(other.Angle);
+            && End.Equals(other.End)
+            && IsShortArc.Equals(other.IsShortArc);
 
         public override bool Equals(object? obj) => obj is CircularArc2 other && Equals(other);
 
-        public override int GetHashCode() => HashCode.Combine(Center, Radius, Start, Angle);
+        public override int GetHashCode() => HashCode.Combine(Center, Radius, Start, End, IsShortArc);
 
         public static bool operator ==(CircularArc2 left, CircularArc2 right) => left.Equals(right);
         public static bool operator !=(CircularArc2 left, CircularArc2 right) => !left.Equals(right);
 
-        public override string ToString() =>
-            string.Join(System.Environment.NewLine,
-                $"Center = {Center}", $"Radius = {Radius}", $"Start = {Start}", $"Angle = {Angle}");
+        public override string ToString() => $"{Center} × {Radius}; {arcString} {Start}-{End}";
+
+        private string arcString => IsShortArc ? "short arc" : "long arc";
 
         private static Angle oppositeAngle(Angle original)
         {
-            return -original.Sign() * (MathConstants.TwoPi.Radians() - original.Abs());
+            var originalMagnitude = original.Abs();
+            var oppositeMagnitude = MathConstants.TwoPi.Radians() - originalMagnitude;
+
+            var originalDirection = original.Sign();
+            var oppositeDirection = -originalDirection;
+
+            return oppositeDirection * oppositeMagnitude;
         }
     }
 }
