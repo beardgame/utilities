@@ -1,7 +1,8 @@
 using Bearded.Utilities.Geometry;
+using Bearded.Utilities.Tests.Generators;
 using FluentAssertions;
+using FsCheck.Xunit;
 using OpenTK.Mathematics;
-using Xunit;
 
 namespace Bearded.Utilities.Tests.Geometry
 {
@@ -9,58 +10,54 @@ namespace Bearded.Utilities.Tests.Geometry
     {
         public sealed class Opposite
         {
-            [Fact]
-            public void ReturnsShortArcIfArcIsLong()
+            [Property(Arbitrary = new [] { typeof(DirectionGenerators.All) })]
+            public void ReturnsShortArcIfArcIsLong(Direction2 from, Direction2 to)
             {
-                var arc = CircularArc2.LongArcBetweenDirections(
-                    Vector2.Zero, 1, Direction2.FromDegrees(0), Direction2.FromDegrees(90));
+                if (from == to) return;
+
+                var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, from, to);
 
                 var actual = arc.Opposite;
 
-                var expected = CircularArc2.ShortArcBetweenDirections(
-                    Vector2.Zero, 1, Direction2.FromDegrees(0), Direction2.FromDegrees(90));
+                var expected = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, from, to);
                 actual.Should().Be(expected);
             }
 
-            [Fact]
-            public void ReturnsLongArcIfArcIsShort()
+            [Property(Arbitrary = new [] { typeof(DirectionGenerators.All) })]
+            public void ReturnsLongArcIfArcIsShort(Direction2 from, Direction2 to)
             {
-                var arc = CircularArc2.ShortArcBetweenDirections(
-                    Vector2.Zero, 1, Direction2.FromDegrees(0), Direction2.FromDegrees(90));
+                if (from == to) return;
+
+                var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, from, to);
 
                 var actual = arc.Opposite;
 
-                var expected = CircularArc2.LongArcBetweenDirections(
-                    Vector2.Zero, 1, Direction2.FromDegrees(0), Direction2.FromDegrees(90));
+                var expected = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, from, to);
                 actual.Should().Be(expected);
             }
         }
 
         public sealed class Reversed
         {
-            [Fact]
-            public void ReturnsReversedShortArcIfArcIsShort()
+            [Property(Arbitrary = new [] { typeof(DirectionGenerators.All) })]
+            public void ReturnsReversedShortArcIfArcIsShort(Direction2 from, Direction2 to)
             {
-                var arc = CircularArc2.ShortArcBetweenDirections(
-                    Vector2.Zero, 1, Direction2.FromDegrees(0), Direction2.FromDegrees(90));
+                var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, from, to);
 
                 var actual = arc.Reversed;
 
-                var expected = CircularArc2.ShortArcBetweenDirections(
-                    Vector2.Zero, 1, Direction2.FromDegrees(90), Direction2.FromDegrees(0));
+                var expected = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, to, from);
                 actual.Should().Be(expected);
             }
 
-            [Fact]
-            public void ReturnsReversedShortArcIfArcIsLong()
+            [Property(Arbitrary = new [] { typeof(DirectionGenerators.All) })]
+            public void ReturnsReversedShortArcIfArcIsLong(Direction2 from, Direction2 to)
             {
-                var arc = CircularArc2.LongArcBetweenDirections(
-                    Vector2.Zero, 1, Direction2.FromDegrees(0), Direction2.FromDegrees(90));
+                var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, from, to);
 
                 var actual = arc.Reversed;
 
-                var expected = CircularArc2.LongArcBetweenDirections(
-                    Vector2.Zero, 1, Direction2.FromDegrees(90), Direction2.FromDegrees(0));
+                var expected = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, to, from);
                 actual.Should().Be(expected);
             }
         }
