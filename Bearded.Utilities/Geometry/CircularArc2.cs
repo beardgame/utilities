@@ -6,6 +6,19 @@ namespace Bearded.Utilities.Geometry
     /// <summary>
     /// Represents an arc of a circle between a pair of distinct points.
     /// </summary>
+    /// <remarks>
+    /// <list type="bullet">
+    /// <item><description>
+    /// If the start and end directions are equal, the short arc is the zero-length arc in this point, and the long arc
+    /// is the full circle arc traversing the circle in positive direction (i.e. Angle will be 2π).
+    /// </description></item>
+    /// <item><description>
+    /// If the start and end directions are opposites, the short arc is the arc traversing the circle in negative
+    /// direction (i.e. Angle will be -π), and the long arc is the arc traversing the circle in the positive direction
+    /// (i.e. Angle will be π).
+    /// </description></item>
+    /// </list>
+    /// </remarks>
     public readonly struct CircularArc2 : IEquatable<CircularArc2>
     {
         public Vector2 Center { get; }
@@ -56,12 +69,17 @@ namespace Bearded.Utilities.Geometry
         public static CircularArc2 FromStartAndAngle(
             Vector2 center, float radius, Direction2 start, Angle angle)
         {
-            if (angle.MagnitudeInRadians > MathConstants.TwoPi)
+            if (angle.Radians < -MathConstants.TwoPi || angle.Radians >= MathConstants.TwoPi)
             {
-                throw new ArgumentException("Angle must be between -360° and +360° inclusive.", nameof(angle));
+                throw new ArgumentException(
+                    "Angle must be between -360° inclusive and +360° exclusive.", nameof(angle));
             }
 
-            return new CircularArc2(center, radius, start, start + angle, angle.MagnitudeInRadians > MathConstants.Pi);
+            // When the start and end are opposite each other, the short arc goes in the negative direction (i.e. the
+            // angle is -π), so conversely -π should be considered a short arc. The long arc goes in the positive
+            // direction (i.e. the angle is -π), so conversely -π should be considered a long arc.
+            var isShortArc = angle.Radians >= -MathConstants.Pi && angle.Radians < MathConstants.Pi;
+            return new CircularArc2(center, radius, start, start + angle, isShortArc);
         }
 
         private CircularArc2(Vector2 center, float radius, Direction2 start, Direction2 end, bool isShortArc)
@@ -97,6 +115,9 @@ namespace Bearded.Utilities.Geometry
             var oppositeMagnitude = MathConstants.TwoPi.Radians() - originalMagnitude;
 
             var originalDirection = original.Sign();
+            // If the sign is 0, start == end. In this case, the opposite angle needs to be the full arc in positive
+            // direction.
+            if (originalDirection == 0) originalDirection = -1;
             var oppositeDirection = -originalDirection;
 
             return oppositeDirection * oppositeMagnitude;
