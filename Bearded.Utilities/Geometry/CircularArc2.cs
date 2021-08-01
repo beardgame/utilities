@@ -69,7 +69,8 @@ namespace Bearded.Utilities.Geometry
         public static CircularArc2 FromStartAndAngle(
             Vector2 center, float radius, Direction2 start, Angle angle)
         {
-            if (angle.Radians < -MathConstants.TwoPi || angle.Radians >= MathConstants.TwoPi)
+            var radians = angle.Radians;
+            if (radians < -MathConstants.TwoPi || radians >= MathConstants.TwoPi)
             {
                 throw new ArgumentException(
                     "Angle must be between -360° inclusive and +360° exclusive.", nameof(angle));
@@ -78,7 +79,7 @@ namespace Bearded.Utilities.Geometry
             // When the start and end are opposite each other, the short arc goes in the negative direction (i.e. the
             // angle is -π), so conversely -π should be considered a short arc. The long arc goes in the positive
             // direction (i.e. the angle is -π), so conversely -π should be considered a long arc.
-            var isShortArc = angle.Radians >= -MathConstants.Pi && angle.Radians < MathConstants.Pi;
+            var isShortArc = radians >= -MathConstants.Pi && radians < MathConstants.Pi;
             return new CircularArc2(center, radius, start, start + angle, isShortArc);
         }
 
