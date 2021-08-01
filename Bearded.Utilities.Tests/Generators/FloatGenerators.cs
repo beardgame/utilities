@@ -19,5 +19,17 @@ namespace Bearded.Utilities.Tests.Generators
                     .Select(Math.Abs)
                     .ToArbitrary();
         }
+
+        /// <summary>
+        /// Generates a positive (specifically, non-zero) circle radius with a reasonable maximum radius to avoid
+        /// positive infinities when doing geometric arithmetic with them.
+        /// </summary>
+        public static class PositiveCircleRadius
+        {
+            public static Arbitrary<float> Floats
+                => Arb.Default.UInt32().Generator
+                    .Select(i => ((float) i + 1) / 1000)
+                    .ToArbitrary();
+        }
     }
 }

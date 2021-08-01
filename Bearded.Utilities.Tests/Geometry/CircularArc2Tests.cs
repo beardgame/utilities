@@ -1,5 +1,6 @@
 using System;
 using Bearded.Utilities.Geometry;
+using Bearded.Utilities.Tests.Assertions;
 using Bearded.Utilities.Tests.Generators;
 using FluentAssertions;
 using FsCheck.Xunit;
@@ -275,7 +276,7 @@ namespace Bearded.Utilities.Tests.Geometry
         public sealed class StartPoint
         {
             [Property(Arbitrary = new[]
-                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveNonInfiniteNonNaN)})]
+                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius)})]
             public void ReturnsPointOnArc(Direction2 from, Direction2 to, float radius)
             {
                 if (from == to) return;
@@ -284,12 +285,41 @@ namespace Bearded.Utilities.Tests.Geometry
 
                 arc.StartPoint.LengthSquared.Should().BeApproximately(radius * radius, 0.01f);
             }
+
+            [Property(Arbitrary = new[]
+                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius)})]
+            public void ReturnsCorrectPointOnXAxis(Direction2 to, float radius)
+            {
+                var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, Direction2.Zero, to);
+
+                arc.StartPoint.Should().BeApproximately(radius * Vector2.UnitX, 0.01f);
+            }
+
+            [Property(Arbitrary = new[]
+                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius)})]
+            public void ReturnsCorrectPointOnYAxis(Direction2 to, float radius)
+            {
+                var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, Direction2.FromDegrees(90), to);
+
+                arc.StartPoint.Should().BeApproximately(radius * Vector2.UnitY, 0.01f);
+            }
+
+            [Property(Arbitrary = new[]
+                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius)})]
+            public void ReturnsPointInCorrectQuadrant(Direction2 to, float radius)
+            {
+                var arc = CircularArc2.ShortArcBetweenDirections(
+                    Vector2.Zero, radius, Direction2.FromDegrees(-135), to);
+
+                arc.StartPoint.X.Should().BeNegative();
+                arc.StartPoint.Y.Should().BeNegative();
+            }
         }
 
         public sealed class EndPoint
         {
             [Property(Arbitrary = new[]
-                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveNonInfiniteNonNaN)})]
+                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius)})]
             public void ReturnsPointOnArc(Direction2 from, Direction2 to, float radius)
             {
                 if (from == to) return;
@@ -297,6 +327,36 @@ namespace Bearded.Utilities.Tests.Geometry
                 var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, from, to);
 
                 arc.EndPoint.LengthSquared.Should().BeApproximately(radius * radius, 0.01f);
+            }
+
+            [Property(Arbitrary = new[]
+                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius)})]
+            public void ReturnsCorrectPointOnXAxis(Direction2 from, float radius)
+            {
+                var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, from, Direction2.Zero);
+
+                arc.EndPoint.Should().BeApproximately(radius * Vector2.UnitX, 0.01f);
+            }
+
+            [Property(Arbitrary = new[]
+                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius)})]
+            public void ReturnsCorrectPointOnYAxis(Direction2 from, float radius)
+            {
+                var arc =
+                    CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, from, Direction2.FromDegrees(90));
+
+                arc.EndPoint.Should().BeApproximately(radius * Vector2.UnitY, 0.01f);
+            }
+
+            [Property(Arbitrary = new[]
+                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius)})]
+            public void ReturnsPointInCorrectQuadrant(Direction2 from, float radius)
+            {
+                var arc = CircularArc2.ShortArcBetweenDirections(
+                    Vector2.Zero, radius, from, Direction2.FromDegrees(-135));
+
+                arc.EndPoint.X.Should().BeNegative();
+                arc.EndPoint.Y.Should().BeNegative();
             }
         }
     }
