@@ -19,7 +19,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Property]
-        public void CreatingShortArcBetweenIdenticalDirections_ReturnsZeroLengthArc(Direction2 fromTo)
+        public void ShortArcBetweenIdenticalDirectionsIsZeroLength(Direction2 fromTo)
         {
             var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
 
@@ -27,7 +27,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Property]
-        public void CreatingShortArcBetweenOppositeDirections_ReturnsNegativeDirectionArc(Direction2 from)
+        public void ShortArcBetweenOppositeDirectionsHasMinusPiAngle(Direction2 from)
         {
             var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, from, -from);
 
@@ -35,7 +35,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Property]
-        public void CreatingShortArc_ReturnsArcWithAngleSmallerThanPiRad(Direction2 from, Direction2 to)
+        public void ShortArcHasAngleWithMagnitudeSmallerThanPi(Direction2 from, Direction2 to)
         {
             if (from == to) return;
 
@@ -45,7 +45,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Property]
-        public void CreatingLongArcBetweenIdenticalDirections_ReturnsFullLengthArc(Direction2 fromTo)
+        public void LongArcBetweenIdenticalDirectionsIsFullCircle(Direction2 fromTo)
         {
             var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
 
@@ -53,7 +53,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Property]
-        public void CreatingLongArcBetweenOppositeDirections_ReturnsPositiveDirectionArc(Direction2 from)
+        public void LongArcBetweenOppositeDirectionsHasPiAngle(Direction2 from)
         {
             var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, from, -from);
 
@@ -61,7 +61,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Property]
-        public void CreatingLongArc_ReturnsArcWithAngleLargerThanPiRad(Direction2 from, Direction2 to)
+        public void LongArcHasAngleWithMagnitudeLargerThanPi(Direction2 from, Direction2 to)
         {
             if (from == to) return;
 
@@ -71,7 +71,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Property]
-        public void CreatingArcWithAngleSmallerThanMinusTwoPi_Throws(Direction2 from)
+        public void ArcWithAngleSmallerThanMinusTwoPiIsInvalid(Direction2 from)
         {
             Action action = () => CircularArc2.FromStartAndAngle(
                 Vector2.Zero, 1, from, Angle.FromRadians(-7));
@@ -80,7 +80,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Property]
-        public void CreatingArcWithAngleEqualsMinusTwoPi_DoesNotThrow(Direction2 from)
+        public void ArcWithAngleMinusTwoPiIsValid(Direction2 from)
         {
             Action action = () => CircularArc2.FromStartAndAngle(
                 Vector2.Zero, 1, from, Angle.FromRadians(-MathConstants.TwoPi));
@@ -89,7 +89,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Property]
-        public void CreatingArcWithAngleSmallerThanMinusPi_ReturnsALongArc(Direction2 from)
+        public void ArcWithAngleLessThanMinusPiIsLongArc(Direction2 from)
         {
             var arc = CircularArc2.FromStartAndAngle(
                 Vector2.Zero, 1, from, Angle.FromRadians(-4));
@@ -98,7 +98,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Property]
-        public void CreatingArcWithAngleEqualsMinusPi_ReturnsAShortArc(Direction2 from)
+        public void ArcWithAngleMinusPiIsShortArc(Direction2 from)
         {
             var arc = CircularArc2.FromStartAndAngle(
                 Vector2.Zero, 1, from, Angle.FromRadians(-MathConstants.Pi));
@@ -107,7 +107,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Property]
-        public void CreatingArcWithAngleLargerThanMinusPi_ReturnsAShortArc(Direction2 from)
+        public void ArcWithAngleMoreThanMinusPiIsShortArc(Direction2 from)
         {
             var arc = CircularArc2.FromStartAndAngle(
                 Vector2.Zero, 1, from, Angle.FromRadians(-2));
@@ -116,7 +116,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Property]
-        public void CreatingArcWithZeroAngle_ReturnsAShortArc(Direction2 from)
+        public void ArcWithAngleZeroIsShortArc(Direction2 from)
         {
             var arc = CircularArc2.FromStartAndAngle(
                 Vector2.Zero, 1, from, Angle.Zero);
@@ -125,7 +125,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Property]
-        public void CreatingArcWithAngleSmallerThanPi_ReturnsAShortArc(Direction2 from)
+        public void ArcWithAngleLessThanPiIsShortArc(Direction2 from)
         {
             var arc = CircularArc2.FromStartAndAngle(
                 Vector2.Zero, 1, from, Angle.FromRadians(2));
@@ -134,7 +134,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Property]
-        public void CreatingArcWithAngleEqualsPi_ReturnsALongArc(Direction2 from)
+        public void ArcWithAnglePiIsLongArc(Direction2 from)
         {
             var arc = CircularArc2.FromStartAndAngle(
                 Vector2.Zero, 1, from, Angle.FromRadians(MathConstants.Pi));
@@ -143,7 +143,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Property]
-        public void CreatingArcWithAngleLargerThanPi_ReturnsALongArc(Direction2 from)
+        public void ArcWithAngleMoreThanPiIsLongArc(Direction2 from)
         {
             var arc = CircularArc2.FromStartAndAngle(
                 Vector2.Zero, 1, from, Angle.FromRadians(4));
@@ -152,7 +152,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Property]
-        public void CreatingArcWithAngleEqualsTwoPi_Throws(Direction2 from)
+        public void ArcWithAngleTwoPiIsInvalid(Direction2 from)
         {
             Action action = () => CircularArc2.FromStartAndAngle(
                 Vector2.Zero, 1, from, Angle.FromRadians(MathConstants.TwoPi));
@@ -161,7 +161,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Property]
-        public void CreatingArcWithAngleLargerThanTwoPi_Throws(Direction2 from)
+        public void ArcWithAngleMoreThanPiIsInvalid(Direction2 from)
         {
             Action action = () => CircularArc2.FromStartAndAngle(
                 Vector2.Zero, 1, from, Angle.FromRadians(7));
