@@ -3,6 +3,7 @@ using Bearded.Utilities.Geometry;
 using Bearded.Utilities.Tests.Assertions;
 using Bearded.Utilities.Tests.Generators;
 using FluentAssertions;
+using FsCheck;
 using FsCheck.Xunit;
 using OpenTK.Mathematics;
 
@@ -12,7 +13,12 @@ namespace Bearded.Utilities.Tests.Geometry
     {
         private const float epsilon = 0.001f;
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        public CircularArc2Tests()
+        {
+            Arb.Register<DirectionGenerators.All>();
+        }
+
+        [Property]
         public void CreatingShortArcBetweenIdenticalDirections_ReturnsZeroLengthArc(Direction2 fromTo)
         {
             var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
@@ -20,7 +26,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.Angle.Radians.Should().BeApproximately(0, epsilon);
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void CreatingShortArcBetweenOppositeDirections_ReturnsNegativeDirectionArc(Direction2 from)
         {
             var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, from, -from);
@@ -28,7 +34,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.Angle.Radians.Should().BeApproximately(-MathConstants.Pi, epsilon);
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void CreatingShortArc_ReturnsArcWithAngleSmallerThanPiRad(Direction2 from, Direction2 to)
         {
             if (from == to) return;
@@ -38,7 +44,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.Angle.MagnitudeInRadians.Should().BeInRange(0, MathConstants.Pi);
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void CreatingLongArcBetweenIdenticalDirections_ReturnsFullLengthArc(Direction2 fromTo)
         {
             var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
@@ -46,7 +52,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.Angle.Radians.Should().BeApproximately(MathConstants.TwoPi, epsilon);
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void CreatingLongArcBetweenOppositeDirections_ReturnsPositiveDirectionArc(Direction2 from)
         {
             var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, from, -from);
@@ -54,7 +60,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.Angle.Radians.Should().BeApproximately(MathConstants.Pi, epsilon);
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void CreatingLongArc_ReturnsArcWithAngleLargerThanPiRad(Direction2 from, Direction2 to)
         {
             if (from == to) return;
@@ -64,7 +70,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.Angle.MagnitudeInRadians.Should().BeInRange(MathConstants.Pi, MathConstants.TwoPi);
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void CreatingArcWithAngleSmallerThanMinusTwoPi_Throws(Direction2 from)
         {
             Action action = () => CircularArc2.FromStartAndAngle(
@@ -73,7 +79,7 @@ namespace Bearded.Utilities.Tests.Geometry
             action.Should().Throw<ArgumentException>();
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void CreatingArcWithAngleEqualsMinusTwoPi_DoesNotThrow(Direction2 from)
         {
             Action action = () => CircularArc2.FromStartAndAngle(
@@ -82,7 +88,7 @@ namespace Bearded.Utilities.Tests.Geometry
             action.Should().NotThrow();
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void CreatingArcWithAngleSmallerThanMinusPi_ReturnsALongArc(Direction2 from)
         {
             var arc = CircularArc2.FromStartAndAngle(
@@ -91,7 +97,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.IsLongArc.Should().BeTrue();
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void CreatingArcWithAngleEqualsMinusPi_ReturnsAShortArc(Direction2 from)
         {
             var arc = CircularArc2.FromStartAndAngle(
@@ -100,7 +106,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.IsShortArc.Should().BeTrue();
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void CreatingArcWithAngleLargerThanMinusPi_ReturnsAShortArc(Direction2 from)
         {
             var arc = CircularArc2.FromStartAndAngle(
@@ -109,7 +115,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.IsShortArc.Should().BeTrue();
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void CreatingArcWithZeroAngle_ReturnsAShortArc(Direction2 from)
         {
             var arc = CircularArc2.FromStartAndAngle(
@@ -118,7 +124,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.IsShortArc.Should().BeTrue();
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void CreatingArcWithAngleSmallerThanPi_ReturnsAShortArc(Direction2 from)
         {
             var arc = CircularArc2.FromStartAndAngle(
@@ -127,7 +133,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.IsShortArc.Should().BeTrue();
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void CreatingArcWithAngleEqualsPi_ReturnsALongArc(Direction2 from)
         {
             var arc = CircularArc2.FromStartAndAngle(
@@ -136,7 +142,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.IsLongArc.Should().BeTrue();
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void CreatingArcWithAngleLargerThanPi_ReturnsALongArc(Direction2 from)
         {
             var arc = CircularArc2.FromStartAndAngle(
@@ -145,7 +151,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.IsLongArc.Should().BeTrue();
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void CreatingArcWithAngleEqualsTwoPi_Throws(Direction2 from)
         {
             Action action = () => CircularArc2.FromStartAndAngle(
@@ -154,7 +160,7 @@ namespace Bearded.Utilities.Tests.Geometry
             action.Should().Throw<ArgumentException>();
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void CreatingArcWithAngleLargerThanTwoPi_Throws(Direction2 from)
         {
             Action action = () => CircularArc2.FromStartAndAngle(
@@ -163,7 +169,7 @@ namespace Bearded.Utilities.Tests.Geometry
             action.Should().Throw<ArgumentException>();
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void OppositeOfALongArcIsAShortArc(Direction2 from, Direction2 to)
         {
             if (from == to) return;
@@ -176,7 +182,7 @@ namespace Bearded.Utilities.Tests.Geometry
             actual.Should().Be(expected);
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void OppositeOfAShortArcIsALongArc(Direction2 from, Direction2 to)
         {
             if (from == to) return;
@@ -189,7 +195,7 @@ namespace Bearded.Utilities.Tests.Geometry
             actual.Should().Be(expected);
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void OppositeOfAZeroLengthArcIsAFullLengthArc(Direction2 fromTo)
         {
             var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
@@ -200,7 +206,7 @@ namespace Bearded.Utilities.Tests.Geometry
             actual.Should().Be(expected);
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void OppositeOfAFullLengthArcIsAZeroLengthArc(Direction2 fromTo)
         {
             var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
@@ -211,7 +217,7 @@ namespace Bearded.Utilities.Tests.Geometry
             actual.Should().Be(expected);
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void ReverseOfAShortArcIsTheShortArcWithDirectionsSwitched(Direction2 from, Direction2 to)
         {
             if (from == to) return;
@@ -224,7 +230,7 @@ namespace Bearded.Utilities.Tests.Geometry
             actual.Should().Be(expected);
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void ReverseOfALongArcIsTheLongArcWithDirectionsSwitched(Direction2 from, Direction2 to)
         {
             if (from == to) return;
@@ -237,7 +243,7 @@ namespace Bearded.Utilities.Tests.Geometry
             actual.Should().Be(expected);
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void ReverseOfAZeroLengthArcIsTheOriginalArc(Direction2 fromTo)
         {
             var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
@@ -247,7 +253,7 @@ namespace Bearded.Utilities.Tests.Geometry
             actual.Should().Be(arc);
         }
 
-        [Property(Arbitrary = new[] { typeof(DirectionGenerators.All) })]
+        [Property]
         public void ReverseOfAFullCircleArcIsTheOriginalArc(Direction2 fromTo)
         {
             var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
@@ -257,8 +263,7 @@ namespace Bearded.Utilities.Tests.Geometry
             actual.Should().Be(arc);
         }
 
-        [Property(Arbitrary = new[]
-            { typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius) })]
+        [Property(Arbitrary = new[] { typeof(FloatGenerators.PositiveCircleRadius) })]
         public void StartPointIsPointOnArc(Direction2 from, Direction2 to, float radius)
         {
             if (from == to) return;
@@ -268,8 +273,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.StartPoint.LengthSquared.Should().BeApproximately(radius * radius, epsilon);
         }
 
-        [Property(Arbitrary = new[]
-            { typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius) })]
+        [Property(Arbitrary = new[] { typeof(FloatGenerators.PositiveCircleRadius) })]
         public void ArcStartingAtDirectionZeroHasStartPointOnXAxis(Direction2 to, float radius)
         {
             var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, Direction2.Zero, to);
@@ -277,8 +281,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.StartPoint.Should().BeApproximately(radius * Vector2.UnitX, epsilon);
         }
 
-        [Property(Arbitrary = new[]
-            { typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius) })]
+        [Property(Arbitrary = new[] { typeof(FloatGenerators.PositiveCircleRadius) })]
         public void ArcStartingAtDirection90DegHasStartPointOnYAxis(Direction2 to, float radius)
         {
             var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, Direction2.FromDegrees(90), to);
@@ -286,8 +289,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.StartPoint.Should().BeApproximately(radius * Vector2.UnitY, epsilon);
         }
 
-        [Property(Arbitrary = new[]
-            { typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius) })]
+        [Property(Arbitrary = new[] { typeof(FloatGenerators.PositiveCircleRadius) })]
         public void ArcStartingAtDirection135HasStartPointInThirdQuadrant(Direction2 to, float radius)
         {
             var arc = CircularArc2.ShortArcBetweenDirections(
@@ -297,8 +299,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.StartPoint.Y.Should().BeNegative();
         }
 
-        [Property(Arbitrary = new[]
-            { typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius) })]
+        [Property(Arbitrary = new[] { typeof(FloatGenerators.PositiveCircleRadius) })]
         public void EndPointIsPointOnArc(Direction2 from, Direction2 to, float radius)
         {
             if (from == to) return;
@@ -308,8 +309,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.EndPoint.LengthSquared.Should().BeApproximately(radius * radius, epsilon);
         }
 
-        [Property(Arbitrary = new[]
-            { typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius) })]
+        [Property(Arbitrary = new[] { typeof(FloatGenerators.PositiveCircleRadius) })]
         public void ArcEndingAtDirectionZeroHasEndPointOnXAxis(Direction2 from, float radius)
         {
             var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, from, Direction2.Zero);
@@ -317,8 +317,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.EndPoint.Should().BeApproximately(radius * Vector2.UnitX, epsilon);
         }
 
-        [Property(Arbitrary = new[]
-            { typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius) })]
+        [Property(Arbitrary = new[] { typeof(FloatGenerators.PositiveCircleRadius) })]
         public void ArcEndingAtDirection90DegHasEndPointOnYAxis(Direction2 from, float radius)
         {
             var arc =
@@ -327,8 +326,7 @@ namespace Bearded.Utilities.Tests.Geometry
             arc.EndPoint.Should().BeApproximately(radius * Vector2.UnitY, epsilon);
         }
 
-        [Property(Arbitrary = new[]
-            { typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius) })]
+        [Property(Arbitrary = new[] { typeof(FloatGenerators.PositiveCircleRadius) })]
         public void ArcEndingAtDirection135DegHasEndPointInThirdQuadrant(Direction2 from, float radius)
         {
             var arc = CircularArc2.ShortArcBetweenDirections(
