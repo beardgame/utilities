@@ -3,6 +3,7 @@ using Bearded.Utilities.Geometry;
 using Bearded.Utilities.Tests.Assertions;
 using Bearded.Utilities.Tests.Generators;
 using FluentAssertions;
+using FsCheck;
 using FsCheck.Xunit;
 using OpenTK.Mathematics;
 
@@ -10,354 +11,329 @@ namespace Bearded.Utilities.Tests.Geometry
 {
     public sealed class CircularArc2Tests
     {
-        public sealed class ShortArcBetweenDirections
+        private const float epsilon = 0.001f;
+
+        public CircularArc2Tests()
         {
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ReturnsZeroLengthArcIfDirectionsAreEqual(Direction2 fromTo)
-            {
-                var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
-
-                arc.Angle.Radians.Should().BeApproximately(0, 0.01f);
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ReturnsNegativeDirectionArcIfDirectionsAreOpposite(Direction2 from)
-            {
-                var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, from, -from);
-
-                arc.Angle.Radians.Should().BeApproximately(-MathConstants.Pi, 0.01f);
-            }
+            Arb.Register<DirectionGenerators.All>();
         }
 
-        public sealed class LongArcBetweenDirections
+        [Property]
+        public void ShortArcBetweenIdenticalDirectionsIsZeroLength(Direction2 fromTo)
         {
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ReturnsFullLengthArcInPositiveDirectionIfDirectionsAreEqual(Direction2 fromTo)
-            {
-                var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
+            var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
 
-                arc.Angle.Radians.Should().BeApproximately(MathConstants.TwoPi, 0.01f);
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ReturnsPositiveDirectionArcIfDirectionsAreOpposite(Direction2 from)
-            {
-                var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, from, -from);
-
-                arc.Angle.Radians.Should().BeApproximately(MathConstants.Pi, 0.01f);
-            }
+            arc.Angle.Radians.Should().BeApproximately(0, epsilon);
         }
 
-        public sealed class FromStartAndAngle
+        [Property]
+        public void ShortArcBetweenOppositeDirectionsHasMinusPiAngle(Direction2 from)
         {
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ThrowsIfAngleIsSmallerThanMinusTwoPi(Direction2 from)
-            {
-                Action action = () => CircularArc2.FromStartAndAngle(
-                    Vector2.Zero, 1, from, Bearded.Utilities.Geometry.Angle.FromRadians(-7));
+            var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, from, -from);
 
-                action.Should().Throw<ArgumentException>();
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void DoesNotThrowIfAngleIsMinusTwoPi(Direction2 from)
-            {
-                Action action = () => CircularArc2.FromStartAndAngle(
-                    Vector2.Zero, 1, from, Bearded.Utilities.Geometry.Angle.FromRadians(-MathConstants.TwoPi));
-
-                action.Should().NotThrow();
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ReturnsLongArcIfAngleSmallerThanMinusPi(Direction2 from)
-            {
-                var arc = CircularArc2.FromStartAndAngle(
-                    Vector2.Zero, 1, from, Bearded.Utilities.Geometry.Angle.FromRadians(-4));
-
-                arc.IsLongArc.Should().BeTrue();
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ReturnsShortArcIfAngleEqualsMinusPi(Direction2 from)
-            {
-                var arc = CircularArc2.FromStartAndAngle(
-                    Vector2.Zero, 1, from, Bearded.Utilities.Geometry.Angle.FromRadians(-MathConstants.Pi));
-
-                arc.IsShortArc.Should().BeTrue();
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ReturnsShortArcIfAngleIsLargerThanMinusPi(Direction2 from)
-            {
-                var arc = CircularArc2.FromStartAndAngle(
-                    Vector2.Zero, 1, from, Bearded.Utilities.Geometry.Angle.FromRadians(-2));
-
-                arc.IsShortArc.Should().BeTrue();
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ReturnsShortArcIfAngleIsZero(Direction2 from)
-            {
-                var arc = CircularArc2.FromStartAndAngle(
-                    Vector2.Zero, 1, from, Bearded.Utilities.Geometry.Angle.Zero);
-
-                arc.IsShortArc.Should().BeTrue();
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ReturnsShortArcIfAngleIsSmallerThanPi(Direction2 from)
-            {
-                var arc = CircularArc2.FromStartAndAngle(
-                    Vector2.Zero, 1, from, Bearded.Utilities.Geometry.Angle.FromRadians(2));
-
-                arc.IsShortArc.Should().BeTrue();
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ReturnsLongArcIfAngleEqualsPi(Direction2 from)
-            {
-                var arc = CircularArc2.FromStartAndAngle(
-                    Vector2.Zero, 1, from, Bearded.Utilities.Geometry.Angle.FromRadians(MathConstants.Pi));
-
-                arc.IsLongArc.Should().BeTrue();
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ReturnsLongArcIfAngleIsLargerThanPi(Direction2 from)
-            {
-                var arc = CircularArc2.FromStartAndAngle(
-                    Vector2.Zero, 1, from, Bearded.Utilities.Geometry.Angle.FromRadians(4));
-
-                arc.IsLongArc.Should().BeTrue();
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ThrowsIfAngleIsTwoPi(Direction2 from)
-            {
-                Action action = () => CircularArc2.FromStartAndAngle(
-                    Vector2.Zero, 1, from, Bearded.Utilities.Geometry.Angle.FromRadians(MathConstants.TwoPi));
-
-                action.Should().Throw<ArgumentException>();
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void DoesNotThrowIfAngleIsLargerThanTwoPi(Direction2 from)
-            {
-                Action action = () => CircularArc2.FromStartAndAngle(
-                    Vector2.Zero, 1, from, Bearded.Utilities.Geometry.Angle.FromRadians(7));
-
-                action.Should().Throw<ArgumentException>();
-            }
+            arc.Angle.Radians.Should().BeApproximately(-MathConstants.Pi, epsilon);
         }
 
-        public sealed class Opposite
+        [Property]
+        public void ShortArcHasAngleWithMagnitudeSmallerThanPi(Direction2 from, Direction2 to)
         {
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ReturnsShortArcIfArcIsLong(Direction2 from, Direction2 to)
-            {
-                if (from == to) return;
+            if (from == to) return;
 
-                var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, from, to);
+            var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, from, to);
 
-                var actual = arc.Opposite;
-
-                var expected = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, from, to);
-                actual.Should().Be(expected);
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ReturnsLongArcIfArcIsShort(Direction2 from, Direction2 to)
-            {
-                if (from == to) return;
-
-                var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, from, to);
-
-                var actual = arc.Opposite;
-
-                var expected = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, from, to);
-                actual.Should().Be(expected);
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ReturnsFullCircleInPositiveDirectionIfArcIsZeroLength(Direction2 fromTo)
-            {
-                var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
-
-                var actual = arc.Opposite;
-
-                var expected = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
-                actual.Should().Be(expected);
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ReturnsZeroLengthArcIfArcIsFullCircle(Direction2 fromTo)
-            {
-                var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
-
-                var actual = arc.Opposite;
-
-                var expected = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
-                actual.Should().Be(expected);
-            }
+            arc.Angle.MagnitudeInRadians.Should().BeInRange(0, MathConstants.Pi);
         }
 
-        public sealed class Reversed
+        [Property]
+        public void LongArcBetweenIdenticalDirectionsIsFullCircle(Direction2 fromTo)
         {
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ReturnsReversedShortArcIfArcIsShort(Direction2 from, Direction2 to)
-            {
-                if (from == to) return;
+            var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
 
-                var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, from, to);
-
-                var actual = arc.Reversed;
-
-                var expected = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, to, from);
-                actual.Should().Be(expected);
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void ReturnsReversedShortArcIfArcIsLong(Direction2 from, Direction2 to)
-            {
-                if (from == to) return;
-
-                var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, from, to);
-
-                var actual = arc.Reversed;
-
-                var expected = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, to, from);
-                actual.Should().Be(expected);
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void IsANoOpWhenArcIsZeroLength(Direction2 fromTo)
-            {
-                var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
-
-                var actual = arc.Reversed;
-
-                actual.Should().Be(arc);
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void IsANoOpWhenArcIsFullCircle(Direction2 fromTo)
-            {
-                var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
-
-                var actual = arc.Reversed;
-
-                actual.Should().Be(arc);
-            }
+            arc.Angle.Radians.Should().BeApproximately(MathConstants.TwoPi, epsilon);
         }
 
-        public sealed class Angle
+        [Property]
+        public void LongArcBetweenOppositeDirectionsHasPiAngle(Direction2 from)
         {
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void IsSmallerThanPiRadForShortArcs(Direction2 from, Direction2 to)
-            {
-                if (from == to) return;
+            var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, from, -from);
 
-                var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, from, to);
-
-                arc.Angle.MagnitudeInRadians.Should().BeInRange(0, MathConstants.Pi);
-            }
-
-            [Property(Arbitrary = new[] {typeof(DirectionGenerators.All)})]
-            public void IsLargerThanPiRadForShortArcs(Direction2 from, Direction2 to)
-            {
-                if (from == to) return;
-
-                var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, from, to);
-
-                arc.Angle.MagnitudeInRadians.Should().BeInRange(MathConstants.Pi, MathConstants.TwoPi);
-            }
+            arc.Angle.Radians.Should().BeApproximately(MathConstants.Pi, epsilon);
         }
 
-        public sealed class StartPoint
+        [Property]
+        public void LongArcHasAngleWithMagnitudeLargerThanPi(Direction2 from, Direction2 to)
         {
-            [Property(Arbitrary = new[]
-                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius)})]
-            public void ReturnsPointOnArc(Direction2 from, Direction2 to, float radius)
-            {
-                if (from == to) return;
+            if (from == to) return;
 
-                var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, from, to);
+            var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, from, to);
 
-                arc.StartPoint.LengthSquared.Should().BeApproximately(radius * radius, 0.01f);
-            }
-
-            [Property(Arbitrary = new[]
-                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius)})]
-            public void ReturnsCorrectPointOnXAxis(Direction2 to, float radius)
-            {
-                var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, Direction2.Zero, to);
-
-                arc.StartPoint.Should().BeApproximately(radius * Vector2.UnitX, 0.01f);
-            }
-
-            [Property(Arbitrary = new[]
-                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius)})]
-            public void ReturnsCorrectPointOnYAxis(Direction2 to, float radius)
-            {
-                var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, Direction2.FromDegrees(90), to);
-
-                arc.StartPoint.Should().BeApproximately(radius * Vector2.UnitY, 0.01f);
-            }
-
-            [Property(Arbitrary = new[]
-                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius)})]
-            public void ReturnsPointInCorrectQuadrant(Direction2 to, float radius)
-            {
-                var arc = CircularArc2.ShortArcBetweenDirections(
-                    Vector2.Zero, radius, Direction2.FromDegrees(-135), to);
-
-                arc.StartPoint.X.Should().BeNegative();
-                arc.StartPoint.Y.Should().BeNegative();
-            }
+            arc.Angle.MagnitudeInRadians.Should().BeInRange(MathConstants.Pi, MathConstants.TwoPi);
         }
 
-        public sealed class EndPoint
+        [Property]
+        public void ArcWithAngleSmallerThanMinusTwoPiIsInvalid(Direction2 from)
         {
-            [Property(Arbitrary = new[]
-                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius)})]
-            public void ReturnsPointOnArc(Direction2 from, Direction2 to, float radius)
-            {
-                if (from == to) return;
+            Action action = () => CircularArc2.FromStartAndAngle(
+                Vector2.Zero, 1, from, Angle.FromRadians(-7));
 
-                var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, from, to);
+            action.Should().Throw<ArgumentException>();
+        }
 
-                arc.EndPoint.LengthSquared.Should().BeApproximately(radius * radius, 0.01f);
-            }
+        [Property]
+        public void ArcWithAngleMinusTwoPiIsValid(Direction2 from)
+        {
+            Action action = () => CircularArc2.FromStartAndAngle(
+                Vector2.Zero, 1, from, Angle.FromRadians(-MathConstants.TwoPi));
 
-            [Property(Arbitrary = new[]
-                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius)})]
-            public void ReturnsCorrectPointOnXAxis(Direction2 from, float radius)
-            {
-                var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, from, Direction2.Zero);
+            action.Should().NotThrow();
+        }
 
-                arc.EndPoint.Should().BeApproximately(radius * Vector2.UnitX, 0.01f);
-            }
+        [Property]
+        public void ArcWithAngleLessThanMinusPiIsLongArc(Direction2 from)
+        {
+            var arc = CircularArc2.FromStartAndAngle(
+                Vector2.Zero, 1, from, Angle.FromRadians(-4));
 
-            [Property(Arbitrary = new[]
-                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius)})]
-            public void ReturnsCorrectPointOnYAxis(Direction2 from, float radius)
-            {
-                var arc =
-                    CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, from, Direction2.FromDegrees(90));
+            arc.IsLongArc.Should().BeTrue();
+        }
 
-                arc.EndPoint.Should().BeApproximately(radius * Vector2.UnitY, 0.01f);
-            }
+        [Property]
+        public void ArcWithAngleMinusPiIsShortArc(Direction2 from)
+        {
+            var arc = CircularArc2.FromStartAndAngle(
+                Vector2.Zero, 1, from, Angle.FromRadians(-MathConstants.Pi));
 
-            [Property(Arbitrary = new[]
-                {typeof(DirectionGenerators.All), typeof(FloatGenerators.PositiveCircleRadius)})]
-            public void ReturnsPointInCorrectQuadrant(Direction2 from, float radius)
-            {
-                var arc = CircularArc2.ShortArcBetweenDirections(
-                    Vector2.Zero, radius, from, Direction2.FromDegrees(-135));
+            arc.IsShortArc.Should().BeTrue();
+        }
 
-                arc.EndPoint.X.Should().BeNegative();
-                arc.EndPoint.Y.Should().BeNegative();
-            }
+        [Property]
+        public void ArcWithAngleMoreThanMinusPiIsShortArc(Direction2 from)
+        {
+            var arc = CircularArc2.FromStartAndAngle(
+                Vector2.Zero, 1, from, Angle.FromRadians(-2));
+
+            arc.IsShortArc.Should().BeTrue();
+        }
+
+        [Property]
+        public void ArcWithAngleZeroIsShortArc(Direction2 from)
+        {
+            var arc = CircularArc2.FromStartAndAngle(
+                Vector2.Zero, 1, from, Angle.Zero);
+
+            arc.IsShortArc.Should().BeTrue();
+        }
+
+        [Property]
+        public void ArcWithAngleLessThanPiIsShortArc(Direction2 from)
+        {
+            var arc = CircularArc2.FromStartAndAngle(
+                Vector2.Zero, 1, from, Angle.FromRadians(2));
+
+            arc.IsShortArc.Should().BeTrue();
+        }
+
+        [Property]
+        public void ArcWithAnglePiIsLongArc(Direction2 from)
+        {
+            var arc = CircularArc2.FromStartAndAngle(
+                Vector2.Zero, 1, from, Angle.FromRadians(MathConstants.Pi));
+
+            arc.IsLongArc.Should().BeTrue();
+        }
+
+        [Property]
+        public void ArcWithAngleMoreThanPiIsLongArc(Direction2 from)
+        {
+            var arc = CircularArc2.FromStartAndAngle(
+                Vector2.Zero, 1, from, Angle.FromRadians(4));
+
+            arc.IsLongArc.Should().BeTrue();
+        }
+
+        [Property]
+        public void ArcWithAngleTwoPiIsInvalid(Direction2 from)
+        {
+            Action action = () => CircularArc2.FromStartAndAngle(
+                Vector2.Zero, 1, from, Angle.FromRadians(MathConstants.TwoPi));
+
+            action.Should().Throw<ArgumentException>();
+        }
+
+        [Property]
+        public void ArcWithAngleMoreThanPiIsInvalid(Direction2 from)
+        {
+            Action action = () => CircularArc2.FromStartAndAngle(
+                Vector2.Zero, 1, from, Angle.FromRadians(7));
+
+            action.Should().Throw<ArgumentException>();
+        }
+
+        [Property]
+        public void OppositeOfALongArcIsAShortArc(Direction2 from, Direction2 to)
+        {
+            if (from == to) return;
+
+            var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, from, to);
+
+            var actual = arc.Opposite;
+
+            var expected = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, from, to);
+            actual.Should().Be(expected);
+        }
+
+        [Property]
+        public void OppositeOfAShortArcIsALongArc(Direction2 from, Direction2 to)
+        {
+            if (from == to) return;
+
+            var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, from, to);
+
+            var actual = arc.Opposite;
+
+            var expected = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, from, to);
+            actual.Should().Be(expected);
+        }
+
+        [Property]
+        public void OppositeOfAZeroLengthArcIsAFullLengthArc(Direction2 fromTo)
+        {
+            var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
+
+            var actual = arc.Opposite;
+
+            var expected = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
+            actual.Should().Be(expected);
+        }
+
+        [Property]
+        public void OppositeOfAFullLengthArcIsAZeroLengthArc(Direction2 fromTo)
+        {
+            var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
+
+            var actual = arc.Opposite;
+
+            var expected = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
+            actual.Should().Be(expected);
+        }
+
+        [Property]
+        public void ReverseOfAShortArcIsTheShortArcWithDirectionsSwitched(Direction2 from, Direction2 to)
+        {
+            if (from == to) return;
+
+            var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, from, to);
+
+            var actual = arc.Reversed;
+
+            var expected = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, to, from);
+            actual.Should().Be(expected);
+        }
+
+        [Property]
+        public void ReverseOfALongArcIsTheLongArcWithDirectionsSwitched(Direction2 from, Direction2 to)
+        {
+            if (from == to) return;
+
+            var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, from, to);
+
+            var actual = arc.Reversed;
+
+            var expected = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, to, from);
+            actual.Should().Be(expected);
+        }
+
+        [Property]
+        public void ReverseOfAZeroLengthArcIsTheOriginalArc(Direction2 fromTo)
+        {
+            var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
+
+            var actual = arc.Reversed;
+
+            actual.Should().Be(arc);
+        }
+
+        [Property]
+        public void ReverseOfAFullCircleArcIsTheOriginalArc(Direction2 fromTo)
+        {
+            var arc = CircularArc2.LongArcBetweenDirections(Vector2.Zero, 1, fromTo, fromTo);
+
+            var actual = arc.Reversed;
+
+            actual.Should().Be(arc);
+        }
+
+        [Property(Arbitrary = new[] { typeof(FloatGenerators.PositiveCircleRadius) })]
+        public void StartPointIsPointOnArc(Direction2 from, Direction2 to, float radius)
+        {
+            if (from == to) return;
+
+            var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, from, to);
+
+            arc.StartPoint.LengthSquared.Should().BeApproximately(radius * radius, epsilon);
+        }
+
+        [Property(Arbitrary = new[] { typeof(FloatGenerators.PositiveCircleRadius) })]
+        public void ArcStartingAtDirectionZeroHasStartPointOnXAxis(Direction2 to, float radius)
+        {
+            var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, Direction2.Zero, to);
+
+            arc.StartPoint.Should().BeApproximately(radius * Vector2.UnitX, epsilon);
+        }
+
+        [Property(Arbitrary = new[] { typeof(FloatGenerators.PositiveCircleRadius) })]
+        public void ArcStartingAtDirection90DegHasStartPointOnYAxis(Direction2 to, float radius)
+        {
+            var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, Direction2.FromDegrees(90), to);
+
+            arc.StartPoint.Should().BeApproximately(radius * Vector2.UnitY, epsilon);
+        }
+
+        [Property(Arbitrary = new[] { typeof(FloatGenerators.PositiveCircleRadius) })]
+        public void ArcStartingAtDirection135HasStartPointInThirdQuadrant(Direction2 to, float radius)
+        {
+            var arc = CircularArc2.ShortArcBetweenDirections(
+                Vector2.Zero, radius, Direction2.FromDegrees(-135), to);
+
+            arc.StartPoint.X.Should().BeNegative();
+            arc.StartPoint.Y.Should().BeNegative();
+        }
+
+        [Property(Arbitrary = new[] { typeof(FloatGenerators.PositiveCircleRadius) })]
+        public void EndPointIsPointOnArc(Direction2 from, Direction2 to, float radius)
+        {
+            if (from == to) return;
+
+            var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, from, to);
+
+            arc.EndPoint.LengthSquared.Should().BeApproximately(radius * radius, epsilon);
+        }
+
+        [Property(Arbitrary = new[] { typeof(FloatGenerators.PositiveCircleRadius) })]
+        public void ArcEndingAtDirectionZeroHasEndPointOnXAxis(Direction2 from, float radius)
+        {
+            var arc = CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, from, Direction2.Zero);
+
+            arc.EndPoint.Should().BeApproximately(radius * Vector2.UnitX, epsilon);
+        }
+
+        [Property(Arbitrary = new[] { typeof(FloatGenerators.PositiveCircleRadius) })]
+        public void ArcEndingAtDirection90DegHasEndPointOnYAxis(Direction2 from, float radius)
+        {
+            var arc =
+                CircularArc2.ShortArcBetweenDirections(Vector2.Zero, radius, from, Direction2.FromDegrees(90));
+
+            arc.EndPoint.Should().BeApproximately(radius * Vector2.UnitY, epsilon);
+        }
+
+        [Property(Arbitrary = new[] { typeof(FloatGenerators.PositiveCircleRadius) })]
+        public void ArcEndingAtDirection135DegHasEndPointInThirdQuadrant(Direction2 from, float radius)
+        {
+            var arc = CircularArc2.ShortArcBetweenDirections(
+                Vector2.Zero, radius, from, Direction2.FromDegrees(-135));
+
+            arc.EndPoint.X.Should().BeNegative();
+            arc.EndPoint.Y.Should().BeNegative();
         }
     }
 }
