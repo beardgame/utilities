@@ -12,7 +12,7 @@ namespace Bearded.Utilities.Geometry
 
         public static readonly Bivector2 Zero = new Bivector2(0);
 
-        public static readonly Bivector2 One = new Bivector2(1);
+        public static readonly Bivector2 Unit = new Bivector2(1);
 
         public static Bivector2 OuterProduct(Vector2 left, Vector2 right) =>
             new Bivector2(left.X * right.Y - left.Y * right.X);

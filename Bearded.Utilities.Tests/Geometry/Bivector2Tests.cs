@@ -25,7 +25,7 @@ namespace Bearded.Utilities.Tests.Geometry
         {
             var outerProduct = Bivector2.OuterProduct(Vector2.UnitX, Vector2.UnitY);
 
-            outerProduct.Should().BeApproximately(Bivector2.One, epsilon);
+            outerProduct.Should().BeApproximately(Bivector2.Unit, epsilon);
         }
 
         [Property]
