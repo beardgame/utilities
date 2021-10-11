@@ -21,7 +21,7 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Fact]
-        public void WedgeOfUnitVectorsIsOne()
+        public void WedgeOfUnitVectorsIsUnitBivector()
         {
             var wedge = Bivector2.Wedge(Vector2.UnitX, Vector2.UnitY);
 
