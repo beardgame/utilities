@@ -21,46 +21,46 @@ namespace Bearded.Utilities.Tests.Geometry
         }
 
         [Fact]
-        public void OuterProductOfUnitVectorsIsOne()
+        public void WedgeOfUnitVectorsIsOne()
         {
-            var outerProduct = Bivector2.OuterProduct(Vector2.UnitX, Vector2.UnitY);
+            var wedge = Bivector2.Wedge(Vector2.UnitX, Vector2.UnitY);
 
-            outerProduct.Should().BeApproximately(Bivector2.Unit, epsilon);
+            wedge.Should().BeApproximately(Bivector2.Unit, epsilon);
         }
 
         [Property]
-        public void OuterProductOfVectorWithSelfIsZero(Vector2 vector)
+        public void WedgeOfVectorWithSelfIsZero(Vector2 vector)
         {
-            var outerProduct = Bivector2.OuterProduct(vector, vector);
+            var wedge = Bivector2.Wedge(vector, vector);
 
-            outerProduct.Should().BeApproximately(Bivector2.Zero, epsilon);
+            wedge.Should().BeApproximately(Bivector2.Zero, epsilon);
         }
 
         [Property]
-        public void OuterProductOfCollinearVectorsIsZero(Vector2 vector, float scalar)
+        public void WedgeOfCollinearVectorsIsZero(Vector2 vector, float scalar)
         {
-            var outerProduct = Bivector2.OuterProduct(vector, vector * scalar);
+            var wedge = Bivector2.Wedge(vector, vector * scalar);
 
-            outerProduct.Should().BeApproximately(Bivector2.Zero, epsilon);
+            wedge.Should().BeApproximately(Bivector2.Zero, epsilon);
         }
 
         [Property]
-        public void OuterProductOfNonCollinearVectorsIsNonZero(Vector2 left, Vector2 right)
+        public void WedgeOfNonCollinearVectorsIsNonZero(Vector2 left, Vector2 right)
         {
             if (areCollinear(left, right)) return;
 
-            var outerProduct = Bivector2.OuterProduct(left, right);
+            var wedge = Bivector2.Wedge(left, right);
 
-            outerProduct.Should().NotBe(Bivector2.Zero);
+            wedge.Should().NotBe(Bivector2.Zero);
         }
 
         [Property]
-        public void OuterProductIsAntiSymmetric(Vector2 left, Vector2 right)
+        public void WedgeIsAntiSymmetric(Vector2 left, Vector2 right)
         {
-            var outerProduct1 = Bivector2.OuterProduct(left, right);
-            var outerProduct2 = Bivector2.OuterProduct(right, left);
+            var wedge1 = Bivector2.Wedge(left, right);
+            var wedge2 = Bivector2.Wedge(right, left);
 
-            outerProduct1.Should().Be(-outerProduct2);
+            wedge1.Should().Be(-wedge2);
         }
 
         [Property]
