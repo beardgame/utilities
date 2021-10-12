@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Bearded.Utilities.Tilemaps.Rectangular;
 using FluentAssertions;
-using FsCheck.Xunit;
 using Xunit;
 
 namespace Bearded.Utilities.Tests.Tilemaps
