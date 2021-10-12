@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Bearded.Utilities.Tests.Monads
+namespace Bearded.Utilities.Tests.Linq
 {
     public sealed class ExtensionsTests
     {
@@ -117,7 +117,10 @@ namespace Bearded.Utilities.Tests.Monads
                     {3, entity }
                 };
             firstDictionary.AddRange(secondDictionary);
-            firstDictionary.Keys.Should().ContainInOrder(1, 2, 3);
+            firstDictionary.Keys
+                .Should().Contain(1)
+                .And.Contain(2)
+                .And.Contain(3);
         }
 
         public class AddSorted
@@ -233,12 +236,15 @@ namespace Bearded.Utilities.Tests.Monads
 
         public sealed class RandomElement
         {
-            [Fact]
-            public void ReturnsAnElementFromTheCollection()
+            [Theory]
+            [InlineData(1, 1)]
+            [InlineData(5, 2)]
+            [InlineData(2, 3)]
+            public void ReturnsAnElementFromTheCollection(int seed, int expected)
             {
                 var list = new List<int> { 1, 2, 3 };
-                var result = list.RandomElement(new System.Random());
-                list.Should().Contain(result);
+                var result = list.RandomElement(new System.Random(seed));
+                result.Should().Be(expected);
             }
 
             [Fact]
@@ -284,12 +290,22 @@ namespace Bearded.Utilities.Tests.Monads
 
         public sealed class RandomSubset
         {
-            [Fact]
-            public void ReturnsAnElementFromTheCollection()
+            [Theory]
+            [InlineData(1, 1, 3)]
+            [InlineData(3, 1, 2)]
+            [InlineData(2, 1, 1)]
+            [InlineData(1, 2, 3, 2)]
+            [InlineData(5, 2, 1, 3)]
+            [InlineData(2, 2, 1, 2)]
+            [InlineData(1, 3, 1, 2, 3)]
+            [InlineData(1, 4, 1, 2, 3)]
+            public void ReturnsAnElementFromTheCollection(int seed, int length, params int[] expected)
             {
                 var list = new List<int> { 1, 2, 3 };
-                var result = list.RandomSubset(1, new System.Random());
-                list.Should().Contain(result);
+                var result = list.RandomSubset(length, new System.Random(seed));
+                foreach (var e in expected)
+                    result.Should().Contain(e);
+                result.Should().HaveCount(Math.Min(length, list.Count));
             }
 
             [Fact]
@@ -366,7 +382,23 @@ namespace Bearded.Utilities.Tests.Monads
             {
                 var list = new List<int> { 1, 2, 3 };
                 list.Shuffle();
-                list.Should().Contain(1).And.Contain(2).And.Contain(3);
+                list.Should()
+                    .Contain(1)
+                    .And.Contain(2)
+                    .And.Contain(3)
+                    .And.HaveCount(3);
+            }
+
+            [Theory]
+            [InlineData(1, 1, 2, 3)]
+            [InlineData(2, 3, 2, 1)]
+            [InlineData(3, 1, 3, 2)]
+            public void ShufflesInPlaceListWithGivenSeed(int seed, params int[] expected)
+            {
+                var list = new List<int> { 1, 2, 3 };
+                list.Shuffle(new System.Random(seed));
+                list.Should()
+                    .ContainInOrder(expected);
             }
         }
 
@@ -386,6 +418,18 @@ namespace Bearded.Utilities.Tests.Monads
                 var list = new List<int> { 1, 2, 3 };
                 Action action = () => list.Shuffled(null);
                 action.Should().Throw<ArgumentNullException>();
+            }
+
+            [Fact]
+            public void ShufflesInPlaceList()
+            {
+                var list = new List<int> { 1, 2, 3 };
+                var result = list.Shuffled();
+                foreach (var e in list)
+                {
+                    result.Should().Contain(e);
+                }
+                result.Should().HaveCount(list.Count);
             }
         }
 
