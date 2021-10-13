@@ -1,5 +1,6 @@
 using System;
 using FluentAssertions;
+using FsCheck;
 using FsCheck.Xunit;
 using Xunit;
 
@@ -24,6 +25,28 @@ namespace Bearded.Utilities.Tests
             var value2 = lazy.Value;
 
             value1.Should().BeSameAs(value2);
+        }
+
+        [Fact]
+        public void ValueReturnsResultFromFunc()
+        {
+            var obj = new object();
+            var lazy = ResettableLazy.From(() => obj);
+
+            lazy.Value.Should().BeSameAs(obj);
+        }
+
+        [Fact]
+        public void FuncShouldNotBeCalledIfValueIsNotCalled()
+        {
+            var funcWasCalled = false;
+            ResettableLazy.From(() =>
+            {
+                funcWasCalled = true;
+                return new object();
+            });
+
+            funcWasCalled.Should().BeFalse();
         }
 
         [Fact]
