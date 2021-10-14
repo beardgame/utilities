@@ -1,6 +1,9 @@
 using Bearded.Utilities.Linq;
 using Bearded.Utilities.Testing;
+using Bearded.Utilities.Tests.Generators;
 using FluentAssertions;
+using FsCheck;
+using FsCheck.Xunit;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -236,15 +239,12 @@ namespace Bearded.Utilities.Tests.Linq
 
         public sealed class RandomElement
         {
-            [Theory]
-            [InlineData(1, 1)]
-            [InlineData(5, 2)]
-            [InlineData(2, 3)]
-            public void ReturnsAnElementFromTheCollection(int seed, int expected)
+            [Property]
+            public void ReturnsAnElementFromTheCollection(int seed)
             {
                 var list = new List<int> { 1, 2, 3 };
                 var result = list.RandomElement(new System.Random(seed));
-                result.Should().Be(expected);
+                list.Should().Contain(result);
             }
 
             [Fact]
@@ -290,21 +290,14 @@ namespace Bearded.Utilities.Tests.Linq
 
         public sealed class RandomSubset
         {
-            [Theory]
-            [InlineData(1, 1, 3)]
-            [InlineData(3, 1, 2)]
-            [InlineData(2, 1, 1)]
-            [InlineData(1, 2, 3, 2)]
-            [InlineData(5, 2, 1, 3)]
-            [InlineData(2, 2, 1, 2)]
-            [InlineData(1, 3, 1, 2, 3)]
-            [InlineData(1, 4, 1, 2, 3)]
-            public void ReturnsAnElementFromTheCollection(int seed, int length, params int[] expected)
+
+            [Property(Arbitrary = new [] { typeof(IntGenerators.PositiveInt) })]
+            public void ReturnsAnElementFromTheCollection(int seed, int length)
             {
                 var list = new List<int> { 1, 2, 3 };
                 var result = list.RandomSubset(length, new System.Random(seed));
-                foreach (var e in expected)
-                    result.Should().Contain(e);
+                foreach (var r in result)
+                    list.Should().Contain(r);
                 result.Should().HaveCount(Math.Min(length, list.Count));
             }
 
@@ -389,16 +382,17 @@ namespace Bearded.Utilities.Tests.Linq
                     .And.HaveCount(3);
             }
 
-            [Theory]
-            [InlineData(1, 1, 2, 3)]
-            [InlineData(2, 3, 2, 1)]
-            [InlineData(3, 1, 3, 2)]
-            public void ShufflesInPlaceListWithGivenSeed(int seed, params int[] expected)
+
+            [Property]
+            public void ShufflesInPlaceListWithGivenSeed(int seed)
             {
                 var list = new List<int> { 1, 2, 3 };
                 list.Shuffle(new System.Random(seed));
                 list.Should()
-                    .ContainInOrder(expected);
+                    .HaveCount(3)
+                    .And.Contain(1)
+                    .And.Contain(2)
+                    .And.Contain(3);
             }
         }
 
