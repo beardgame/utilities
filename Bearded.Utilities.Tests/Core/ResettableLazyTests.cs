@@ -58,7 +58,6 @@ namespace Bearded.Utilities.Tests
         [Fact]
         public void ValueReturnsNewInstanceAfterResetting()
         {
-            // Use our own func to ensure that we create new instances each time the func is called.
             var lazy = ResettableLazy.From(() => new object());
             var valueBeforeResetting = lazy.Value;
             lazy.Reset();
