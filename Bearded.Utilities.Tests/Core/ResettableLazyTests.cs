@@ -1,39 +1,45 @@
-using System;
 using FluentAssertions;
-using FsCheck;
-using FsCheck.Xunit;
 using Xunit;
 
 namespace Bearded.Utilities.Tests
 {
     public sealed class ResettableLazyTests
     {
-        [Property]
-        public void ValueReturnsValueReturnedFromFunc(object obj)
+        [Fact]
+        public void ValueReturnsReferenceTypeFromFunc()
         {
+            var obj = new object();
             var lazy = ResettableLazy.From(() => obj);
 
             lazy.Value.Should().Be(obj);
         }
 
-        [Property]
-        public void ValueReturnsSameInstanceEveryTime(Func<object> objProvider)
+        [Fact]
+        public void ValueReturnsNullFromFunc()
         {
-            var lazy = ResettableLazy.From(objProvider);
+            var lazy = ResettableLazy.From(() => (object?) null);
+
+            lazy.Value.Should().Be(null);
+        }
+
+        [Fact]
+        public void ValueReturnsValueTypeFromFunc()
+        {
+            const int num = 5;
+            var lazy = ResettableLazy.From(() => num);
+
+            lazy.Value.Should().Be(num);
+        }
+
+        [Fact]
+        public void ValueReturnsSameInstanceEveryTime()
+        {
+            var lazy = ResettableLazy.From(() => new object());
 
             var value1 = lazy.Value;
             var value2 = lazy.Value;
 
             value1.Should().BeSameAs(value2);
-        }
-
-        [Fact]
-        public void ValueReturnsResultFromFunc()
-        {
-            var obj = new object();
-            var lazy = ResettableLazy.From(() => obj);
-
-            lazy.Value.Should().BeSameAs(obj);
         }
 
         [Fact]
