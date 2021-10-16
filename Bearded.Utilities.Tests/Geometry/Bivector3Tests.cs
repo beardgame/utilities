@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Bearded.Utilities.Geometry;
 using Bearded.Utilities.Testing.Geometry;
 using Bearded.Utilities.Tests.Generators;
@@ -60,6 +61,39 @@ namespace Bearded.Utilities.Tests.Geometry
             var wedge2 = Bivector3.Wedge(right, left);
 
             wedge1.Should().Be(-wedge2);
+        }
+
+        [Property]
+        public void FromAxisCreatesBivectorWithSameMagnitudeAsVector(Vector3 axis)
+        {
+            var bivector = Bivector3.FromAxis(axis);
+
+            bivector.Magnitude.Should().BeApproximately(axis.Length, epsilon);
+        }
+
+        [Property]
+        public void FromAxisRetainsSign(Vector3 axis)
+        {
+            var bivector = Bivector3.FromAxis(axis);
+            var reverseBivector = Bivector3.FromAxis(-axis);
+
+            bivector.Should().BeApproximately(-reverseBivector, epsilon);
+        }
+
+        [Theory]
+        [MemberData(nameof(UnitVectorsWithOrthogonalPlanes))]
+        public void FromAxisReturnsOrthogonalPlaneToUnitVectors(Vector3 axis, Bivector3 expectedBivector)
+        {
+            var bivector = Bivector3.FromAxis(axis);
+
+            bivector.Should().BeApproximately(expectedBivector, epsilon);
+        }
+
+        public static IEnumerable<object[]> UnitVectorsWithOrthogonalPlanes()
+        {
+            yield return new object[] { Vector3.UnitX, Bivector3.UnitYz };
+            yield return new object[] { Vector3.UnitY, -Bivector3.UnitXz };
+            yield return new object[] { Vector3.UnitZ, Bivector3.UnitXy };
         }
 
         [Fact]

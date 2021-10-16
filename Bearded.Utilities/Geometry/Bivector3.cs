@@ -30,6 +30,15 @@ namespace Bearded.Utilities.Geometry
                 left.Y * right.Z - right.Y * left.Z,
                 left.X * right.Z - right.X * left.Z);
 
+        /// <summary>
+        /// Returns a counter-clockwise bivector representing the plane orthogonal from the provided axis, with
+        /// magnitude equal to the length of the axis.
+        /// </summary>
+        public static Bivector3 FromAxis(Vector3 axis)
+        {
+            return new Bivector3(axis.Z, axis.X, -axis.Y);
+        }
+
         public Bivector3(float xy, float yz, float xz)
         {
             Xy = xy;
