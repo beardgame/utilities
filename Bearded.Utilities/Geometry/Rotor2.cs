@@ -3,6 +3,12 @@ using OpenTK.Mathematics;
 
 namespace Bearded.Utilities.Geometry
 {
+    /// <summary>
+    /// A representation of a rotation in two-dimensional space.
+    /// Rotors are the analog to complex numbers in geometric algebra. The underlying maths is isomorphic to the maths
+    /// used in complex numbers, but the underlying geometric concepts are more geometrically intuitive.
+    /// Normalized rotors represent a rotation only. Non-normalized rotors may also scale the vector.
+    /// </summary>
     public readonly struct Rotor2 : IEquatable<Rotor2>
     {
         /// <summary>
@@ -24,11 +30,14 @@ namespace Bearded.Utilities.Geometry
 
         public float MagnitudeSquared => Scalar.Squared() + Bivector.MagnitudeSquared;
 
+        /// <summary>
+        /// The rotor that acts as an identity transformation on all vectors.
+        /// </summary>
         public static Rotor2 Identity { get; } = new Rotor2(1, Bivector2.Zero);
 
         /// <summary>
         /// Creates a rotor that rotates the from vector to the to vector, assuming these vectors are normalized.
-        /// The rotor between two opposite vectors is undefined.
+        /// The rotor between two opposite vectors is undefined, as there are multiple possible rotations.
         /// </summary>
         public static Rotor2 Between(Vector2 from, Vector2 to)
         {

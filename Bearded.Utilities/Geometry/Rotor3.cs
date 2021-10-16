@@ -3,6 +3,12 @@ using OpenTK.Mathematics;
 
 namespace Bearded.Utilities.Geometry
 {
+    /// <summary>
+    /// A representation of a rotation in three-dimensional space.
+    /// Rotors are the analog to quaternions in geometric algebra. The underlying maths is isomorphic to the maths used
+    /// in quaternions, but the underlying geometric concepts are more geometrically intuitive.
+    /// Normalized rotors represent a rotation only. Non-normalized rotors may also scale the vector.
+    /// </summary>
     public readonly struct Rotor3 : IEquatable<Rotor3>
     {
         /// <summary>
@@ -34,11 +40,14 @@ namespace Bearded.Utilities.Geometry
 
         public float MagnitudeSquared => Scalar.Squared() + Bivector.MagnitudeSquared;
 
+        /// <summary>
+        /// The rotor that acts as an identity transformation on all vectors.
+        /// </summary>
         public static Rotor3 Identity { get; } = new Rotor3(1, Bivector3.Zero);
 
         /// <summary>
         /// Creates a rotor that rotates the from vector to the to vector, assuming these vectors are normalized.
-        /// The rotor between two opposite vectors is undefined.
+        /// The rotor between two opposite vectors is undefined, as there are infinitely many possible rotations.
         /// </summary>
         public static Rotor3 Between(Vector3 from, Vector3 to)
         {
@@ -70,6 +79,9 @@ namespace Bearded.Utilities.Geometry
         /// </summary>
         public static Rotor3 FromXzAngle(Angle angle) => FromPlaneAngle(Bivector3.UnitXz, angle);
 
+        /// <summary>
+        /// Creates a rotor that rotates around the axis by the specified angle.
+        /// </summary>
         public static Rotor3 FromAxisAngle(Vector3 axis, Angle angle) =>
             FromPlaneAngle(Bivector3.FromAxis(axis), angle);
 
