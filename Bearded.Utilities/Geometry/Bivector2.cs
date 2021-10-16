@@ -10,6 +10,10 @@ namespace Bearded.Utilities.Geometry
     {
         public float Xy { get; }
 
+        public float Magnitude => MathF.Abs(Xy);
+
+        public float MagnitudeSquared => Xy.Squared();
+
         public static readonly Bivector2 Zero = new Bivector2(0);
 
         public static readonly Bivector2 Unit = new Bivector2(1);
@@ -21,10 +25,6 @@ namespace Bearded.Utilities.Geometry
         {
             Xy = xy;
         }
-
-        public float Magnitude() => MathF.Abs(Xy);
-
-        public float MagnitudeSquared() => Xy.Squared();
 
         public Bivector2 Normalized() => new Bivector2(MathF.Sign(Xy));
 

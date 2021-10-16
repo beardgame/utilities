@@ -12,6 +12,10 @@ namespace Bearded.Utilities.Geometry
         public float Yz { get; }
         public float Xz { get; }
 
+        public float Magnitude => MagnitudeSquared.Sqrted();
+
+        public float MagnitudeSquared => Xy.Squared() + Yz.Squared() + Xz.Squared();
+
         public static readonly Bivector3 Zero = new Bivector3(0, 0, 0);
 
         public static readonly Bivector3 UnitXy = new Bivector3(1, 0, 0);
@@ -33,11 +37,7 @@ namespace Bearded.Utilities.Geometry
             Xz = xz;
         }
 
-        public float MagnitudeSquared() => Xy.Squared() + Yz.Squared() + Xz.Squared();
-
-        public float Magnitude() => MagnitudeSquared().Sqrted();
-
-        public Bivector3 Normalized() => this / Magnitude();
+        public Bivector3 Normalized() => this / Magnitude;
 
         public static Bivector3 operator +(Bivector3 left, Bivector3 right) =>
             new Bivector3(left.Xy + right.Xy, left.Yz + right.Yz, left.Xz + right.Xz);

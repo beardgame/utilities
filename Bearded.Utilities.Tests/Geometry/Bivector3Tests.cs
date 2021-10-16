@@ -65,19 +65,19 @@ namespace Bearded.Utilities.Tests.Geometry
         [Fact]
         public void UnitBivectorsHaveMagnitudeOne()
         {
-            Bivector3.UnitXy.Magnitude().Should().BeApproximately(1, epsilon);
-            Bivector3.UnitXy.MagnitudeSquared().Should().BeApproximately(1, epsilon);
-            Bivector3.UnitYz.Magnitude().Should().BeApproximately(1, epsilon);
-            Bivector3.UnitYz.MagnitudeSquared().Should().BeApproximately(1, epsilon);
-            Bivector3.UnitXz.Magnitude().Should().BeApproximately(1, epsilon);
-            Bivector3.UnitXz.MagnitudeSquared().Should().BeApproximately(1, epsilon);
+            Bivector3.UnitXy.Magnitude.Should().BeApproximately(1, epsilon);
+            Bivector3.UnitXy.MagnitudeSquared.Should().BeApproximately(1, epsilon);
+            Bivector3.UnitYz.Magnitude.Should().BeApproximately(1, epsilon);
+            Bivector3.UnitYz.MagnitudeSquared.Should().BeApproximately(1, epsilon);
+            Bivector3.UnitXz.Magnitude.Should().BeApproximately(1, epsilon);
+            Bivector3.UnitXz.MagnitudeSquared.Should().BeApproximately(1, epsilon);
         }
 
         [Fact]
         public void ZeroBivectorHasMagnitudeZero()
         {
-            Bivector3.Zero.Magnitude().Should().BeApproximately(0, epsilon);
-            Bivector3.Zero.MagnitudeSquared().Should().BeApproximately(0, epsilon);
+            Bivector3.Zero.Magnitude.Should().BeApproximately(0, epsilon);
+            Bivector3.Zero.MagnitudeSquared.Should().BeApproximately(0, epsilon);
         }
 
         [Property]
@@ -88,8 +88,8 @@ namespace Bearded.Utilities.Tests.Geometry
 
             var normalized = bivector.Normalized();
 
-            normalized.Magnitude().Should().BeApproximately(1, epsilon);
-            normalized.MagnitudeSquared().Should().BeApproximately(1, epsilon);
+            normalized.Magnitude.Should().BeApproximately(1, epsilon);
+            normalized.MagnitudeSquared.Should().BeApproximately(1, epsilon);
         }
 
         [Property]

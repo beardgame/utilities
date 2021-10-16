@@ -66,15 +66,15 @@ namespace Bearded.Utilities.Tests.Geometry
         [Fact]
         public void UnitBivectorHasMagnitudeOne()
         {
-            Bivector2.Unit.Magnitude().Should().BeApproximately(1, epsilon);
-            Bivector2.Unit.MagnitudeSquared().Should().BeApproximately(1, epsilon);
+            Bivector2.Unit.Magnitude.Should().BeApproximately(1, epsilon);
+            Bivector2.Unit.MagnitudeSquared.Should().BeApproximately(1, epsilon);
         }
 
         [Fact]
         public void ZeroBivectorHasMagnitudeZero()
         {
-            Bivector2.Zero.Magnitude().Should().BeApproximately(0, epsilon);
-            Bivector2.Zero.MagnitudeSquared().Should().BeApproximately(0, epsilon);
+            Bivector2.Zero.Magnitude.Should().BeApproximately(0, epsilon);
+            Bivector2.Zero.MagnitudeSquared.Should().BeApproximately(0, epsilon);
         }
 
         [Property]
@@ -85,8 +85,8 @@ namespace Bearded.Utilities.Tests.Geometry
 
             var normalized = bivector.Normalized();
 
-            normalized.Magnitude().Should().BeApproximately(1, epsilon);
-            normalized.MagnitudeSquared().Should().BeApproximately(1, epsilon);
+            normalized.Magnitude.Should().BeApproximately(1, epsilon);
+            normalized.MagnitudeSquared.Should().BeApproximately(1, epsilon);
         }
 
         [Property]
