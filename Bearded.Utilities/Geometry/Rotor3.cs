@@ -32,7 +32,7 @@ namespace Bearded.Utilities.Geometry
 
         public float Magnitude => MagnitudeSquared.Sqrted();
 
-        public float MagnitudeSquared => Scalar.Squared() + Xy.Squared() + Yz.Squared() + Xz.Squared();
+        public float MagnitudeSquared => Scalar.Squared() + Bivector.MagnitudeSquared;
 
         public static Rotor3 Identity { get; } = new Rotor3(1, Bivector3.Zero);
 

@@ -79,7 +79,7 @@ namespace Bearded.Utilities.Tests.Geometry
         {
             if (from == Vector3.Zero) from = Vector3.UnitX;
             if (to == Vector3.Zero) to = Vector3.UnitY;
-            if (to == -from) return;
+            if (areCollinear(to, from)) return;
 
             var rotor = Rotor3.Between(from.Normalized(), to.Normalized());
             var reversedRotor = rotor.Reversed();
