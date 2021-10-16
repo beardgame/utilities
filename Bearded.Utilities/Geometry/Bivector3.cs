@@ -33,6 +33,12 @@ namespace Bearded.Utilities.Geometry
             Xz = xz;
         }
 
+        public float MagnitudeSquared() => Xy.Squared() + Yz.Squared() + Xz.Squared();
+
+        public float Magnitude() => MagnitudeSquared().Sqrted();
+
+        public Bivector3 Normalized() => this / Magnitude();
+
         public static Bivector3 operator +(Bivector3 left, Bivector3 right) =>
             new Bivector3(left.Xy + right.Xy, left.Yz + right.Yz, left.Xz + right.Xz);
 
@@ -41,6 +47,13 @@ namespace Bearded.Utilities.Geometry
 
         public static Bivector3 operator -(Bivector3 bivector) =>
             new Bivector3(-bivector.Xy, -bivector.Yz, -bivector.Xz);
+
+        public static Bivector3 operator *(float scalar, Bivector3 bivector) =>
+            new Bivector3(scalar * bivector.Xy, scalar * bivector.Yz, scalar * bivector.Xz);
+
+        public static Bivector3 operator *(Bivector3 bivector, float scalar) => scalar * bivector;
+
+        public static Bivector3 operator /(Bivector3 bivector, float divider) => 1 / divider * bivector;
 
         public bool Equals(Bivector3 other) => Xy.Equals(other.Xy) && Yz.Equals(other.Yz) && Xz.Equals(other.Xz);
 
