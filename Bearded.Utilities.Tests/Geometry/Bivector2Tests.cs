@@ -89,6 +89,14 @@ namespace Bearded.Utilities.Tests.Geometry
             normalized.MagnitudeSquared.Should().BeApproximately(1, epsilon);
         }
 
+        [Fact]
+        public void NormalizedZeroBivectorIsZeroBivector()
+        {
+            var bivector = Bivector2.Zero;
+
+            bivector.Normalized().Should().Be(bivector);
+        }
+
         [Property]
         public void NormalizedBivectorRetainsSign(float xy)
         {

@@ -37,7 +37,7 @@ namespace Bearded.Utilities.Geometry
             Xz = xz;
         }
 
-        public Bivector3 Normalized() => this / Magnitude;
+        public Bivector3 Normalized() => MagnitudeSquared == 0 ? this : this / Magnitude;
 
         public static Bivector3 operator +(Bivector3 left, Bivector3 right) =>
             new Bivector3(left.Xy + right.Xy, left.Yz + right.Yz, left.Xz + right.Xz);
