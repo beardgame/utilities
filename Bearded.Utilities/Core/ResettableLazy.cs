@@ -2,6 +2,9 @@
 
 namespace Bearded.Utilities
 {
+    /// <summary>
+    /// Factory class for creating ResettableLazy instances.
+    /// </summary>
     public static class ResettableLazy
     {
         public static ResettableLazy<T> From<T>(Func<T> factory)
@@ -11,7 +14,7 @@ namespace Bearded.Utilities
     }
 
     /// <summary>
-    /// This class represents a lazily initialised value. It can be reset to call the initialisation again afterwards.
+    /// This class represents a lazily initialized value. It can be reset to call the initialization again afterwards.
     /// It is not thread safe.
     /// </summary>
     public sealed class ResettableLazy<T>
@@ -19,7 +22,7 @@ namespace Bearded.Utilities
         private readonly Func<T> factory;
 
         private bool hasValue;
-        private T value;
+        private T value = default!;
 
         public T Value => ensureValue();
 
