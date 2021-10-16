@@ -116,7 +116,7 @@ namespace Bearded.Utilities.Tests.Geometry
         {
             if (from == Vector3.Zero) from = Vector3.UnitX;
             if (to == Vector3.Zero) to = Vector3.UnitY;
-            if (to == -from) return;
+            if (areCollinear(from, to)) return;
 
             var rotor = Rotor3.Between(from.Normalized(), to.Normalized());
 
@@ -147,7 +147,7 @@ namespace Bearded.Utilities.Tests.Geometry
         [Property]
         public void RotorFromPlaneAngleRotatesByAngle(Vector3 l, Vector3 r, float rads, Vector3 toRotate)
         {
-            if (areCollinear(l, r)) return;
+            if (areCollinear(l, r) || toRotate == Vector3.Zero) return;
             var plane = Bivector3.Wedge(l, r);
             var angle = Angle.FromRadians(rads);
 

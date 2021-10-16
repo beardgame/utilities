@@ -44,6 +44,28 @@ namespace Bearded.Utilities.Geometry
             return new Rotor2(1 + Vector2.Dot(from, to), Bivector2.Wedge(to, from)).Normalized();
         }
 
+        /// <summary>
+        /// Creates a rotor that rotates the from direction to the to direction.
+        /// The rotor between two opposite directions is undefined, as there are multiple possible rotations.
+        /// </summary>
+        public static Rotor2 Between(Direction2 from, Direction2 to) => Between(from.Vector, to.Vector);
+
+        /// <summary>
+        /// Creates a rotor that rotates in the (orientation-aware) plane defined by the bivector by the specified
+        /// angle.
+        /// </summary>
+        public static Rotor2 FromPlaneAngle(Bivector2 plane, Angle angle)
+        {
+            var halfAngle = 0.5f * angle;
+            return new Rotor2(MathF.Cos(halfAngle.Radians), -MathF.Sin(halfAngle.Radians) * plane.Normalized());
+        }
+
+        /// <summary>
+        /// Creates a rotor that rotates by the specified angle.
+        /// This is possible in 2D, because there is only one axis to rotate around.
+        /// </summary>
+        public static Rotor2 FromAngle(Angle angle) => FromPlaneAngle(Bivector2.Unit, angle);
+
         public Rotor2(float scalar, Bivector2 bivector)
         {
             Scalar = scalar;

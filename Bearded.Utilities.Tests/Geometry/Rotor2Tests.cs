@@ -79,7 +79,7 @@ namespace Bearded.Utilities.Tests.Geometry
         {
             if (from == Vector2.Zero) from = Vector2.UnitX;
             if (to == Vector2.Zero) to = Vector2.UnitY;
-            if (to == -from) return;
+            if (areCollinear(from, to)) return;
 
             var rotor = Rotor2.Between(from.Normalized(), to.Normalized());
             var reversedRotor = rotor.Reversed();
@@ -123,6 +123,47 @@ namespace Bearded.Utilities.Tests.Geometry
             var rotated = rotor.Rotate(from);
 
             rotated.Normalized().Should().BeApproximately(to.Normalized(), epsilon);
+        }
+
+        [Property]
+        public void RotorFromPlaneAngleRotatesByAngle(Vector2 l, Vector2 r, float rads, Vector2 toRotate)
+        {
+            if (areCollinear(l, r) || toRotate == Vector2.Zero) return;
+            var plane = Bivector2.Wedge(l, r);
+            var angle = Angle.FromRadians(rads);
+
+            var rotor = Rotor2.FromPlaneAngle(plane, angle);
+            var rotated = rotor.Rotate(toRotate);
+
+            Angle.Between(toRotate, rotated).MagnitudeInRadians.Should().BeApproximately(MathF.Abs(rads), epsilon);
+        }
+
+        [Property]
+        public void RotorFromPlaneAngleAppliesPlaneOrientation(Vector2 l, Vector2 r, float rads, Vector2 toRotate)
+        {
+            if (areCollinear(l, r) || toRotate == Vector2.Zero) return;
+            var plane = Bivector2.Wedge(l, r);
+            var reversePlane = -plane;
+            var angle = Angle.FromRadians(rads);
+
+            var rotatedInPlane = Rotor2.FromPlaneAngle(plane, angle).Rotate(toRotate);
+            var rotatedInReversePlane = Rotor2.FromPlaneAngle(reversePlane, angle).Rotate(toRotate);
+
+            Angle.Between(toRotate, rotatedInPlane).Radians.Should()
+                .BeApproximately(-Angle.Between(toRotate, rotatedInReversePlane).Radians, epsilon);
+        }
+
+        [Property]
+        public void RotorFromAngleRotatesByAngle(Vector2 l, Vector2 r, float rads, Vector2 toRotate)
+        {
+            if (areCollinear(l, r) || toRotate == Vector2.Zero) return;
+            var plane = Bivector2.Wedge(l, r);
+            var angle = Angle.FromRadians(rads);
+
+            var rotor = Rotor2.FromAngle(angle);
+            var rotated = rotor.Rotate(toRotate);
+
+            Angle.Between(rotated, toRotate).Radians.Should().BeApproximately(rads, epsilon);
         }
 
         [Property]
