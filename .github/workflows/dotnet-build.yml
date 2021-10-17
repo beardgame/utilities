@@ -45,7 +45,9 @@ jobs:
       - name: Build
         run: dotnet build -c Release --no-restore
       - name: Run benchmarks
-        run: dotnet run --project Bearded.Utilities.Benchmarks -c Release --no-build -- -f '*' --exporters json
+        run: dotnet run --project Bearded.Utilities.Benchmarks -c Release --no-build -- -f '*' --join --exporters json
+      - name: Copy benchmark data to deterministic location
+        run: cp BenchmarkDotNet.Artifacts/results/*-report-full-compressed.json ./new-benchmark-data.json
       - name: Download previous benchmark data
         uses: actions/cache@v2
         with:
@@ -62,4 +64,4 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Persist benchmark data
         if: github.event_name != 'pull_request'
-        run: cp BenchmarkDotNet.Artifacts/results/*-report-full-compressed.json ./benchmarks/benchmark-data.json
+        run: cp ./new-benchmark-data.json ./benchmarks/benchmark-data.json
