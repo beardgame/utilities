@@ -187,3 +187,6 @@ FakesAssemblies/
 
 # Rider files
 .idea/
+
+# Benchmark outputs
+BenchmarkDotNet.Artifacts/
