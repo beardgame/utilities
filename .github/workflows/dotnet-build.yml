@@ -25,6 +25,41 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build -c Release --no-restore
       - name: Test
         run: dotnet test --no-restore --verbosity normal
+
+  benchmark:
+
+    name: Run benchmarks
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core 5.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build -c Release --no-restore
+      - name: Run benchmarks
+        run: dotnet run --project Bearded.Utilities.Benchmarks -c Release --no-build -- -f '*' --exporters json
+      - name: Download previous benchmark data
+        uses: actions/cache@v2
+        with:
+          path: ./benchmarks
+          key: ${{ runner.os }}-benchmark
+      - name: Process benchmark result
+        uses: Happypig375/github-action-benchmark@v1.8.2
+        with:
+          tool: 'benchmarkdotnet'
+          output-file-path: BenchmarkDotNet.Artifacts/results/*-report-full-compressed.json
+          external-data-json-path: ./benchmarks/benchmark-data.json
+          fail-on-alert: true
+          comment-on-alert: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Persist benchmark data
+        if: github.event_name != 'pull_request'
+        run: cp BenchmarkDotNet.Artifacts/results/*-report-full-compressed.json ./benchmarks/benchmark-data.json
