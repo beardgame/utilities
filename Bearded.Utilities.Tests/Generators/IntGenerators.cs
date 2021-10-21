@@ -1,5 +1,4 @@
-﻿using System;
-using FsCheck;
+﻿using FsCheck;
 
 namespace Bearded.Utilities.Tests.Generators
 {
