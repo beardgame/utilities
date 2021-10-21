@@ -2,7 +2,7 @@
 
 namespace Bearded.Utilities.Tests.Generators
 {
-    static class IntGenerators
+    internal static class IntGenerators
     {
         public static class PositiveInt
         {
