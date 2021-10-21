@@ -62,6 +62,3 @@ jobs:
           fail-on-alert: true
           comment-on-alert: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Persist benchmark data
-        if: github.event_name != 'pull_request'
-        run: cp ./new-benchmark-data.json ./benchmarks/benchmark-data.json
