@@ -52,7 +52,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ./benchmarks
-          key: ${{ runner.os }}-benchmark
+          key: ${{ runner.os }}-benchmark-v2
       - name: Process benchmark result
         uses: Happypig375/github-action-benchmark@v1.8.2
         with:
