@@ -52,7 +52,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ./benchmarks
-          key: ${{ runner.os }}-benchmark
+          key: ${{ runner.os }}-benchmark-v2
       - name: Process benchmark result
         uses: Happypig375/github-action-benchmark@v1.8.2
         with:
@@ -62,6 +62,3 @@ jobs:
           fail-on-alert: true
           comment-on-alert: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Persist benchmark data
-        if: github.event_name != 'pull_request'
-        run: cp ./new-benchmark-data.json ./benchmarks/benchmark-data.json
