@@ -10,11 +10,11 @@ namespace Bearded.Utilities.Noise
 
         public static IProceduralTexture Generate(int numCellsX, int numCellsY, IInterpolationMethod2d interpolation, int? seed)
         {
-            if (numCellsX == 0)
+            if (numCellsX <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(numCellsX));
             }
-            if (numCellsY == 0)
+            if (numCellsY <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(numCellsY));
             }
