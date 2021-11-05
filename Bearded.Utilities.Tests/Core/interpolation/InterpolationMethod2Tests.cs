@@ -1,3 +1,4 @@
+using System.Linq;
 using Bearded.Utilities.Tests.Generators;
 using FluentAssertions;
 using FsCheck.Xunit;
@@ -37,9 +38,12 @@ namespace Bearded.Utilities.Tests
         }
 
         [Property(Arbitrary = new[] {typeof(DoubleGenerators.UnitIntervalBoundsInclusive)})]
-        public void ReturnsValuesBetweenValues(double u, double v)
+        public void ReturnsValuesBetweenValues(double value00, double value10, double value01, double value11, double u, double v)
         {
-            Interpolation.Interpolate(0, 0, 1, 1, u, v).Should().BeInRange(0, 1);
+            var min = new[] { value00, value10, value01, value11 }.Min();
+            var max = new[] { value00, value10, value01, value11 }.Max();
+
+            Interpolation.Interpolate(value00, value10, value01, value11, u, v).Should().BeInRange(min, max);
         }
     }
 }
