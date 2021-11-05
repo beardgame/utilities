@@ -31,5 +31,16 @@ namespace Bearded.Utilities.Tests.Generators
                     .Select(i => ((float) i + 1) / 1000)
                     .ToArbitrary();
         }
+
+        /// <summary>
+        /// Generates floats with reasonable maximum magnitude to avoid positive infinities when doing arithmetic.
+        /// </summary>
+        public sealed class ForArithmetic
+        {
+            public static Arbitrary<float> Floats()
+                => Arb.Default.Int32().Generator
+                    .Select(i => 0.001f * i)
+                    .ToArbitrary();
+        }
     }
 }
