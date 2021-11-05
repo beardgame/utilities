@@ -1,3 +1,5 @@
+using System;
+
 namespace Bearded.Utilities
 {
     public static class Interpolation1d
@@ -18,16 +20,8 @@ namespace Bearded.Utilities
         {
             public double Interpolate(double from, double to, double t)
             {
-                if (t <= 0)
-                {
-                    return from;
-                }
-                if (t >= 1)
-                {
-                    return to;
-                }
-
-                return from + (to - from) * t;
+                var clampedT = Math.Max(0, Math.Min(t, 1));
+                return from * (1 - clampedT) + to * clampedT;
             }
         }
 
@@ -35,17 +29,12 @@ namespace Bearded.Utilities
         {
             public double Interpolate(double from, double to, double t)
             {
-                if (t <= 0)
-                {
-                    return from;
-                }
-                if (t >= 1)
-                {
-                    return to;
-                }
-
-                return (2 * t - 3) * t * t * (from - to) + from;
+                var clampedT = Math.Max(0, Math.Min(t, 1));
+                var smoothT = smoothStep(clampedT);
+                return from * (1 - smoothT) + to * smoothT;
             }
+
+            private static double smoothStep(double t) => t * t * (3 - 2 * t);
         }
     }
 }
