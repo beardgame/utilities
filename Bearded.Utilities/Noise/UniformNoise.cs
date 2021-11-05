@@ -5,10 +5,10 @@ namespace Bearded.Utilities.Noise
 {
     public static class UniformNoise
     {
-        public static IProceduralTexture Generate(int numCellsX, int numCellsY, int? seed) =>
-            Generate(numCellsX, numCellsY, Interpolation2d.Nearest, seed);
+        public static IProceduralTexture Generate(int numCellsX, int numCellsY, Random? random) =>
+            Generate(numCellsX, numCellsY, Interpolation2d.Nearest, random);
 
-        public static IProceduralTexture Generate(int numCellsX, int numCellsY, IInterpolationMethod2d interpolation, int? seed)
+        public static IProceduralTexture Generate(int numCellsX, int numCellsY, IInterpolationMethod2d interpolation, Random? random)
         {
             if (numCellsX <= 0)
             {
@@ -19,7 +19,7 @@ namespace Bearded.Utilities.Noise
                 throw new ArgumentOutOfRangeException(nameof(numCellsY));
             }
 
-            return ProceduralTexture.FromArray(GenerateRandomArray(numCellsX, numCellsY, r => r.NextDouble(), seed), interpolation);
+            return ProceduralTexture.FromArray(GenerateRandomArray(numCellsX, numCellsY, r => r.NextDouble(), random), interpolation);
         }
     }
 }

@@ -4,9 +4,9 @@ namespace Bearded.Utilities.Noise
 {
     static class NoiseUtils
     {
-        internal static T[,] GenerateRandomArray<T>(int width, int height, Func<Random, T> generator, int? seed)
+        internal static T[,] GenerateRandomArray<T>(int width, int height, Func<Random, T> generator, Random? random)
         {
-            var r = toRandomInstance(seed);
+            random ??= new Random();
 
             var array = new T[width, height];
 
@@ -14,16 +14,11 @@ namespace Bearded.Utilities.Noise
             {
                 for (var x = 0; x < width; x++)
                 {
-                    array[x, y] = generator(r);
+                    array[x, y] = generator(random);
                 }
             }
 
             return array;
-        }
-
-        private static Random toRandomInstance(int? seed)
-        {
-            return seed == null ? new Random() : new Random(seed.Value);
         }
     }
 }

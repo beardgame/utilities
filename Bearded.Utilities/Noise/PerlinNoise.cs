@@ -28,10 +28,10 @@ namespace Bearded.Utilities.Noise
         /// <param name="numCellsY">
         /// The number of cells in which the texture is divided along the vertical axis (see remarks).
         /// </param>
-        /// <param name="seed"></param>
+        /// <param name="random"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static IProceduralTexture Generate(int numCellsX, int numCellsY, int? seed)
+        public static IProceduralTexture Generate(int numCellsX, int numCellsY, Random? random)
         {
             if (numCellsX <= 0)
             {
@@ -48,7 +48,7 @@ namespace Bearded.Utilities.Noise
                 numCellsX,
                 numCellsY,
                 r => vectorSamples[r.Next(vectorSamples.Length)],
-                seed);
+                random);
             return new PerlinProceduralTexture(gradientArray);
         }
 
