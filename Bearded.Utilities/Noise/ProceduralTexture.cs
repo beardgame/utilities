@@ -4,8 +4,12 @@ namespace Bearded.Utilities.Noise
 {
     public static class ProceduralTexture
     {
-        public static IProceduralTexture FromArray(double[,] array, IInterpolationMethod2d interpolation) =>
-            new ArrayProceduralTexture(array, interpolation);
+        public static IProceduralTexture FromArray(double[,] array, IInterpolationMethod2d interpolation)
+        {
+            var arrowCopy = new double[array.GetLength(0), array.GetLength(1)];
+            Array.Copy(array, arrowCopy, array.Length);
+            return new ArrayProceduralTexture(arrowCopy, interpolation);
+        }
 
         private sealed class ArrayProceduralTexture : IProceduralTexture
         {
@@ -18,8 +22,7 @@ namespace Bearded.Utilities.Noise
             {
                 width = array.GetLength(0);
                 height = array.GetLength(1);
-                this.array = new double[width, height];
-                Array.Copy(array, this.array, array.Length);
+                this.array = array;
 
                 this.interpolation = interpolation;
             }
@@ -59,7 +62,7 @@ namespace Bearded.Utilities.Noise
 
             private void alignCoordinatesWithPixelCenters(ref double x, ref double y)
             {
-                // The noise array keeps track of the values at the center of each "pixel", so for the interpolation, we
+                // The texture keeps track of the values at the center of each "pixel", so for the interpolation, we
                 // need to move the array coordinates by (0.5, 0.5), which is the same as moving the x, y by
                 // (-0.5, -0.5).
                 x -= 0.5;
