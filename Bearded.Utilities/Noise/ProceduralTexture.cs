@@ -35,20 +35,10 @@ namespace Bearded.Utilities.Noise
                     throw new ArgumentOutOfRangeException(nameof(y));
                 }
 
-                // First we transform x and y from [0, 1) x [0, 1) to [0, width) x [0, height) for easier math.
-                x *= width;
-                y *= height;
+                scaleToWidthHeight(ref x, ref y);
+                alignCoordinatesWithPixelCenters(ref x, ref y);
 
-                // The noise array keeps track of the values at the center of each "pixel", so for the interpolation, we
-                // need to move the array coordinates by (0.5, 0.5), which is the same as moving the x, y by
-                // (-0.5, -0.5).
-                x -= 0.5;
-                y -= 0.5;
-
-                var xBelow = MoreMath.FloorToInt(x);
-                var xAbove = MoreMath.CeilToInt(x);
-                var yBelow = MoreMath.FloorToInt(y);
-                var yAbove = MoreMath.CeilToInt(y);
+                var (xBelow, xAbove, yBelow, yAbove) = getGridCorners(x, y);
                 var u = x - xBelow;
                 var v = y - yBelow;
 
@@ -59,6 +49,32 @@ namespace Bearded.Utilities.Noise
 
                 return interpolation.Interpolate(
                     array[xBelow, yBelow], array[xAbove, yBelow], array[xBelow, yAbove], array[xAbove, yAbove], u, v);
+            }
+
+            private void scaleToWidthHeight(ref double x, ref double y)
+            {
+                x *= width;
+                y *= height;
+            }
+
+            private void alignCoordinatesWithPixelCenters(ref double x, ref double y)
+            {
+                // The noise array keeps track of the values at the center of each "pixel", so for the interpolation, we
+                // need to move the array coordinates by (0.5, 0.5), which is the same as moving the x, y by
+                // (-0.5, -0.5).
+                x -= 0.5;
+                y -= 0.5;
+            }
+
+            private static (int xLower, int xUpper, int yLower, int yUpper) getGridCorners(double x, double y)
+            {
+                var xLower = (int) x;
+                var xUpper = xLower + 1;
+
+                var yLower = (int) y;
+                var yUpper = yLower + 1;
+
+                return (xLower, xUpper, yLower, yUpper);
             }
         }
     }

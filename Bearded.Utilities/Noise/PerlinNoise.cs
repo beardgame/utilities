@@ -76,31 +76,38 @@ namespace Bearded.Utilities.Noise
                     throw new ArgumentOutOfRangeException(nameof(y));
                 }
 
-                // First we transform x and y from [0, 1) x [0, 1) to [0, width) x [0, height) for easier math.
+                scaleToWidthHeight(ref x, ref y);
+                var (xBelow, xAbove, yBelow, yAbove) = getGridCorners(x, y);
+                var u = x - xBelow;
+                var v = y - yBelow;
+
+                var topLeft = dotProductWithGridDirection(xBelow, yAbove, x, y);
+                var topRight = dotProductWithGridDirection(xAbove, yAbove, x, y);
+                var bottomLeft = dotProductWithGridDirection(xBelow, yBelow, x, y);
+                var bottomRight = dotProductWithGridDirection(xAbove, yBelow, x, y);
+
+                var (tx, ty) = getInterpolationWeights(u, 1 - v);
+
+                var r = Interpolation2d.BiLinear.Interpolate(bottomLeft, bottomRight, topLeft, topRight, tx, ty);
+
+                return normalizeDotProductToUnitScale(r);
+            }
+
+            private void scaleToWidthHeight(ref double x, ref double y)
+            {
                 x *= width;
                 y *= height;
+            }
 
-                // We take the floor and ceil to get the corners of the grid cell that surround the current point.
-                var xLower = (int) x;
-                var xUpper = xLower + 1;
+            private static (int xBelow, int xAbove, int yBelow, int yAbove) getGridCorners(double x, double y)
+            {
+                var xBelow = (int) x;
+                var xAbove = xBelow + 1;
 
-                var yLower = (int) y;
-                var yUpper = yLower + 1;
+                var yBelow = (int) y;
+                var yAbove = yBelow + 1;
 
-                // Calculate dot products between distance and gradient for each of the grid corners
-                var topLeft = dotProductWithGridDirection(xLower, yUpper, x, y);
-                var topRight = dotProductWithGridDirection(xUpper, yUpper, x, y);
-                var bottomLeft = dotProductWithGridDirection(xLower, yLower, x, y);
-                var bottomRight = dotProductWithGridDirection(xUpper, yLower, x, y);
-
-                // Interpolation weights
-                var tx = Interpolation1.SmoothStep.Interpolate(0, 1, x - xLower);
-                // TODO: why is this 1-?
-                var ty = 1 - Interpolation1.SmoothStep.Interpolate(0, 1, y - yLower);
-
-                // Dot products can be between -1 and 1, so we need to normalize before returning.
-                var r = Interpolation2.BiLinear.Interpolate(bottomLeft, bottomRight, topLeft, topRight, tx, ty);
-                return (r + 1) * 0.5;
+                return (xBelow, xAbove, yBelow, yAbove);
             }
 
             private double dotProductWithGridDirection(int gridX, int gridY, double x, double y)
@@ -108,6 +115,15 @@ namespace Bearded.Utilities.Noise
                 var distance = new Vector2d(x - gridX, y - gridY);
                 return Vector2d.Dot(distance, gradientArray[gridX % width, gridY % height]);
             }
+
+            private static (double tx, double ty) getInterpolationWeights(double u, double v)
+            {
+                var tx = Interpolation1d.SmoothStep.Interpolate(0, 1, u);
+                var ty = 1 - Interpolation1d.SmoothStep.Interpolate(0, 1, v);
+                return (tx, ty);
+            }
+
+            private static double normalizeDotProductToUnitScale(double dotProduct) => (dotProduct + 1) * 0.5;
         }
     }
 }
