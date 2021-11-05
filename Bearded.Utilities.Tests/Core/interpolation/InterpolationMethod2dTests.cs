@@ -5,7 +5,7 @@ using FsCheck.Xunit;
 
 namespace Bearded.Utilities.Tests
 {
-    public abstract class InterpolationMethod2Tests
+    public abstract class InterpolationMethod2dTests
     {
         protected abstract IInterpolationMethod2 Interpolation { get; }
 

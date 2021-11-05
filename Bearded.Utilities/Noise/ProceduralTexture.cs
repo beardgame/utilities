@@ -4,7 +4,7 @@ namespace Bearded.Utilities.Noise
 {
     public static class ProceduralTexture
     {
-        public static IProceduralTexture FromArray(double[,] array, IInterpolationMethod2 interpolation) =>
+        public static IProceduralTexture FromArray(double[,] array, IInterpolationMethod2d interpolation) =>
             new ArrayProceduralTexture(array, interpolation);
 
         private sealed class ArrayProceduralTexture : IProceduralTexture
@@ -12,9 +12,9 @@ namespace Bearded.Utilities.Noise
             private readonly int width;
             private readonly int height;
             private readonly double[,] array;
-            private readonly IInterpolationMethod2 interpolation;
+            private readonly IInterpolationMethod2d interpolation;
 
-            public ArrayProceduralTexture(double[,] array, IInterpolationMethod2 interpolation)
+            public ArrayProceduralTexture(double[,] array, IInterpolationMethod2d interpolation)
             {
                 width = array.GetLength(0);
                 height = array.GetLength(1);

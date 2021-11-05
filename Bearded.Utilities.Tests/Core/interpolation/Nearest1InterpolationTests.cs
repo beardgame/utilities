@@ -1,7 +1,7 @@
 namespace Bearded.Utilities.Tests
 {
-    public sealed class Nearest1InterpolationTests : InterpolationMethod1Tests
+    public sealed class Nearest1InterpolationTests : InterpolationMethod1dTests
     {
-        protected override IInterpolationMethod1 Interpolation { get; } = Interpolation1.Nearest;
+        protected override IInterpolationMethod1d Interpolation => Interpolation1d.Nearest;
     }
 }

@@ -1,15 +1,15 @@
 namespace Bearded.Utilities
 {
-    public static class Interpolation2
+    public static class Interpolation2d
     {
-        public static IInterpolationMethod2 Nearest { get; } = new ExtendedInterpolation(Interpolation1.Nearest);
-        public static IInterpolationMethod2 BiLinear { get; } = new ExtendedInterpolation(Interpolation1.Linear);
+        public static IInterpolationMethod2d Nearest { get; } = new ComposedInterpolation(Interpolation1d.Nearest);
+        public static IInterpolationMethod2d BiLinear { get; } = new ComposedInterpolation(Interpolation1d.Linear);
 
-        private sealed class ExtendedInterpolation : IInterpolationMethod2
+        private sealed class ComposedInterpolation : IInterpolationMethod2d
         {
-            private readonly IInterpolationMethod1 inner;
+            private readonly IInterpolationMethod1d inner;
 
-            public ExtendedInterpolation(IInterpolationMethod1 inner)
+            public ComposedInterpolation(IInterpolationMethod1d inner)
             {
                 this.inner = inner;
             }

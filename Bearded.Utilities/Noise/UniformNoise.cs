@@ -6,9 +6,9 @@ namespace Bearded.Utilities.Noise
     public static class UniformNoise
     {
         public static IProceduralTexture Generate(int numCellsX, int numCellsY, int? seed) =>
-            Generate(numCellsX, numCellsY, Interpolation2.Nearest, seed);
+            Generate(numCellsX, numCellsY, Interpolation2d.Nearest, seed);
 
-        public static IProceduralTexture Generate(int numCellsX, int numCellsY, IInterpolationMethod2 interpolation, int? seed)
+        public static IProceduralTexture Generate(int numCellsX, int numCellsY, IInterpolationMethod2d interpolation, int? seed)
         {
             if (numCellsX == 0)
             {

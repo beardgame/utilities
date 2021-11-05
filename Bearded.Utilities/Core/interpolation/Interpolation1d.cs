@@ -1,12 +1,12 @@
 namespace Bearded.Utilities
 {
-    public static class Interpolation1
+    public static class Interpolation1d
     {
-        public static IInterpolationMethod1 Nearest { get; } = new NearestInterpolation();
-        public static IInterpolationMethod1 Linear { get; } = new LinearInterpolation();
-        public static IInterpolationMethod1 SmoothStep { get; } = new SmoothStepInterpolation();
+        public static IInterpolationMethod1d Nearest { get; } = new NearestInterpolation();
+        public static IInterpolationMethod1d Linear { get; } = new LinearInterpolation();
+        public static IInterpolationMethod1d SmoothStep { get; } = new SmoothStepInterpolation();
 
-        private sealed class NearestInterpolation : IInterpolationMethod1
+        private sealed class NearestInterpolation : IInterpolationMethod1d
         {
             public double Interpolate(double from, double to, double t)
             {
@@ -14,7 +14,7 @@ namespace Bearded.Utilities
             }
         }
 
-        private sealed class LinearInterpolation : IInterpolationMethod1
+        private sealed class LinearInterpolation : IInterpolationMethod1d
         {
             public double Interpolate(double from, double to, double t)
             {
@@ -31,7 +31,7 @@ namespace Bearded.Utilities
             }
         }
 
-        private sealed class SmoothStepInterpolation : IInterpolationMethod1
+        private sealed class SmoothStepInterpolation : IInterpolationMethod1d
         {
             public double Interpolate(double from, double to, double t)
             {
