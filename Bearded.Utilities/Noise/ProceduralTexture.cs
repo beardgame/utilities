@@ -6,9 +6,9 @@ namespace Bearded.Utilities.Noise
     {
         public static IProceduralTexture FromArray(double[,] array, IInterpolationMethod2d interpolation)
         {
-            var arrowCopy = new double[array.GetLength(0), array.GetLength(1)];
-            Array.Copy(array, arrowCopy, array.Length);
-            return new ArrayProceduralTexture(arrowCopy, interpolation);
+            var arrayCopy = new double[array.GetLength(0), array.GetLength(1)];
+            Array.Copy(array, arrayCopy, array.Length);
+            return new ArrayProceduralTexture(arrayCopy, interpolation);
         }
 
         private sealed class ArrayProceduralTexture : IProceduralTexture
