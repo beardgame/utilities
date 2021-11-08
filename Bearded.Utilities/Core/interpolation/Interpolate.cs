@@ -1,3 +1,4 @@
+using System;
 using OpenTK.Mathematics;
 
 namespace Bearded.Utilities
@@ -144,14 +145,16 @@ namespace Bearded.Utilities
         /// <summary>
         /// Performs a linear interpolation between two values.
         /// </summary>
-        public static float Lerp(float from, float to, float t)
+        public static T Lerp<T, TScalar>(T from, T to, TScalar t)
+            where T : IAdditionOperators<T, T, T>, IMultiplyOperators<T, TScalar, T>
+            where TScalar : INumber<TScalar>
         {
-            if (t <= 0)
-                return from;
-            if (t >= 1)
-                return to;
+            var one = TScalar.One;
+            var zero = TScalar.Zero;
 
-            return from + (to - from) * t;
+            t = TScalar.Min(one, TScalar.Max(zero, t));
+
+            return from * (one - t) + to * t;
         }
 
         /// <summary>
