@@ -106,7 +106,7 @@ namespace Bearded.Utilities.Algorithms
                     // This selection process is implemented by representing the predecessors of an element as a
                     // decreasing number sequence of the predecessors' indices, and selecting the lowest of those in a
                     // reflected lexicographic ordering.
-                    var next = sources.MinBy(createDecreasingNumberSequenceOfPredecessorIndices);
+                    var next = Extensions.MinBy(sources, createDecreasingNumberSequenceOfPredecessorIndices);
 
                     orderedElementIndices.Add(next, ordering.Count);
                     ordering.Add(next);
