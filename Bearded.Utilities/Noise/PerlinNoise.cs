@@ -88,7 +88,7 @@ namespace Bearded.Utilities.Noise
 
                 var (tx, ty) = getInterpolationWeights(u, 1 - v);
 
-                var r = Interpolation2d.BiLinear.Interpolate(bottomLeft, bottomRight, topLeft, topRight, tx, ty);
+                var r = Interpolation2<double, double>.BiLinear.Interpolate(bottomLeft, bottomRight, topLeft, topRight, tx, ty);
 
                 return normalizeDotProductToUnitScale(r);
             }
@@ -118,8 +118,8 @@ namespace Bearded.Utilities.Noise
 
             private static (double tx, double ty) getInterpolationWeights(double u, double v)
             {
-                var tx = Interpolation1d.SmoothStep.Interpolate(0, 1, u);
-                var ty = 1 - Interpolation1d.SmoothStep.Interpolate(0, 1, v);
+                var tx = Interpolation1<double, double>.SmoothStep.Interpolate(0, 1, u);
+                var ty = 1 - Interpolation1<double, double>.SmoothStep.Interpolate(0, 1, v);
                 return (tx, ty);
             }
 

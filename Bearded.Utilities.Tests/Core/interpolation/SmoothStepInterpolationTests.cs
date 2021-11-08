@@ -2,6 +2,6 @@ namespace Bearded.Utilities.Tests
 {
     public sealed class SmoothStepInterpolationTests : InterpolationMethod1dTests
     {
-        protected override IInterpolationMethod1d Interpolation => Interpolation1d.SmoothStep;
+        protected override IInterpolationMethod1<double, double> Interpolation => Interpolation1<double, double>.SmoothStep;
     }
 }

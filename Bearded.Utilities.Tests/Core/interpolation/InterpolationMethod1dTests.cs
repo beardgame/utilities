@@ -9,7 +9,7 @@ namespace Bearded.Utilities.Tests
     {
         private const double epsilon = 1e-6;
 
-        protected abstract IInterpolationMethod1d Interpolation { get; }
+        protected abstract IInterpolationMethod1<double, double> Interpolation { get; }
 
         [Property(Arbitrary = new[] {typeof(DoubleGenerators.NonInfiniteNonNaN)})]
         public void ReturnsFromAtStart(double from, double to)
