@@ -14,7 +14,7 @@ namespace Bearded.Utilities.Tests.Collections
         [Fact]
         public void TestDecreasePriority()
         {
-            var q = new PriorityQueue<double, string>();
+            var q = new Utilities.Collections.PriorityQueue<double, string>();
             q.Enqueue(2, "first item");
             q.Enqueue(3, "second item");
             q.Enqueue(1, "third item");
@@ -28,7 +28,7 @@ namespace Bearded.Utilities.Tests.Collections
         public void TestDecreasePriorityInitialData()
         {
             var data = new[] { 5, 9, 2, 13, 1, 4, 7, 11 };
-            var q = new PriorityQueue<int, int>(data.Select(i => new KeyValuePair<int, int>(i, i)));
+            var q = new Utilities.Collections.PriorityQueue<int, int>(data.Select(i => new KeyValuePair<int, int>(i, i)));
             Assert.Equal(data.Length, q.Count);
             q.DecreasePriority(5, 0);
             Assert.Equal(5, q.Dequeue().Value);
@@ -40,14 +40,14 @@ namespace Bearded.Utilities.Tests.Collections
         [Fact]
         public void TestDecreasePriorityEmptyQueue()
         {
-            var q = new PriorityQueue<int, int>();
+            var q = new Utilities.Collections.PriorityQueue<int, int>();
             Assert.Throws<KeyNotFoundException>(() => q.DecreasePriority(0, 0));
         }
 
         [Fact]
         public void TestDecreasePriorityDequeuedElement()
         {
-            var q = new PriorityQueue<double, string>();
+            var q = new Utilities.Collections.PriorityQueue<double, string>();
             q.Enqueue(2, "first item");
             q.Enqueue(3, "second item");
             q.Enqueue(1, "third item");
@@ -60,7 +60,7 @@ namespace Bearded.Utilities.Tests.Collections
         [Fact]
         public void TestDecreasePriorityClearedQueue()
         {
-            var q = new PriorityQueue<double, string>();
+            var q = new Utilities.Collections.PriorityQueue<double, string>();
             q.Enqueue(2, "first item");
             q.Enqueue(3, "second item");
             q.Enqueue(1, "third item");
@@ -73,7 +73,7 @@ namespace Bearded.Utilities.Tests.Collections
         [Fact]
         public void TestIncreasePriority()
         {
-            var q = new PriorityQueue<double, string>();
+            var q = new Utilities.Collections.PriorityQueue<double, string>();
             q.Enqueue(2, "item");
             Assert.Throws<InvalidOperationException>(() => q.DecreasePriority("item", 4));
         }
@@ -83,7 +83,7 @@ namespace Bearded.Utilities.Tests.Collections
         {
             var random = new System.Random(seed);
             var totalItems = itemsToEnumerate + otherItems;
-            var q = new PriorityQueue<double, int>();
+            var q = new Utilities.Collections.PriorityQueue<double, int>();
             var items = Enumerable
                 .Range(0, totalItems)
                 .Select(i => KeyValuePair.Create(random.NextDouble(), i))
