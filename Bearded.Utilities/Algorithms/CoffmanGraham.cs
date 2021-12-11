@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Bearded.Utilities.Graphs;
-using Bearded.Utilities.Linq;
 
 namespace Bearded.Utilities.Algorithms
 {
+    using Linq;
     /// <summary>
     /// This class contains logic to take a partially ordered set of elements and split it in a sequence of layers such
     /// that the following holds:
