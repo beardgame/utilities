@@ -1,17 +1,16 @@
 using System;
 
-namespace Bearded.Utilities
+namespace Bearded.Utilities;
+
+public abstract class Singleton<TSelf> where TSelf : Singleton<TSelf>
 {
-    public abstract class Singleton<TSelf> where TSelf : Singleton<TSelf>
+    public static TSelf Instance { get; private set; }
+
+    protected Singleton()
     {
-        public static TSelf Instance { get; private set; }
+        if (Instance != null)
+            throw new InvalidOperationException("A singleton can only be instantiated once.");
 
-        protected Singleton()
-        {
-            if (Instance != null)
-                throw new InvalidOperationException("A singleton can only be instantiated once.");
-
-            Instance = (TSelf)this;
-        }
+        Instance = (TSelf)this;
     }
 }

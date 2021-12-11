@@ -1,7 +1,6 @@
-namespace Bearded.Utilities
+namespace Bearded.Utilities;
+
+public interface IInterpolationMethod1d
 {
-    public interface IInterpolationMethod1d
-    {
-        public double Interpolate(double from, double to, double t);
-    }
+    public double Interpolate(double from, double to, double t);
 }
