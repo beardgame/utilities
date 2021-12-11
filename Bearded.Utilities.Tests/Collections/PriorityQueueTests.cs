@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Bearded.Utilities.Collections;
 using Bearded.Utilities.Linq;
 using FluentAssertions;
 using FsCheck.Xunit;
@@ -9,6 +8,8 @@ using Xunit;
 
 namespace Bearded.Utilities.Tests.Collections
 {
+    using Bearded.Utilities.Collections;
+
     public class PriorityQueueTests
     {
         [Fact]
