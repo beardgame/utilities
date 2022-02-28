@@ -1,40 +1,39 @@
-﻿namespace Bearded.Utilities.Input
+﻿namespace Bearded.Utilities.Input;
+
+partial class InputManager
 {
-    partial class InputManager
+    public ActionConstructor Actions => new ActionConstructor(this);
+
+    public readonly partial struct ActionConstructor
     {
-        public ActionConstructor Actions => new ActionConstructor(this);
+        private readonly InputManager manager;
 
-        public readonly partial struct ActionConstructor
+        public ActionConstructor(InputManager inputManager)
         {
-            private readonly InputManager manager;
+            manager = inputManager;
+        }
 
-            public ActionConstructor(InputManager inputManager)
+        public IAction None => InputAction.None;
+
+        public IAction FromString(string value)
+            => fromLowerCaseTrimmedString(value.ToLowerInvariant().Trim());
+
+        private IAction fromLowerCaseTrimmedString(string value)
+        {
+            switch (value)
             {
-                manager = inputManager;
-            }
-
-            public IAction None => InputAction.None;
-
-            public IAction FromString(string value)
-                => fromLowerCaseTrimmedString(value.ToLowerInvariant().Trim());
-
-            private IAction fromLowerCaseTrimmedString(string value)
-            {
-                switch (value)
+                case "none":
+                case "unbound":
+                    return None;
+                default:
                 {
-                    case "none":
-                    case "unbound":
-                        return None;
-                    default:
-                    {
-                        // if (Keyboard.TryParseLowerTrimmedString(value, out var action)
-                        //     || Gamepad.TryParseLowerTrimmedString(value, out action))
-                        //     return action;
-                        if (Keyboard.TryParseLowerTrimmedString(value, out var action))
-                            return action;
+                    // if (Keyboard.TryParseLowerTrimmedString(value, out var action)
+                    //     || Gamepad.TryParseLowerTrimmedString(value, out action))
+                    //     return action;
+                    if (Keyboard.TryParseLowerTrimmedString(value, out var action))
+                        return action;
 
-                        return None;
-                    }
+                    return None;
                 }
             }
         }

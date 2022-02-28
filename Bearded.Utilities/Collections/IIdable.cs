@@ -1,8 +1,7 @@
 ﻿
-namespace Bearded.Utilities.Collections
+namespace Bearded.Utilities.Collections;
+
+public interface IIdable<T>
 {
-    public interface IIdable<T>
-    {
-        Id<T> Id { get; }
-    }
+    Id<T> Id { get; }
 }
