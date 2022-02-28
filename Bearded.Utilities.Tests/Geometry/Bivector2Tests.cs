@@ -12,7 +12,7 @@ namespace Bearded.Utilities.Tests.Geometry;
 
 public sealed class Bivector2Tests
 {
-    private const float epsilon = 1E-6f;
+    private const float epsilon = 1E-3f;
 
     public Bivector2Tests()
     {
