@@ -42,9 +42,9 @@ jobs:
       # Create the NuGet package
       # Note that we substr the release version to get the numbers only, without
       # the 'v' prefix.
-      - name: Pack binary
+      - name: Pack Bearded.Utilities
         run: dotnet pack --configuration Release --no-restore -p:PackageVersion=${RELEASE_VERSION:1} Bearded.Utilities/Bearded.Utilities.csproj
-      - name: Pack binary
+      - name: Pack Bearded.Utilities.Testing
         run: dotnet pack --configuration Release --no-restore -p:PackageVersion=${RELEASE_VERSION:1} Bearded.Utilities.Testing/Bearded.Utilities.Testing.csproj
 
       # Create a GitHub release
