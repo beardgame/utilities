@@ -14,18 +14,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Setup .NET Core 3.1
+      - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 3.1.x
-      - name: Setup .NET Core 5.0
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: 5.0.x
-      - name: Setup .NET Core 6.0
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: 6.0.x
+          dotnet-version: |
+            3.1.x
+            5.0.x
+            6.0.x
       - name: Install dependencies
         run: dotnet restore
       - name: Build
@@ -40,7 +35,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Setup .NET Core 6.0
+      - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: 6.0.x
