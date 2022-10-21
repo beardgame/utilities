@@ -13,12 +13,11 @@ public sealed class MutableLinkedList<T> : IEnumerable<T>
 {
     #region Fields and Properties
 
-    private readonly LinkedList<MutableLinkedListEnumerator<T>> enumerators =
-        new LinkedList<MutableLinkedListEnumerator<T>>();
+    private readonly LinkedList<MutableLinkedListEnumerator<T>> enumerators = new();
 
-    public MutableLinkedListNode<T> First { get; private set; }
+    public MutableLinkedListNode<T>? First { get; private set; }
 
-    public MutableLinkedListNode<T> Last { get; private set; }
+    public MutableLinkedListNode<T>? Last { get; private set; }
 
     public int Count { get; private set; }
 
@@ -56,7 +55,7 @@ public sealed class MutableLinkedList<T> : IEnumerable<T>
         else
         {
             node.Prev = Last;
-            Last.Next = node;
+            Last!.Next = node; // We know that Last is not null here, as the list is not empty.
         }
 
         Last = node;
@@ -147,7 +146,7 @@ public sealed class MutableLinkedList<T> : IEnumerable<T>
             throw new ArgumentException("Object must already be in list before inserting.");
         if (beforeThis.List != this)
             throw new ArgumentException("The object to insert before must be in the same list.");
-        if (node != Last)
+        if (node != Last || node.Prev == null)
             throw new ArgumentException("Inserted object must be last object in list.");
         if (node == beforeThis)
             throw new ArgumentException("Cannot insert object before itself.");
@@ -173,7 +172,7 @@ public sealed class MutableLinkedList<T> : IEnumerable<T>
     {
         var e = new MutableLinkedListEnumerator<T>(this);
         enumerators.AddFirst(e);
-        e.SetNode(enumerators.First);
+        e.SetNode(enumerators.First!); // We know First is not null as we just added e
         return e;
     }
 

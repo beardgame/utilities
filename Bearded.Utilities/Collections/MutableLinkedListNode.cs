@@ -1,4 +1,6 @@
 
+using System;
+
 namespace Bearded.Utilities.Collections;
 
 /// <summary>
@@ -25,23 +27,21 @@ public class MutableLinkedListNode<T>
 
     #region Fields and Properties
 
-    private readonly T value;
-
     /// <summary>
     /// The value stored in the node.
     /// </summary>
-    public T Value { get { return value; } }
+    public T? Value { get; }
 
     // Next, Prev and List are internally writeable to
     // simplify addition, removal and insertion code.
     // Do not mess with them!
-    internal MutableLinkedListNode<T> Next { get; set; }
-    internal MutableLinkedListNode<T> Prev { get; set; }
+    internal MutableLinkedListNode<T>? Next { get; set; }
+    internal MutableLinkedListNode<T>? Prev { get; set; }
 
     /// <summary>
     /// The list the node is part of.
     /// </summary>
-    public MutableLinkedList<T> List { get; internal set; }
+    public MutableLinkedList<T>? List { get; internal set; }
 
     internal bool ChangingList { get; private set; }
 
@@ -51,12 +51,12 @@ public class MutableLinkedListNode<T>
 
     internal MutableLinkedListNode(T value)
     {
-        this.value = value;
+        Value = value;
     }
 
     internal MutableLinkedListNode()
     {
-        value = this as T;
+        Value = this as T;
     }
 
     #endregion
@@ -89,7 +89,7 @@ public class MutableLinkedListNode<T>
     /// <param name="beforeThis">The node to add this before.</param>
     public void InsertBefore(MutableLinkedListNode<T> beforeThis)
     {
-        List.InsertBefore(this, beforeThis);
+        List?.InsertBefore(this, beforeThis);
     }
 
     /// <summary>
@@ -97,7 +97,7 @@ public class MutableLinkedListNode<T>
     /// </summary>
     public void RemoveFromList()
     {
-        List.Remove(this);
+        List?.Remove(this);
     }
 
     #endregion
