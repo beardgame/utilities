@@ -15,10 +15,10 @@ partial class InputManager
 
         public IAction None => InputAction.None;
 
-        public IAction FromString(string value)
+        public IAction? FromString(string value)
             => fromLowerCaseTrimmedString(value.ToLowerInvariant().Trim());
 
-        private IAction fromLowerCaseTrimmedString(string value)
+        private IAction? fromLowerCaseTrimmedString(string value)
         {
             switch (value)
             {
