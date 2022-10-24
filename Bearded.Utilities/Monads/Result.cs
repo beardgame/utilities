@@ -14,11 +14,13 @@ public readonly struct Result<TResult, TError> : IEquatable<Result<TResult, TErr
 
     private Result(bool isSuccess, TResult? result, TError? error)
     {
-        if (isSuccess && result is null)
-            throw new ArgumentNullException(nameof(result), "Result cannot be null when isSuccess is true");
-
-        if (!isSuccess && error is null)
-            throw new ArgumentNullException(nameof(error), "Error cannot be null when isSuccess is false");
+        switch (isSuccess)
+        {
+            case true when result is null:
+                throw new ArgumentNullException(nameof(result), "Result cannot be null when isSuccess is true");
+            case false when error is null:
+                throw new ArgumentNullException(nameof(error), "Error cannot be null when isSuccess is false");
+        }
 
         this.isSuccess = isSuccess;
         this.result = result;
@@ -38,7 +40,7 @@ public readonly struct Result<TResult, TError> : IEquatable<Result<TResult, TErr
     public TResult ResultOrThrow(Func<TError, Exception> exceptionProvider) =>
         isSuccess ? result! : throw exceptionProvider(error!);
 
-    public Maybe<TResult> AsMaybe() => isSuccess ? Maybe.Just(result!) : Maybe.Nothing;
+    public Maybe<TResult> AsMaybe() => isSuccess ? Maybe.Just(result!) : Maybe.Nothing<TResult>();
 
     public Result<TOut, TError> Select<TOut>(Func<TResult, TOut> selector) where TOut : notnull  =>
         isSuccess ? (Result<TOut, TError>) Result.Success(selector(result!)) : Result.Failure(error!);
