@@ -6,7 +6,7 @@
     <TargetFrameworks>net5.0;net6.0;netcoreapp3.1</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="6.9.0" />
+    <PackageReference Include="FluentAssertions" Version="6.10.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bearded.Utilities\Bearded.Utilities.csproj" />
