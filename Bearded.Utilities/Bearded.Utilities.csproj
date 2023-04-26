@@ -4,6 +4,11 @@
     <Nullable>enable</Nullable>
     <WarningsAsErrors>CS8600;CS8602;CS8603</WarningsAsErrors>
     <TargetFrameworks>net5.0;net6.0;netcoreapp3.1</TargetFrameworks>
+    <AssemblyTitle>Bearded Utilities</AssemblyTitle>
+    <Description>Set of basic utilities on top of OpenTK, mostly aimed at games.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/beardgame/utilities</RepositoryUrl>
+    <PackageTags>game-development;gamedev</PackageTags>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="OpenTK.Mathematics" Version="4.7.7" />

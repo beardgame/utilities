@@ -1,18 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
-        <LangVersion>10</LangVersion>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <PackageReference Include="BenchmarkDotNet" Version="0.13.5" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Bearded.Utilities\Bearded.Utilities.csproj" />
-    </ItemGroup>
-
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>10</LangVersion>
+    <Nullable>enable</Nullable>
+    <AssemblyTitle>Bearded Utilities Benchmarks</AssemblyTitle>
+    <Description>Utilities that can be used to benchmark projects from Bearded.Utilities.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/beardgame/utilities</RepositoryUrl>
+    <PackageTags>game-development;gamedev</PackageTags>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bearded.Utilities\Bearded.Utilities.csproj" />
+  </ItemGroup>
 </Project>
