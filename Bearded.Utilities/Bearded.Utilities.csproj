@@ -11,6 +11,7 @@
     <PackageTags>game-development;gamedev</PackageTags>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="OpenTK.Core" Version="4.8.0" />
     <PackageReference Include="OpenTK.Mathematics" Version="4.8.0" />
     <PackageReference Include="OpenTK.Windowing.Desktop" Version="4.7.7" />
     <PackageReference Include="OpenTK.Windowing.GraphicsLibraryFramework" Version="4.8.0" />
