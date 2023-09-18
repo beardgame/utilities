@@ -9,7 +9,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
     <PackageReference Include="xunit" Version="2.5.0" />
     <PackageReference Include="xunit.abstractions" Version="2.0.3" />
-    <PackageReference Include="xunit.runner.console" Version="2.5.0" />
+    <PackageReference Include="xunit.runner.console" Version="2.5.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bearded.Utilities.Testing\Bearded.Utilities.Testing.csproj" />
