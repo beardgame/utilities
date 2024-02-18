@@ -14,7 +14,7 @@
     <PackageReference Include="xunit" Version="2.6.5" />
     <PackageReference Include="xunit.abstractions" Version="2.0.3" />
     <PackageReference Include="xunit.runner.console" Version="2.6.5" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.6" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bearded.Utilities.Testing\Bearded.Utilities.Testing.csproj" />
