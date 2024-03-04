@@ -14,5 +14,4 @@ jobs:
         5.0.x
         6.0.x
     secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
