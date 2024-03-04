@@ -19,12 +19,12 @@ public readonly struct Rectangle : IEquatable<Rectangle>, IFormattable
     public float Right => Left + Width;
     public float Bottom => Top + Height;
 
-    public Vector2 TopLeft => new Vector2(Left, Top);
-    public Vector2 TopRight => new Vector2(Right, Top);
-    public Vector2 BottomLeft => new Vector2(Left, Bottom);
-    public Vector2 BottomRight => new Vector2(Right, Bottom);
+    public Vector2 TopLeft => new(Left, Top);
+    public Vector2 TopRight => new(Right, Top);
+    public Vector2 BottomLeft => new(Left, Bottom);
+    public Vector2 BottomRight => new(Right, Bottom);
 
-    public Vector2 Center => new Vector2(Left + Width * 0.5f, Top + Height * 0.5f);
+    public Vector2 Center => new(Left + Width * 0.5f, Top + Height * 0.5f);
 
     public float Area => Width * Height;
 
@@ -56,10 +56,10 @@ public readonly struct Rectangle : IEquatable<Rectangle>, IFormattable
             || other.Top > Bottom || other.Bottom < Top);
 
     public static Rectangle WithCorners(Vector2 upperLeft, Vector2 bottomRight)
-        => new Rectangle(upperLeft.X, upperLeft.Y, bottomRight.X - upperLeft.X, bottomRight.Y - upperLeft.Y);
+        => new(upperLeft.X, upperLeft.Y, bottomRight.X - upperLeft.X, bottomRight.Y - upperLeft.Y);
 
-    public static Rectangle WithSides(float top, float right, float bottom, float left)
-        => new Rectangle(top, left, bottom - top, right - left);
+    public static Rectangle WithSides(float top, float right, float bottom, float left) =>
+        new(left, top, right - left, bottom - top);
 
     public bool Equals(Rectangle other)
         // ReSharper disable CompareOfFloatsByEqualityOperator
