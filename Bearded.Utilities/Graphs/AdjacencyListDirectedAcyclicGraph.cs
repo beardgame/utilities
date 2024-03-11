@@ -7,9 +7,9 @@ sealed class AdjacencyListDirectedAcyclicGraph<T> : AdjacencyListDirectedGraph<T
     where T : IEquatable<T>
 {
     internal AdjacencyListDirectedAcyclicGraph(
-        ImmutableList<T> elements,
-        ImmutableDictionary<T, ImmutableList<T>> directSuccessors,
-        ImmutableDictionary<T, ImmutableList<T>> directPredecessors)
+        ImmutableArray<T> elements,
+        ImmutableDictionary<T, ImmutableArray<T>> directSuccessors,
+        ImmutableDictionary<T, ImmutableArray<T>> directPredecessors)
         : base(
             elements,
             directSuccessors,
