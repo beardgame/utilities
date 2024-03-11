@@ -7,10 +7,10 @@ namespace Bearded.Utilities.Graphs;
 
 public sealed class DirectedGraphBuilder<T> where T : IEquatable<T>
 {
-    private readonly HashSet<T> elements = new HashSet<T>();
-    private readonly HashSet<T> sources = new HashSet<T>();
-    private readonly Dictionary<T, HashSet<T>> directSuccessors = new Dictionary<T, HashSet<T>>();
-    private readonly Dictionary<T, HashSet<T>> directPredecessors = new Dictionary<T, HashSet<T>>();
+    private readonly HashSet<T> elements = new();
+    private readonly HashSet<T> sources = new();
+    private readonly Dictionary<T, HashSet<T>> directSuccessors = new();
+    private readonly Dictionary<T, HashSet<T>> directPredecessors = new();
 
     public static DirectedGraphBuilder<T> NewBuilder()
     {
@@ -139,12 +139,12 @@ public sealed class DirectedGraphBuilder<T> where T : IEquatable<T>
     public IDirectedAcyclicGraph<T> CreateAcyclicGraphUnsafe()
     {
         return new AdjacencyListDirectedAcyclicGraph<T>(
-            ImmutableList.CreateRange(elements),
+            ImmutableArray.CreateRange(elements),
             directSuccessors.ToImmutableDictionary(
                 pair => pair.Key,
-                pair => ImmutableList.CreateRange(pair.Value)),
+                pair => ImmutableArray.CreateRange(pair.Value)),
             directPredecessors.ToImmutableDictionary(
                 pair => pair.Key,
-                pair => ImmutableList.CreateRange(pair.Value)));
+                pair => ImmutableArray.CreateRange(pair.Value)));
     }
 }

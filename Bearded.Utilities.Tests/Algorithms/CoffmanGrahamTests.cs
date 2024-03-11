@@ -133,7 +133,7 @@ public class CoffmanGrahamTests
 
         var solution = solver.Solve(graph);
 
-        for (var i = 0; i < solution.Count; i++)
+        for (var i = 0; i < solution.Length; i++)
         {
             solution[i].Should().ContainSingle().Which.Should().Be(i);
         }
