@@ -81,13 +81,13 @@ public sealed class DirectedGraphBuilder<T> where T : IEquatable<T>
     public IDirectedGraph<T> CreateGraph()
     {
         return new AdjacencyListDirectedGraph<T>(
-            ImmutableList.CreateRange(elements),
+            ImmutableArray.CreateRange(elements),
             directSuccessors.ToImmutableDictionary(
                 pair => pair.Key,
-                pair => ImmutableList.CreateRange(pair.Value)),
+                pair => ImmutableArray.CreateRange(pair.Value)),
             directPredecessors.ToImmutableDictionary(
                 pair => pair.Key,
-                pair => ImmutableList.CreateRange(pair.Value)));
+                pair => ImmutableArray.CreateRange(pair.Value)));
     }
 
     /// <summary>

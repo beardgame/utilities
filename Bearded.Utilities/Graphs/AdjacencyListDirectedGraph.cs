@@ -6,17 +6,17 @@ namespace Bearded.Utilities.Graphs;
 
 class AdjacencyListDirectedGraph<T> : IDirectedGraph<T> where T : IEquatable<T>
 {
-    private readonly ImmutableList<T> elements;
-    private readonly ImmutableDictionary<T, ImmutableList<T>> directSuccessors;
-    private readonly ImmutableDictionary<T, ImmutableList<T>> directPredecessors;
+    private readonly ImmutableArray<T> elements;
+    private readonly ImmutableDictionary<T, ImmutableArray<T>> directSuccessors;
+    private readonly ImmutableDictionary<T, ImmutableArray<T>> directPredecessors;
 
     public IEnumerable<T> Elements => elements;
-    public int Count => elements.Count;
+    public int Count => elements.Length;
 
     internal AdjacencyListDirectedGraph(
-        ImmutableList<T> elements,
-        ImmutableDictionary<T, ImmutableList<T>> directSuccessors,
-        ImmutableDictionary<T, ImmutableList<T>> directPredecessors)
+        ImmutableArray<T> elements,
+        ImmutableDictionary<T, ImmutableArray<T>> directSuccessors,
+        ImmutableDictionary<T, ImmutableArray<T>> directPredecessors)
     {
         this.elements = elements;
         this.directSuccessors = directSuccessors;

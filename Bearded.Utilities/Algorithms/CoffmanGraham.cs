@@ -37,7 +37,7 @@ public static class CoffmanGraham
 {
     public interface ISolver
     {
-        ImmutableList<ImmutableHashSet<T>> Solve<T>(IDirectedAcyclicGraph<T> graph)
+        ImmutableArray<ImmutableHashSet<T>> Solve<T>(IDirectedAcyclicGraph<T> graph)
             where T : IEquatable<T>;
     }
 
@@ -50,7 +50,7 @@ public static class CoffmanGraham
             internalSolver = new ReducedGraphSolver(maxLayerSize);
         }
 
-        public ImmutableList<ImmutableHashSet<T>> Solve<T>(IDirectedAcyclicGraph<T> graph)
+        public ImmutableArray<ImmutableHashSet<T>> Solve<T>(IDirectedAcyclicGraph<T> graph)
             where T : IEquatable<T>
         {
             var reducedGraph = DirectedAcyclicGraphTransitiveReducer<T>.ReduceGraph(graph);
@@ -67,10 +67,10 @@ public static class CoffmanGraham
             this.maxLayerSize = maxLayerSize;
         }
 
-        public ImmutableList<ImmutableHashSet<T>> Solve<T>(IDirectedAcyclicGraph<T> graph)
+        public ImmutableArray<ImmutableHashSet<T>> Solve<T>(IDirectedAcyclicGraph<T> graph)
             where T : IEquatable<T>
         {
-            if (graph.Count == 0) return ImmutableList<ImmutableHashSet<T>>.Empty;
+            if (graph.Count == 0) return ImmutableArray<ImmutableHashSet<T>>.Empty;
 
             var ordering = createTopologicalOrdering(graph);
             return createLayers(graph, ordering, maxLayerSize);
@@ -125,7 +125,7 @@ public static class CoffmanGraham
             }
         }
 
-        private static ImmutableList<ImmutableHashSet<T>> createLayers<T>(
+        private static ImmutableArray<ImmutableHashSet<T>> createLayers<T>(
             // ReSharper disable once SuggestBaseTypeForParameter
             IDirectedAcyclicGraph<T> graph, IList<T> ordering, int maxLayerSize)
             where T : IEquatable<T>
@@ -169,7 +169,7 @@ public static class CoffmanGraham
                 elementToLayer.Add(ordering[i], candidateLayer);
             }
 
-            return ImmutableList.CreateRange(layersReversed.Select(b => b.ToImmutable()).Reverse());
+            return ImmutableArray.CreateRange(layersReversed.Select(b => b.ToImmutable()).Reverse());
         }
     }
 
