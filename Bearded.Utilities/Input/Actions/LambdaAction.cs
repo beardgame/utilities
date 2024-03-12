@@ -28,6 +28,6 @@ public static class DeferredAction
         public bool IsAnalog => action.IsAnalog;
         public float AnalogAmount => action.AnalogAmount;
 
-        public bool Equals(IAction other) => this.IsSameAs(other);
+        public bool Equals(IAction? other) => this.IsSameAs(other);
     }
 }
