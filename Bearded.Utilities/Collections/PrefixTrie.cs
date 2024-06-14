@@ -13,7 +13,7 @@ public sealed class PrefixTrie : ICollection<string>
     {
         private readonly Dictionary<char, Node>? values;
 
-        public string Key { get; }
+        public string? Key { get; }
 
         #region creating
 
