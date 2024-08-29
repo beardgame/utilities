@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Bearded.Utilities.Collections;
@@ -10,13 +11,19 @@ internal class DeletableObjectListEnumerator<T> : IEnumerator<T>
     where T : class, IDeletable
 {
     private readonly DeletableObjectList<T> deletableObjectList;
-    private readonly List<T> list;
+    private readonly List<T?> list;
     private int i;
+    private T? current;
 
     object System.Collections.IEnumerator.Current => Current;
-    public T Current { get; private set; }
 
-    public DeletableObjectListEnumerator(DeletableObjectList<T> deletableObjectList, List<T> list)
+    public T Current
+    {
+        get => current ?? throw new InvalidOperationException();
+        private set => current = value;
+    }
+
+    public DeletableObjectListEnumerator(DeletableObjectList<T> deletableObjectList, List<T?> list)
     {
         this.deletableObjectList = deletableObjectList;
         this.list = list;

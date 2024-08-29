@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Bearded.Utilities.Linq;
@@ -152,8 +153,13 @@ public static class Extensions
     /// <param name="result">The resulting transformed value.</param>
     /// <param name="transform">The function transforming the value into the result.</param>
     /// <returns>True if the value was found, false otherwise.</returns>
-    public static bool TryGetTransformedValue<TKey, TValue, TNewValue>(this Dictionary<TKey, TValue> dictionary, TKey key, out TNewValue result,
-        Func<TValue, TNewValue> transform)
+    public static bool TryGetTransformedValue<TKey, TValue, TNewValue>(
+        this Dictionary<TKey, TValue> dictionary,
+        TKey key,
+        [MaybeNullWhen(false)] out TNewValue result,
+        Func<TValue, TNewValue> transform
+    )
+        where TKey : notnull
     {
         if (dictionary.TryGetValue(key, out var value))
         {
@@ -171,7 +177,9 @@ public static class Extensions
     /// <param name="dictionary">The dictionary.</param>
     /// <param name="other">KeyValuePairs to add.</param>
     public static void AddRange<TKey, TValue>(this IDictionary<TKey, TValue> dictionary,
-        IEnumerable<KeyValuePair<TKey, TValue>> other)
+        IEnumerable<KeyValuePair<TKey, TValue>> other
+    )
+        where TKey : notnull
     {
         foreach (var pair in other)
         {
@@ -181,6 +189,7 @@ public static class Extensions
 
     public static TValue? ValueOrNull<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key)
         where TValue : class
+        where TKey : notnull
     {
         dict.TryGetValue(key, out var value);
         return value;
@@ -188,6 +197,7 @@ public static class Extensions
 
     public static TValue ValueOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key)
         where TValue : struct
+        where TKey : notnull
     {
         dict.TryGetValue(key, out var value);
         return value;
