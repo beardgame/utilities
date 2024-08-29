@@ -27,7 +27,7 @@ public sealed class Bivector2Assertions
     public AndConstraint<Bivector2Assertions> BeApproximately(
         Bivector2 other, float precision, string because = "", params object[] becauseArgs)
     {
-        subject.Magnitude.Should().BeApproximately(other.Magnitude, precision, because, becauseArgs);
+        subject.Xy.Should().BeApproximately(other.Xy, precision, because, becauseArgs);
         return new AndConstraint<Bivector2Assertions>(this);
     }
 
@@ -35,7 +35,7 @@ public sealed class Bivector2Assertions
     public AndConstraint<Bivector2Assertions> NotBeApproximately(
         Bivector2 other, float precision, string because = "", params object[] becauseArgs)
     {
-        subject.Magnitude.Should().NotBeApproximately(other.Magnitude, precision, because, becauseArgs);
+        subject.Xy.Should().NotBeApproximately(other.Xy, precision, because, becauseArgs);
         return new AndConstraint<Bivector2Assertions>(this);
     }
 }
