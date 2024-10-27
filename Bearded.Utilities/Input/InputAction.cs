@@ -9,7 +9,7 @@ namespace Bearded.Utilities.Input;
 
 public static class InputAction
 {
-    public static bool IsSameAs(this IAction me, IAction other)
+    public static bool IsSameAs(this IAction me, IAction? other)
         => other != null && (ReferenceEquals(me, other) || me.ToString() == other.ToString());
 
     public static IAction None { get; } = new DummyAction("unbound");
@@ -99,7 +99,7 @@ public static class InputAction
         public bool IsAnalog => Child1.IsAnalog || Child2.IsAnalog;
         public float AnalogAmount => FloatOp(Child1.AnalogAmount, Child2.AnalogAmount);
 
-        public bool Equals(IAction other) => this.IsSameAs(other);
+        public bool Equals(IAction? other) => this.IsSameAs(other);
     }
 
     private class OrAction : BinaryAction
@@ -130,6 +130,6 @@ public static class InputAction
         public bool IsAnalog => actions.Any(a => a.IsAnalog);
         public float AnalogAmount => actions.Max(a => a.AnalogAmount);
 
-        public bool Equals(IAction other) => this.IsSameAs(other);
+        public bool Equals(IAction? other) => this.IsSameAs(other);
     }
 }

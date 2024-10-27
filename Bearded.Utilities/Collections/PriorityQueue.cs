@@ -9,7 +9,9 @@ namespace Bearded.Utilities.Collections;
 /// </summary>
 /// <typeparam name="TPriority"></typeparam>
 /// <typeparam name="TValue"></typeparam>
-public sealed class PriorityQueue<TPriority, TValue> : StaticPriorityQueue<TPriority, TValue> where TPriority : IComparable<TPriority>
+public sealed class PriorityQueue<TPriority, TValue> : StaticPriorityQueue<TPriority, TValue>
+    where TPriority : IComparable<TPriority>
+    where TValue : notnull
 {
     private readonly Dictionary<TValue, int> valueDict = new Dictionary<TValue, int>();
 

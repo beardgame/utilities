@@ -12,13 +12,13 @@ public static class StaticRandom
 {
     #region Threadsafe random
     [ThreadStatic]
-    private static Random random;
+    private static Random? random;
 
     /// <summary>
     /// The thread safe instance of Random used by StaticRandom
     /// </summary>
     // is internal for use as default random in Linq.Extensions
-    internal static Random Random => random ?? (random = new Random());
+    internal static Random Random => random ??= new Random();
 
     /// <summary>
     /// Overrides the Random object for the calling thread by one with the given seed.
