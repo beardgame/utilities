@@ -16,7 +16,7 @@ public sealed class DeletableObjectList<T> : IEnumerable<T>
 {
     #region Fields and Properties
 
-    private readonly List<T> list;
+    private readonly List<T?> list;
 
     private int enumerators;
     private int count;
@@ -47,7 +47,7 @@ public sealed class DeletableObjectList<T> : IEnumerable<T>
 
     public DeletableObjectList(int capacity)
     {
-        list = new List<T>(capacity);
+        list = new List<T?>(capacity);
         MaxEmptyFraction = 0.2f;
     }
 
