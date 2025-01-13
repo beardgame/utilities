@@ -18,7 +18,7 @@ public static class NumericAssertionsExtensions
         if (bothMatch(IsNaN) || bothMatch(IsPositiveInfinity) || bothMatch(IsNegativeInfinity))
             return new AndConstraint<NumericAssertions<float>>(parent);
 
-        var acceptedPrecision = Max(Epsilon, Abs(expectedValue) * (float) Pow(0.1, precisionDigits));
+        var acceptedPrecision = Max(Epsilon, Math.Abs(expectedValue) * (float) Pow(0.1, precisionDigits));
 
         return parent.BeApproximately(expectedValue, acceptedPrecision, because, becauseArgs);
 
