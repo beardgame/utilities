@@ -177,7 +177,7 @@ public static class CoffmanGraham
 
     public static ISolver SolverForReducedGraphs(int maxLayerSize) => new ReducedGraphSolver(maxLayerSize);
 
-    private struct DecreasingNumberSequence : IComparable<DecreasingNumberSequence>, IComparable
+    private readonly struct DecreasingNumberSequence : IComparable<DecreasingNumberSequence>, IComparable
     {
         private readonly ImmutableList<int> numbers;
 
@@ -186,7 +186,7 @@ public static class CoffmanGraham
             this.numbers = numbers;
         }
 
-        public int CompareTo(object obj) => CompareTo((DecreasingNumberSequence) obj);
+        public int CompareTo(object? obj) => CompareTo((DecreasingNumberSequence) (obj ?? throw new ArgumentNullException()));
 
         public int CompareTo(DecreasingNumberSequence other)
         {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Bearded.Utilities.Collections;
@@ -21,19 +22,15 @@ internal sealed class MutableLinkedListEnumerator<T> : IEnumerator<T>
         this.list = list;
     }
 
-    private LinkedListNode<MutableLinkedListEnumerator<T>> node;
+    private LinkedListNode<MutableLinkedListEnumerator<T>>? node;
     public void SetNode(LinkedListNode<MutableLinkedListEnumerator<T>> node)
     {
-        if (this.node == null)
-            this.node = node;
+        this.node ??= node;
     }
 
-    public T Current
-    {
-        get { return current.Value; }
-    }
+    public T Current => current?.Value ?? throw new InvalidOperationException();
 
-    private MutableLinkedListNode<T> current;
+    private MutableLinkedListNode<T>? current;
 
     public void OnObjectRemove(MutableLinkedListNode<T> obj)
     {
@@ -48,6 +45,8 @@ internal sealed class MutableLinkedListEnumerator<T> : IEnumerator<T>
 
     public void Dispose()
     {
+        if (node is null) return;
+
         list.ForgetEnumerator(node);
     }
 
@@ -69,12 +68,14 @@ internal sealed class MutableLinkedListEnumerator<T> : IEnumerator<T>
                 currentWasDeleted = false;
                 return true;
             }
-            current = current.Next;
-            if (current == null)
+
+            if (current?.Next == null)
             {
                 done = true;
                 return false;
             }
+
+            current = current.Next;
         }
         return true;
     }
@@ -87,9 +88,5 @@ internal sealed class MutableLinkedListEnumerator<T> : IEnumerator<T>
         currentWasDeleted = false;
     }
 
-    object System.Collections.IEnumerator.Current
-    {
-        get { return Current; }
-    }
-
+    object System.Collections.IEnumerator.Current => Current;
 }

@@ -43,7 +43,7 @@ public static class Environment
     #endregion
 
     #region User settings directory
-    private static string userSettingsDirectory;
+    private static string? userSettingsDirectory;
 
     private static string buildUserSettingsDirectory()
     {
@@ -67,8 +67,7 @@ public static class Environment
                     return linuxConfigDir;
 
                 var linuxHomeDir = System.Environment.GetEnvironmentVariable("HOME");
-                // ReSharper disable once AssignNullToNotNullAttribute
-                return string.IsNullOrEmpty(linuxConfigDir) ? "." : Path.Combine(linuxHomeDir, ".config");
+                return string.IsNullOrEmpty(linuxConfigDir) ? "." : Path.Combine(linuxHomeDir!, ".config");
             default:
                 throw new InvalidOperationException("Encountered unknown platform.");
         }
@@ -80,7 +79,7 @@ public static class Environment
     /// For OSX: ~/Library/Application Support
     /// For Linux: ~/.config
     /// </summary>
-    public static string UserSettingsDirectory => userSettingsDirectory ?? (userSettingsDirectory = buildUserSettingsDirectory());
+    public static string UserSettingsDirectory => userSettingsDirectory ??= buildUserSettingsDirectory();
 
     /// <summary>
     /// Gets the default user setting directory for a given game name.

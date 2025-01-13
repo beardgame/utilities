@@ -234,7 +234,7 @@ public class Logger
     /// <summary>
     /// If RaiseEvents is true, this event is raised every time an event is added to the log.
     /// </summary>
-    public event LogEvent Logged;
+    public event LogEvent? Logged;
 
     #region settings
 

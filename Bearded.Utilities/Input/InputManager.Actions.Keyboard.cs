@@ -33,15 +33,15 @@ partial class InputManager
 
         public IAction FromKey(Keys key) => new KeyboardAction(manager, key);
 
-        public IAction FromString(string value)
+        public IAction? FromString(string value)
             => TryParse(value, out var action)
                 ? action
                 : throw new FormatException($"Keyboard key '{value}' invalid.");
 
-        public bool TryParse(string value, out IAction action)
+        public bool TryParse(string value, out IAction? action)
             => TryParseLowerTrimmedString(value.ToLowerInvariant().Trim(), out action);
 
-        internal bool TryParseLowerTrimmedString(string value, out IAction action)
+        internal bool TryParseLowerTrimmedString(string value, out IAction? action)
         {
             action = null;
 
