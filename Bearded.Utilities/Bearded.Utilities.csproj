@@ -3,7 +3,7 @@
     <LangVersion>10</LangVersion>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>CS8600;CS8602;CS8603</WarningsAsErrors>
-    <TargetFrameworks>net5.0;net6.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net6.0;netcoreapp3.1;net8.0</TargetFrameworks>
     <AssemblyTitle>Bearded Utilities</AssemblyTitle>
     <Description>Set of basic utilities on top of OpenTK, mostly aimed at games.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

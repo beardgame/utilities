@@ -11,7 +11,7 @@ jobs:
     with:
       dotnet-version: |
         3.1.x
-        5.0.x
         6.0.x
+        8.0.x
     secrets:
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
