@@ -2,7 +2,6 @@ using System;
 using FluentAssertions;
 using FluentAssertions.Numeric;
 using static System.Single;
-using static System.Math;
 
 namespace Bearded.Utilities.Tests.Helpers;
 
@@ -18,7 +17,7 @@ public static class NumericAssertionsExtensions
         if (bothMatch(IsNaN) || bothMatch(IsPositiveInfinity) || bothMatch(IsNegativeInfinity))
             return new AndConstraint<NumericAssertions<float>>(parent);
 
-        var acceptedPrecision = Max(Epsilon, Math.Abs(expectedValue) * (float) Pow(0.1, precisionDigits));
+        var acceptedPrecision = Math.Max(Epsilon, Math.Abs(expectedValue) * (float) Math.Pow(0.1, precisionDigits));
 
         return parent.BeApproximately(expectedValue, acceptedPrecision, because, becauseArgs);
 
