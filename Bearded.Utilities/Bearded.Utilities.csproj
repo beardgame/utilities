@@ -10,6 +10,9 @@
     <RepositoryUrl>https://github.com/beardgame/utilities</RepositoryUrl>
     <PackageTags>game-development;gamedev</PackageTags>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="OpenTK.Core" Version="4.9.3" />
     <PackageReference Include="OpenTK.Mathematics" Version="4.9.3" />
