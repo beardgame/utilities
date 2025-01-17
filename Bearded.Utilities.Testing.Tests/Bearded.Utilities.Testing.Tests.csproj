@@ -4,6 +4,7 @@
     <Nullable>annotations</Nullable>
     <WarningsAsErrors>CS8600;CS8602;CS8603</WarningsAsErrors>
     <TargetFrameworks>net6.0;netcoreapp3.1;net8.0</TargetFrameworks>
+    <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
