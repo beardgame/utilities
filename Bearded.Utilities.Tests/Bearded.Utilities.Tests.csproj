@@ -6,7 +6,7 @@
     <TargetFrameworks>net6.0;netcoreapp3.1</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="7.0.0" />
+    <PackageReference Include="FluentAssertions" Version="8.1.0" />
     <PackageReference Include="FsCheck.Xunit" Version="2.16.6" />
     <PackageReference Include="FSharp.Core" Version="9.0.100" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
