@@ -2,7 +2,7 @@
 
 public sealed class AsyncAtomicUpdating<T>
 {
-    private readonly object mutex = new object();
+    private readonly object mutex = new();
 
     public T Current { get; private set; }
     public T Previous { get; private set; }

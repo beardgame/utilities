@@ -1,8 +1,6 @@
 using Bearded.Utilities.Linq;
-using Bearded.Utilities.Testing;
 using Bearded.Utilities.Tests.Generators;
 using FluentAssertions;
-using FsCheck;
 using FsCheck.Xunit;
 using System;
 using System.Collections.Generic;
@@ -20,40 +18,7 @@ public sealed class ExtensionsTests
             .And.Contain(obj);
     }
 
-    [Fact]
-    public void AppendOnEmptyReturnsObject()
-    {
-        var obj = new object();
-        Array.Empty<object>().Append(obj).Should().HaveCount(1)
-            .And.Contain(obj);
-    }
-
-    [Fact]
-    public void AppendOnNotEmptyReturnsObjectAsLastElement()
-    {
-        var obj = new object();
-        var array = new[] { new object() };
-        array.Append(obj).Should().HaveCount(2)
-            .And.ContainInOrder(array[0], obj);
-    }
-
-    [Fact]
-    public void PrependOnEmptyReturnsObject()
-    {
-        var obj = new object();
-        Array.Empty<object>().Prepend(obj).Should().HaveCount(1)
-            .And.Contain(obj);
-    }
-
-    [Fact]
-    public void PrependOnNotEmptyReturnsObjectAsFirstElement()
-    {
-        var obj = new object();
-        var array = new[] { new object() };
-        array.Prepend(obj).Should().HaveCount(2)
-            .And.ContainInOrder(obj, array[0]);
-    }
-
+#if !NET6_0_OR_GREATER
     [Theory]
     [InlineData(1, 2, 3, 3)]
     [InlineData(3, 2, 1, 1)]
@@ -79,6 +44,7 @@ public sealed class ExtensionsTests
         };
         array.MinBy(e => e.Value).Id.Should().Be(expectedId);
     }
+#endif
 
     [Fact]
     public void TryGetTransformedValueTransformPresentValue()

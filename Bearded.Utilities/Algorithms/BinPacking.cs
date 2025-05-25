@@ -110,7 +110,7 @@ public static partial class BinPacking
         if (rectangles.Count == 0)
             return Result<T>.Empty;
 
-        Result<T> bestResult = default!;
+        Result<T> bestResult = null!;
 
         foreach (var heuristic in heuristics)
         {

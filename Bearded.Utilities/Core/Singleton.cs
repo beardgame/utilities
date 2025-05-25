@@ -4,7 +4,7 @@ namespace Bearded.Utilities;
 
 public abstract class Singleton<TSelf> where TSelf : Singleton<TSelf>
 {
-    public static TSelf Instance { get; private set; }
+    public static TSelf Instance { get; private set; } = null!;
 
     protected Singleton()
     {

@@ -260,10 +260,6 @@ public readonly struct Direction2 : IEquatable<Direction2>, IFormattable
 
     #endregion
 
-    #region Casts
-
-    #endregion
-
     #endregion
 
 }

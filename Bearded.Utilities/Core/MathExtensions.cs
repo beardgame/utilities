@@ -47,7 +47,7 @@ public static class MathExtensions
     /// <summary>
     /// Gives the number projected to Zn.
     /// </summary>
-    public static int ModuloN(this int a, int n) => ((a % n) + n) % n;
+    public static int ModuloN(this int a, int n) => (a % n + n) % n;
 
     #endregion
 
@@ -269,10 +269,10 @@ public static class MathExtensions
     #endregion
 
     #region Vector
-    public static Vector3 WithZ(this Vector2 xy) => new Vector3(xy.X, xy.Y, 0);
-    public static Vector3 WithZ(this Vector2 xy, float z) => new Vector3(xy.X, xy.Y, z);
-    public static Vector4 WithW(this Vector3 xyz, float w) => new Vector4(xyz, w);
-    public static Vector4 WithZw(this Vector2 xy, float z, float w) => new Vector4(xy.X, xy.Y, z, w);
+    public static Vector3 WithZ(this Vector2 xy) => new(xy.X, xy.Y, 0);
+    public static Vector3 WithZ(this Vector2 xy, float z) => new(xy.X, xy.Y, z);
+    public static Vector4 WithW(this Vector3 xyz, float w) => new(xyz, w);
+    public static Vector4 WithZw(this Vector2 xy, float z, float w) => new(xy.X, xy.Y, z, w);
 
     /// <summary>
     /// Normalizes a vector. If all components of the vector are zero, no exception is thrown. Instead the zero vector is returned.

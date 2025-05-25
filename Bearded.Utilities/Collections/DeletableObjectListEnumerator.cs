@@ -6,7 +6,7 @@ namespace Bearded.Utilities.Collections;
 /// Enumerator for deletable object list.
 /// Kept internal to hide implementation.
 /// </summary>
-internal class DeletableObjectListEnumerator<T> : IEnumerator<T>
+class DeletableObjectListEnumerator<T> : IEnumerator<T>
     where T : class, IDeletable
 {
     private readonly DeletableObjectList<T> deletableObjectList;

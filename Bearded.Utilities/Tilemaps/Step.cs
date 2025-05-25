@@ -1,6 +1,6 @@
 ﻿namespace Bearded.Utilities.Tilemaps;
 
-internal struct Step
+struct Step
 {
     public readonly sbyte X;
     public readonly sbyte Y;

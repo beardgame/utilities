@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Bearded.Utilities.Input.Actions;
-using Bearded.Utilities.Linq;
 
 namespace Bearded.Utilities.Input;
 
@@ -76,7 +75,7 @@ public static class InputAction
         // Call extension method explicitly since there is ambiguity between System.Linq.Enumerable.Prepend and
         // Bearded.Utilities.Linq.Extensions.Prepend. (Introduced in .NET Framework 4.8 and .NET Standard 2.0.)
         // ReSharper disable once InvokeAsExtensionMethod
-        return AnyOf(Extensions.Prepend(others, me));
+        return AnyOf(others.Prepend(me));
     }
 
     private abstract class BinaryAction : IAction

@@ -8,44 +8,40 @@ namespace Bearded.Utilities.Monads;
 public readonly struct Result<TResult, TError> : IEquatable<Result<TResult, TError>>
 {
     private readonly bool isSuccess;
-    [AllowNull]
-    private readonly TResult result;
-    [AllowNull]
-    private readonly TError error;
+    private readonly TResult? result;
+    private readonly TError? error;
 
-    private Result(bool isSuccess, [AllowNull] TResult result, [AllowNull] TError error)
+    private Result(bool isSuccess, TResult? result, TError? error)
     {
         this.isSuccess = isSuccess;
         this.result = result;
         this.error = error;
     }
 
-    public static Result<TResult, TError> Success(TResult result) =>
-        new Result<TResult, TError>(true, result, default);
+    public static Result<TResult, TError> Success(TResult result) => new(true, result, default);
 
-    public static Result<TResult, TError> Failure(TError error) =>
-        new Result<TResult, TError>(false, default, error);
+    public static Result<TResult, TError> Failure(TError error) => new(false, default, error);
 
-    public TResult ResultOrDefault(TResult @default) => isSuccess ? result : @default;
+    public TResult ResultOrDefault(TResult @default) => isSuccess ? result! : @default;
 
-    public TResult ResultOrDefault(Func<TResult> defaultProvider) => isSuccess ? result : defaultProvider();
+    public TResult ResultOrDefault(Func<TResult> defaultProvider) => isSuccess ? result! : defaultProvider();
 
     public TResult ResultOrThrow(Func<TError, Exception> exceptionProvider) =>
-        isSuccess ? result : throw exceptionProvider(error);
+        isSuccess ? result! : throw exceptionProvider(error!);
 
-    public Maybe<TResult> AsMaybe() => isSuccess ? Maybe.Just(result) : Maybe.Nothing;
+    public Maybe<TResult> AsMaybe() => isSuccess ? Maybe.Just(result!) : Maybe.Nothing;
 
     public Result<TOut, TError> Select<TOut>(Func<TResult, TOut> selector) =>
-        isSuccess ? (Result<TOut, TError>) Result.Success(selector(result)) : Result.Failure(error);
+        isSuccess ? Result.Success(selector(result!)) : Result.Failure(error!);
 
     public Result<TOut, TError> SelectMany<TOut>(Func<TResult, Result<TOut, TError>> selector) =>
-        isSuccess ? selector(result) : Result.Failure(error);
+        isSuccess ? selector(result!) : Result.Failure(error!);
 
     public void Match(Action<TResult> onSuccess)
     {
         if (isSuccess)
         {
-            onSuccess(result);
+            onSuccess(result!);
         }
     }
 
@@ -53,16 +49,16 @@ public readonly struct Result<TResult, TError> : IEquatable<Result<TResult, TErr
     {
         if (isSuccess)
         {
-            onSuccess(result);
+            onSuccess(result!);
         }
         else
         {
-            onFailure(error);
+            onFailure(error!);
         }
     }
 
     public TOut Match<TOut>(Func<TResult, TOut> onSuccess, FailureResultTransformation<TError, TOut> onFailure) =>
-        isSuccess ? onSuccess(result) : onFailure(error);
+        isSuccess ? onSuccess(result!) : onFailure(error!);
 
     public bool Equals(Result<TResult, TError> other) =>
         isSuccess == other.isSuccess
@@ -93,12 +89,12 @@ public static class Result
     public static Result<TResult, TError> Success<TResult, TError>(TResult result) =>
         Result<TResult, TError>.Success(result);
 
-    public static Success<T> Success<T>(T result) => new Success<T>(result);
+    public static Success<T> Success<T>(T result) => new(result);
 
     public static Result<TResult, TError> Failure<TResult, TError>(TError error) =>
         Result<TResult, TError>.Failure(error);
 
-    public static Failure<T> Failure<T>(T error) => new Failure<T>(error);
+    public static Failure<T> Failure<T>(T error) => new(error);
 
     public static TResult ResultOrThrow<TResult, TError>(this Result<TResult, TError> result)
         where TError : Exception
