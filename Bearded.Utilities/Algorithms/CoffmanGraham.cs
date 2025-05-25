@@ -177,7 +177,7 @@ public static class CoffmanGraham
 
     public static ISolver SolverForReducedGraphs(int maxLayerSize) => new ReducedGraphSolver(maxLayerSize);
 
-    private struct DecreasingNumberSequence : IComparable<DecreasingNumberSequence>, IComparable
+    private readonly struct DecreasingNumberSequence : IComparable<DecreasingNumberSequence>, IComparable
     {
         private readonly ImmutableList<int> numbers;
 
@@ -186,7 +186,7 @@ public static class CoffmanGraham
             this.numbers = numbers;
         }
 
-        public int CompareTo(object obj) => CompareTo((DecreasingNumberSequence) obj);
+        public int CompareTo(object? obj) => obj is DecreasingNumberSequence seq ? CompareTo(seq) : 1;
 
         public int CompareTo(DecreasingNumberSequence other)
         {
@@ -205,11 +205,8 @@ public static class CoffmanGraham
             return numbers.Count - other.numbers.Count;
         }
 
-        public static DecreasingNumberSequence FromSortedNumbers(IEnumerable<int> numbers)
-            => new DecreasingNumberSequence(numbers.ToImmutableList());
-
-        public static DecreasingNumberSequence FromUnsortedNumbers(IEnumerable<int> numbers)
-            => new DecreasingNumberSequence(numbers.OrderByDescending(a => a).ToImmutableList());
+        public static DecreasingNumberSequence FromUnsortedNumbers(IEnumerable<int> numbers) =>
+            new(numbers.OrderByDescending(a => a).ToImmutableList());
     }
 }
 

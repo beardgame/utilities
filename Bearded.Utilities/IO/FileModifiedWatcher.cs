@@ -35,9 +35,7 @@ public class FileModifiedWatcher
 
     private DateTime? getLastWriteTime()
     {
-        return File.Exists(Path)
-            ? (DateTime?)File.GetLastWriteTime(Path)
-            : null;
+        return File.Exists(Path) ? File.GetLastWriteTime(Path) : null;
     }
 
     /// <summary>

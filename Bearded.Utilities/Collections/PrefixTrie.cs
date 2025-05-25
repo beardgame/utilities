@@ -133,7 +133,7 @@ public sealed class PrefixTrie : ICollection<string>
         if (values == null)
             throw new ArgumentNullException(nameof(values));
 
-        var valueList = values.NotNull().Distinct()
+        var valueList = values.WhereNotNull().Distinct()
             .OrderBy(s => s).ToList();
 
         Count = valueList.Count;

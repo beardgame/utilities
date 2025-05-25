@@ -158,7 +158,7 @@ public class Logger
 
     #region fields and constructor
 
-    private readonly List<Entry> lines = new List<Entry>();
+    private readonly List<Entry> lines = new();
 
     /// <summary>
     /// Gets the stored history of events.
@@ -234,7 +234,7 @@ public class Logger
     /// <summary>
     /// If RaiseEvents is true, this event is raised every time an event is added to the log.
     /// </summary>
-    public event LogEvent Logged;
+    public event LogEvent? Logged;
 
     #region settings
 

@@ -88,7 +88,7 @@ public static partial class BinPacking
         /// </summary>
         public double Filled => 1 - EmptyPixels / (double) Area;
 
-        internal static Result<T> Empty { get; } = new Result<T>(
+        internal static Result<T> Empty { get; } = new(
             new ReadOnlyCollection<PositionedRectangle<T>>(new List<PositionedRectangle<T>>()),
             0, 0, 0);
 

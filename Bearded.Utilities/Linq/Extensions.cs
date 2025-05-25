@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Bearded.Utilities.Linq;
@@ -20,41 +21,15 @@ public static class Extensions
         yield return obj;
     }
 
-    /// <summary>
-    /// Appends an item to the end of a sequence.
-    /// </summary>
-    /// <param name="target">The original sequence.</param>
-    /// <param name="item">The item to append.</param>
-    [Obsolete("Use Append of the System.Linq library instead.")]
-    public static IEnumerable<T> Append<T>(this IEnumerable<T> target, T item)
-    {
-        foreach (var t in target) yield return t;
-        yield return item;
-    }
-
-    /// <summary>
-    /// Prepends an item to the beginning of a sequence.
-    /// </summary>
-    /// <param name="target">The original sequence.</param>
-    /// <param name="item">The item to prepend.</param>
-    [Obsolete("Use Prepend of the System.Linq library instead.")]
-    public static IEnumerable<T> Prepend<T>(this IEnumerable<T> target, T item)
-    {
-        yield return item;
-        foreach (var t in target) yield return t;
-    }
-
-    /// <summary>
-    /// Filters a sequence, removing all elements that are null.
-    /// </summary>
-    public static IEnumerable<T> NotNull<T>(this IEnumerable<T> source)
+    public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> source)
         where T : class
     {
-        return source.Where(arg => arg != null);
+        return source.Where(arg => arg != null)!;
     }
 
     #endregion
 
+#if !NET6_0_OR_GREATER
     #region Aggregates
 
     /// <summary>
@@ -80,6 +55,7 @@ public static class Extensions
     }
 
     #endregion
+#endif
 
     #region List
 
@@ -152,12 +128,16 @@ public static class Extensions
     /// <param name="result">The resulting transformed value.</param>
     /// <param name="transform">The function transforming the value into the result.</param>
     /// <returns>True if the value was found, false otherwise.</returns>
-    public static bool TryGetTransformedValue<TKey, TValue, TNewValue>(this Dictionary<TKey, TValue> dictionary, TKey key, out TNewValue result,
+    public static bool TryGetTransformedValue<TKey, TValue, TNewValue>(
+        this Dictionary<TKey, TValue> dictionary,
+        TKey key,
+        [NotNullWhen(true)] out TNewValue? result,
         Func<TValue, TNewValue> transform)
+        where TKey : notnull
     {
         if (dictionary.TryGetValue(key, out var value))
         {
-            result = transform(value);
+            result = transform(value)!;
             return true;
         }
 
@@ -172,6 +152,7 @@ public static class Extensions
     /// <param name="other">KeyValuePairs to add.</param>
     public static void AddRange<TKey, TValue>(this IDictionary<TKey, TValue> dictionary,
         IEnumerable<KeyValuePair<TKey, TValue>> other)
+        where TKey : notnull
     {
         foreach (var pair in other)
         {
@@ -180,14 +161,14 @@ public static class Extensions
     }
 
     public static TValue? ValueOrNull<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key)
-        where TValue : class
+        where TKey : notnull where TValue : class
     {
         dict.TryGetValue(key, out var value);
         return value;
     }
 
     public static TValue ValueOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key)
-        where TValue : struct
+        where TKey : notnull where TValue : struct
     {
         dict.TryGetValue(key, out var value);
         return value;
@@ -203,8 +184,7 @@ public static class Extensions
     /// <typeparam name="T">Type of the elements.</typeparam>
     /// <param name="source">The sequance to choose a random element from.</param>
     /// <returns>A random element from the input.</returns>
-    public static T RandomElement<T>(this IEnumerable<T> source)
-        => source.RandomElement(StaticRandom.Random);
+    public static T RandomElement<T>(this IEnumerable<T> source) => source.RandomElement(defaultRandom);
 
     /// <summary>
     /// Selects a random element from a sequence.
@@ -256,7 +236,7 @@ public static class Extensions
     /// <param name="count">The number of random elements to return. If this is smaller than the inputs size, the entire input is returned.</param>
     /// <returns>Random elements from the input.</returns>
     public static List<T> RandomSubset<T>(this IEnumerable<T> source, int count)
-        => source.RandomSubset(count, StaticRandom.Random);
+        => source.RandomSubset(count, defaultRandom);
 
     /// <summary>
     /// Efficiently (O(n) with n the size of the input) selects a random number of elements from an enumerable.
@@ -310,8 +290,7 @@ public static class Extensions
     /// <summary>
     /// Shuffles the list. This is a linear operation in the length of the list.
     /// </summary>
-    public static void Shuffle<T>(this IList<T> list)
-        => list.Shuffle(StaticRandom.Random);
+    public static void Shuffle<T>(this IList<T> list) => list.Shuffle(defaultRandom);
 
     /// <summary>
     /// Shuffles the list. This is a linear operation in the length of the list.
@@ -328,17 +307,14 @@ public static class Extensions
         {
             var j = random.Next(i, c);
 
-            var temp = list[i];
-            list[i] = list[j];
-            list[j] = temp;
+            (list[i], list[j]) = (list[j], list[i]);
         }
     }
 
     /// <summary>
     /// Returns a new shuffled list with the elements from the given sequence.
     /// </summary>
-    public static IList<T> Shuffled<T>(this IEnumerable<T> source)
-        => source.Shuffled(StaticRandom.Random);
+    public static IList<T> Shuffled<T>(this IEnumerable<T> source) => source.Shuffled(defaultRandom);
 
     /// <summary>
     /// Returns a new shuffled list with the elements from the given sequence.
@@ -356,5 +332,17 @@ public static class Extensions
     }
 
     #endregion
+
+    private static Random defaultRandom
+    {
+        get
+        {
+#if NET6_0_OR_GREATER
+            return Random.Shared;
+#else
+            return StaticRandom.Random;
+#endif
+        }
+    }
 
 }

@@ -6,7 +6,7 @@ namespace Bearded.Utilities.Collections;
 /// Enumerator for mutable linked lists.
 /// Kept internal to hide implementation.
 /// </summary>
-internal sealed class MutableLinkedListEnumerator<T> : IEnumerator<T>
+sealed class MutableLinkedListEnumerator<T> : IEnumerator<T>
     where T : class
 {
 

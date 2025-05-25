@@ -18,17 +18,17 @@ public readonly struct Maybe<T> : IEquatable<Maybe<T>>
 
     public static Maybe<T> Nothing => default;
 
-    internal static Maybe<T> Just(T value) => new Maybe<T>(value);
+    internal static Maybe<T> Just(T value) => new(value);
 
     public T ValueOrDefault(T @default) => hasValue ? value : @default;
 
     public T ValueOrDefault(Func<T> defaultProvider) => hasValue ? value : defaultProvider();
 
     public Result<T, TError> ValueOrFailure<TError>(TError error) =>
-        hasValue ? (Result<T, TError>) Result.Success(value) : Result.Failure(error);
+        hasValue ? Result.Success(value) : Result.Failure(error);
 
     public Result<T, TError> ValueOrFailure<TError>(Func<TError> errorProvider) =>
-        hasValue ? (Result<T, TError>) Result.Success(value) : Result.Failure(errorProvider());
+        hasValue ? Result.Success(value) : Result.Failure(errorProvider());
 
     public Maybe<TOut> Select<TOut>(Func<T, TOut> selector) =>
         hasValue ? Maybe.Just(selector(value)) : Maybe<TOut>.Nothing;
@@ -66,7 +66,7 @@ public readonly struct Maybe<T> : IEquatable<Maybe<T>>
 
     public override bool Equals(object? obj) => obj is Maybe<T> other && Equals(other);
 
-    public override int GetHashCode() => hasValue ? EqualityComparer<T>.Default.GetHashCode(value) : 0;
+    public override int GetHashCode() => hasValue ? EqualityComparer<T>.Default.GetHashCode(value!) : 0;
 
     public override string ToString() => hasValue ? $"just {value}" : "nothing";
 

@@ -8,17 +8,20 @@ namespace Bearded.Utilities;
 /// Note that several of the methods are slightly biased for the sake of performance.
 /// </summary>
 /// <remarks>The actual implementations of the custom random methods can be found in RandomExtensions.</remarks>
+#if NET6_0_OR_GREATER
+[Obsolete("Use Random.Shared instead")]
+#endif
 public static class StaticRandom
 {
     #region Threadsafe random
     [ThreadStatic]
-    private static Random random;
+    private static Random? random;
 
     /// <summary>
     /// The thread safe instance of Random used by StaticRandom
     /// </summary>
     // is internal for use as default random in Linq.Extensions
-    internal static Random Random => random ?? (random = new Random());
+    internal static Random Random => random ??= new Random();
 
     /// <summary>
     /// Overrides the Random object for the calling thread by one with the given seed.

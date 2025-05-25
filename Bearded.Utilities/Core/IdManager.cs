@@ -5,7 +5,7 @@ namespace Bearded.Utilities;
 
 public sealed class IdManager
 {
-    private readonly Dictionary<Type, int> lastIds = new Dictionary<Type, int>();
+    private readonly Dictionary<Type, int> lastIds = new();
 
     public Id<T> GetNext<T>()
     {

@@ -14,7 +14,7 @@ public readonly struct Id<T> : IEquatable<Id<T>>
     }
 
     public bool IsValid => Value != 0;
-    public static Id<T> Invalid => new Id<T>(0);
+    public static Id<T> Invalid => new(0);
 
     public override string ToString() => $"{typeof(T).Name}:{Value}";
     public override int GetHashCode() => Value.GetHashCode();
