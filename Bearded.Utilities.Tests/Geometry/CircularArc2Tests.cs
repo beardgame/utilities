@@ -11,7 +11,7 @@ namespace Bearded.Utilities.Tests.Geometry;
 
 public sealed class CircularArc2Tests
 {
-    private const float epsilon = 0.001f;
+    private const float epsilon = 1E-3f;
 
     public CircularArc2Tests()
     {
