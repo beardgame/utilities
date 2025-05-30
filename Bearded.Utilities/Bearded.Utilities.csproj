@@ -12,10 +12,10 @@
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="OpenTK.Core" Version="4.9.3" />
-    <PackageReference Include="OpenTK.Mathematics" Version="4.9.3" />
-    <PackageReference Include="OpenTK.Windowing.Desktop" Version="4.9.3" />
-    <PackageReference Include="OpenTK.Windowing.GraphicsLibraryFramework" Version="4.9.3" />
+    <PackageReference Include="OpenTK.Core" Version="4.9.4" />
+    <PackageReference Include="OpenTK.Mathematics" Version="4.9.4" />
+    <PackageReference Include="OpenTK.Windowing.Desktop" Version="4.9.4" />
+    <PackageReference Include="OpenTK.Windowing.GraphicsLibraryFramework" Version="4.9.4" />
     <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.0" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
