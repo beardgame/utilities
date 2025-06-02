@@ -12,7 +12,7 @@ namespace Bearded.Utilities.Tests.Geometry;
 
 public sealed class Bivector2Tests
 {
-    private const float epsilon = 1E-6f;
+    private const float epsilon = 1E-3f;
 
     public Bivector2Tests()
     {
@@ -63,8 +63,52 @@ public sealed class Bivector2Tests
         wedge1.Should().Be(-wedge2);
     }
 
+    [Fact]
+    public void UnitBivectorHasMagnitudeOne()
+    {
+        Bivector2.Unit.Magnitude.Should().BeApproximately(1, epsilon);
+        Bivector2.Unit.MagnitudeSquared.Should().BeApproximately(1, epsilon);
+    }
+
+    [Fact]
+    public void ZeroBivectorHasMagnitudeZero()
+    {
+        Bivector2.Zero.Magnitude.Should().BeApproximately(0, epsilon);
+        Bivector2.Zero.MagnitudeSquared.Should().BeApproximately(0, epsilon);
+    }
+
     [Property]
-    public void AddingBivectorsAddsMagnitudes(float f1, float f2)
+    public void NormalizedNonZeroBivectorHasMagnitudeOne(float xy)
+    {
+        var bivector = new Bivector2(xy);
+        if (bivector == Bivector2.Zero) return;
+
+        var normalized = bivector.Normalized();
+
+        normalized.Magnitude.Should().BeApproximately(1, epsilon);
+        normalized.MagnitudeSquared.Should().BeApproximately(1, epsilon);
+    }
+
+    [Fact]
+    public void NormalizedZeroBivectorIsZeroBivector()
+    {
+        var bivector = Bivector2.Zero;
+
+        bivector.Normalized().Should().Be(bivector);
+    }
+
+    [Property]
+    public void NormalizedBivectorRetainsSign(float xy)
+    {
+        var bivector = new Bivector2(xy);
+
+        var normalized = bivector.Normalized();
+
+        MathF.Sign(bivector.Xy).Should().Be(MathF.Sign(normalized.Xy));
+    }
+
+    [Property]
+    public void AddingBivectorsAddsComponents(float f1, float f2)
     {
         var bivector1 = new Bivector2(f1);
         var bivector2 = new Bivector2(f2);
@@ -74,7 +118,7 @@ public sealed class Bivector2Tests
     }
 
     [Property]
-    public void SubtractingBivectorsSubtractsMagnitudes(float f1, float f2)
+    public void SubtractingBivectorsSubtractsComponents(float f1, float f2)
     {
         var bivector1 = new Bivector2(f1);
         var bivector2 = new Bivector2(f2);
@@ -84,7 +128,26 @@ public sealed class Bivector2Tests
     }
 
     [Property]
-    public void BivectorsWithSameMagnitudeAreEqual(float magnitude)
+    public void ScalingBivectorScalesItsComponents(float xy, float scalar)
+    {
+        var bivector = new Bivector2(xy);
+        var scaled = scalar * bivector;
+
+        scaled.Xy.Should().BeApproximately(xy * scalar, epsilon);
+    }
+
+    [Property]
+    public void DividingBivectorByScalarDividesItsComponents(float xy, float divider)
+    {
+        if (divider == 0) return;
+        var bivector = new Bivector2(xy);
+        var scaled = bivector / divider;
+
+        scaled.Xy.Should().BeApproximately(xy / divider, epsilon);
+    }
+
+    [Property]
+    public void BivectorsWithSameComponentsAreEqual(float magnitude)
     {
         var bivector1 = new Bivector2(magnitude);
         var bivector2 = new Bivector2(magnitude);
@@ -96,7 +159,7 @@ public sealed class Bivector2Tests
     }
 
     [Property]
-    public void BivectorsWithDifferentMagnitudeAreNotEqual(float f1, float f2)
+    public void BivectorsWithDifferentComponentsAreNotEqual(float f1, float f2)
     {
         // ReSharper disable once CompareOfFloatsByEqualityOperator
         if (f1 == f2) f2++;

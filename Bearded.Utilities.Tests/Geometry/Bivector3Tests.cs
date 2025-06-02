@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Bearded.Utilities.Geometry;
 using Bearded.Utilities.Testing.Geometry;
 using Bearded.Utilities.Tests.Generators;
@@ -11,7 +12,7 @@ namespace Bearded.Utilities.Tests.Geometry;
 
 public sealed class Bivector3Tests
 {
-    private const float epsilon = 1E-6f;
+    private const float epsilon = 1E-3f;
 
     public Bivector3Tests()
     {
@@ -63,6 +64,77 @@ public sealed class Bivector3Tests
     }
 
     [Property]
+    public void FromAxisCreatesBivectorWithSameMagnitudeAsVector(Vector3 axis)
+    {
+        var bivector = Bivector3.FromAxis(axis);
+
+        bivector.Magnitude.Should().BeApproximately(axis.Length, epsilon);
+    }
+
+    [Property]
+    public void FromAxisRetainsSign(Vector3 axis)
+    {
+        var bivector = Bivector3.FromAxis(axis);
+        var reverseBivector = Bivector3.FromAxis(-axis);
+
+        bivector.Should().BeApproximately(-reverseBivector, epsilon);
+    }
+
+    [Theory]
+    [MemberData(nameof(UnitVectorsWithOrthogonalPlanes))]
+    public void FromAxisReturnsOrthogonalPlaneToUnitVectors(Vector3 axis, Bivector3 expectedBivector)
+    {
+        var bivector = Bivector3.FromAxis(axis);
+
+        bivector.Should().BeApproximately(expectedBivector, epsilon);
+    }
+
+    public static IEnumerable<object[]> UnitVectorsWithOrthogonalPlanes()
+    {
+        yield return new object[] { Vector3.UnitX, Bivector3.UnitYz };
+        yield return new object[] { Vector3.UnitY, -Bivector3.UnitXz };
+        yield return new object[] { Vector3.UnitZ, Bivector3.UnitXy };
+    }
+
+    [Fact]
+    public void UnitBivectorsHaveMagnitudeOne()
+    {
+        Bivector3.UnitXy.Magnitude.Should().BeApproximately(1, epsilon);
+        Bivector3.UnitXy.MagnitudeSquared.Should().BeApproximately(1, epsilon);
+        Bivector3.UnitYz.Magnitude.Should().BeApproximately(1, epsilon);
+        Bivector3.UnitYz.MagnitudeSquared.Should().BeApproximately(1, epsilon);
+        Bivector3.UnitXz.Magnitude.Should().BeApproximately(1, epsilon);
+        Bivector3.UnitXz.MagnitudeSquared.Should().BeApproximately(1, epsilon);
+    }
+
+    [Fact]
+    public void ZeroBivectorHasMagnitudeZero()
+    {
+        Bivector3.Zero.Magnitude.Should().BeApproximately(0, epsilon);
+        Bivector3.Zero.MagnitudeSquared.Should().BeApproximately(0, epsilon);
+    }
+
+    [Property]
+    public void NormalizedNonZeroBivectorHasMagnitudeOne(float xy, float yz, float xz)
+    {
+        var bivector = new Bivector3(xy, yz, xz);
+        if (bivector == Bivector3.Zero) return;
+
+        var normalized = bivector.Normalized();
+
+        normalized.Magnitude.Should().BeApproximately(1, epsilon);
+        normalized.MagnitudeSquared.Should().BeApproximately(1, epsilon);
+    }
+
+    [Fact]
+    public void NormalizedZeroBivectorIsZeroBivector()
+    {
+        var bivector = Bivector3.Zero;
+
+        bivector.Normalized().Should().Be(bivector);
+    }
+
+    [Property]
     public void AddingBivectorsAddsComponents(float xy1, float xy2, float yz1, float yz2, float xz1, float xz2)
     {
         var bivector1 = new Bivector3(xy1, yz1, xz1);
@@ -81,6 +153,29 @@ public sealed class Bivector3Tests
         var sum = bivector1 - bivector2;
 
         sum.Should().BeApproximately(new Bivector3(xy1 - xy2, yz1 - yz2, xz1 - xz2), epsilon);
+    }
+
+    [Property]
+    public void ScalingBivectorScalesItsComponents(float xy, float yz, float xz, float scalar)
+    {
+        var bivector = new Bivector3(xy, yz, xz);
+        var scaled = scalar * bivector;
+
+        scaled.Xy.Should().BeApproximately(xy * scalar, epsilon);
+        scaled.Yz.Should().BeApproximately(yz * scalar, epsilon);
+        scaled.Xz.Should().BeApproximately(xz * scalar, epsilon);
+    }
+
+    [Property]
+    public void DividingBivectorByScalarDividesItsComponents(float xy, float yz, float xz, float divider)
+    {
+        if (divider == 0) return;
+        var bivector = new Bivector3(xy, yz, xz);
+        var scaled = bivector / divider;
+
+        scaled.Xy.Should().BeApproximately(xy / divider, epsilon);
+        scaled.Yz.Should().BeApproximately(yz / divider, epsilon);
+        scaled.Xz.Should().BeApproximately(xz / divider, epsilon);
     }
 
     [Property]

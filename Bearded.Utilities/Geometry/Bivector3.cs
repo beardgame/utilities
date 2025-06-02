@@ -12,6 +12,10 @@ public readonly struct Bivector3 : IEquatable<Bivector3>
     public float Yz { get; }
     public float Xz { get; }
 
+    public float Magnitude => MagnitudeSquared.Sqrted();
+
+    public float MagnitudeSquared => Xy.Squared() + Yz.Squared() + Xz.Squared();
+
     public static readonly Bivector3 Zero = new Bivector3(0, 0, 0);
 
     public static readonly Bivector3 UnitXy = new Bivector3(1, 0, 0);
@@ -26,12 +30,23 @@ public readonly struct Bivector3 : IEquatable<Bivector3>
             left.Y * right.Z - right.Y * left.Z,
             left.X * right.Z - right.X * left.Z);
 
+    /// <summary>
+    /// Returns a counter-clockwise bivector representing the plane orthogonal from the provided axis, with
+    /// magnitude equal to the length of the axis.
+    /// </summary>
+    public static Bivector3 FromAxis(Vector3 axis)
+    {
+        return new Bivector3(axis.Z, axis.X, -axis.Y);
+    }
+
     public Bivector3(float xy, float yz, float xz)
     {
         Xy = xy;
         Yz = yz;
         Xz = xz;
     }
+
+    public Bivector3 Normalized() => MagnitudeSquared == 0 ? this : this / Magnitude;
 
     public static Bivector3 operator +(Bivector3 left, Bivector3 right) =>
         new Bivector3(left.Xy + right.Xy, left.Yz + right.Yz, left.Xz + right.Xz);
@@ -41,6 +56,13 @@ public readonly struct Bivector3 : IEquatable<Bivector3>
 
     public static Bivector3 operator -(Bivector3 bivector) =>
         new Bivector3(-bivector.Xy, -bivector.Yz, -bivector.Xz);
+
+    public static Bivector3 operator *(float scalar, Bivector3 bivector) =>
+        new Bivector3(scalar * bivector.Xy, scalar * bivector.Yz, scalar * bivector.Xz);
+
+    public static Bivector3 operator *(Bivector3 bivector, float scalar) => scalar * bivector;
+
+    public static Bivector3 operator /(Bivector3 bivector, float divider) => 1 / divider * bivector;
 
     public bool Equals(Bivector3 other) => Xy.Equals(other.Xy) && Yz.Equals(other.Yz) && Xz.Equals(other.Xz);
 
